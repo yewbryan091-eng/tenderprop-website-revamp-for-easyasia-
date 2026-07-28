@@ -71,7 +71,9 @@
   .hero-panel-left {
     /* Burgundy base is load-bearing: readable even if the photo never loads */
     background-color: var(--burgundy);
-    background-image: url(/assets/layout/kl-skyline.webp);
+    background-image:
+      url(https://tender-seeker-bot.lovable.app/__l5e/assets-v1/6644ffc2-9879-41d4-a406-38a39f2f4c9a/kl-skyline.png),
+      url(/assets/layout/kl-skyline.webp);
     background-size: auto 100%;
     background-repeat: no-repeat;
     background-position: left center;
