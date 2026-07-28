@@ -60,6 +60,13 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 29 Jul 2026 — Codex
+Tightened the wide-desktop listings proportions in `tender-listings.css`: cards now cap at a
+comfortable 1020px results column (~325px each at 1470px), while the Tender by State rail uses
+260–280px, smaller rows, and 18px heading type. Verified 1470 / 1400 / 1280 / 375px with three
+cards preserved where intended and zero horizontal overflow; build and console checks are clean.
+Area released after push (`fa36710`, merged as `4d83b96`).
+
 ### 28 Jul 2026 — Claude
 Repo became the source of truth (Lovable credits exhausted). Established local dev loop
 (`npm run dev`, port 5173). Pushed: REN placeholder, 3% deposit rule, card/state-rail tightening
