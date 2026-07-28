@@ -376,12 +376,12 @@
   .prop-card .pc-deadline.is-closed { background: rgba(23,19,15,.62); }
 
   /* Body — grid mode: one flex column, explicit order per block */
-  .prop-card .pc-body { flex: 1; display: flex; flex-direction: column; min-width: 0; padding: 16px 18px 18px; }
+  .prop-card .pc-body { flex: 1; display: flex; flex-direction: column; min-width: 0; padding: 13px 15px 15px; }
   .prop-card .pc-ident, .prop-card .pc-side { display: contents; }
-  .prop-card .pc-title { order: 1; margin: 0; color: var(--ink); font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 21px; font-weight: 600; letter-spacing: -.015em; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .prop-card .pc-title { order: 1; margin: 0; color: var(--ink); font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 19.5px; font-weight: 600; letter-spacing: -.015em; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .prop-card .pc-title a { color: inherit; text-decoration: none; }
   .prop-card .pc-title a:hover { color: var(--burgundy); }
-  .prop-card .pc-loc { order: 2; display: flex; align-items: center; gap: 5px; margin: 6px 0 0; min-width: 0; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+  .prop-card .pc-loc { order: 2; display: flex; align-items: center; gap: 5px; margin: 4px 0 0; min-width: 0; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
   .prop-card .pc-loc svg { flex: none; width: 13px; height: 13px; color: var(--burgundy); }
   .prop-card .pc-loc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -405,14 +405,14 @@
   .prop-card .pc-type.is-missing { border-left-color: var(--line); background: var(--paper); }
   .prop-card .pc-type.is-missing .pc-type-label,
   .prop-card .pc-type.is-missing .pc-type-value { color: var(--muted); }
-  @media (min-width: 601px) { .props-grid.grid-mode .pc-title { min-height: 2.4em; } }
+  /* title no longer reserves two lines — short names keep the location tight below (Bryan, 28 Jul) */
 
   /* Financial band — institutional, never bright */
-  .prop-card .pc-money { order: 4; display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); align-items: end; gap: 8px; margin-top: 12px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--line) 65%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--paper) 62%, var(--card)); }
+  .prop-card .pc-money { order: 4; display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); align-items: end; gap: 8px; margin-top: 10px; padding: 10px 12px; border: 1px solid color-mix(in srgb, var(--line) 65%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--paper) 62%, var(--card)); }
   .prop-card .pc-money-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .09em; line-height: 1.25; text-transform: uppercase; }
   .prop-card .pc-money-value { display: block; color: var(--ink); font-size: clamp(18px, 6cqi, 22px); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .prop-card .pc-deposit { min-width: 0; text-align: right; }
-  .prop-card .pc-deposit-value { display: block; color: var(--burgundy); font-size: 13px; font-weight: 700; line-height: 1.25; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-deposit-value { display: block; color: var(--good); font-size: 13px; font-weight: 700; line-height: 1.25; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   /* Three permanent comparison slots keep every card aligned. Missing physical
      dimensions render as an em dash instead of collapsing the structure. */
@@ -534,8 +534,8 @@
   /* Standalone state navigator: heading sits outside the panel, no inner scroll. */
   .sidebar-filters { display: flex; flex-direction: column; min-width: 0; }
   .filters-scroll { min-height: 0; display: flex; flex-direction: column; }
-  .rail-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 14px; }
-  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 25px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); }
+  .rail-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 10px; }
+  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 20px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); }
   .state-panel { border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--paper) 32%, var(--card)); padding: 6px 8px; }
   .sheet-head { display: none; }
   .filters-backdrop { display: none; }
@@ -692,7 +692,7 @@
   .pop-row:has(input:checked) .label { color: var(--burgundy); font-weight: 700; }
   .pop-row .count { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .state-panel #state-filters { border: none; }
-  .state-panel .accordion-trigger { padding: 11px 8px; border-radius: 8px; }
+  .state-panel .accordion-trigger { padding: 8px 8px; border-radius: 8px; }
   .state-panel .accordion-item { border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); }
   .state-panel .accordion-item:last-child { border-bottom: none; }
   .state-panel .all-state-item { border-bottom: 1px solid var(--line); }
