@@ -92,7 +92,7 @@ export function PropertyCard({
           </dl>
           <div className="pc-foot">
             <img className="pc-avatar" src={AGENT_PHOTO} alt="Stephen Yew, listing agent" loading="lazy" />
-            <span className="pc-agent"><b>Stephen Yew</b><span>REN 00000</span></span>
+            <span className="pc-agent"><b>Stephen Yew</b><span>REN 123456</span></span>
             <a className="pc-tel" href="tel:+60123938255">012-393 8255</a>
           </div>
           <a className="pc-cta" href={href}>View tender details</a>
