@@ -1,8 +1,16 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 import { AREAS, STATES } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import { ChevronIcon } from "./icons";
+
+/* Small burgundy location pin used on every navigator row (decorative). */
+const RowPin = () => (
+  <svg className="marker" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z" />
+    <circle cx="12" cy="10" r="2.5" />
+  </svg>
+);
 
 type Tally = Record<string, { total: number; areas: Record<string, number> }>;
 
@@ -16,22 +24,21 @@ function tallyOf(list: Tender[]): Tally {
   return t;
 }
 
-/* "Tender By State" — single-open accordion. Selecting a state header means
-   "view all of it"; areas with no stock still render, disabled, so the list
-   reads as national coverage. */
+/* "Tender by State" — a standalone state navigator. The row itself applies the
+   state filter; the chevron is a separate control so cities can be inspected
+   without changing the selection. Only one state's city group is open at once. */
 export function StateFilters({
-  pool, activeState, activeArea, onSelect, query = "",
+  pool, activeState, activeArea, onSelect,
 }: {
   pool: Tender[];               // everything passing the OTHER filter groups
   activeState: string;
   activeArea: string;
   onSelect: (stateKey: string, area: string, areaLabel: string) => void;
-  query?: string;               // purely a display filter over the rendered rows
 }) {
   const [open, setOpen] = useState<string | null>(null);
+  const uid = useId();
   const inventory = useMemo(() => tallyOf(TENDERS), []);
   const counts = useMemo(() => tallyOf(pool), [pool]);
-  const q = query.trim().toLowerCase();
 
   const ordered = useMemo(() => {
     const sorted = STATES.slice().sort((a, b) => {
@@ -46,19 +53,21 @@ export function StateFilters({
 
   return (
     <div id="state-filters">
-      {!q && (
       <div className="accordion-item all-state-item">
-        <button
-          type="button"
-          className={"accordion-trigger all-state-trigger" + (activeState === "all" ? " active" : "")}
-          aria-pressed={activeState === "all"}
-          onClick={() => { setOpen(null); onSelect("all", "", ""); }}
-        >
-          <span className="label">All Malaysia</span>
-          <span className="count">{pool.length}</span>
-        </button>
+        <div className="accordion-row">
+          <button
+            type="button"
+            className={"accordion-trigger all-state-trigger" + (activeState === "all" ? " active" : "")}
+            aria-pressed={activeState === "all"}
+            onClick={() => { setOpen(null); onSelect("all", "", ""); }}
+          >
+            <RowPin />
+            <span className="label">All Malaysia</span>
+            {activeState === "all" && <span className="sel-tick" aria-hidden="true">✓</span>}
+            <span className="count" aria-label={`${pool.length} properties`}>{pool.length}</span>
+          </button>
+        </div>
       </div>
-      )}
 
       {ordered.map((s) => {
         const stock = inventory[s.key] || { total: 0, areas: {} };
@@ -66,37 +75,47 @@ export function StateFilters({
         const names: Record<string, true> = {};
         (AREAS[s.key] || []).forEach((a) => { names[a] = true; });
         Object.keys(stock.areas).forEach((a) => { names[a] = true; });
-        let areas = Object.keys(names).sort((a, b) =>
+        const areas = Object.keys(names).sort((a, b) =>
           a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }),
         );
-        const stateHit = s.name.toLowerCase().includes(q);
-        if (q && !stateHit) areas = areas.filter((a) => a.toLowerCase().includes(q));
-        if (q && !stateHit && areas.length === 0) return null;
         const hasChildren = areas.length > 0;
-        const isOpen = q ? hasChildren : open === s.key;
+        const isOpen = open === s.key;
         const stateActive = activeState === s.key;
+        const bodyId = `${uid}-cities-${s.key}`;
+        const disabled = stock.total === 0 || (live.total === 0 && !stateActive);
 
         return (
           <div className="accordion-item" key={s.key}>
-            <button
-              type="button"
-              className={"accordion-trigger" + (stateActive ? " active" : "")}
-              aria-expanded={hasChildren ? isOpen : undefined}
-              aria-pressed={stateActive}
-              disabled={stock.total === 0 || (live.total === 0 && !stateActive)}
-              onClick={() => {
-                if (isOpen) { setOpen(null); onSelect("all", "", ""); return; }
-                setOpen(s.key);
-                onSelect(s.key, "", "");
-              }}
-            >
-              <span className="label">{s.name}</span>
-              <span className="count">{live.total}</span>
-              {hasChildren ? <ChevronIcon /> : null}
-            </button>
-            <div className={"accordion-body" + (isOpen ? " open" : "")}>
+            <div className="accordion-row">
+              <button
+                type="button"
+                className={"accordion-trigger" + (stateActive ? " active" : "")}
+                aria-pressed={stateActive}
+                disabled={disabled}
+                onClick={() => { setOpen(hasChildren ? s.key : null); onSelect(s.key, "", ""); }}
+              >
+                <RowPin />
+                <span className="label">{s.name}</span>
+                {stateActive && <span className="sel-tick" aria-hidden="true">✓</span>}
+                <span className="count" aria-label={`${live.total} properties`}>{live.total}</span>
+              </button>
+              {hasChildren ? (
+                <button
+                  type="button"
+                  className={"accordion-chev" + (isOpen ? " open" : "")}
+                  aria-expanded={isOpen}
+                  aria-controls={bodyId}
+                  aria-label={`${isOpen ? "Collapse" : "Expand"} cities in ${s.name}`}
+                  onClick={() => setOpen(isOpen ? null : s.key)}
+                >
+                  <ChevronIcon />
+                </button>
+              ) : (
+                <span className="accordion-chev is-empty" aria-hidden="true" />
+              )}
+            </div>
+            <div className={"accordion-body" + (isOpen ? " open" : "")} id={bodyId} hidden={!isOpen}>
               <ul className="sub-list">
-                {!q && (
                 <li>
                   <button
                     type="button"
@@ -104,10 +123,9 @@ export function StateFilters({
                     onClick={() => onSelect(s.key, "", "")}
                   >
                     <span className="label">All</span>
-                    <span className="count">{live.total}</span>
+                    <span className="count" aria-label={`${live.total} properties`}>{live.total}</span>
                   </button>
                 </li>
-                )}
                 {areas.map((a) => {
                   const n = live.areas[a] || 0;
                   const on = stateActive && activeArea === a.toLowerCase();
@@ -121,7 +139,7 @@ export function StateFilters({
                         onClick={() => onSelect(s.key, a.toLowerCase(), a)}
                       >
                         <span className="label">{a}</span>
-                        <span className="count">{n}</span>
+                        <span className="count" aria-label={`${n} properties`}>{n}</span>
                       </button>
                     </li>
                   );

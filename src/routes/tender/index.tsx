@@ -116,11 +116,16 @@ function TenderListings() {
   const [page, setPage] = useState(1);
   const [priceOpen, setPriceOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [stateQuery, setStateQuery] = useState("");
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [taOpen, setTaOpen] = useState(false);
   const [taActive, setTaActive] = useState(-1);
   const resultsTop = useRef<HTMLDivElement>(null);
+  /* Price popover keeps a draft copy so nothing filters until Apply. */
+  const priceWrapRef = useRef<HTMLDivElement>(null);
+  const priceBtnRef = useRef<HTMLButtonElement>(null);
+  const [draftMin, setDraftMin] = useState("");
+  const [draftMax, setDraftMax] = useState("");
+  const [draftRanges, setDraftRanges] = useState<string[]>([]);
 
   useEffect(() => {
     try {
@@ -135,6 +140,23 @@ function TenderListings() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [sheetOpen]);
+
+  /* Price popover: outside click and Escape close it, focus returns to the button. */
+  useEffect(() => {
+    if (!priceOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (!priceWrapRef.current?.contains(e.target as Node)) setPriceOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setPriceOpen(false); priceBtnRef.current?.focus(); }
+    };
+    document.addEventListener("mousedown", onDown);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [priceOpen]);
 
   function toggleSave(id: string) {
     setSaved((prev) => {
@@ -210,11 +232,34 @@ function TenderListings() {
     setQuery(""); setTypeValue("all"); setCategory("all"); setRanges([]);
     setPriceMin(""); setPriceMax(""); setState("all"); setArea(""); setAreaLabel("");
     setPriceOpen(false); setPage(1);
-    setStateQuery("");
   }
 
   const activePriceCount = ranges.length + (priceMin ? 1 : 0) + (priceMax ? 1 : 0);
-  const priceExpanded = priceOpen || activePriceCount > 0;
+
+  /* Compact, human-readable summary of the applied price filter. */
+  const priceSummary = (() => {
+    const mn = priceMin ? parseInt(priceMin) : null;
+    const mx = priceMax ? parseInt(priceMax) : null;
+    if (mn !== null && mx !== null) return `${fmtRM(mn)}–${fmtRM(mx)}`;
+    if (mn !== null) return `${fmtRM(mn)}+`;
+    if (mx !== null) return `Up to ${fmtRM(mx)}`;
+    if (ranges.length === 1) return PRICE_ROWS.find((p) => p.value === ranges[0])?.label ?? null;
+    if (ranges.length > 1) return `${ranges.length} price bands`;
+    return null;
+  })();
+
+  function openPrice() {
+    setDraftMin(priceMin); setDraftMax(priceMax); setDraftRanges(ranges);
+    setPriceOpen(true);
+  }
+  function applyPrice() {
+    setPriceMin(draftMin); setPriceMax(draftMax); setRanges(draftRanges);
+    setPage(1); setPriceOpen(false); priceBtnRef.current?.focus();
+  }
+  function clearPrice() {
+    setDraftMin(""); setDraftMax(""); setDraftRanges([]);
+    setPriceMin(""); setPriceMax(""); setRanges([]); setPage(1);
+  }
 
   /* ---- Active filter chips ---- */
   const chips: { label: string; clear: () => void }[] = [];
@@ -361,46 +406,12 @@ function TenderListings() {
           </div>
         </section>
 
-        {/* TRUST STRIP — published terms only */}
-        <section className="trust-strip" aria-label="Platform assurances">
-          <ul className="wrap">
-            <li className="item">
-              <span className="icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3z" />
-                </svg>
-              </span>
-              <span className="copy"><strong>Licensed handling</strong><span>Your offer is handled by registered real estate professionals (REA/REN).</span></span>
-            </li>
-            <li className="item">
-              <span className="icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 018 0v3" />
-                </svg>
-              </span>
-              <span className="copy"><strong>Deposit safeguarded</strong><span>Your deposit is held in the agency&rsquo;s client account as stakeholder.</span></span>
-            </li>
-            <li className="item">
-              <span className="icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <rect x="3" y="7" width="18" height="13" rx="2.5" />
-                  <path d="M3 11h18" /><circle cx="16.5" cy="15.5" r="1.2" />
-                  <path d="M11 4.5L8 7l3 2.5" /><path d="M8 7h6" />
-                </svg>
-              </span>
-              <span className="copy"><strong>Full refund</strong><span>If unsuccessful, your deposit is refunded in full within 3 working days.</span></span>
-            </li>
-          </ul>
-        </section>
 
-        {/* PROPERTY DISCOVERY */}
-        <section className="search-filter-section" id="listings" aria-labelledby="property-search-title">
+        {/* SEARCH BAND — sits directly below the hero date */}
+        <section className="hero-search-band" aria-labelledby="property-search-title">
           <div className="wrap">
             <div className="search-intro">
               <h2 id="property-search-title">Find a property <span className="hl">open for tender</span></h2>
-              <p className="search-sub">
-                Discover properties available through sealed tender and submit your offer before the closing date.
-              </p>
             </div>
             <form
               className="search-form"
@@ -497,7 +508,7 @@ function TenderListings() {
         </section>
 
         {/* MAIN LISTINGS AREA */}
-        <section className="listings-section">
+        <section className="listings-section" id="listings">
           <div className="wrap main-layout">
             <div className="results-column">
               <div className="results-header" ref={resultsTop}>
@@ -513,11 +524,13 @@ function TenderListings() {
                     aria-expanded={sheetOpen}
                     onClick={() => setSheetOpen(true)}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                      <path d="M4 6h16M7 12h10M10 18h4" />
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" />
                     </svg>
-                    <span>Filters</span>
-                    {chips.length > 0 && <span className="tool-badge">{chips.length}</span>}
+                    <span>Tender by State</span>
+                    {state !== "all" && (
+                      <span className="tool-badge">{area ? 2 : 1}</span>
+                    )}
                   </button>
                   <div className="sort-field">
                     <label htmlFor="sort-by">Sort</label>
@@ -527,6 +540,68 @@ function TenderListings() {
                       <option value="price-asc">Reserve price: low to high</option>
                       <option value="price-desc">Reserve price: high to low</option>
                     </select>
+                  </div>
+                  {/* Price range — the single price control on the page */}
+                  <div className="price-tool" ref={priceWrapRef}>
+                    <button
+                      type="button"
+                      ref={priceBtnRef}
+                      className={"price-tool-btn" + (priceSummary ? " is-active" : "")}
+                      aria-expanded={priceOpen}
+                      aria-controls="price-popover"
+                      aria-haspopup="dialog"
+                      aria-label={priceSummary ? `Price range: ${priceSummary}` : "Price range"}
+                      onClick={() => (priceOpen ? setPriceOpen(false) : openPrice())}
+                    >
+                      <span className="ptb-short" aria-hidden="true">{priceSummary || "Price"}</span>
+                      <span className="ptb-full">{priceSummary || "Price range"}</span>
+                      <svg className="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </button>
+                    {priceOpen && (
+                      <div className="price-popover" id="price-popover" role="dialog" aria-label="Price range">
+                        <div className="price-minmax">
+                          <label className="pp-field">
+                            <span>Minimum (RM)</span>
+                            <select value={draftMin} onChange={(e) => setDraftMin(e.target.value)}>
+                              <option value="">No min</option>
+                              {MIN_OPTIONS.map((v) => <option key={v} value={v}>{fmtRM(v)}</option>)}
+                            </select>
+                          </label>
+                          <span className="mm-sep" aria-hidden="true">to</span>
+                          <label className="pp-field">
+                            <span>Maximum (RM)</span>
+                            <select value={draftMax} onChange={(e) => setDraftMax(e.target.value)}>
+                              <option value="">No max</option>
+                              {MAX_OPTIONS.map((v) => <option key={v} value={v}>{fmtRM(v)}</option>)}
+                            </select>
+                          </label>
+                        </div>
+                        <p className="pp-legend">Or pick a band</p>
+                        <div className="price-pop">
+                          {PRICE_ROWS.map((r) => (
+                            <label className="pop-row" key={r.value}>
+                              <input
+                                type="checkbox"
+                                value={r.value}
+                                checked={draftRanges.includes(r.value)}
+                                onChange={(e) =>
+                                  setDraftRanges((v) => (e.target.checked ? [...v, r.value] : v.filter((y) => y !== r.value)))
+                                }
+                              />
+                              <span className="box" aria-hidden="true" />
+                              <span className="label">{r.label}</span>
+                              <span className="count">{priceCount(r.value)}</span>
+                            </label>
+                          ))}
+                        </div>
+                        <div className="pp-actions">
+                          <button type="button" className="pp-clear" onClick={clearPrice} disabled={activePriceCount === 0 && !draftMin && !draftMax && draftRanges.length === 0}>Clear</button>
+                          <button type="button" className="btn red pp-apply" onClick={applyPrice}>Apply</button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="view-toggle" role="group" aria-label="Result layout">
                     <button type="button" className={"toggle-btn" + (view === "grid" ? " active" : "")} title="Grid View" aria-pressed={view === "grid"} onClick={() => setView("grid")}>
@@ -604,106 +679,33 @@ function TenderListings() {
             <div className={"filters-backdrop" + (sheetOpen ? " show" : "")} onClick={() => setSheetOpen(false)} />
             <aside
               className={"sidebar-filters" + (sheetOpen ? " open" : "")}
-              aria-label="Filter properties"
+              aria-label="Tender by state"
             >
-              <div className="filters-head">
-                <b>Filter properties</b>
-                <div className="filters-head-actions">
-                  <button
-                    type="button"
-                    className="link-reset"
-                    onClick={reset}
-                    disabled={chips.length === 0}
-                  >
-                    Reset
-                  </button>
-                  <button
-                    type="button"
-                    className="sheet-close"
-                    aria-label="Close filters"
-                    onClick={() => setSheetOpen(false)}
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                      <path d="M6 6l12 12M18 6L6 18" />
-                    </svg>
-                  </button>
-                </div>
+              <div className="rail-head">
+                <h2 className="rail-title">Tender by State</h2>
+                <button
+                  type="button"
+                  className="sheet-close"
+                  aria-label="Close tender by state"
+                  onClick={() => setSheetOpen(false)}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" />
+                  </svg>
+                </button>
               </div>
               <div className="filters-scroll">
-
-              {/* Price collapsed by default so Tender By State sits higher; it force-opens
-                  whenever a price filter is active so an applied filter is never hidden. */}
-              <section className={"fcard" + (priceExpanded ? "" : " is-collapsed")}>
-                <h3 className="fcard-title">
-                  <button type="button" className="fcard-toggle" aria-expanded={priceExpanded} onClick={() => setPriceOpen((v) => !v)}>
-                    <span>Price Range</span>
-                    <span className="fcard-badge" hidden={activePriceCount === 0}>{activePriceCount}</span>
-                    <svg className="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="m6 9 6 6 6-6" />
-                    </svg>
-                  </button>
-                </h3>
-                <div className="fcard-body">
-                  <div className="price-minmax">
-                    <select aria-label="Minimum price" value={priceMin} onChange={(e) => { setPriceMin(e.target.value); setPage(1); }}>
-                      <option value="">No min</option>
-                      {MIN_OPTIONS.map((v) => <option key={v} value={v}>{fmtRM(v)}</option>)}
-                    </select>
-                    <span className="mm-sep">to</span>
-                    <select aria-label="Maximum price" value={priceMax} onChange={(e) => { setPriceMax(e.target.value); setPage(1); }}>
-                      <option value="">No max</option>
-                      {MAX_OPTIONS.map((v) => <option key={v} value={v}>{fmtRM(v)}</option>)}
-                    </select>
-                  </div>
-                  <div className="price-pop">
-                    {PRICE_ROWS.map((r) => (
-                      <label className="pop-row" key={r.value}>
-                        <input
-                          type="checkbox"
-                          value={r.value}
-                          checked={ranges.includes(r.value)}
-                          onChange={(e) => {
-                            setRanges((v) => (e.target.checked ? [...v, r.value] : v.filter((y) => y !== r.value)));
-                            setPage(1);
-                          }}
-                        />
-                        <span className="box" aria-hidden="true" />
-                        <span className="label">{r.label}</span>
-                        <span className="count">{priceCount(r.value)}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </section>
-
-              <section className="fcard fcard-state">
-                <h3 className="fcard-title">Tender By State</h3>
-                <div className="state-search">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                    <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" />
-                  </svg>
-                  <input
-                    type="search"
-                    aria-label="Search state or city"
-                    placeholder="Search state or city"
-                    value={stateQuery}
-                    onChange={(e) => setStateQuery(e.target.value)}
-                  />
-                </div>
-                <div className="state-scroll">
+                <div className="state-panel">
                   <StateFilters
                     pool={locationPool}
                     activeState={state}
                     activeArea={area}
-                    query={stateQuery}
                     onSelect={(k, a, label) => { setState(k); setArea(a); setAreaLabel(label); setPage(1); }}
                   />
                 </div>
-              </section>
               </div>
 
               <div className="sheet-actions">
-                <button type="button" className="btn ghost" onClick={reset}>Reset</button>
                 <button type="button" className="btn red" onClick={() => setSheetOpen(false)}>
                   Show <span>{sorted.length}</span> properties
                 </button>
