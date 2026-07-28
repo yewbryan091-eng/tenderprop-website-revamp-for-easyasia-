@@ -1,0 +1,68 @@
+# TEAM LOG — the shared channel between agents
+
+Claude and Codex both build this repo and **cannot talk to each other**. This file is how
+they communicate. Bryan should not have to relay context between agents.
+
+**Every agent: READ this file before you start. UPDATE it before you stop. Commit it with your work.**
+
+---
+
+## 1. WHO IS WORKING ON WHAT
+
+Claim your area here *before* you edit, and push the claim immediately. If someone else holds
+the area you were asked to work on, tell Bryan instead of editing anyway.
+
+| Area | Files | Held by | Since | Status |
+|---|---|---|---|---|
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | — |
+| Property detail page | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | — |
+| Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
+
+Release your claim (set back to *free*) when you push your finished work.
+
+---
+
+## 2. DECISIONS LEDGER — do not silently reverse these
+
+These were decided deliberately, most of them by Bryan directly. If something here looks like a
+bug or a mistake, it probably isn't — **ask Bryan before changing it.**
+
+| Date | Decision | Why | Decided by |
+|---|---|---|---|
+| 28 Jul | Refundable deposit = **3% of reserve price**, computed in `depositOf()` | Founder-confirmed rule. Sinaran's old published RM10,000 was stale CMS data (3% = RM15,510) | Bryan (from his father) |
+| 28 Jul | Deposit value renders **green** (`--good`) | Bryan's explicit preference. Overrides earlier advice to keep it neutral ink | Bryan |
+| 28 Jul | Card title does **NOT** reserve two lines | The `min-height: 2.4em` reserve pushed the location far below short titles. Removed so location hugs the title. Ragged card heights are accepted | Bryan |
+| 28 Jul | Hero = **full-bleed diagonal split** (`/` direction), no maroon slab | Bryan's design. Left = closing date over KLCC image; right = sealed-tender explainer | Bryan |
+| 28 Jul | Hero shows **days only**, no hours/mins/secs tiles | A tender four months out doesn't need a ticking clock; auction-urgency theatre is wrong for a sealed tender | Claude, accepted by Bryan |
+| 28 Jul | The 12 `demo:true` listings **stay**, badged DEMO, and get **no detail pages** | Bryan wants national state coverage in the demo without generating fake property pages | Bryan |
+| 28 Jul | Fabricated content **removed**: invented price history, borrowed facilities list, dead Video/Drone buttons | This prototype becomes EasyAsia's spec — invented content would be copied as real | Claude, accepted by Bryan |
+| 28 Jul | `REN 123456` is an approved **placeholder** | Real REN + agency registration required before go-live | Bryan |
+| 28 Jul | `tender-seeker-bot.lovable.app` is a **frozen snapshot**; this repo is the truth | Lovable credits ran out; its copy no longer updates from git | Bryan |
+
+---
+
+## 3. FLAGGED / UNRESOLVED — needs Bryan or his father
+
+- **"Registration closing / Registration by" dates may be fabricated.** Bryan's account of the model
+  has no separate registration deadline — a buyer just submits before the closing date (an account
+  is required, but that isn't a dated deadline). Removed from the listings hero; **still present on
+  the detail page** (`Registration by 17 Dec 2028`). Do not build on it until confirmed.
+- **When exactly is the 3% deposit paid?** Bryan's flow: buyer submits offer price + contact details,
+  then the agency follows up. The detail page currently says the deposit is paid at submission.
+  Unresolved — avoid stating the timing in new copy.
+- **After acceptance:** SPA timeline, balance payment window, and whether the deposit is at risk if
+  the buyer's loan is declined. Unknown.
+- Package pricing (3-month vs 6-month), real REN, agency registration number, footer legal identity.
+
+---
+
+## 4. WORKING NOTES — newest first
+
+Short entries. What you did, anything the other agent needs to know.
+
+### 28 Jul 2026 — Claude
+Repo became the source of truth (Lovable credits exhausted). Established local dev loop
+(`npm run dev`, port 5173). Pushed: REN placeholder, 3% deposit rule, card/state-rail tightening
+(green deposit, title-to-location gap, smaller card + rail), AGENTS.md rules, this file.
+**Queued and NOT started:** search-section pass (closing-date filter, live-count sub-line,
+"All Property Types" grammar, tab spacing), then Residensi Sinaran detail page section by section.

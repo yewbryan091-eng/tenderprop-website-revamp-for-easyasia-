@@ -20,12 +20,26 @@ Set by Bryan, 28 Jul 2026: *"make sure everyone is editing the same 1 same file 
 - **https://tender-seeker-bot.lovable.app is a FROZEN SNAPSHOT.** It is Lovable's hosted copy from the morning of 28 Jul 2026, before Lovable credits ran out. It does NOT update from this repo. Use it as a visual reference only — never as the current state, and never edit anything based on the assumption it is current.
 - Do NOT edit the old prototype copies elsewhere on Bryan's machine (`tenderprop.os/tenderprop-website-revamp*`, anything in `~/Downloads`). Those are design-reference archives from before this repo existed.
 
+## FIRST: read TEAM-LOG.md
+
+`TEAM-LOG.md` is the shared channel between agents (Claude, Codex, anyone else). It holds:
+who is currently working on which files, a DECISIONS LEDGER of deliberate choices that must not be
+silently reversed, unresolved questions waiting on the founder, and short working notes.
+
+**Read it before you start. Update it before you stop. Commit it with your work.**
+If something in the code looks wrong, check the decisions ledger before "fixing" it — it may be
+deliberate, and reversing it wastes Bryan's time and ping-pongs the design.
+
 ## Git protocol (prevents agents clobbering each other)
 1. `git pull` before you touch anything.
 2. Leave the working tree CLEAN when you stop: commit + push, or discard. Never leave uncommitted edits for the next agent to trip over.
 3. Push only working code to `main` — it is the demo surface.
 4. NEVER force-push / rebase / amend pushed commits (see Lovable notice above).
 5. One agent in the working tree at a time.
+6. Claim your area in `TEAM-LOG.md` before editing, and release it when you push. If another agent
+   holds the area you were asked to work on, tell Bryan rather than editing anyway.
+7. If you hit a merge conflict, STOP and tell Bryan. Never resolve it by discarding the other
+   agent's work.
 
 ## Product rules (non-negotiable, from the founder)
 - **Vocabulary:** bid, tender, reserve price, tender closing date, "Apply for Tender". Never "Auction Date", never "starting bid", never live-auction devices (bid counts, "N bidding now") — this is a SEALED tender: nobody ever sees another buyer's offer.
