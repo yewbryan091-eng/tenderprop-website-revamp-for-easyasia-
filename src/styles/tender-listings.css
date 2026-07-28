@@ -321,6 +321,13 @@
   /* padding-block only — the .wrap shorthand must keep supplying the gutters */
   .main-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 38px; padding-top: 40px; padding-bottom: 80px; align-items: start; }
   .results-column { min-width: 0; }
+  @media(min-width: 1400px) {
+    .main-layout {
+      grid-template-columns: minmax(0, 1020px) clamp(260px, 19vw, 280px);
+      gap: 28px;
+      justify-content: center;
+    }
+  }
   @media(max-width: 1399px) { .main-layout { grid-template-columns: minmax(0, 1fr); } }
 
   /* Results system: intentional max-width, 32px gutters on large screens. */
@@ -537,8 +544,8 @@
   .sidebar-filters { display: flex; flex-direction: column; min-width: 0; }
   .filters-scroll { min-height: 0; display: flex; flex-direction: column; }
   .rail-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 10px; }
-  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 20px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); }
-  .state-panel { border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--paper) 32%, var(--card)); padding: 6px 8px; }
+  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 18px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); }
+  .state-panel { border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--paper) 32%, var(--card)); padding: 5px 6px; }
   .sheet-head { display: none; }
   .filters-backdrop { display: none; }
   .filters-open-btn { display: none; }
@@ -694,12 +701,12 @@
   .pop-row:has(input:checked) .label { color: var(--burgundy); font-weight: 700; }
   .pop-row .count { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .state-panel #state-filters { border: none; }
-  .state-panel .accordion-trigger { padding: 8px 8px; border-radius: 8px; }
+  .state-panel .accordion-trigger { padding: 7px 7px; border-radius: 8px; font-size: 13px; }
   .state-panel .accordion-item { border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); }
   .state-panel .accordion-item:last-child { border-bottom: none; }
   .state-panel .all-state-item { border-bottom: 1px solid var(--line); }
   .state-panel .sub-list { background: transparent; }
-  .state-panel .sub-list li button { padding-left: 34px; border-radius: 8px; }
+  .state-panel .sub-list li button { padding: 7px 7px 7px 28px; border-radius: 8px; font-size: 12px; }
   /* Selection is never colour-only: active rows carry a burgundy edge, tick + weight. */
   .state-panel .accordion-trigger.active { background: rgba(87,28,46,.06); box-shadow: inset 3px 0 0 var(--burgundy); font-weight: 700; }
   .state-panel .accordion-trigger.active .label { font-weight: 700; }
