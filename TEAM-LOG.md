@@ -60,6 +60,16 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 28 Jul 2026 (later) — Claude
+Hero rework, both panels. LEFT: timer moved to the top-right edge (it now hugs the diagonal —
+it cannot sit further right without colliding with the slash), announcement block centred beneath it
+(eyebrow → date → count → CTA → 5PM note). RIGHT: **replaced the four-card pile with an unboxed
+numbered 3-step sequence** (submit → seller reviews → accepted-or-refunded) with a connecting rule.
+Rationale: the content is a process, so it should read as a sequence; four nested cards inside an
+already-white panel was muddy and fought the "limited rounded containers" rule. Removed the now-unused
+CalendarCheck / CheckCircle / ArrowLeftCircle icons. Hero min-height raised 340-420 -> 460-580 because
+the sequence needs the room. Verified: no overflow at 375px or desktop, right panel content fits.
+
 ### 28 Jul 2026 — Claude
 Repo became the source of truth (Lovable credits exhausted). Established local dev loop
 (`npm run dev`, port 5173). Pushed: REN placeholder, 3% deposit rule, card/state-rail tightening

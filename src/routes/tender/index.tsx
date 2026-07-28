@@ -7,7 +7,6 @@ import { SiteHeader } from "@/components/tender/SiteHeader";
 import { StateFilters } from "@/components/tender/StateFilters";
 import { TaHome, TaPin } from "@/components/tender/icons";
 import {
-  ArrowLeftCircleIcon, CalendarCheckIcon, CheckCircleIcon, LockIcon,
 } from "@/components/tender/icons";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
@@ -368,40 +367,35 @@ function TenderListings() {
           </div>
           <div className="hero-panel hero-panel-right">
             <div className="hero-panel-inner">
-              <div className="hero-seal">
-                <span className="hero-seal-icon" aria-hidden="true"><LockIcon /></span>
-                <div>
-                  <p className="hero-eyebrow">Sealed e-tender</p>
-                  <h2 className="hero-seal-title">Your offer stays private.</h2>
-                  <p className="hero-seal-text">Submit before closing. It is never displayed publicly.</p>
-                </div>
-              </div>
-              <p className="hero-next-label">What happens next</p>
-              <div className="hero-next">
-                <div className="hero-next-card is-wide">
-                  <span className="hero-next-icon"><CalendarCheckIcon /></span>
+              <p className="hero-eyebrow">Sealed e-tender</p>
+              <h2 className="hero-seal-title">Your offer stays private</h2>
+              <p className="hero-seal-text">
+                No one — not other buyers, not the public — ever sees what you offered.
+              </p>
+
+              <ol className="hero-flow">
+                <li>
+                  <span className="hero-flow-n" aria-hidden="true">1</span>
                   <div>
-                    <strong>After closing</strong>
-                    <p>The seller considers all valid offers.</p>
+                    <strong>Submit your offer</strong>
+                    <p>Any time before the closing date. A refundable deposit applies.</p>
                   </div>
-                </div>
-                <div className="hero-next-row">
-                  <div className="hero-next-card is-success">
-                    <span className="hero-next-icon"><CheckCircleIcon /></span>
-                    <div>
-                      <strong>If accepted</strong>
-                      <p>Continue with the appointed agent.</p>
-                    </div>
+                </li>
+                <li>
+                  <span className="hero-flow-n" aria-hidden="true">2</span>
+                  <div>
+                    <strong>The seller reviews</strong>
+                    <p>After closing they may accept, decline, or negotiate through our licensed agent.</p>
                   </div>
-                  <div className="hero-next-card is-return">
-                    <span className="hero-next-icon"><ArrowLeftCircleIcon /></span>
-                    <div>
-                      <strong>If not accepted</strong>
-                      <p>Your refundable deposit is returned in full.</p>
-                    </div>
+                </li>
+                <li>
+                  <span className="hero-flow-n" aria-hidden="true">3</span>
+                  <div>
+                    <strong>Accepted, or refunded</strong>
+                    <p>Accepted offers proceed to signing. Otherwise your deposit is refunded in full within 3 working days.</p>
                   </div>
-                </div>
-              </div>
+                </li>
+              </ol>
             </div>
           </div>
         </section>
