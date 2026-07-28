@@ -353,8 +353,8 @@
   @media(max-width: 680px) { .props-grid.grid-mode { grid-template-columns: minmax(0, 1fr); } }
 
   /* ══════════════ Tender notice card ══════════════
-     A card is a tender dossier: photo + deadline, identity, one quiet financial
-     band, a compact fact grid, then the licensed agent and the single CTA.
+     Buyer-first hierarchy: photo + deadline, identity + location, a prominent
+     property classification, financials, tender/area details, agent and CTA.
      Grid mode stacks (flex column + order); list mode splits into columns. */
   .prop-card { position: relative; display: flex; flex-direction: column; min-width: 0; background: var(--card); border: 1px solid var(--line); border-radius: 15px; overflow: hidden; transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
   .prop-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--burgundy) 34%, var(--line)); box-shadow: 0 4px 14px rgba(23,19,15,.055); }
@@ -388,26 +388,60 @@
   .prop-card .pc-loc { order: 2; display: flex; align-items: center; gap: 5px; margin: 6px 0 0; min-width: 0; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
   .prop-card .pc-loc svg { flex: none; width: 13px; height: 13px; color: var(--burgundy); }
   .prop-card .pc-loc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .prop-card .pc-specs { order: 3; display: flex; align-items: center; flex-wrap: wrap; gap: 4px 14px; margin: 10px 0 0; color: var(--ink); font-size: 12px; font-weight: 600; line-height: 1.3; }
-  .prop-card .pc-spec { display: inline-flex; align-items: center; gap: 5px; }
-  .prop-card .pc-spec svg { flex: none; width: 15px; height: 15px; color: var(--burgundy); }
+
+  /* Property classification is the card's signature scan point. The left rule
+     reads like a dossier index tab, not another floating badge or decoration. */
+  .prop-card .pc-type {
+    order: 3; min-width: 0; display: grid; gap: 2px; margin-top: 14px;
+    padding: 10px 12px 11px; border-left: 3px solid var(--burgundy);
+    border-radius: 0 8px 8px 0;
+    background: color-mix(in srgb, var(--burgundy) 5%, var(--card));
+  }
+  .prop-card .pc-type-label {
+    color: var(--burgundy); font-size: 9.5px; font-weight: 800;
+    letter-spacing: .11em; line-height: 1.25; text-transform: uppercase;
+  }
+  .prop-card .pc-type-value {
+    min-width: 0; overflow: hidden; color: var(--ink); font-size: 15.5px;
+    font-weight: 750; letter-spacing: -.01em; line-height: 1.3;
+    text-overflow: ellipsis; white-space: nowrap;
+  }
+  .prop-card .pc-type.is-missing { border-left-color: var(--line); background: var(--paper); }
+  .prop-card .pc-type.is-missing .pc-type-label,
+  .prop-card .pc-type.is-missing .pc-type-value { color: var(--muted); }
   @media (min-width: 601px) { .props-grid.grid-mode .pc-title { min-height: 2.4em; } }
 
   /* Financial band — institutional, never bright */
-  .prop-card .pc-money { order: 4; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px 14px; margin-top: 16px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--line) 65%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--paper) 62%, var(--card)); }
+  .prop-card .pc-money { order: 4; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px 14px; margin-top: 12px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--line) 65%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--paper) 62%, var(--card)); }
   .prop-card .pc-money-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .09em; line-height: 1.25; text-transform: uppercase; }
   .prop-card .pc-money-value { display: block; color: var(--ink); font-size: 22px; font-weight: 800; letter-spacing: -.025em; line-height: 1.1; font-variant-numeric: tabular-nums; }
   .prop-card .pc-deposit { min-width: 0; text-align: right; }
   .prop-card .pc-deposit-value { display: block; color: var(--burgundy); font-size: 13px; font-weight: 700; line-height: 1.25; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
-  /* Compact 2-column fact grid — absent facts simply don't render */
-  .prop-card .pc-facts { order: 5; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; margin: 16px 0 0; }
-  .prop-card .pc-fact { min-width: 0; }
-  .prop-card .pc-fact dt { color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .07em; line-height: 1.3; text-transform: uppercase; }
-  .prop-card .pc-fact dd { margin: 2px 0 0; color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* Three permanent comparison slots keep every card aligned. Missing physical
+     dimensions render as an em dash instead of collapsing the structure. */
+  .prop-card .pc-details {
+    order: 5; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0; margin: 14px 0 0;
+  }
+  .prop-card .pc-detail { min-width: 0; }
+  .prop-card .pc-detail + .pc-detail {
+    margin-left: 10px; padding-left: 10px;
+    border-left: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+  }
+  .prop-card .pc-detail dt {
+    color: var(--muted); font-size: 9.5px; font-weight: 800;
+    letter-spacing: .07em; line-height: 1.3; text-transform: uppercase;
+  }
+  .prop-card .pc-detail dd {
+    min-width: 0; margin: 3px 0 0; overflow: hidden; color: var(--ink);
+    font-size: 12px; font-weight: 700; line-height: 1.35;
+    text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  .prop-card .pc-detail.is-missing dd { color: var(--muted); font-weight: 600; }
 
   /* Agent footer + single CTA */
-  .prop-card .pc-foot { order: 6; display: flex; align-items: center; gap: 10px; min-width: 0; margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); }
+  .prop-card .pc-foot { order: 6; display: flex; align-items: center; gap: 10px; min-width: 0; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
   .prop-card .pc-avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
   .prop-card .pc-agent { flex: 1; min-width: 0; }
   .prop-card .pc-agent b { display: block; color: var(--ink); font-size: 13.5px; font-weight: 700; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -418,7 +452,7 @@
   .prop-card .pc-cta:hover { background: var(--burgundy); border-color: var(--burgundy); color: #fff; }
   @media (prefers-reduced-motion: reduce) { .prop-card .pc-cta, .prop-card .save-btn::before { transition: none; } }
 
-  /* List mode — media left, identity centre, financials + CTA right */
+  /* List mode — media left, identity centre, decision details + CTA right */
   @container (min-width: 700px) {
     .props-grid.list-mode .prop-card { display: grid; grid-template-columns: clamp(230px, 26cqi, 300px) minmax(0, 1fr); }
     .props-grid.list-mode .pc-media { height: 100%; }
@@ -429,12 +463,39 @@
     .props-grid.list-mode .pc-title { min-height: 0; -webkit-line-clamp: 2; }
     .props-grid.list-mode .pc-money { grid-template-columns: minmax(0, 1fr); text-align: left; margin-top: 0; }
     .props-grid.list-mode .pc-deposit { text-align: left; }
-    .props-grid.list-mode .pc-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 16px; }
+    .props-grid.list-mode .pc-details { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 0; }
+    .props-grid.list-mode .pc-detail {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 10px; padding: 7px 2px;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+    }
+    .props-grid.list-mode .pc-detail + .pc-detail { margin-left: 0; padding-left: 2px; border-left: 0; }
+    .props-grid.list-mode .pc-detail dd { text-align: right; }
     .props-grid.list-mode .pc-foot { margin-top: auto; }
     .props-grid.list-mode .pc-foot { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 3px 10px; align-items: center; }
     .props-grid.list-mode .pc-avatar { grid-row: span 2; }
     .props-grid.list-mode .pc-tel { grid-column: 2; justify-self: start; }
     .props-grid.list-mode .pc-cta { margin-top: 0; }
+  }
+
+  /* On a narrow card, give the date a full row and keep the two physical
+     dimensions paired underneath. This preserves readable values at 320–375px. */
+  @media (max-width: 420px) {
+    .prop-card .pc-money { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+    .prop-card .pc-deposit {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 12px; padding-top: 9px; border-top: 1px solid
+      color-mix(in srgb, var(--line) 60%, transparent); text-align: left;
+    }
+    .prop-card .pc-deposit .pc-money-label { margin-bottom: 0; }
+    .prop-card .pc-details { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 10px; }
+    .prop-card .pc-detail:first-child {
+      grid-column: 1 / -1; display: flex; align-items: baseline;
+      justify-content: space-between; gap: 12px; padding-bottom: 9px;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+    }
+    .prop-card .pc-detail:nth-child(2) { margin-left: 0; padding-left: 0; border-left: 0; }
+    .prop-card .pc-detail:nth-child(3) { margin-left: 12px; padding-left: 12px; }
   }
 
   /* Pagination (iNewProject pattern, in TenderProp maroon) */

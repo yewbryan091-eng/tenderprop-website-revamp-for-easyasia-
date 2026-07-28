@@ -1,19 +1,7 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
-import {
-  BathIcon, BedIcon, CarIcon, ClockIcon, HeartIcon, PinIcon,
-} from "./icons";
+import { ClockIcon, HeartIcon, PinIcon } from "./icons";
 import { daysLeft, depositOf, fmtDate, fmtPrice, hrefFor, tenderId } from "@/lib/tender-utils";
-
-function Spec({ label, children, icon }: { label: string; icon: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <span className="pc-spec">
-      <span className="sr-only">{label}</span>
-      {icon}
-      <span>{children}</span>
-    </span>
-  );
-}
 
 /* "12 Dec" — short form of the listing's own closing date. Never hardcoded. */
 function shortDate(iso: string) {
@@ -21,7 +9,7 @@ function shortDate(iso: string) {
 }
 
 /* One semantic tender-notice card. Grid mode stacks it; list mode splits it into
-   media / identity / financial columns — same render path, driven by the
+   media / identity / decision details — same render path, driven by the
    container class on .props-grid. */
 export function PropertyCard({
   x, saved, onToggleSave,
@@ -36,14 +24,9 @@ export function PropertyCard({
   const dlTxt =
     d <= 0 ? "Tender closed" : `Closes ${shortDate(x.closingDate)} · ${d} ${d === 1 ? "day" : "days"}`;
   const href = hrefFor(x);
-
-  const facts: { l: string; v: string }[] = [];
-  if (x.propertyType) facts.push({ l: "Property type", v: x.propertyType });
-  if (x.tenure) facts.push({ l: "Tenure", v: x.tenure });
-  if (x.builtUp) facts.push({ l: "Built-up", v: x.builtUp });
-  if (x.landArea) facts.push({ l: "Land area", v: x.landArea });
-
-  const hasSpecs = Boolean(x.bedrooms || x.bathrooms || x.carParks);
+  const hasPropertyType = Boolean(x.propertyType.trim());
+  const propertyType = hasPropertyType ? x.propertyType.trim() : "Not specified";
+  const tenderDate = fmtDate(x.closingDate);
 
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
@@ -76,23 +59,10 @@ export function PropertyCard({
         <div className="pc-ident">
           <h3 className="pc-title"><a href={href}>{x.name}</a></h3>
           <p className="pc-loc"><PinIcon /><span>{x.area}, {x.stateName}</span></p>
-          {hasSpecs && (
-            <p className="pc-specs">
-              {x.bedrooms ? <Spec label="Bedrooms" icon={<BedIcon />}>{x.bedrooms}</Spec> : null}
-              {x.bathrooms ? <Spec label="Bathrooms" icon={<BathIcon />}>{x.bathrooms}</Spec> : null}
-              {x.carParks ? <Spec label="Car parks" icon={<CarIcon />}>{x.carParks}</Spec> : null}
-            </p>
-          )}
-          {facts.length > 0 && (
-            <dl className="pc-facts">
-              {facts.map((f) => (
-                <div className="pc-fact" key={f.l}>
-                  <dt>{f.l}</dt>
-                  <dd>{f.v}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
+          <div className={"pc-type" + (hasPropertyType ? "" : " is-missing")}>
+            <span className="pc-type-label">Property type</span>
+            <strong className="pc-type-value">{propertyType}</strong>
+          </div>
         </div>
 
         <div className="pc-side">
@@ -106,6 +76,20 @@ export function PropertyCard({
               <span className="pc-deposit-value">{depositOf(x)}</span>
             </div>
           </div>
+          <dl className="pc-details">
+            <div className="pc-detail">
+              <dt>Tender date</dt>
+              <dd><time dateTime={x.closingDate}>{tenderDate}</time></dd>
+            </div>
+            <div className={"pc-detail" + (x.landArea ? "" : " is-missing")}>
+              <dt>Land area</dt>
+              <dd>{x.landArea || <span aria-label="Not provided">—</span>}</dd>
+            </div>
+            <div className={"pc-detail" + (x.builtUp ? "" : " is-missing")}>
+              <dt>Built-up</dt>
+              <dd>{x.builtUp || <span aria-label="Not provided">—</span>}</dd>
+            </div>
+          </dl>
           <div className="pc-foot">
             <img className="pc-avatar" src={AGENT_PHOTO} alt="Stephen Yew, listing agent" loading="lazy" />
             <span className="pc-agent"><b>Stephen Yew</b><span>REN 00000</span></span>
