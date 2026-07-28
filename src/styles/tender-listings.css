@@ -313,21 +313,17 @@
     .cat-nav { margin-top: 14px; gap: 20px; }
   }
 
-  /* Main Layout — results column + sticky filter rail (rail hidden ≤1180px) */
+  /* Main Layout — the state rail appears only when three cards still retain
+     comfortable buyer-facing widths. Below 1400px it becomes the toolbar
+     drawer, giving the listings the full canvas instead of squeezing them. */
   /* padding-block only — the .wrap shorthand must keep supplying the gutters */
   .main-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 38px; padding-top: 40px; padding-bottom: 80px; align-items: start; }
   .results-column { min-width: 0; }
-  @media(max-width: 1180px) { .main-layout { grid-template-columns: minmax(0, 1fr); } }
+  @media(max-width: 1399px) { .main-layout { grid-template-columns: minmax(0, 1fr); } }
 
   /* Results system: intentional max-width, 32px gutters on large screens. */
   .listings-section .wrap { max-width: 1600px; }
   @media(min-width: 1200px) { .listings-section .wrap { padding-inline: 32px; } }
-  /* Below 1600px three cards would go under-sized, so run a centred 2-up grid
-     with the cards capped instead of letting them become slabs. */
-  @media(max-width: 1599px) and (min-width: 1181px) {
-    /* Cap the whole system so the cards stay ~430px and the 38px rail gap holds. */
-    .listings-section .main-layout { max-width: 1220px; margin-inline: auto; }
-  }
   @media(max-width: 1180px) {
     .results-column { max-width: 880px; margin-inline: auto; }
   }
@@ -344,11 +340,11 @@
   .toggle-btn svg { stroke: currentColor; }
   @media (prefers-reduced-motion: reduce) { .toggle-btn { transition: none; } }
 
-  /* Properties grid/list — 3 columns on wide screens, 2 when space is tighter */
+  /* Properties grid/list — three cards are the desktop contract. The state rail
+     yields first, so card content is never compressed merely to keep it visible. */
   .props-grid { display: grid; gap: 22px; align-items: start; }
   .props-grid.grid-mode { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .props-grid.list-mode { grid-template-columns: minmax(0, 1fr); container-type: inline-size; }
-  @media(max-width: 1599px) { .props-grid.grid-mode { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media(max-width: 1180px) { .props-grid.grid-mode { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media(max-width: 680px) { .props-grid.grid-mode { grid-template-columns: minmax(0, 1fr); } }
 
@@ -356,7 +352,7 @@
      Buyer-first hierarchy: photo + deadline, identity + location, a prominent
      property classification, financials, tender/area details, agent and CTA.
      Grid mode stacks (flex column + order); list mode splits into columns. */
-  .prop-card { position: relative; display: flex; flex-direction: column; min-width: 0; background: var(--card); border: 1px solid var(--line); border-radius: 15px; overflow: hidden; transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+  .prop-card { position: relative; display: flex; flex-direction: column; min-width: 0; container-type: inline-size; background: var(--card); border: 1px solid var(--line); border-radius: 15px; overflow: hidden; transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
   .prop-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--burgundy) 34%, var(--line)); box-shadow: 0 4px 14px rgba(23,19,15,.055); }
   .prop-card:focus-within { border-color: var(--burgundy); }
   @media (prefers-reduced-motion: reduce) { .prop-card { transition: none; } .prop-card:hover { transform: none; } }
@@ -412,9 +408,9 @@
   @media (min-width: 601px) { .props-grid.grid-mode .pc-title { min-height: 2.4em; } }
 
   /* Financial band — institutional, never bright */
-  .prop-card .pc-money { order: 4; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px 14px; margin-top: 12px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--line) 65%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--paper) 62%, var(--card)); }
+  .prop-card .pc-money { order: 4; display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); align-items: end; gap: 8px; margin-top: 12px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--line) 65%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--paper) 62%, var(--card)); }
   .prop-card .pc-money-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .09em; line-height: 1.25; text-transform: uppercase; }
-  .prop-card .pc-money-value { display: block; color: var(--ink); font-size: 22px; font-weight: 800; letter-spacing: -.025em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-money-value { display: block; color: var(--ink); font-size: clamp(18px, 6cqi, 22px); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .prop-card .pc-deposit { min-width: 0; text-align: right; }
   .prop-card .pc-deposit-value { display: block; color: var(--burgundy); font-size: 13px; font-weight: 700; line-height: 1.25; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
@@ -478,16 +474,10 @@
     .props-grid.list-mode .pc-cta { margin-top: 0; }
   }
 
-  /* On a narrow card, give the date a full row and keep the two physical
-     dimensions paired underneath. This preserves readable values at 320–375px. */
-  @media (max-width: 420px) {
-    .prop-card .pc-money { grid-template-columns: minmax(0, 1fr); gap: 9px; }
-    .prop-card .pc-deposit {
-      display: flex; align-items: baseline; justify-content: space-between;
-      gap: 12px; padding-top: 9px; border-top: 1px solid
-      color-mix(in srgb, var(--line) 60%, transparent); text-align: left;
-    }
-    .prop-card .pc-deposit .pc-money-label { margin-bottom: 0; }
+  /* Card-width logic, not viewport logic: a narrow card can occur in the
+     three-up desktop grid as well as on a phone. The date gets a full row and
+     the two physical dimensions retain useful width beneath it. */
+  @container (max-width: 350px) {
     .prop-card .pc-details { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 10px; }
     .prop-card .pc-detail:first-child {
       grid-column: 1 / -1; display: flex; align-items: baseline;
@@ -496,6 +486,15 @@
     }
     .prop-card .pc-detail:nth-child(2) { margin-left: 0; padding-left: 0; border-left: 0; }
     .prop-card .pc-detail:nth-child(3) { margin-left: 12px; padding-left: 12px; }
+  }
+  @media (max-width: 420px) {
+    .prop-card .pc-money { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+    .prop-card .pc-deposit {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 12px; padding-top: 9px; border-top: 1px solid
+      color-mix(in srgb, var(--line) 60%, transparent); text-align: left;
+    }
+    .prop-card .pc-deposit .pc-money-label { margin-bottom: 0; }
   }
 
   /* Pagination (iNewProject pattern, in TenderProp maroon) */
@@ -542,8 +541,8 @@
   .filters-backdrop { display: none; }
   .filters-open-btn { display: none; }
   .sheet-close { display: none; }
-  /* ≤1180px: rail becomes an accessible bottom-sheet drawer from the toolbar */
-  @media(max-width: 1180px) {
+  /* ≤1399px: rail becomes an accessible bottom-sheet drawer from the toolbar */
+  @media(max-width: 1399px) {
     .filters-open-btn { display: inline-flex; }
     .sheet-close { display: inline-grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); cursor: pointer; }
     .sheet-close svg { width: 16px; height: 16px; }
@@ -706,7 +705,7 @@
   .state-panel .sub-list li button.active { box-shadow: inset 3px 0 0 var(--burgundy); }
   .state-panel .sub-list li button.active .label::after { content: " ✓"; }
   .sheet-actions { display: none; }
-  @media(max-width: 1180px) {
+  @media(max-width: 1399px) {
     .sidebar-filters { border: 0; }
     .sheet-actions { display: flex; gap: 10px; background: var(--paper); padding: 12px 0 0; border-top: 1px solid var(--line); margin-top: 10px; }
     .sheet-actions .btn.red { flex: 1; }
