@@ -5,6 +5,11 @@ All 36 cards route to `/tender/residensi-sinaran` — this page is the **design 
 decided here becomes the template for every future detail page. That is why it is done one section
 at a time, with a stated UI/UX rule per section, and Bryan reviews each rendered result.
 
+**Bryan's standing instruction (30 Jul):** *"i want to talk about the UI/UX remakeover before
+details, the architecturing of each sections before sections details."* Structure first — decide
+what a section is FOR and how it is laid out before arguing about its copy or chasing missing
+facts. A content gap is not a reason to stall a section's architecture.
+
 **Method (binding, from AGENTS.md):** one section per pass → state the section's UI/UX rule →
 build → LOOK at it rendered (desktop + 375px) → judge and report with a view → Bryan reacts →
 next section. Claim "Property detail page" in TEAM-LOG.md before starting a pass. Log every pass.
@@ -19,11 +24,20 @@ Files: `src/components/tender/ResidensiSinaranDetail.tsx` (~278 lines, one compo
 Each entry: what it is → its job for the buyer → known issues → the section's UI/UX rule to state
 and apply. Work top of page downward, because that is how Bryan reviews.
 
-### 1. Opening header (breadcrumb, status, title, price, Save/Share, Apply CTA)
+### 1. Opening header — ✅ DONE 30 Jul 2026
 - Job: orient in 3 seconds — what property, open or closed, floor price, what to do next.
-- Known issues: serif is **Playfair Display here vs Newsreader on the grid** — unify to Newsreader
-  (contract says one display serif). Check "Apply for Tender" CTA still says exactly that.
-- Rule to apply: status → name → price → actions, nothing else above the gallery.
+- **Rule applied:** status → name → address → price → actions, nothing else above the gallery.
+  The tender's state and deadline must be visible without scrolling; the detail page may never
+  tell a buyer less about the tender than the card they clicked to get here.
+- Shipped: (a) new `.ovstatus` line — green dot + OPEN FOR TENDER + computed "Closes {date},
+  5:00 PM · {n} days left", above the H1; (b) reserve price 24px→39px with the clarifier "The
+  floor — offers start here", because "reserve price" is auction vocabulary a subsale buyer
+  misreads as a fixed asking price; (c) **Playfair Display was never loaded in `__root.tsx`** —
+  the page had been rendering Georgia while the grid used Newsreader; `--serif` switched to
+  Newsreader and six serif rules capped 800/900→600 (Newsreader ships 400..700, above that the
+  browser fakes the bold); (d) mobile: right column no longer right-aligns once the head stacks,
+  map pin marks the first line of a wrapped address.
+- Verified: 0px overflow at 375px, no console errors, typecheck clean.
 
 ### 2. Photo gallery
 - Job: proof the property is real; the emotional hook.
@@ -38,11 +52,18 @@ and apply. Work top of page downward, because that is how Bryan reviews.
 
 ### 4. Tender Information block (the v1 "Calm white" panel)
 - Job: THE differentiating section — terms + how it works + apply rail.
-- Known issues: **"Registration by 17 Dec 2028" row is SUSPECT** — founder says no separate
-  registration deadline exists; remove or replace with "Tender opens" once Bryan confirms.
-  **"deposit is paid when you submit your offer" states unresolved timing** — soften to avoid
-  claiming the moment of payment (see TEAM-LOG flagged list). Steps end at "receive result" —
-  extend to the confirmed accept/decline/negotiate/refund flow (mirror the grid hero's 3 steps).
+- **RESOLVED 30 Jul (Bryan):** the registration step DOES exist and belongs on this page —
+  "the listing page is the crucial information of the property, with my dad's sketches." Keep the
+  row. (The *date* 17 Dec 2028 is still an assumed close-minus-14-days value — confirm the rule.)
+- **THE BIG COPY CHANGE — the 3% is not an extra cost.** Founder: "the 3% is basically part of
+  the booking fee from the 10% SPA." It is the standard Malaysian subsale earnest deposit: 2–3%
+  on the Offer to Purchase, SPA signed within ~14–21 days with the balance topping it up to 10%,
+  the remaining 90% on loan disbursement. So the tender deposit is the buyer's FIRST PAYMENT
+  TOWARD THE HOUSE, not a platform fee — and it is refunded in full if the offer is not accepted.
+  This section must say that plainly; today it reads as a standalone RM15,510 risk. Suggested
+  ladder for this block: 3% now (refundable) → 7% more at SPA = 10% → 90% on completion. The
+  agency fee is customarily deducted from that earnest deposit.
+- Steps end at "receive result" — extend to the confirmed accept/decline/negotiate/refund flow.
 - Rule: terms are facts in labelled rows; the how-it-works is a numbered sequence; one red CTA.
 
 ### 5. Property Details (19 labelled rows, 5 groups)
@@ -69,16 +90,18 @@ and apply. Work top of page downward, because that is how Bryan reviews.
 
 ### 9. Agent + Mortgage calculator
 - Job: trust + affordability. REN 123456 placeholder OK; "REA registration: Not stated" rows —
-  fill when founder supplies. Calculator: pre-fills reserve, 10% down payment default does not
-  reconcile with the 3% tender deposit — add the "cash at risk" line once deposit timing is
-  resolved (blocked, see TEAM-LOG).
+  fill when founder supplies. Calculator: **UNBLOCKED 30 Jul** — the 10% down payment and the
+  3% deposit are the same money, not two costs. Show the 3% as the first instalment of the 10%
+  the calculator already assumes, so the two sections stop contradicting each other.
 - Rule: the calculator never contradicts the tender terms shown above it.
 
 ### 10. FAQ
 - Job: kill the last doubts. The "how many bidders" answer is the best copy on the site — keep.
   Add the two missing questions once founder answers: what if seller declines all offers
   (answerable NOW: decline → negotiate possible → full refund), and what happens after
-  acceptance (SPA timeline — still blocked).
+  acceptance — **ANSWERED 30 Jul:** the appointed agent carries the deal forward with buyer and
+  seller through to SPA. Both platforms are lead engines for the agency; a tender submission is
+  a qualified lead an agent personally follows up. (Exact SPA day-counts still to confirm.)
 - Rule: every answer states only confirmed process.
 
 ### 11. Sticky bid bar + subnav
@@ -91,12 +114,18 @@ and apply. Work top of page downward, because that is how Bryan reviews.
 
 ---
 
-## Founder questions that gate sections (ask Bryan, never assume)
-1. Does a registration step exist at all? (gates §4 row) — his model says no; site shows one.
-2. When exactly is the 3% deposit paid? (gates §4 copy + §9 cash-at-risk line)
-3. After acceptance: SPA timeline / loan-declined case (gates §4 step 5, §10 FAQ)
-4. Real facilities list for Sinaran, if any (gates §6)
-5. Real REN + agency registration numbers (gates §9; REN 123456 is interim)
+## Founder answers — 30 Jul 2026 (Bryan, direct)
+1. ✅ **Registration step exists** and belongs on the detail page (Dad's sketches).
+2. ✅ **The 3% is part of the 10%** — earnest deposit / booking fee, the first slice of the SPA
+   down payment, not an additional charge. Refunded in full if the offer is not accepted.
+3. ✅ **After acceptance:** the agency's agent proceeds with buyer and seller to SPA. Strategic
+   framing — TenderProp and iNewProject are lead-collection engines for the agency; every
+   e-Enquiry and tender is a lead an agent follows up.
+4. ⏸️ Facilities for Sinaran — **parked by Bryan:** UI/UX architecture of each section comes
+   before section content. Do not chase content answers ahead of structure.
+5. ❓ Real REN + agency registration numbers — still open (REN 123456 is interim).
+6. ❓ Exact SPA day-counts and the loan-declined case — still open.
+7. ❓ Is "Registration by = close minus 14 days" the real rule? The shown date is assumed.
 
 ## Standing constraints (from AGENTS.md — binding)
 Sealed-tender vocabulary only · deposit computed at 3% of reserve, never hardcoded · no invented

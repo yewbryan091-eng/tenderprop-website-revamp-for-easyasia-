@@ -67,6 +67,25 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §1 opening header DONE + founder answers
+Detail-page phase started. §1 shipped (status line above the fold, price promoted, Playfair→
+Newsreader — Playfair was never loaded so the page had been rendering Georgia; six serif rules
+capped to 600; two mobile fixes). Verified 375px clean, typecheck clean.
+
+**Three founder answers landed — they change work beyond §1, read `PLAN-residensi-sinaran.md`:**
+1. The registration step EXISTS and stays on this page. The suspect-row flag is closed; only the
+   assumed *date* (close minus 14 days) still needs confirming.
+2. **The 3% tender deposit is part of the 10% SPA down payment** — the Malaysian earnest deposit,
+   not an extra fee. §4 copy must stop presenting RM15,510 as a standalone cost, and §9's
+   calculator is unblocked (the 3% and the 10% are the same money).
+3. After acceptance the appointed agent carries the deal to SPA. Both platforms are lead engines
+   for the agency — that is the business model behind the flow.
+
+**Bryan's method note:** architecture of each section before its content. Facilities/price-history
+content is parked; do not chase missing facts ahead of structure.
+
+Next: §2 gallery, then §3 facts strip. §4 is the big one (the deposit-ladder rewrite).
+
 ### 29 Jul 2026 (night) — Claude
 Grid phase CLOSED by Bryan for now. Every card now routes to /tender/residensi-sinaran (demo
 exception #2, see ledger). **Detail-page phase opened: `PLAN-residensi-sinaran.md` is the working
