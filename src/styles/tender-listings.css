@@ -409,23 +409,22 @@
 
   /* Property classification is the card's signature scan point. The left rule
      reads like a dossier index tab, not another floating badge or decoration. */
+  /* Unboxed: property type is filter information, the reserve price is decision
+     information. Only the money block is emphasised so price outranks type. */
   .prop-card .pc-type {
-    order: 3; min-width: 0; display: grid; gap: 2px; margin-top: 14px;
-    padding: 10px 12px 11px; border-left: 3px solid var(--burgundy);
-    border-radius: 0 8px 8px 0;
-    background: color-mix(in srgb, var(--burgundy) 5%, var(--card));
+    order: 3; min-width: 0; display: flex; align-items: baseline; gap: 8px;
+    margin-top: 12px; padding: 0;
   }
   .prop-card .pc-type-label {
-    color: var(--burgundy); font-size: 9.5px; font-weight: 800;
+    flex: none; color: var(--muted); font-size: 9.5px; font-weight: 800;
     letter-spacing: .11em; line-height: 1.25; text-transform: uppercase;
   }
   .prop-card .pc-type-value {
-    min-width: 0; overflow: hidden; color: var(--ink); font-size: 15.5px;
-    font-weight: 750; letter-spacing: -.01em; line-height: 1.3;
+    min-width: 0; overflow: hidden; color: var(--ink); font-size: 13.5px;
+    font-weight: 700; letter-spacing: -.01em; line-height: 1.3;
     text-overflow: ellipsis; white-space: nowrap;
   }
-  .prop-card .pc-type.is-missing { border-left-color: var(--line); background: var(--paper); }
-  .prop-card .pc-type.is-missing .pc-type-label,
+    .prop-card .pc-type.is-missing .pc-type-label,
   .prop-card .pc-type.is-missing .pc-type-value { color: var(--muted); }
   /* title no longer reserves two lines — short names keep the location tight below (Bryan, 28 Jul) */
 
@@ -439,7 +438,7 @@
   /* Three permanent comparison slots keep every card aligned. Missing physical
      dimensions render as an em dash instead of collapsing the structure. */
   .prop-card .pc-details {
-    order: 5; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    order: 5; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0; margin: 14px 0 0;
   }
   .prop-card .pc-detail { min-width: 0; }
@@ -496,19 +495,6 @@
     .props-grid.list-mode .pc-cta { margin-top: 0; }
   }
 
-  /* Card-width logic, not viewport logic: a narrow card can occur in the
-     three-up desktop grid as well as on a phone. The date gets a full row and
-     the two physical dimensions retain useful width beneath it. */
-  @container (max-width: 350px) {
-    .prop-card .pc-details { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 10px; }
-    .prop-card .pc-detail:first-child {
-      grid-column: 1 / -1; display: flex; align-items: baseline;
-      justify-content: space-between; gap: 12px; padding-bottom: 9px;
-      border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
-    }
-    .prop-card .pc-detail:nth-child(2) { margin-left: 0; padding-left: 0; border-left: 0; }
-    .prop-card .pc-detail:nth-child(3) { margin-left: 12px; padding-left: 12px; }
-  }
   @media (max-width: 420px) {
     .prop-card .pc-money { grid-template-columns: minmax(0, 1fr); gap: 9px; }
     .prop-card .pc-deposit {

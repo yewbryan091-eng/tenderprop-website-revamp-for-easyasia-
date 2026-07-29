@@ -3,9 +3,21 @@ import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
 import { ClockIcon, HeartIcon, PinIcon } from "./icons";
 import { daysLeft, depositOf, fmtDate, fmtPrice, hrefFor, tenderId } from "@/lib/tender-utils";
 
-/* "12 Dec" — short form of the listing's own closing date. Never hardcoded. */
-function shortDate(iso: string) {
-  return fmtDate(iso).split(" ").slice(0, 2).join(" ");
+/* The photo pill is the card's ONLY date. It carries the year because listings
+   span 2026-2028, so "12 Dec" alone would be ambiguous. Never hardcoded. */
+
+/* Which two physical facts actually mean something for this property type.
+   Land area is not "unknown" for a condo — it does not exist — so it is omitted
+   rather than shown as a dash. Tenure fills the slot; it matters in Malaysia. */
+const STRATA = ["Condominium", "Apartment", "Serviced Residence", "Flat", "SOHO"];
+function detailRows(x: Tender) {
+  const order: [string, string][] =
+    x.propertyCategory === "land"
+      ? [["Land area", x.landArea], ["Tenure", x.tenure], ["Built-up", x.builtUp]]
+      : STRATA.includes(x.propertyType)
+        ? [["Built-up", x.builtUp], ["Tenure", x.tenure], ["Land area", x.landArea]]
+        : [["Land area", x.landArea], ["Built-up", x.builtUp], ["Tenure", x.tenure]];
+  return order.filter(([, v]) => Boolean(v)).slice(0, 2).map(([label, value]) => ({ label, value }));
 }
 
 /* One semantic tender-notice card. Grid mode stacks it; list mode splits it into
@@ -22,11 +34,11 @@ export function PropertyCard({
   const d = daysLeft(x.closingDate);
   const soon = d > 0 && d <= 14;
   const dlTxt =
-    d <= 0 ? "Tender closed" : `Closes ${shortDate(x.closingDate)} · ${d} ${d === 1 ? "day" : "days"}`;
+    d <= 0 ? "Tender closed" : `Closes ${fmtDate(x.closingDate)} · ${d} ${d === 1 ? "day" : "days"}`;
   const href = hrefFor(x);
+  const rows = detailRows(x);
   const hasPropertyType = Boolean(x.propertyType.trim());
   const propertyType = hasPropertyType ? x.propertyType.trim() : "Not specified";
-  const tenderDate = fmtDate(x.closingDate);
 
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
@@ -76,20 +88,16 @@ export function PropertyCard({
               <span className="pc-deposit-value">{depositOf(x)}</span>
             </div>
           </div>
-          <dl className="pc-details">
-            <div className="pc-detail">
-              <dt>Tender date</dt>
-              <dd><time dateTime={x.closingDate}>{tenderDate}</time></dd>
-            </div>
-            <div className={"pc-detail" + (x.landArea ? "" : " is-missing")}>
-              <dt>Land area</dt>
-              <dd>{x.landArea || <span aria-label="Not provided">—</span>}</dd>
-            </div>
-            <div className={"pc-detail" + (x.builtUp ? "" : " is-missing")}>
-              <dt>Built-up</dt>
-              <dd>{x.builtUp || <span aria-label="Not provided">—</span>}</dd>
-            </div>
-          </dl>
+          {rows.length > 0 && (
+            <dl className="pc-details">
+              {rows.map((r) => (
+                <div className="pc-detail" key={r.label}>
+                  <dt>{r.label}</dt>
+                  <dd>{r.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
           <div className="pc-foot">
             <img className="pc-avatar" src={AGENT_PHOTO} alt="Stephen Yew, listing agent" loading="lazy" />
             <span className="pc-agent"><b>Stephen Yew</b><span>REN 123456</span></span>
