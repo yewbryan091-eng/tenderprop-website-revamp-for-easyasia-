@@ -118,7 +118,7 @@
     inset: 0;
     background: var(--paper);
     /* Keep the panorama legible while leaving the reassurance copy dominant. */
-    opacity: .945;
+    opacity: .93;
     pointer-events: none;
   }
   .hero-panel-inner { position: relative; z-index: 1; width: 100%; max-width: 560px; min-width: 0; }
