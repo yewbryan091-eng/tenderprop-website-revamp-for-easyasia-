@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | Codex | 29 Jul 2026 | Lowering the shared KLCC hero crop to 57% |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | — |
 | Property detail page | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | — |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -39,6 +39,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 29 Jul | Submitted offers are presented to the seller **immediately** through the appointed agent; they are not held until the tender deadline | Corrected the old “reviewed after closing” model. Immediate presentation does not promise an immediate seller decision | Bryan |
 | 29 Jul | The seller is the offer recipient; the appointed agent privately handles its presentation. Accepted buyers proceed through to SPA signing | Keeps the sealed-tender privacy promise accurate without hiding the agent’s operational role | Bryan |
 | 29 Jul | Hero closing date uses full ordinal format: **12th December 2026**, with a small suffix | Founder-selected editorial treatment; replaces the abbreviated hero date only | Bryan |
+| 29 Jul | Wide-desktop KLCC panorama uses `background-position: center 57%`; narrower desktop/tablet and mobile retain their tuned crops | Bryan asked to move the skyline slightly downward. Keeping this breakpoint-specific reveals more of the tower tops in the reviewed wide layout without disturbing smaller compositions | Bryan |
 | 28 Jul | The 12 `demo:true` listings **stay**, badged DEMO, and get **no detail pages** | Bryan wants national state coverage in the demo without generating fake property pages | Bryan |
 | 28 Jul | Fabricated content **removed**: invented price history, borrowed facilities list, dead Video/Drone buttons | This prototype becomes EasyAsia's spec — invented content would be copied as real | Claude, accepted by Bryan |
 | 28 Jul | `REN 123456` is an approved **placeholder** | Real REN + agency registration required before go-live | Bryan |
@@ -65,6 +66,13 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 29 Jul 2026 — Codex (wide KLCC crop)
+Lowered the shared KLCC panorama slightly in the founder-reviewed wide-desktop hero by changing
+the `min-width: 1280px` crop from `center 62%` to `center 57%`. This reveals more of the tower tops
+while preserving the left/right panorama alignment and diagonal seam. The 1024–1279px, 821–1023px,
+and mobile crops remain unchanged because each has a different composition. Rendered at 1470px and
+rechecked 1024px/375px; the latter still has zero horizontal overflow. Production build passes.
 
 ### 29 Jul 2026 (evening) — Claude
 Assurance panel pass, all five approved items (Bryan chose hierarchy option B):
