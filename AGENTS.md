@@ -20,6 +20,11 @@ Set by Bryan, 28 Jul 2026: *"make sure everyone is editing the same 1 same file 
 - **https://tender-seeker-bot.lovable.app is a FROZEN SNAPSHOT.** It is Lovable's hosted copy from the morning of 28 Jul 2026, before Lovable credits ran out. It does NOT update from this repo. Use it as a visual reference only — never as the current state, and never edit anything based on the assumption it is current.
 - Do NOT edit the old prototype copies elsewhere on Bryan's machine (`tenderprop.os/tenderprop-website-revamp*`, anything in `~/Downloads`). Those are design-reference archives from before this repo existed.
 
+## SITE-WIDE PLAN
+`PLAN-site-architecture.md` — all 18 pages of the live site: what is broken today, the nav
+redesign, the section stack for every page, and the build order. Read before starting any page
+that is not the tender detail page.
+
 ## ACTIVE PHASE: the Residensi Sinaran detail page
 `PLAN-residensi-sinaran.md` is the current working brief — read it before touching
 `ResidensiSinaranDetail.tsx` or `tender-detail.css`. The `/tender` grid is done for now.
