@@ -30,6 +30,39 @@ silently reversed, unresolved questions waiting on the founder, and short workin
 If something in the code looks wrong, check the decisions ledger before "fixing" it — it may be
 deliberate, and reversing it wastes Bryan's time and ping-pongs the design.
 
+## THE CHANGE SOP — how a request must be handled (Bryan, 29 Jul 2026)
+
+**A change request is a GOAL, not a literal instruction. Executing the words and stopping is not
+doing the job.**
+
+Bryan's words: *"changing the code but not looking back at the frontend changes is not the right way
+of doing things… you must go take a look of the changes in the frontend and have your own opinion…
+whats the point of keep changing 1 thing over and over again if you can do it one time with the
+right SOP."*
+
+Example: *"move the button below the search button."* Moving it is step 2 of 6. You are not done
+until you have looked at it and judged whether it actually works there.
+
+**Every change follows these six steps:**
+
+1. **Read the intent.** What outcome does Bryan actually want? The instruction is his best guess at
+   how to get there — the outcome is the real target.
+2. **Make the change.**
+3. **Look at it rendered.** Open the page. Screenshot it. Measure it. Never judge from the code
+   alone — code that looks right renders wrong all the time.
+4. **Judge it, with your own opinion.** Is that the right placement? Does the size, weight and font
+   still fit the hierarchy? Is spacing balanced against its new neighbours? Is it obvious to a user?
+   Did it break, crowd or unbalance anything next to it? Does it still work at 375px?
+5. **Finish the job.** Fix whatever the change itself broke or exposed — that is part of the request,
+   not extra work. **But do not silently redesign adjacent things Bryan did not ask about.** If you
+   think something nearby should also change, say so and let him decide.
+   (Precedent: growing the hero panel to fit taller content was wrong — the content should have been
+   fitted to the panel. Fix what your change requires; propose anything beyond that.)
+6. **Report with a view.** Say what you saw when you looked, what you judged, and flag anything you
+   disagree with or that needs his call. "Done" on its own is not a report.
+
+**The point:** one careful pass instead of five sloppy ones.
+
 ## Git protocol (prevents agents clobbering each other)
 1. `git pull` before you touch anything.
 2. Leave the working tree CLEAN when you stop: commit + push, or discard. Never leave uncommitted edits for the next agent to trip over.
