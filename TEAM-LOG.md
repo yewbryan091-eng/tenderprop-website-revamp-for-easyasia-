@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | Codex | 29 Jul 2026 | Testing a continuous low-opacity skyline on the right hero panel |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | — |
 | Property detail page | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | — |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -60,6 +60,13 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 29 Jul 2026 — Codex (continuous hero skyline test)
+Continued the existing KL skyline through the right hero plane using identical desktop image
+geometry, then placed a 93%-opaque `--paper` wash over it. The diagonal now separates a dark,
+urgent treatment from a quiet, reassuring treatment of the same scene; no new image or DOM was
+introduced. Verified live clock behaviour, clean console, passing production build, matching
+background alignment at 1280/1024px, and zero horizontal overflow at 375px.
 
 ### 29 Jul 2026 — Codex (right-hero eyebrow)
 Changed the approved right-panel eyebrow from `Sealed e-tender` to `Why sealed e-tender?`.

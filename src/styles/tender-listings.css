@@ -95,7 +95,15 @@
     pointer-events: none;
   }
   .hero-panel-right {
-    background: var(--card);
+    /* Continue the same skyline across the seam so the hero reads as one scene.
+       A dense paper wash keeps this side calm and the assurance copy primary. */
+    background-color: var(--paper);
+    background-image:
+      url(https://tender-seeker-bot.lovable.app/__l5e/assets-v1/6644ffc2-9879-41d4-a406-38a39f2f4c9a/kl-skyline.png),
+      url(/assets/layout/kl-skyline.webp);
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: left center;
     clip-path: polygon(
       calc(var(--hero-top-split) + var(--hero-seam)) 0,
       100% 0,
@@ -103,6 +111,14 @@
       calc(var(--hero-bot-split) + var(--hero-seam)) 100%
     );
     padding: clamp(28px, 3.5vw, 48px) clamp(20px, 4vw, 56px) clamp(28px, 3.5vw, 48px) calc(var(--hero-top-split) + 2.5%);
+  }
+  .hero-panel-right::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--paper);
+    opacity: .93;
+    pointer-events: none;
   }
   .hero-panel-inner { position: relative; z-index: 1; width: 100%; max-width: 560px; min-width: 0; }
 
@@ -216,7 +232,8 @@
   @media (min-width: 1280px) {
     .hero-tender { --hero-top-split: 70%; --hero-bot-split: 58%; }
     /* The panel is wider now — let the photograph fill it rather than tile short. */
-    .hero-panel-left { background-size: cover; background-position: center 62%; }
+    .hero-panel-left,
+    .hero-panel-right { background-size: cover; background-position: center 62%; }
     .hero-panel-right { padding-top: clamp(24px, 3vw, 40px); padding-bottom: clamp(24px, 3vw, 40px); padding-right: clamp(18px, 3.2vw, 44px); }
     .hero-panel-right .hero-panel-inner { max-width: 520px; }
     .hero-seal-title { font-size: clamp(18px, 1.7vw, 23px); }
@@ -230,7 +247,8 @@
   /* 1024–1279px: a safer 60/40 so the right column never crowds. */
   @media (min-width: 1024px) and (max-width: 1279px) {
     .hero-tender { --hero-top-split: 64%; --hero-bot-split: 52%; }
-    .hero-panel-left { background-size: cover; background-position: center 62%; }
+    .hero-panel-left,
+    .hero-panel-right { background-size: cover; background-position: center 62%; }
     .hero-panel-right .hero-panel-inner { max-width: 480px; }
     .hero-seal-title { font-size: 19px; }
   }
