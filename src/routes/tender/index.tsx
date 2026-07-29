@@ -66,39 +66,25 @@ const INDEXED = TENDERS.map((x, i) => ({ ...x, _i: i })) as (Tender & { _i: numb
 
 /* Null until mount so SSR and first paint never show a flash of zeros.
    Tenders close at 5:00 PM Malaysian time on the closing date. */
-type Remaining = { days: number; hours: number; minutes: number; seconds: number };
-function useCountdown(iso: string): Remaining | null {
-  const [left, setLeft] = useState<Remaining | null>(null);
+function useDaysRemaining(iso: string): number | null {
+  const [days, setDays] = useState<number | null>(null);
   useEffect(() => {
     const target = new Date(iso + "T17:00:00+08:00").getTime();
-    const compute = (): Remaining => {
+    const compute = (): number => {
       const diff = Math.max(0, target - Date.now());
-      const s = Math.floor(diff / 1000);
-      return {
-        days: Math.floor(s / 86400),
-        hours: Math.floor((s % 86400) / 3600),
-        minutes: Math.floor((s % 3600) / 60),
-        seconds: s % 60,
-      };
+      return Math.floor(diff / 86400000);
     };
-    setLeft(compute());
-    const id = window.setInterval(() => setLeft(compute()), 1000);
+    setDays(compute());
+    const id = window.setInterval(() => setDays(compute()), 60000);
     return () => window.clearInterval(id);
   }, [iso]);
-  return left;
+  return days;
 }
-const pad2 = (n: number) => String(n).padStart(2, "0");
 
 function TenderListings() {
-  const left = useCountdown(NEXT_BATCH.date);
-  const countdownUnits = [
-    { label: "Days", value: left ? String(left.days) : "" },
-    { label: "Hours", value: left ? pad2(left.hours) : "" },
-    { label: "Minutes", value: left ? pad2(left.minutes) : "" },
-    { label: "Seconds", value: left ? pad2(left.seconds) : "" },
-  ];
-  const countdownLabel = left
-    ? `Offers close in ${left.days} days, ${left.hours} hours, ${left.minutes} minutes and ${left.seconds} seconds`
+  const daysLeft = useDaysRemaining(NEXT_BATCH.date);
+  const countdownLabel = daysLeft !== null
+    ? `Offers close in ${daysLeft} days`
     : "Offers close in";
 
   const [query, setQuery] = useState("");
@@ -344,17 +330,16 @@ function TenderListings() {
             <div className="hero-panel-inner">
               <div className="hero-timer" aria-live="off" aria-label={countdownLabel}>
                 <span className="hero-timer-label" aria-hidden="true">Offers close in</span>
-                <div className="hero-timer-cells" aria-hidden="true">
-                  {countdownUnits.map((u) => (
-                    <span className="hero-timer-cell" key={u.label}>
-                      <span className="hero-timer-value">{u.value || "\u00a0"}</span>
-                      <span className="hero-timer-unit">{u.label}</span>
-                    </span>
-                  ))}
-                </div>
+                <span className="hero-timer-value" aria-hidden="true">
+                  {daysLeft !== null ? daysLeft : "\u00a0"}
+                </span>
+                <span className="hero-timer-unit" aria-hidden="true">days</span>
               </div>
               <p className="hero-eyebrow">Next tender cycle</p>
               <p className="hero-date">{fmtDate(NEXT_BATCH.date)}</p>
+              <p className="hero-cycle-count">
+                <strong>{NEXT_BATCH.count}</strong> {NEXT_BATCH.count === 1 ? "property" : "properties"} in this cycle
+              </p>
               <a className="btn red hero-cta" href="#listings">
                 View Tender Properties
               </a>

@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | Codex | 29 Jul 2026 | Left hero hierarchy/positioning only; right panel untouched |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | — |
 | Property detail page | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | — |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -59,6 +59,15 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 29 Jul 2026 — Codex (left hero refinement)
+Rebuilt the left hero hierarchy as one centred editorial column: a single days-only deadline signal
+replaces the four auction-like timer tiles, the 12 Dec date remains dominant, the data-derived
+`5 properties in this cycle` line is restored, and the CTA is a calmer 240×48px desktop action
+(280×48px on mobile). The right explainer panel was deliberately untouched pending Bryan's SVG-icon
+direction. Verified visually at 1470 / 1280 / 1024 / 820 / 375px; zero horizontal overflow and no
+console errors at 375px. Production build passes. Project-wide lint still reports the repository's
+pre-existing Prettier backlog.
 
 ### 29 Jul 2026 — Codex
 Tightened the wide-desktop listings proportions in `tender-listings.css`: cards now cap at a
