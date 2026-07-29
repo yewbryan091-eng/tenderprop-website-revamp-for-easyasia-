@@ -355,10 +355,6 @@ function TenderListings() {
               </div>
               <p className="hero-eyebrow">Next tender cycle</p>
               <p className="hero-date">{fmtDate(NEXT_BATCH.date)}</p>
-              <p className="hero-days">
-                <strong>{NEXT_BATCH.count}</strong>{" "}
-                {NEXT_BATCH.count === 1 ? "property" : "properties"} in this cycle
-              </p>
               <a className="btn red hero-cta" href="#listings">
                 View Tender Properties
               </a>
