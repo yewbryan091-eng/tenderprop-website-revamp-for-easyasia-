@@ -10,12 +10,54 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutIndexRouteImport } from './routes/about/index'
+import { Route as BuyIndexRouteImport } from './routes/buy/index'
+import { Route as MemberIndexRouteImport } from './routes/member/index'
+import { Route as OwnerAuctionIndexRouteImport } from './routes/owner-auction/index'
+import { Route as RentIndexRouteImport } from './routes/rent/index'
+import { Route as SellIndexRouteImport } from './routes/sell/index'
+import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as TenderIndexRouteImport } from './routes/tender/index'
 import { Route as TenderResidensiSinaranRouteImport } from './routes/tender/residensi-sinaran'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutIndexRoute = AboutIndexRouteImport.update({
+  id: '/about/',
+  path: '/about/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuyIndexRoute = BuyIndexRouteImport.update({
+  id: '/buy/',
+  path: '/buy/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemberIndexRoute = MemberIndexRouteImport.update({
+  id: '/member/',
+  path: '/member/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerAuctionIndexRoute = OwnerAuctionIndexRouteImport.update({
+  id: '/owner-auction/',
+  path: '/owner-auction/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RentIndexRoute = RentIndexRouteImport.update({
+  id: '/rent/',
+  path: '/rent/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SellIndexRoute = SellIndexRouteImport.update({
+  id: '/sell/',
+  path: '/sell/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TenderIndexRoute = TenderIndexRouteImport.update({
@@ -32,30 +74,89 @@ const TenderResidensiSinaranRoute = TenderResidensiSinaranRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
+  '/about/': typeof AboutIndexRoute
+  '/buy/': typeof BuyIndexRoute
+  '/member/': typeof MemberIndexRoute
+  '/owner-auction/': typeof OwnerAuctionIndexRoute
+  '/rent/': typeof RentIndexRoute
+  '/sell/': typeof SellIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/tender/': typeof TenderIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
+  '/about': typeof AboutIndexRoute
+  '/buy': typeof BuyIndexRoute
+  '/member': typeof MemberIndexRoute
+  '/owner-auction': typeof OwnerAuctionIndexRoute
+  '/rent': typeof RentIndexRoute
+  '/sell': typeof SellIndexRoute
+  '/services': typeof ServicesIndexRoute
   '/tender': typeof TenderIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
+  '/about/': typeof AboutIndexRoute
+  '/buy/': typeof BuyIndexRoute
+  '/member/': typeof MemberIndexRoute
+  '/owner-auction/': typeof OwnerAuctionIndexRoute
+  '/rent/': typeof RentIndexRoute
+  '/sell/': typeof SellIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/tender/': typeof TenderIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tender/residensi-sinaran' | '/tender/'
+  fullPaths:
+    | '/'
+    | '/tender/residensi-sinaran'
+    | '/about/'
+    | '/buy/'
+    | '/member/'
+    | '/owner-auction/'
+    | '/rent/'
+    | '/sell/'
+    | '/services/'
+    | '/tender/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tender/residensi-sinaran' | '/tender'
-  id: '__root__' | '/' | '/tender/residensi-sinaran' | '/tender/'
+  to:
+    | '/'
+    | '/tender/residensi-sinaran'
+    | '/about'
+    | '/buy'
+    | '/member'
+    | '/owner-auction'
+    | '/rent'
+    | '/sell'
+    | '/services'
+    | '/tender'
+  id:
+    | '__root__'
+    | '/'
+    | '/tender/residensi-sinaran'
+    | '/about/'
+    | '/buy/'
+    | '/member/'
+    | '/owner-auction/'
+    | '/rent/'
+    | '/sell/'
+    | '/services/'
+    | '/tender/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TenderResidensiSinaranRoute: typeof TenderResidensiSinaranRoute
+  AboutIndexRoute: typeof AboutIndexRoute
+  BuyIndexRoute: typeof BuyIndexRoute
+  MemberIndexRoute: typeof MemberIndexRoute
+  OwnerAuctionIndexRoute: typeof OwnerAuctionIndexRoute
+  RentIndexRoute: typeof RentIndexRoute
+  SellIndexRoute: typeof SellIndexRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
   TenderIndexRoute: typeof TenderIndexRoute
 }
 
@@ -66,6 +167,55 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about/': {
+      id: '/about/'
+      path: '/about'
+      fullPath: '/about/'
+      preLoaderRoute: typeof AboutIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/buy/': {
+      id: '/buy/'
+      path: '/buy'
+      fullPath: '/buy/'
+      preLoaderRoute: typeof BuyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/member/': {
+      id: '/member/'
+      path: '/member'
+      fullPath: '/member/'
+      preLoaderRoute: typeof MemberIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner-auction/': {
+      id: '/owner-auction/'
+      path: '/owner-auction'
+      fullPath: '/owner-auction/'
+      preLoaderRoute: typeof OwnerAuctionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rent/': {
+      id: '/rent/'
+      path: '/rent'
+      fullPath: '/rent/'
+      preLoaderRoute: typeof RentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sell/': {
+      id: '/sell/'
+      path: '/sell'
+      fullPath: '/sell/'
+      preLoaderRoute: typeof SellIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/': {
+      id: '/services/'
+      path: '/services'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tender/': {
@@ -88,6 +238,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TenderResidensiSinaranRoute: TenderResidensiSinaranRoute,
+  AboutIndexRoute: AboutIndexRoute,
+  BuyIndexRoute: BuyIndexRoute,
+  MemberIndexRoute: MemberIndexRoute,
+  OwnerAuctionIndexRoute: OwnerAuctionIndexRoute,
+  RentIndexRoute: RentIndexRoute,
+  SellIndexRoute: SellIndexRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
   TenderIndexRoute: TenderIndexRoute,
 }
 export const routeTree = rootRouteImport

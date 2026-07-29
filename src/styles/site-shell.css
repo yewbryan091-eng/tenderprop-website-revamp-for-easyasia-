@@ -1,0 +1,81 @@
+/* ── Site shell: the frame for pages that exist but are not yet decorated ──
+   Used by /, /owner-auction, /sell, /services, /about, /member. Chrome (header,
+   footer, .wrap, tokens) comes from tender-listings.css; this file only adds the
+   framing vocabulary. Delete a page's frame styles as its real sections land. */
+
+.shell-hero { padding: clamp(34px, 6vh, 64px) 0 clamp(26px, 4vh, 44px); }
+.shell-hero .eyebrow {
+  font-size: 11.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--burgundy); margin: 0 0 10px;
+}
+.shell-hero h1 {
+  margin: 0 0 12px; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-weight: 600; font-size: clamp(30px, 4.4vw, 52px); line-height: 1.05; letter-spacing: -.015em;
+}
+.shell-hero h1 em { font-style: italic; color: var(--burgundy); }
+.shell-hero .lede { margin: 0; max-width: 62ch; color: var(--muted); font-size: clamp(15px, 1.6vw, 17.5px); line-height: 1.6; }
+.shell-hero .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.shell-hero .cta-row .btn { display: inline-block; padding: 12px 22px; border-radius: 8px; font-weight: 600; font-size: 14.5px; text-decoration: none; border: 1.5px solid transparent; }
+.shell-hero .cta-row .btn.red { background: var(--red); color: #fff; }
+.shell-hero .cta-row .btn.red:hover { background: #A81F15; }
+.shell-hero .cta-row .btn.ghost { border-color: var(--ink); color: var(--ink); }
+.shell-hero .cta-row .btn.ghost:hover { background: var(--ink); color: var(--paper); }
+.shell-hero .cycle-line { margin-top: 18px; font-size: 13.5px; color: var(--muted); }
+.shell-hero .cycle-line b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* The planned rooms of a page, visible as structure. Honest about being a frame. */
+.shell-frames { padding-bottom: clamp(40px, 7vh, 72px); }
+.shell-frames .frames-note {
+  margin: 0 0 18px; font-size: 12.5px; color: var(--muted);
+  display: flex; align-items: center; gap: 8px;
+}
+.shell-frames .frames-note .tag {
+  font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--burgundy); background: color-mix(in srgb, var(--burgundy) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--burgundy) 22%, transparent);
+  padding: 3px 8px; border-radius: 999px;
+}
+.shell-frames .frame-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 720px) { .shell-frames .frame-grid { grid-template-columns: 1fr; } }
+.shell-frames .frame {
+  border: 1.5px dashed var(--line); border-radius: 12px; background: var(--card);
+  padding: 18px 20px;
+}
+.shell-frames .frame .n {
+  font-family: "Newsreader", Georgia, serif; font-weight: 600; font-size: 19px;
+  color: var(--burgundy); font-variant-numeric: tabular-nums; margin-right: 8px;
+}
+.shell-frames .frame h2 { display: inline; margin: 0; font-size: 16.5px; font-weight: 700; letter-spacing: -.01em; }
+.shell-frames .frame p { margin: 8px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.shell-frames .frame .blocked {
+  display: inline-block; margin-top: 10px; font-size: 11px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--warn, #9A6A00);
+}
+
+/* Homepage product doors */
+.home-doors { padding: clamp(10px, 2vh, 20px) 0 clamp(36px, 6vh, 60px); }
+.home-doors .doors { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 720px) { .home-doors .doors { grid-template-columns: 1fr; } }
+.door {
+  display: block; text-decoration: none; color: var(--ink);
+  border: 1px solid var(--line); border-radius: 14px; background: var(--card);
+  padding: clamp(20px, 3vw, 30px); transition: border-color .15s, transform .15s;
+}
+.door:hover { border-color: var(--burgundy); transform: translateY(-2px); }
+.door .k { font-size: 11px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: var(--muted); }
+.door h2 {
+  margin: 8px 0 8px; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-weight: 600; font-size: clamp(22px, 2.6vw, 30px); letter-spacing: -.015em;
+}
+.door p { margin: 0 0 14px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+.door .go { font-weight: 700; font-size: 13.5px; color: var(--burgundy); }
+.door.is-live .k::after {
+  content: "LIVE"; margin-left: 8px; color: var(--good);
+  background: color-mix(in srgb, var(--good) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--good) 30%, transparent);
+  padding: 2px 7px; border-radius: 999px; font-size: 9.5px;
+}
+
+/* Sticky-footer page skeleton so short framed pages don't float the footer mid-screen */
+.page-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.page-shell main { flex: 1; }
