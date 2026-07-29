@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | Codex | 29 Jul 2026 | Refining hero messaging, icon colours and full closing date |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | — |
 | Property detail page | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | — |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -37,6 +37,8 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 29 Jul | Hero restores a compact **live days/hours/minutes/seconds clock** with a clock glyph | Bryan explicitly said the timer must exist “like a clock,” overriding the 28 Jul days-only direction; it remains visually secondary to the closing date | Bryan |
 | 29 Jul | Right hero continues the skyline beneath a **93% paper wash** (7% image visibility) | Bryan explicitly selected 7%; rendered review confirms the panorama is clearly visible while the assurance copy remains legible | Bryan |
 | 29 Jul | Submitted offers are presented to the seller **immediately** through the appointed agent; they are not held until the tender deadline | Corrected the old “reviewed after closing” model. Immediate presentation does not promise an immediate seller decision | Bryan |
+| 29 Jul | The seller is the offer recipient; the appointed agent privately handles its presentation. Accepted buyers proceed through to SPA signing | Keeps the sealed-tender privacy promise accurate without hiding the agent’s operational role | Bryan |
+| 29 Jul | Hero closing date uses full ordinal format: **12th December 2026**, with a small suffix | Founder-selected editorial treatment; replaces the abbreviated hero date only | Bryan |
 | 28 Jul | The 12 `demo:true` listings **stay**, badged DEMO, and get **no detail pages** | Bryan wants national state coverage in the demo without generating fake property pages | Bryan |
 | 28 Jul | Fabricated content **removed**: invented price history, borrowed facilities list, dead Video/Drone buttons | This prototype becomes EasyAsia's spec — invented content would be copied as real | Claude, accepted by Bryan |
 | 28 Jul | `REN 123456` is an approved **placeholder** | Real REN + agency registration required before go-live | Bryan |
@@ -53,8 +55,8 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 - **When exactly is the 3% deposit paid?** Bryan's flow: buyer submits offer price + contact details,
   then the agency follows up. The detail page currently says the deposit is paid at submission.
   Unresolved — avoid stating the timing in new copy.
-- **After acceptance:** SPA timeline, balance payment window, and whether the deposit is at risk if
-  the buyer's loan is declined. Unknown.
+- **After acceptance:** the buyer proceeds through to SPA signing, but the timing, balance payment
+  window, and whether the deposit is at risk if the buyer's loan is declined remain unknown.
 - Package pricing (3-month vs 6-month), real REN, agency registration number, footer legal identity.
 
 ---
@@ -62,6 +64,16 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 29 Jul 2026 — Codex (buyer-choice hero, reapplied at Bryan's direction)
+Reapplied the visually tested hero pass, then changed the eyebrow to
+`WHY BUYERS CHOOSE E-TENDER`, the second heading to `Your offer reaches the seller directly`, and
+its icon to a document-with-check SVG in Bryan's exact `#6B1F33`. The privacy line makes the seller
+the recipient while identifying the appointed agent as the private handler. The outcome branch has
+green/red arrows, Accepted has a green tick, Not accepted has a red return glyph, and accepted copy
+now runs through SPA signing. The date is data-derived as `12th December 2026` with a small suffix.
+Kept the hero height fixed; compact side-by-side rules fit the richer copy instead. Rendered at
+1470 / 1280 / 1024 / 900 / 821 / 375px, with zero mobile overflow, a clean console and passing build.
 
 ### 29 Jul 2026 — Codex (right-hero offer flow + outcome)
 Corrected the right hero to match the operating model: only the seller and appointed agent see the

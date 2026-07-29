@@ -100,12 +100,22 @@ export const OfferPresentedIcon = () => (
     <path d="M18 9.5h2.5M19 8l1.5 1.5L19 11" />
   </svg>
 );
-export const OutcomePathIcon = () => (
+export const DocumentCheckIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M4 12h3.5c4 0 3.2-6 7.5-6h4" />
-    <path d="m16.5 3.5 3 2.5-3 2.5" />
-    <path d="M7.5 12c4 0 3.2 6 7.5 6h4" />
-    <path d="m16.5 15.5 3 2.5-3 2.5" />
+    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+    <path d="M14 3v5h5" />
+    <path d="m8.5 14 2.2 2.2 4.8-4.8" />
+  </svg>
+);
+export const OutcomePathIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path className="outcome-path-stem" d="M3.5 12H8" />
+    <g className="outcome-path-accepted" stroke="currentColor">
+      <path d="M8 12c3.5 0 2.7-6 7-6h4.5" /><path d="m17 3.5 3 2.5-3 2.5" />
+    </g>
+    <g className="outcome-path-refunded" stroke="currentColor">
+      <path d="M8 12c3.5 0 2.7 6 7 6h4.5" /><path d="m17 15.5 3 2.5-3 2.5" />
+    </g>
   </svg>
 );
 export const ArrowLeftCircleIcon = () => (

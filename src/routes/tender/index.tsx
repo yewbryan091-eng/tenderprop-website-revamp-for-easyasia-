@@ -6,10 +6,12 @@ import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
 import { StateFilters } from "@/components/tender/StateFilters";
 import {
+  CheckCircleIcon,
   ClockIcon,
+  DocumentCheckIcon,
   LockIcon,
-  OfferPresentedIcon,
   OutcomePathIcon,
+  ReturnIcon,
   TaHome,
   TaPin,
 } from "@/components/tender/icons";
@@ -54,6 +56,18 @@ const BATCHES = (() => {
     .sort((a, b) => a.date.localeCompare(b.date));
 })();
 const NEXT_BATCH = BATCHES[0];
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+const HERO_DATE = (() => {
+  const [year, month, day] = NEXT_BATCH.date.split("-").map(Number);
+  const lastTwo = day % 100;
+  const suffix = lastTwo >= 11 && lastTwo <= 13
+    ? "th"
+    : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
+  return { day, suffix, month: MONTH_NAMES[month - 1], year };
+})();
 
 const PRICE_ROWS = [
   { value: "500k-below", label: "Under RM500k" },
@@ -362,7 +376,11 @@ function TenderListings() {
                 </span>
               </div>
               <p className="hero-eyebrow">Next tender cycle</p>
-              <p className="hero-date">{fmtDate(NEXT_BATCH.date)}</p>
+              <p className="hero-date">
+                <time dateTime={NEXT_BATCH.date}>
+                  {HERO_DATE.day}<sup>{HERO_DATE.suffix}</sup> {HERO_DATE.month} {HERO_DATE.year}
+                </time>
+              </p>
               <p className="hero-cycle-count">
                 <strong>{NEXT_BATCH.count}</strong> {NEXT_BATCH.count === 1 ? "property" : "properties"} in this cycle
               </p>
@@ -374,20 +392,20 @@ function TenderListings() {
           </div>
           <div className="hero-panel hero-panel-right">
             <div className="hero-panel-inner">
-              <p className="hero-eyebrow">Why sealed e-tender?</p>
+              <p className="hero-eyebrow">WHY BUYERS CHOOSE E-TENDER</p>
               <ul className="hero-flow hero-assurances" aria-label="Sealed e-tender assurances">
                 <li className="hero-assurance hero-assurance-primary">
                   <span className="hero-assurance-icon" aria-hidden="true"><LockIcon /></span>
                   <div>
                     <h2 className="hero-seal-title">Your offer stays <em>private</em></h2>
-                    <p>Only the seller and appointed agent see what you offered for the property — never other buyers or the public.</p>
+                    <p>Your offer goes only to the seller, privately handled by our appointed agent — never shown to other buyers or the public.</p>
                   </div>
                 </li>
-                <li className="hero-assurance">
-                  <span className="hero-assurance-icon" aria-hidden="true"><OfferPresentedIcon /></span>
+                <li className="hero-assurance hero-assurance-agent">
+                  <span className="hero-assurance-icon" aria-hidden="true"><DocumentCheckIcon /></span>
                   <div>
-                    <strong>Presented to the seller immediately</strong>
-                    <p>Once submitted, our appointed agent presents your offer to the seller for consideration.</p>
+                    <strong>Your offer reaches the seller directly</strong>
+                    <p>Once submitted, our appointed agent presents your e-tender offer to the seller for consideration.</p>
                   </div>
                 </li>
                 <li className="hero-assurance hero-assurance-outcome">
@@ -396,11 +414,17 @@ function TenderListings() {
                     <strong>A clear outcome either way</strong>
                     <div className="hero-outcome-grid">
                       <div className="hero-outcome-option is-accepted">
-                        <span className="hero-outcome-label">Accepted</span>
-                        <span>Proceed through the appointed agent.</span>
+                        <span className="hero-outcome-label">
+                          <span className="hero-outcome-status-icon" aria-hidden="true"><CheckCircleIcon /></span>
+                          Accepted
+                        </span>
+                        <span>Proceed with the purchase of your property, all the way to SPA signing.</span>
                       </div>
                       <div className="hero-outcome-option is-refunded">
-                        <span className="hero-outcome-label">Not accepted</span>
+                        <span className="hero-outcome-label">
+                          <span className="hero-outcome-status-icon" aria-hidden="true"><ReturnIcon /></span>
+                          Not accepted
+                        </span>
                         <span>Refundable deposit returned in full.</span>
                       </div>
                     </div>
