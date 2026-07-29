@@ -418,3 +418,45 @@
   .modal .mbody p { margin: 0; max-width: 42ch; font-size: 14px; }
 
   footer.site { background: var(--ink); color: #8F857A; font-size: 12.5px; padding: 20px 0; margin-top: clamp(36px, 6vh, 60px); }
+
+/* ── §4 Tender Information: negotiation note + deposit ladder (30 Jul 2026) ──
+   Both exist to kill the same fear: that submitting is an all-or-nothing gamble
+   with RM15,510 at stake. It is neither — the outcome is negotiable and the money
+   is the buyer's own down payment paid early. */
+.v1-negotiate {
+  margin: 22px 0 0; padding: 14px 16px;
+  background: color-mix(in srgb, var(--burgundy) 5%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--burgundy) 18%, transparent);
+  border-radius: 10px;
+  color: var(--ink); font-size: 14px; line-height: 1.55;
+}
+.v1-negotiate b { color: var(--burgundy); }
+
+.v1-ladder { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+.v1-ladder .ladderhead {
+  font-size: 11px; font-weight: 800; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+}
+.v1-ladder ol {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+}
+.v1-ladder li { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; align-items: start; }
+.v1-ladder .pct {
+  font-family: var(--serif); font-optical-sizing: auto;
+  font-size: 21px; font-weight: 600; line-height: 1.15;
+  color: var(--burgundy); font-variant-numeric: tabular-nums;
+}
+/* The first rung is the one they actually pay now, and the one they get back. */
+.v1-ladder li:first-child .pct, .v1-ladder li:first-child b { color: var(--good); }
+.v1-ladder li b { display: block; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 3px; }
+.v1-ladder li span { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.45; }
+.v1-ladder .laddernote {
+  margin: 18px 0 0; padding-top: 15px; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 12.5px; line-height: 1.55;
+}
+.v1-ladder .laddernote b { color: var(--ink); font-weight: 700; }
+.v1-ladder .laddernote a { color: var(--burgundy); font-weight: 600; }
+@media(max-width: 760px) {
+  .v1-ladder ol { grid-template-columns: 1fr; gap: 14px; }
+}

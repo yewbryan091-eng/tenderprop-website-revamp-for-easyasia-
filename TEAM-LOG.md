@@ -67,6 +67,23 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 (later) — Claude · §2 gallery + §4 deposit ladder & negotiation
+§2: overview widened to `.wrap-wide` 1520px (body stays 1180 for readable measure), gallery
+1.32fr/1fr, thumbs 2x2→2x3 so six of seven photos show at once, stage 16/10→3/2 so thumb rows
+land at 1.76:1. Title row widened with it — at 1180 it read as a caption detached from its photos.
+
+§4: **the deposit is no longer presented as a standalone cost.** Sub-line now "counts toward your
+10% down payment"; new derived ladder (3% now / +7% at SPA / 90% on completion — computed from
+`RESERVE`, never typed, so it stays true if the price changes); new negotiation panel.
+
+⚠️ **For whoever works the grid next:** the hero's "IF ACCEPTED / IF NOT ACCEPTED" pair is now
+known to be wrong — the founder confirmed a third outcome, negotiation. Do not present a tender
+as win-or-lose anywhere. Left unchanged pending Bryan's call since it is his approved design.
+
+Caveat on this pass: the browser screenshot tool returned blank frames for the lower page, so §4
+was verified by DOM geometry + computed styles (3x334px ladder columns, green first rung, tinted
+panel, no overflow) rather than by eye. Worth a visual look next session.
+
 ### 30 Jul 2026 — Claude · §1 opening header DONE + founder answers
 Detail-page phase started. §1 shipped (status line above the fold, price promoted, Playfair→
 Newsreader — Playfair was never loaded so the page had been rendering Georgia; six serif rules

@@ -63,7 +63,10 @@ and apply. Work top of page downward, because that is how Bryan reviews.
   This section must say that plainly; today it reads as a standalone RM15,510 risk. Suggested
   ladder for this block: 3% now (refundable) → 7% more at SPA = 10% → 90% on completion. The
   agency fee is customarily deducted from that earnest deposit.
-- Steps end at "receive result" — extend to the confirmed accept/decline/negotiate/refund flow.
+- ✅ **DONE 30 Jul:** deposit sub-line now "counts toward your 10% down payment"; added the
+  derived payment ladder (3% now / +7% at SPA / 90% on completion, computed from RESERVE, never
+  typed) and the negotiation panel. Step 3 changed "Receive the result" → "The seller responds".
+  Still open in this section: the assumed registration date, and the rail's 5:00 PM claim.
 - Rule: terms are facts in labelled rows; the how-it-works is a numbered sequence; one red CTA.
 
 ### 5. Property Details (19 labelled rows, 5 groups)
@@ -115,6 +118,11 @@ and apply. Work top of page downward, because that is how Bryan reviews.
 ---
 
 ## Founder answers — 30 Jul 2026 (Bryan, direct)
+0. ✅ **A tender outcome is NOT binary.** *"it's not about win or lose... there's always a
+   chance/room for negotiation done by the agent, the agent can also pursue the buyer or the
+   seller."* Accepted / negotiated / refunded are three outcomes, not two. Any copy that frames
+   submission as win-or-lose is wrong — including the **grid hero's ACCEPTED / NOT ACCEPTED
+   pair**, which should gain the middle path (flagged, not yet changed — Bryan's call).
 1. ✅ **Registration step exists** and belongs on the detail page (Dad's sketches).
 2. ✅ **The 3% is part of the 10%** — earnest deposit / booking fee, the first slice of the SPA
    down payment, not an additional charge. Refunded in full if the offer is not accepted.
