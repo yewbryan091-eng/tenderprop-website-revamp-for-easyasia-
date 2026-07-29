@@ -691,11 +691,12 @@
   .state-panel .all-state-item { border-bottom: 1px solid var(--line); }
   .state-panel .sub-list { background: transparent; }
   .state-panel .sub-list li button { padding: 7px 7px 7px 28px; border-radius: 8px; font-size: 12px; }
-  /* Selection is never colour-only: active rows carry a burgundy edge, tick + weight. */
-  .state-panel .accordion-trigger.active { background: rgba(87,28,46,.06); box-shadow: inset 3px 0 0 var(--burgundy); font-weight: 700; }
+  /* Selection is never colour-only: bold weight (+ a tick on area rows) carries it.
+     The burgundy left edge was removed at Bryan's request, 28 Jul. */
+  .state-panel .accordion-trigger.active { background: rgba(87,28,46,.06); font-weight: 700; }
   .state-panel .accordion-trigger.active .label { font-weight: 700; }
   .state-panel .accordion-trigger.active .count { background: var(--burgundy); color: var(--burgundy-ink); }
-  .state-panel .sub-list li button.active { box-shadow: inset 3px 0 0 var(--burgundy); }
+  .state-panel .sub-list li button.active { font-weight: 700; }
   .state-panel .sub-list li button.active .label::after { content: " ✓"; }
   .sheet-actions { display: none; }
   @media(max-width: 1399px) {
