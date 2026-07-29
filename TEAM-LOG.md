@@ -67,6 +67,30 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — DECISION: the portal is out. Two products only.
+Bryan: *"there will be no more buy and sell anymore, only tender and owner auction."*
+`/buy` and `/rent` are retired (redirect to E-Tender, don't 404). Nav goes to five items:
+E-Tender · Owner Auction · List Your Property · Services · About. `PLAN-site-architecture.md`
+rewritten around this — read §1 for the consequence that matters: inventory drops to ~5 tender
++ 2 auction records, so **every page must lead with the cycle and its deadline. A handful of
+properties is an event; a handful presented as a catalogue is embarrassing.**
+
+Note the seller door survives — owners are the paying side, so /sell is renamed and narrowed to
+two routes, not deleted.
+
+**Two blocked items closed from a second read of the live site** (see §8 of the site plan):
+results are announced **within 5 working days** of closing, and the **deposit is paid in the
+member account after the tender form is submitted** — not at the moment of offering. §4's copy
+must not imply payment on submission. Also: membership is mandatory before tendering, and the
+Owner Auction deposit is 3% of *bidding* price where tender is 3% of *reserve*.
+
+**Correction to my earlier read:** the four Services pages are not a grab-bag. Every one carries
+"special privilege for member" + "Become a Member" + the same 4-step funnel, and membership is
+step 1 of tendering. Services → membership → tender is a real funnel. Build it as one page.
+
+More live wounds found: a **fourth lorem ipsum** on /how-to-bid under "How To Bid?", and
+/contact-us publishes **info@newproject1u.com** — the other company's domain.
+
 ### 30 Jul 2026 (cont.) — Claude · §4 refinements after Bryan's screenshot
 - Deposit sub was wrapping to three lines while its two neighbours ran to one, leaving the facts
   row visibly ragged → shortened to "Refundable · part of your 10%". The ladder does the

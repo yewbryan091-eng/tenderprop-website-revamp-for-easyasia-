@@ -117,6 +117,18 @@ and apply. Work top of page downward, because that is how Bryan reviews.
 
 ---
 
+## Facts recovered from the LIVE site, 30 Jul — two blocked items now answered
+The live `/how-to-tender` page publishes process detail our canon was missing. Confirm with
+Bryan's father before treating as final, but the agency already states these publicly:
+- **Results announced within 5 working days of the closing date** → use in §4 step 3 and §10 FAQ.
+- **The deposit is paid in the member account AFTER the tender form is submitted**, not at the
+  moment of offering ("Log in to your member account to complete the Tender process and make the
+  required deposit payment"). §4's copy must not imply payment happens on submission. This was
+  the long-standing FLAG on deposit timing — largely closed.
+- **Membership is mandatory before tendering** (step 1) → the parked apply flow opens with an
+  account gate, as the live site already promises.
+- **Buyers may inspect and view before bidding** — a trust asset absent from the rebuilt page.
+
 ## Founder answers — 30 Jul 2026 (Bryan, direct)
 0. ✅ **A tender outcome is NOT binary.** *"it's not about win or lose... there's always a
    chance/room for negotiation done by the agent, the agent can also pursue the buyer or the

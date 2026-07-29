@@ -6,27 +6,39 @@ this file covers everything else. Read both.
 
 ---
 
-## 1. THE VERDICT: the site has an identity crisis
+## 1. DECIDED 30 Jul 2026 — THE PORTAL IS OUT
 
-TenderProp is running two businesses on one website and losing both.
+**Bryan: *"there will be no more buy and sell anymore, only tender and owner auction."***
 
-**Business A — a generic property portal.** /buy, /rent, /investment, /agent, and most of the
-homepage. Four sale listings. Twenty-eight agents, of whom **two have any listings at all**.
-Against PropertyGuru, iProperty and EdgeProp this is not a fight — it is a rounding error.
+TenderProp stops being a general property portal. It is a two-product platform:
+**E-Tender** (sealed offers, batched by closing date) and **Owner Private Auction** (live bidding,
+licensed auctioneer). Private-treaty buying and renting are retired.
 
-**Business B — E-Tender and Owner Private Auction.** Almost nobody in Malaysia does this. It is
-a licensed agency running sealed batched tenders with a real method, a real deposit ladder, and
-a real physical-banner flywheel. **This is the entire moat.**
+This is the right call. The portal side had 4 sale listings and 28 agents of whom 2 had any
+listing — unwinnable against PropertyGuru and iProperty. The two auction-style methods are a
+service almost nobody in Malaysia offers. The moat is the method, not the inventory.
 
-The homepage currently leads with Business A. The first thing a visitor sees under the fold is
-four private-treaty listings with one agent's mobile number repeated four times. A visitor
-cannot tell that E-Tender is the point.
+### The consequence that has to be designed around
 
-> **Direction: demote or retire the portal. Build every page around the tender method.**
-> Inventory is commodity; the method is the product. This is a recommendation, not a decision —
-> Bryan and his father own it. But no amount of page polish fixes a site that hides its moat.
+Retiring /buy and /rent removes real listings hosted for ~28 agents (Ken Ng, WH Low, yap khuan
+sang and others, each with their own mobile on the card). What remains is roughly **five tender
+records and two auction records**. The site goes from "hundreds of listings" to a handful.
 
----
+**A handful of properties is fine — but only framed as a cycle, never as a catalogue.**
+"5 properties, offers close 12 December" is an event with real scarcity. "5 properties" presented
+as a browsable catalogue is embarrassing. Every page must lead with the cycle and its deadline.
+This is the single most important framing decision in the revamp.
+
+Second consequence: those 28 agents lose their listing shelf. That pushes them toward bringing
+properties in as tender or auction stock instead — which is exactly what the exclusive-agency
+model wants. Aligned, but it is a conversation the agency has to have with its own people.
+
+### Where do sellers go now?
+
+"No more buy and sell" retires the *private-treaty business*. It must not retire the **seller
+door** — owners are the customers who actually pay (listing packages plus commission), and
+without them there is no supply at all. Recommendation: the /sell page survives, renamed to match
+the products and narrowed from three routes to two.
 
 ## 2. WHAT IS ACTUALLY BROKEN RIGHT NOW (live, today, on the public site)
 
@@ -40,30 +52,33 @@ Ranked by damage. Items 1–4 are credibility wounds and should be fixed before 
 | 4 | **/agent** | Publishes **28 agents' personal Gmail/Yahoo addresses** in plain text. One reads `foongcarol@yahoo.comdemo` — a data-entry error shipped live. PDPA exposure and a scraping target. 26 of 28 show "0 Listing(s)". |
 | 5 | **/owner-auction** | Live listings priced **"RM-"** and one literally titled **"Auction Property 2 test"**. Test data on the public site. |
 | 6 | **/register** | H1 reads **"Memebr Registration"** — typo, live. |
+| 6b | **/how-to-bid** | **A fourth lorem ipsum block**, directly under the heading "How To Bid?" — the one thing that page exists to explain. |
+| 6c | **/contact-us** | TenderProp's public contact email is **`info@newproject1u.com`** — the *other* company's domain. A visitor checking who they are paying finds a different brand. |
+| 6d | **/rent** | A rental listed at **RM5,200,000** ("pjs7 pj") — a sale price in a rent record. Retired with the page, but shows the data hygiene. |
 | 7 | **all** | Nav has **eleven** top-level items with duplicates: "Tender" and "How To Tender", "Owner Private Auction" and "Owner Auction", plus a "Services" grab-bag of four unrelated businesses. |
 | 8 | **all** | **No page has any internal structure.** Every page is one `<h1>` and a wall of text — not a single `<h2>` anywhere except Terms of Use. Nothing is scannable. |
 
 ---
 
-## 3. THE NAV — from eleven items to four
+## 3. THE NAV — eleven items down to five
 
 Current: Tender · How To Tender · Owner Private Auction · Owner Auction · How To Bid · Sell ·
 Services (Investment / Interior Design & Renovation / Loan Center / Legal Matter) · Agent ·
 Register · Sign In
 
-Proposed:
+Proposed, under the two-product decision:
 
 | Item | Contains | Serves |
 |---|---|---|
-| **Buy** | E-Tender listings (the built grid) · Owner Auction listings · How it works for buyers | buyers |
-| **Sell** | Why tender · the three routes compared · packages · list with us | **sellers — the revenue** |
-| **Services** | Loan Center, Legal, Renovation, Investment as one "after you buy" page | both, post-sale |
-| **About** | Licensed agency, the people, why your deposit is safe | **trust — gates everything** |
+| **E-Tender** | the built listings grid · how to tender · the cycle countdown | buyers |
+| **Owner Auction** | auction listings · how to bid · next auction date | buyers |
+| **List Your Property** | why tender vs auction · packages · the exclusive-agency terms | **owners — the revenue** |
+| **Services** | loan, legal, renovation, investment — the membership benefits | members |
+| **About** | licensed agency, the people, why your deposit is safe | **trust — gates everything** |
 
-Sign In / Register stay to the right. "How To Tender" and "How To Bid" become sections inside
-Buy, not top-level peers — nobody navigates to a manual.
-
----
+Sign In / Register sit right. "How To Tender" and "How To Bid" become sections inside their
+product page — nobody navigates to a manual. **/buy and /rent are retired**; redirect both to
+E-Tender rather than 404, since they hold whatever inbound links and search equity exist.
 
 ## 4. PAGE-BY-PAGE ARCHITECTURE
 
@@ -132,10 +147,20 @@ as sections rather than separate pages.
 4. The people — founder, principal, the agents who actually run deals.
 5. Contact + office. ⛔ *Blocked: real registration numbers and legal identity.*
 
-### 4.6 Services — *four separate thin pages (Investment 430w, Renovation 174w, Loan 128w, Legal 109w)*
-**Job:** prove the agency carries the deal past the tender — the thing a portal can never do.
-Merge all four into **one** page framed as the journey: *win the tender → loan → legal → keys →
-renovation → future investment.* Four unrelated thin pages become one strong argument.
+### 4.6 Services — *I read these wrong the first time; correcting it*
+Investment, Loan Center, Legal Matter and Interior Design are **not** four unrelated businesses.
+Every one of them carries the same two lines — *"special privilege for member"* and *"Become a
+Member"* — and the same four-step funnel: join as a member → submit an enquiry → get a
+recommendation or quote → confirm. And membership is step 1 of tendering.
+
+So the real chain is: **Services make membership worth having → membership is required to tender
+→ tendering is the business.** That is a coherent funnel, not a grab-bag, and it should be built
+as one page that says so out loud: *"Members get the whole transaction handled — financing,
+conveyancing, renovation."* A portal cannot offer that; only a licensed agency with panels can.
+
+Real assets already on these pages worth keeping: a **named CIMB financing partnership** ("up to
+95% + 5% financing"), panel solicitors for SPA/tenancy/loan/refinancing, and a stated
+secondary-market investment thesis.
 
 ### 4.7 Agent — *liability today*
 Either rebuild as a credential showcase (photo, name, **REN number**, area, active listings,
@@ -190,3 +215,28 @@ area once Bryan supplies the dashboard design.
 3. Real sold results, or confirmation there are none yet to show.
 4. Portal in or out (§1) — the one decision that shapes every remaining page.
 5. Whether the homepage testimonials are real, named clients.
+
+
+---
+
+## 8. OPERATIONAL FACTS RECOVERED FROM THE LIVE SITE (30 Jul, second read)
+
+The live /how-to-tender and /how-to-bid pages contain real process detail that was missing from
+our canon and was sitting on the blocked list. Confirm each with Bryan's father, but these are
+what the agency already publishes:
+
+1. **Tender results are announced within 5 working days of the tender closing date.** This closes
+   a gap in the detail page's step 3 and belongs in the FAQ.
+2. **The deposit is paid inside the member account after the tender form is submitted** —
+   live step 5: *"Log in to your member account to complete the Tender process and make the
+   required deposit payment."* So it is not taken at the moment of submitting the offer. The
+   detail-page copy should not imply otherwise.
+3. **Membership is mandatory before tendering** — step 1 on both how-to pages. The apply flow must
+   therefore open with an account gate, matching what the site already promises.
+4. **Owner Auction deposit is 3% of the *bidding* price**, where the tender deposit is 3% of the
+   *reserve* price. Same percentage, different base. Do not conflate the two in shared copy.
+5. **Buyers may inspect and view the property before bidding**, and are told to contact the agent
+   to arrange it — a genuine trust asset that appears nowhere in the revamped pages yet.
+6. **Real office identity** for the About page and footer: No. 23B, Jalan USJ 10/1C, 47620 Subang
+   Jaya, Selangor · (+603) 8021 6468. The email needs replacing (see §2 item 6c).
+7. **Named CIMB financing partnership** — "up to 95% + 5% financing".
