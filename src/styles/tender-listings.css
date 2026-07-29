@@ -528,7 +528,7 @@
   .sidebar-filters { display: flex; flex-direction: column; min-width: 0; }
   .filters-scroll { min-height: 0; display: flex; flex-direction: column; }
   .rail-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 10px; }
-  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 18px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); }
+  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 23px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); }
   .state-panel { border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--paper) 32%, var(--card)); padding: 5px 6px; }
   .sheet-head { display: none; }
   .filters-backdrop { display: none; }
@@ -721,7 +721,7 @@
        Anchor the menu to that edge so every action remains reachable on mobile. */
     .price-popover { left: 0; right: auto; width: min(320px, calc(100vw - 36px)); }
     .view-toggle { flex: 0 0 auto; margin-left: auto; }
-    .rail-title { font-size: 21px; }
+    .rail-title { font-size: 25px; }
   }
 
 /* DEMO badge — fabricated filler records (demo:true in src/data/tenders.ts).

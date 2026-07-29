@@ -62,7 +62,7 @@ export function StateFilters({
             onClick={() => { setOpen(null); onSelect("all", "", ""); }}
           >
             <RowPin />
-            <span className="label">All Malaysia</span>
+            <span className="label">All</span>
             {activeState === "all" && <span className="sel-tick" aria-hidden="true">✓</span>}
             <span className="count" aria-label={`${pool.length} properties`}>{pool.length}</span>
           </button>
