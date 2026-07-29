@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | Codex | 29 Jul 2026 | Reframing the wide KLCC crop to show the tower tops |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | — |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Section queue in the plan file; work it in order |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -39,7 +39,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 29 Jul | Submitted offers are presented to the seller **immediately** through the appointed agent; they are not held until the tender deadline | Corrected the old “reviewed after closing” model. Immediate presentation does not promise an immediate seller decision | Bryan |
 | 29 Jul | The seller is the offer recipient; the appointed agent privately handles its presentation. Accepted buyers proceed through to SPA signing | Keeps the sealed-tender privacy promise accurate without hiding the agent’s operational role | Bryan |
 | 29 Jul | Hero closing date uses full ordinal format: **12th December 2026**, with a small suffix | Founder-selected editorial treatment; replaces the abbreviated hero date only | Bryan |
-| 29 Jul | Wide-desktop KLCC panorama uses `background-position: center 57%`; narrower desktop/tablet and mobile retain their tuned crops | Bryan asked to move the skyline slightly downward. Keeping this breakpoint-specific reveals more of the tower tops in the reviewed wide layout without disturbing smaller compositions | Bryan |
+| 29 Jul | Wide-desktop KLCC panorama uses `background-position: center 20%`; narrower desktop/tablet and mobile retain their tuned crops | Bryan wants the KLCC spires—not only the tower middles—in frame. The reviewed 20% focal point reveals both antenna tips with minimal sky and preserves the smaller compositions | Bryan |
 | 28 Jul | The 12 `demo:true` listings **stay**, badged DEMO, and get **no detail pages** | Bryan wants national state coverage in the demo without generating fake property pages | Bryan |
 | 28 Jul | Fabricated content **removed**: invented price history, borrowed facilities list, dead Video/Drone buttons | This prototype becomes EasyAsia's spec — invented content would be copied as real | Claude, accepted by Bryan |
 | 28 Jul | `REN 123456` is an approved **placeholder** | Real REN + agency registration required before go-live | Bryan |
@@ -74,7 +74,16 @@ brief** — 12 sections in review order with per-section rules, known issues and
 questions. Bryan reviews section by section on localhost:5173. Start at §1 (opening header,
 incl. the Playfair→Newsreader unification). Claim the area before starting.
 
+### 29 Jul 2026 — Codex (KLCC spires in frame)
+Finalised the shared wide-desktop panorama at `background-position: center 20%`. With the
+16:9 image covering the shallow hero, this is the smallest practical shift that brings both KLCC
+antenna tips into view; 57% still began around the towers' middle. Left and right panels use the
+same focal point, so the panorama and diagonal seam remain aligned. Rendered at the founder's
+1470px view and verified at 1280px; 1024px and mobile retain their separate crops, and 375px has
+zero horizontal overflow. Production build passes.
+
 ### 29 Jul 2026 — Codex (wide KLCC crop)
+Superseded by the founder-requested complete tower-top framing above.
 Lowered the shared KLCC panorama slightly in the founder-reviewed wide-desktop hero by changing
 the `min-width: 1280px` crop from `center 62%` to `center 57%`. This reveals more of the tower tops
 while preserving the left/right panorama alignment and diagonal seam. The 1024–1279px, 821–1023px,

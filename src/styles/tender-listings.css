@@ -281,7 +281,7 @@
     .hero-tender { --hero-top-split: 70%; --hero-bot-split: 58%; }
     /* The panel is wider now — let the photograph fill it rather than tile short. */
     .hero-panel-left,
-    .hero-panel-right { background-size: cover; background-position: center 57%; }
+    .hero-panel-right { background-size: cover; background-position: center 20%; }
 
     .hero-panel-right { padding-top: clamp(24px, 3vw, 40px); padding-bottom: clamp(24px, 3vw, 40px); padding-right: clamp(18px, 3.2vw, 44px); }
     .hero-panel-right .hero-panel-inner { max-width: 520px; }
