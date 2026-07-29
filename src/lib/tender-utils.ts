@@ -18,6 +18,15 @@ export function fmtRM(n: number) {
     : "RM" + Math.round(n / 1000) + "k";
 }
 
+/* DEMO VALUE (Bryan, 29 Jul): the data model has no listing-start field yet, so the
+   card shows closing date minus 3 months — the founder's standard package length.
+   Replace with a real per-listing start date when the agency/backend supplies one. */
+export function tenderStartOf(x: Tender) {
+  const d = new Date(x.closingDate + "T00:00:00");
+  d.setMonth(d.getMonth() - 3);
+  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+
 export function daysLeft(iso: string) {
   return Math.ceil((new Date(iso + "T23:59:59").getTime() - Date.now()) / 86400000);
 }

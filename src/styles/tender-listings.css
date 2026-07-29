@@ -492,7 +492,7 @@
   /* Three permanent comparison slots keep every card aligned. Missing physical
      dimensions render as an em dash instead of collapsing the structure. */
   .prop-card .pc-details {
-    order: 5; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    order: 5; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
     gap: 0; margin: 14px 0 0;
   }
   .prop-card .pc-detail { min-width: 0; }

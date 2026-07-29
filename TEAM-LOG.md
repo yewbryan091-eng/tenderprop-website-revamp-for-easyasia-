@@ -42,6 +42,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 28 Jul | The 12 `demo:true` listings **stay**, badged DEMO, and get **no detail pages** | Bryan wants national state coverage in the demo without generating fake property pages | Bryan |
 | 28 Jul | Fabricated content **removed**: invented price history, borrowed facilities list, dead Video/Drone buttons | This prototype becomes EasyAsia's spec — invented content would be copied as real | Claude, accepted by Bryan |
 | 28 Jul | `REN 123456` is an approved **placeholder** | Real REN + agency registration required before go-live | Bryan |
+| 29 Jul | Cards show a **Tender start** date computed as closing date − 3 months (`tenderStartOf` in tender-utils) | DELIBERATE demo value, founder's call: "this is just a demo for easyasia, information may not be accurate… who cares". Overrides the invent-nothing rule for THIS field only. Swap for a real per-listing start date when the backend supplies one | Bryan |
 | 28 Jul | `tender-seeker-bot.lovable.app` is a **frozen snapshot**; this repo is the truth | Lovable credits ran out; its copy no longer updates from git | Bryan |
 
 ---

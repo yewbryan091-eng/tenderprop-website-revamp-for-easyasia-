@@ -1,7 +1,7 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
 import { ClockIcon, HeartIcon, PinIcon } from "./icons";
-import { daysLeft, depositOf, fmtDate, fmtPrice, hrefFor, tenderId } from "@/lib/tender-utils";
+import { daysLeft, depositOf, fmtDate, fmtPrice, hrefFor, tenderId, tenderStartOf } from "@/lib/tender-utils";
 
 /* The photo pill is the card's ONLY date. It carries the year because listings
    span 2026-2028, so "12 Dec" alone would be ambiguous. Never hardcoded. */
@@ -36,7 +36,9 @@ export function PropertyCard({
   const dlTxt =
     d <= 0 ? "Tender closed" : `Closes ${fmtDate(x.closingDate)} · ${d} ${d === 1 ? "day" : "days"}`;
   const href = hrefFor(x);
-  const rows = detailRows(x);
+  /* Start date leads the row: with the closing date in the photo pill, "Tender
+     start" answers the other half of the window without duplicating the close. */
+  const rows = [{ label: "Tender start", value: tenderStartOf(x) }, ...detailRows(x)];
   const hasPropertyType = Boolean(x.propertyType.trim());
   const propertyType = hasPropertyType ? x.propertyType.trim() : "Not specified";
 
