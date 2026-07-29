@@ -398,7 +398,7 @@ function TenderListings() {
                   <span className="hero-assurance-icon" aria-hidden="true"><LockIcon /></span>
                   <div>
                     <h2 className="hero-seal-title">Your offer stays <em>private</em></h2>
-                    <p>Your offer goes only to the seller, privately handled by our appointed agent — never shown to other buyers or the public.</p>
+                    <p>Your offer goes only to the seller, with the process handled privately through an appointed agent — never shown to other buyers or the public.</p>
                   </div>
                 </li>
                 <li className="hero-assurance hero-assurance-agent">
