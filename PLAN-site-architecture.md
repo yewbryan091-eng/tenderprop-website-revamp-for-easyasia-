@@ -195,11 +195,27 @@ final, then reconcile the terms with what the tender pages promise.
 
 ## 6. BUILD ORDER
 
-**Now — credibility, cheap and urgent (§2).** Remove the lorem ipsum, the 18 fake sold tiles,
-the test auction records, the public email addresses; fix "Memebr". These need no design work
-and every one of them is visible to anyone Bryan sends to the site today.
+**Framing correction (Bryan, 30 Jul): this is a REPLACEMENT, not a repair.** *"the old website
+tenderprop is old, everything is everywhere and wrong, and thats why im here, to revamp it."*
 
-**Next — the two pages that make money.** (1) Sell, starting with the comparison table.
+So there are two separate tracks and they must not be confused:
+
+**Track A — triage the OLD site (damage control only).** The old site stays live while the new one
+is built, so the §2 wounds are still public and still worth an hour: the four lorem ipsum blocks,
+the 18 fabricated sold tiles, the 28 exposed email addresses, the "test"/"RM-" records, "Memebr",
+the `newproject1u.com` contact email. **Do NOT spend design effort here.** Every one of these
+pages is being replaced. Patch the embarrassment, then walk away.
+
+**Track B — build the NEW site.** This is the real work. The tender grid and the Residensi Sinaran
+detail page are already built in this repo — they are not two finished pages, they are **the design
+system**: tokens, cards, the money box, the facts row, the ladder, the cycle hero, the type scale.
+Every remaining page gets composed from that vocabulary. Nothing else gets ported from the old
+site except verified facts and copy that survives review.
+
+Order within Track B:
+
+
+**First — the two pages that make money.** (1) Sell, starting with the comparison table.
 (2) Homepage, rebuilt around the tender cycle.
 
 **Then — trust and consolidation.** About Us, then Services merged into one page.
