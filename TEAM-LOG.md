@@ -67,6 +67,23 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 (night) — Claude · house framed + §4 timer + forward roadmap
+1. **Site frame shipped**: 5-item nav (E-Tender / Owner Auction / Sell / Services / About,
+   router-driven active state), real homepage at `/` (cycle line + two product doors + frames),
+   framed pages at /owner-auction /sell /services /about /member via `PageShell`, /buy→/tender
+   and /rent→/owner-auction redirects, footer rewired (real address, next-cycle line).
+   CORRECTION from Bryan: it is buy and RENT that die — SELL STAYS (owners pay us).
+2. **§4 gets its timer** (Bryan asked): live D:HH:MM:SS in the tender rail, same segmented
+   language as the grid hero, 1s tick, SSR-safe (null till mount). Serif date stays the
+   headline; timer is the pulse under it.
+3. **Recovered facts applied to §4 copy**: deposit is paid in the member account (ladder rung 1
+   + step 2), results within 5 working days (step 3).
+4. ⚠️ Browser pane collapsed to width 0 mid-session — timer verified ticking via DOM (values
+   advance 1s apart, fits inside rail at last real measurement); no post-change eyeball. First
+   agent with a working screenshot: look at /tender/residensi-sinaran §4 rail + the new
+   homepage, and check 375px on both.
+5. `PLAN-roadmap.md` added — the forward strategy beyond the current build. Read it.
+
 ### 30 Jul 2026 — DECISION: the portal is out. Two products only.
 Bryan: *"there will be no more buy and sell anymore, only tender and owner auction."*
 `/buy` and `/rent` are retired (redirect to E-Tender, don't 404). Nav goes to five items:

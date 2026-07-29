@@ -472,3 +472,12 @@
 .v1-ladder { order: 3; }
 .v1-steps { order: 4; }
 .v1-negotiate { order: 5; }
+
+/* ── §4 rail countdown (Bryan, 30 Jul: "i kinda want to add a timer") ──
+   Same segmented D:H:M:S voice as the grid hero, scaled to the rail. The serif
+   date stays the headline; the timer is the pulse under it. */
+.v1-timer { display: flex; align-items: baseline; gap: 5px; margin: 8px 0 4px; font-variant-numeric: tabular-nums; }
+.v1-timer .u b { font-family: var(--serif); font-optical-sizing: auto; font-weight: 600; font-size: 25px; line-height: 1; letter-spacing: -.01em; }
+.v1-timer .u i { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-left: 2px; }
+.v1-timer .sep { color: var(--muted); font-weight: 700; font-size: 15px; }
+.v1-rail .v1-cd { margin-top: 6px; }
