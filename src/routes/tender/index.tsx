@@ -5,8 +5,14 @@ import { PropertyCard } from "@/components/tender/PropertyCard";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
 import { StateFilters } from "@/components/tender/StateFilters";
-import { TaHome, TaPin } from "@/components/tender/icons";
 import {
+  CalendarCheckIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  LockIcon,
+  ReturnIcon,
+  TaHome,
+  TaPin,
 } from "@/components/tender/icons";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
@@ -66,25 +72,39 @@ const INDEXED = TENDERS.map((x, i) => ({ ...x, _i: i })) as (Tender & { _i: numb
 
 /* Null until mount so SSR and first paint never show a flash of zeros.
    Tenders close at 5:00 PM Malaysian time on the closing date. */
-function useDaysRemaining(iso: string): number | null {
-  const [days, setDays] = useState<number | null>(null);
+type Remaining = { days: number; hours: number; minutes: number; seconds: number };
+function useCountdown(iso: string): Remaining | null {
+  const [left, setLeft] = useState<Remaining | null>(null);
   useEffect(() => {
     const target = new Date(iso + "T17:00:00+08:00").getTime();
-    const compute = (): number => {
+    const compute = (): Remaining => {
       const diff = Math.max(0, target - Date.now());
-      return Math.floor(diff / 86400000);
+      const seconds = Math.floor(diff / 1000);
+      return {
+        days: Math.floor(seconds / 86400),
+        hours: Math.floor((seconds % 86400) / 3600),
+        minutes: Math.floor((seconds % 3600) / 60),
+        seconds: seconds % 60,
+      };
     };
-    setDays(compute());
-    const id = window.setInterval(() => setDays(compute()), 60000);
+    setLeft(compute());
+    const id = window.setInterval(() => setLeft(compute()), 1000);
     return () => window.clearInterval(id);
   }, [iso]);
-  return days;
+  return left;
 }
+const pad2 = (n: number) => String(n).padStart(2, "0");
 
 function TenderListings() {
-  const daysLeft = useDaysRemaining(NEXT_BATCH.date);
-  const countdownLabel = daysLeft !== null
-    ? `Offers close in ${daysLeft} days`
+  const left = useCountdown(NEXT_BATCH.date);
+  const countdownUnits = [
+    { label: "d", value: left ? String(left.days) : "" },
+    { label: "h", value: left ? pad2(left.hours) : "" },
+    { label: "m", value: left ? pad2(left.minutes) : "" },
+    { label: "s", value: left ? pad2(left.seconds) : "" },
+  ];
+  const countdownLabel = left
+    ? `Offers close in ${left.days} days, ${left.hours} hours, ${left.minutes} minutes and ${left.seconds} seconds`
     : "Offers close in";
 
   const [query, setQuery] = useState("");
@@ -323,17 +343,24 @@ function TenderListings() {
       <SiteHeader />
 
       <main>
-        {/* HERO — full-bleed diagonal split. Structure only; content lands in a later pass.
-            Left panel: announcement + background image. Right panel: 3-step how-it-works. */}
+        {/* HERO — full-bleed diagonal split.
+            Left panel: tender-cycle announcement. Right panel: buyer assurances. */}
         <section className="hero-tender" aria-label="Tender overview">
           <div className="hero-panel hero-panel-left is-dark">
             <div className="hero-panel-inner">
               <div className="hero-timer" aria-live="off" aria-label={countdownLabel}>
-                <span className="hero-timer-label" aria-hidden="true">Offers close in</span>
-                <span className="hero-timer-value" aria-hidden="true">
-                  {daysLeft !== null ? daysLeft : "\u00a0"}
+                <span className="hero-timer-heading" aria-hidden="true">
+                  <span className="hero-timer-clock"><ClockIcon /></span>
+                  <span className="hero-timer-label">Offers close in</span>
                 </span>
-                <span className="hero-timer-unit" aria-hidden="true">days</span>
+                <span className="hero-timer-cells" aria-hidden="true">
+                  {countdownUnits.map((unit) => (
+                    <span className="hero-timer-cell" key={unit.label}>
+                      <span className="hero-timer-value">{unit.value || "\u00a0"}</span>
+                      <span className="hero-timer-unit">{unit.label}</span>
+                    </span>
+                  ))}
+                </span>
               </div>
               <p className="hero-eyebrow">Next tender cycle</p>
               <p className="hero-date">{fmtDate(NEXT_BATCH.date)}</p>
@@ -349,34 +376,32 @@ function TenderListings() {
           <div className="hero-panel hero-panel-right">
             <div className="hero-panel-inner">
               <p className="hero-eyebrow">Sealed e-tender</p>
-              <h2 className="hero-seal-title">Your offer stays private</h2>
-              <p className="hero-seal-text">
-                No one — not other buyers, not the public — ever sees what you offered.
-              </p>
-
-              <ol className="hero-flow">
-                <li>
-                  <span className="hero-flow-n" aria-hidden="true">1</span>
+              <ul className="hero-flow hero-assurances" aria-label="Sealed e-tender assurances">
+                <li className="hero-assurance hero-assurance-primary">
+                  <span className="hero-assurance-icon" aria-hidden="true"><LockIcon /></span>
                   <div>
-                    <strong>Submit your offer</strong>
-                    <p>Any time before the closing date. A refundable deposit applies.</p>
+                    <h2 className="hero-seal-title">Your offer stays private</h2>
+                    <p>No one — not other buyers, not the public — ever sees what you offered.</p>
                   </div>
                 </li>
-                <li>
-                  <span className="hero-flow-n" aria-hidden="true">2</span>
+                <li className="hero-assurance">
+                  <span className="hero-assurance-icon" aria-hidden="true"><CalendarCheckIcon /></span>
                   <div>
-                    <strong>The seller reviews</strong>
-                    <p>After closing they may accept, decline, or negotiate through our licensed agent.</p>
+                    <strong>Reviewed after closing</strong>
+                    <p>All valid offers are presented after the tender deadline.</p>
                   </div>
                 </li>
-                <li>
-                  <span className="hero-flow-n" aria-hidden="true">3</span>
+                <li className="hero-assurance hero-assurance-outcome">
+                  <span className="hero-assurance-icon hero-assurance-icon-pair" aria-hidden="true">
+                    <span className="hero-outcome-accepted"><CheckCircleIcon /></span>
+                    <span><ReturnIcon /></span>
+                  </span>
                   <div>
                     <strong>Accepted, or refunded</strong>
-                    <p>Accepted offers proceed to signing. Otherwise your deposit is refunded in full within 3 working days.</p>
+                    <p>Successful buyers proceed through the appointed agent. Otherwise, the refundable deposit is returned in full.</p>
                   </div>
                 </li>
-              </ol>
+              </ul>
             </div>
           </div>
         </section>

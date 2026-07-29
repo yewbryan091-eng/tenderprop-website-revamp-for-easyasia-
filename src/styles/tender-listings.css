@@ -122,29 +122,37 @@
   }
   .hero-cycle-count strong { color: var(--ink); font-weight: 800; }
   .hero-foot { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
-  /* One calm deadline signal. A seconds-level timer makes a sealed tender read
-     like a live auction and competes with the actual closing date. */
+  /* Live countdown clock — compact enough to support the date rather than
+     competing with it. One unboxed digital line keeps it professional. */
   .hero-timer {
-    display: inline-flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 7px;
+    display: inline-flex; flex-direction: column; align-items: center;
+    gap: 4px;
     margin: 0 0 clamp(16px, 1.6vw, 22px);
     padding: 0 0 9px;
     border-bottom: 1px solid rgba(245, 228, 216, .36);
     text-align: center;
     font-variant-numeric: tabular-nums;
   }
+  .hero-timer-heading { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .hero-timer-clock { display: inline-grid; place-items: center; width: 14px; height: 14px; color: var(--muted); }
+  .hero-timer-clock svg { display: block; width: 100%; height: 100%; }
   .hero-timer-label {
     font-size: clamp(10px, .8vw, 12px); font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
     color: var(--muted);
   }
+  .hero-timer-cells { display: flex; align-items: baseline; justify-content: center; gap: 7px; }
+  .hero-timer-cell { display: inline-flex; align-items: baseline; gap: 2px; white-space: nowrap; }
+  .hero-timer-cell + .hero-timer-cell::before {
+    content: ":"; margin-right: 5px; color: rgba(245, 228, 216, .62);
+    font-size: clamp(17px, 1.55vw, 23px); font-weight: 500; line-height: 1;
+  }
   .hero-timer-value {
-    min-width: 2.5ch; font-size: clamp(26px, 2.4vw, 36px); font-weight: 800;
+    min-width: 2ch; font-size: clamp(22px, 2vw, 29px); font-weight: 800;
     line-height: .95; letter-spacing: -.025em; color: var(--ink);
   }
+  .hero-timer-cell:first-child .hero-timer-value { min-width: 3ch; }
   .hero-timer-unit {
-    font-size: clamp(10px, .8vw, 12px); font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    font-size: clamp(9px, .7vw, 10px); font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
     color: var(--muted);
   }
   .hero-panel-left .hero-panel-inner {
@@ -166,42 +174,42 @@
   .hero-panel-left.is-dark .hero-cycle-count { color: var(--burgundy-ink); }
   .hero-panel-left.is-dark .hero-cycle-count strong { color: var(--card); }
   .hero-panel-left.is-dark .hero-foot { color: var(--burgundy-ink); }
+  .hero-panel-left.is-dark .hero-timer-clock,
   .hero-panel-left.is-dark .hero-timer-label,
   .hero-panel-left.is-dark .hero-timer-unit { color: var(--burgundy-ink); }
   .hero-panel-left.is-dark .hero-timer-value { color: var(--card); }
 
-  /* Right panel: the tender explained as a sequence, not a pile of boxes.
-     No card containers — whitespace and a connecting rule carry the structure. */
+  /* Right panel: three icon-led assurances. They are truths buyers need to
+     recognise at a glance, not numbered instructions they must memorise. */
   .hero-seal-title {
-    margin: 4px 0 5px; font-family: Newsreader, Georgia, serif; font-weight: 600;
+    margin: 0 0 4px; font-family: Newsreader, Georgia, serif; font-weight: 600;
     font-size: clamp(21px, 2vw, 28px); line-height: 1.1; letter-spacing: -.02em; color: var(--ink);
   }
-  .hero-seal-text {
-    margin: 0 0 clamp(10px, 1.1vw, 14px); padding-bottom: clamp(9px, 1vw, 12px);
+  .hero-flow { list-style: none; margin: 0; padding: 0; }
+  .hero-assurance {
+    display: grid; grid-template-columns: 40px minmax(0, 1fr);
+    gap: 13px; align-items: start;
+    padding: clamp(10px, 1vw, 13px) 0;
     border-bottom: 1px solid var(--line);
-    font-size: 13px; line-height: 1.5; color: var(--muted); max-width: 46ch;
   }
-  .hero-flow { list-style: none; margin: 0; padding: 0; position: relative; }
-  .hero-flow li {
-    position: relative; display: grid; grid-template-columns: 26px minmax(0, 1fr);
-    gap: 12px; padding-bottom: clamp(8px, .95vw, 12px);
+  .hero-assurance:first-child { padding-top: 5px; }
+  .hero-assurance:last-child { padding-bottom: 0; border-bottom: 0; }
+  .hero-assurance-icon {
+    display: grid; place-items: center; width: 36px; height: 36px;
+    color: var(--burgundy);
   }
-  .hero-flow li:last-child { padding-bottom: 0; }
-  /* connecting rule between the step numbers */
-  .hero-flow li:not(:last-child)::before {
-    content: ""; position: absolute; left: 12.5px; top: 28px; bottom: 4px;
-    width: 1px; background: var(--line);
+  .hero-assurance-icon svg { display: block; width: 30px; height: 30px; }
+  .hero-assurance-primary .hero-assurance-icon svg { width: 34px; height: 34px; }
+  .hero-assurance-icon-pair {
+    grid-template-columns: repeat(2, 19px); gap: 1px; width: 40px;
   }
-  .hero-flow-n {
-    position: relative; z-index: 1; width: 26px; height: 26px; border-radius: 50%;
-    display: grid; place-items: center; background: var(--burgundy); color: var(--card);
-    font-size: 12.5px; font-weight: 800; font-variant-numeric: tabular-nums;
-  }
-  .hero-flow strong {
+  .hero-assurance-icon-pair svg { width: 19px; height: 19px; }
+  .hero-outcome-accepted { color: var(--good); }
+  .hero-assurance strong {
     display: block; margin-bottom: 2px; font-size: 14.5px; font-weight: 700;
     line-height: 1.25; letter-spacing: -.01em; color: var(--ink);
   }
-  .hero-flow p { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+  .hero-assurance p { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
 
   /* Wide desktop: the image panel owns ~2/3 of the hero. Same height, same seam,
      the right panel simply runs a little tighter so all content still fits. */
@@ -212,7 +220,6 @@
     .hero-panel-right { padding-top: clamp(24px, 3vw, 40px); padding-bottom: clamp(24px, 3vw, 40px); padding-right: clamp(18px, 3.2vw, 44px); }
     .hero-panel-right .hero-panel-inner { max-width: 520px; }
     .hero-seal-title { font-size: clamp(18px, 1.7vw, 23px); }
-    .hero-seal-text { font-size: 12.5px; }
   }
   /* At the narrow edge of desktop the dominant left plane leaves a compact
      confidence rail. Tighten its rhythm rather than letting the final outcome
@@ -249,7 +256,7 @@
     .hero-cycle-count { margin-top: 10px; }
     .hero-panel-left .hero-cta { width: min(100%, 280px); min-width: 0; }
     .hero-seal-title { font-size: 19px; }
-    .hero-seal-text { font-size: 12px; }
+    .hero-assurance { grid-template-columns: 38px minmax(0, 1fr); gap: 11px; }
   }
 
   /* Search band — sits directly below the hero date */
