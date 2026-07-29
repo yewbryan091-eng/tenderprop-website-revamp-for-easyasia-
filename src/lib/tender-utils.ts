@@ -62,11 +62,10 @@ export function matchesTaxonomy(x: Tender, value: string) {
   return (t.types || []).indexOf(x.propertyType) !== -1;
 }
 
-/* Only these detail pages exist so far; everything else degrades to a
-   coming-soon route instead of a hard 404. */
-export const BUILT_PAGES: Record<string, string> = {
-  "residensi-sinaran-shah-alam": "/tender/residensi-sinaran",
-};
-export function hrefFor(x: Tender) {
-  return BUILT_PAGES[tenderId(x)] || "/tender/coming-soon";
+/* DEMO ROUTING (Bryan, 29 Jul): every card opens the one built detail page —
+   Residensi Sinaran is the design canon, and for the EasyAsia demo every click
+   should land somewhere real rather than a coming-soon wall. When more detail
+   pages exist, route per-listing again (each record's own slug). */
+export function hrefFor(_x: Tender) {
+  return "/tender/residensi-sinaran";
 }
