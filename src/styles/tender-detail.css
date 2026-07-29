@@ -75,7 +75,11 @@
     --muted: #75695E; --line: #DED2C4; --card: #FFFFFF;
     --good: #2E6B3F; --warn: #9A6A00;
     --sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    /* One display serif across the whole site. Playfair was never loaded in
+       __root.tsx, so this page had been silently rendering Georgia while the
+       tender grid used Newsreader. Newsreader is the loaded face (400..700) —
+       never ask it for 800/900 or the browser fakes the bold. */
+    --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -116,16 +120,34 @@
   .crumbs a { text-decoration: none; font-weight: 600; }
   .crumbs a:hover { color: var(--red); }
   .ovhead { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
-  .ovtitle .status { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; padding: 5px 10px; border-radius: 3px; background: rgba(200,40,28,.08); border: 1px solid rgba(200,40,28,.35); color: var(--red); margin-bottom: 10px; }
+  /* Status line. Green = open, matching the tender rail's own live/closed language;
+     red is reserved for "not accepted" outcomes, so it must not mean "live" here. */
+  .ovstatus { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 0 12px; }
+  .ovtitle .status { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: var(--good); }
+  .ovtitle .status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); box-shadow: 0 0 0 3px rgba(46,107,63,.16); }
   .ovtitle .status svg { width: 12px; height: 12px; }
-  .ovhead h1 { font-family: var(--serif); margin: 0 0 6px; font-size: clamp(27px, 3.8vw, 47px); font-weight: 900; line-height: 1.02; letter-spacing: -.01em; }
-  .ovhead .addr { color: var(--muted); font-size: clamp(14px, 1.5vw, 16px); margin: 0; display: flex; align-items: center; gap: 8px; }
-  .ovhead .addr svg { width: 16px; height: 16px; flex: none; color: var(--burgundy); }
+  .ovcloses { font-size: 13px; color: var(--muted); padding-left: 12px; border-left: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  @media(max-width: 560px) { .ovcloses { padding-left: 0; border-left: 0; flex-basis: 100%; } }
+  .ovhead h1 { font-family: var(--serif); font-optical-sizing: auto; margin: 0 0 6px; font-size: clamp(27px, 3.6vw, 44px); font-weight: 600; line-height: 1.04; letter-spacing: -.015em; }
+  /* flex-start, not center: the address wraps to two lines on narrow screens and a
+     centred pin then floats between them instead of marking the first line. */
+  .ovhead .addr { color: var(--muted); font-size: clamp(14px, 1.5vw, 16px); margin: 0; display: flex; align-items: flex-start; gap: 8px; }
+  .ovhead .addr svg { width: 16px; height: 16px; flex: none; margin-top: .28em; color: var(--burgundy); }
   .ovhead .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   .ovside { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
   .ovprice { text-align: right; }
+  /* Once the head stacks, the right column is no longer a column — right-aligning it
+     leaves the price drifting away from everything else on the page. */
+  @media(max-width: 700px) {
+    .ovhead { align-items: stretch; gap: 16px; }
+    .ovside { align-items: stretch; width: 100%; }
+    .ovprice { text-align: left; }
+  }
   .ovprice .k { font-size: 10.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
-  .ovprice .v { font-family: var(--serif); font-size: clamp(19px, 2.1vw, 24px); font-weight: 800; color: var(--burgundy); }
+  /* The price is what the buyer came for — it was rendering smaller than the
+     property name. Sized to sit just under the H1, not compete with it. */
+  .ovprice .v { font-family: var(--serif); font-optical-sizing: auto; font-size: clamp(27px, 3.1vw, 39px); font-weight: 600; color: var(--burgundy); line-height: 1.04; letter-spacing: -.02em; }
+  .ovprice .s { margin-top: 4px; font-size: 12.5px; line-height: 1.35; color: var(--muted); }
   .icobtn { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--line); color: var(--muted); border-radius: 5px; padding: 8px 13px; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
   .icobtn:hover { border-color: var(--burgundy); color: var(--burgundy); }
   .icobtn svg { width: 15px; height: 15px; }
@@ -187,14 +209,14 @@
   /* Section scaffolding */
   section.blk { padding: clamp(28px, 4vh, 46px) 0; scroll-margin-top: 128px; }section.blk { --band-bg: var(--paper); }section.blk.band-card { background: var(--card); --band-bg: var(--card); }section.blk.band-deep { background: var(--paper-deep); --band-bg: var(--paper-deep); }section.blk.band-paper { background: var(--paper); --band-bg: var(--paper); }
   .blkcard { background: transparent; border: none; border-radius: 0; padding: 0; }
-  .sec-title { font-family: var(--serif); font-size: clamp(1.7rem, 2.4vw, 2.25rem); font-weight: 800; letter-spacing: -.01em; margin: 0 0 18px; }
+  .sec-title { font-family: var(--serif); font-size: clamp(1.7rem, 2.4vw, 2.25rem); font-weight: 600; letter-spacing: -.01em; margin: 0 0 18px; }
   
   .kicker { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--burgundy); opacity: .9; margin: 0 0 6px; }
 
   /* Tender Information — facts first, process second, focused action rail */
   /* old .tinfo base rule removed — superseded by t2 rule above (overflow visible for pin) */
   .tinfo .thead { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--burgundy); color: #fff; padding: 18px clamp(22px,3vw,32px); }
-  .tinfo .thead h2 { font-family: var(--serif); font-size: clamp(1.45rem,2vw,1.9rem); font-weight: 800; margin: 0; }
+  .tinfo .thead h2 { font-family: var(--serif); font-size: clamp(1.45rem,2vw,1.9rem); font-weight: 600; margin: 0; }
   .tinfo .thead .status { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #F3C2B6; }
   .tinfo .tbody { display: grid; grid-template-columns: minmax(0,1fr) 310px; gap: clamp(24px,3vw,38px); padding: clamp(24px,3vw,34px); align-items: start; }
   @media(max-width:860px){ .tinfo .tbody { grid-template-columns: 1fr; } }
@@ -359,7 +381,7 @@
   .bidbar.show { transform: translateY(0); }
   .bidbar .in { min-height: 74px; display: grid; grid-template-columns: minmax(220px,1fr) auto auto; align-items: center; gap: 28px; padding: 10px 0; }
   .bidbar .identity { min-width: 0; }
-  .bidbar .nm { display:block; font-family: var(--serif); font-weight: 800; font-size: 18px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bidbar .nm { display:block; font-family: var(--serif); font-weight: 600; font-size: 18px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .bidbar .meta { display:block; margin-top:2px; color:var(--muted); font-size:12.5px; }
   .bidbar .pr { text-align: right; }
   .bidbar .pr .k { font-size: 9.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
@@ -383,7 +405,7 @@
   .modal.open { display: flex; }
   .modal .box { background: var(--card); border-radius: 8px; max-width: 720px; width: 100%; overflow: hidden; }
   .modal .mh { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--line); }
-  .modal .mh b { font-family: var(--serif); font-size: 20px; font-weight: 800; }
+  .modal .mh b { font-family: var(--serif); font-size: 20px; font-weight: 600; }
   .modal .mh button { background: none; border: none; cursor: pointer; font-size: 22px; line-height: 1; color: var(--muted); }
   .modal .mbody { aspect-ratio: 16/9; background: var(--paper-deep); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 24px; color: var(--muted); }
   .modal .mbody svg { width: 54px; height: 54px; color: var(--burgundy); opacity: .5; }
