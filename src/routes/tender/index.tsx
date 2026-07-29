@@ -375,7 +375,7 @@ function TenderListings() {
           </div>
           <div className="hero-panel hero-panel-right">
             <div className="hero-panel-inner">
-              <p className="hero-eyebrow">Sealed e-tender</p>
+              <p className="hero-eyebrow">Why sealed e-tender?</p>
               <ul className="hero-flow hero-assurances" aria-label="Sealed e-tender assurances">
                 <li className="hero-assurance hero-assurance-primary">
                   <span className="hero-assurance-icon" aria-hidden="true"><LockIcon /></span>
