@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | Codex | 29 Jul 2026 | Visually tuning the right hero skyline watermark |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | — |
 | Property detail page | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | — |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -60,6 +60,13 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 29 Jul 2026 — Codex (right skyline visual correction)
+After reviewing the rendered hero at the founder's effective 1470px desktop width, increased the
+right panel's paper wash from 93% to 97%, reducing the skyline from a visible second image to a
+roughly 3% watermark. The building edges no longer compete with the assurance copy. Rechecked the
+actual frontend at desktop and 375px; the live clock works, content fits, console is clean, there is
+zero mobile overflow, and the production build passes.
 
 ### 29 Jul 2026 — Codex (continuous hero skyline test)
 Continued the existing KL skyline through the right hero plane using identical desktop image
