@@ -6,11 +6,10 @@ import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
 import { StateFilters } from "@/components/tender/StateFilters";
 import {
-  CalendarCheckIcon,
-  CheckCircleIcon,
   ClockIcon,
   LockIcon,
-  ReturnIcon,
+  OfferPresentedIcon,
+  OutcomePathIcon,
   TaHome,
   TaPin,
 } from "@/components/tender/icons";
@@ -380,25 +379,31 @@ function TenderListings() {
                 <li className="hero-assurance hero-assurance-primary">
                   <span className="hero-assurance-icon" aria-hidden="true"><LockIcon /></span>
                   <div>
-                    <h2 className="hero-seal-title">Your offer stays private</h2>
-                    <p>No one — not other buyers, not the public — ever sees what you offered.</p>
+                    <h2 className="hero-seal-title">Your offer stays <em>private</em></h2>
+                    <p>Only the seller and appointed agent see what you offered for the property — never other buyers or the public.</p>
                   </div>
                 </li>
                 <li className="hero-assurance">
-                  <span className="hero-assurance-icon" aria-hidden="true"><CalendarCheckIcon /></span>
+                  <span className="hero-assurance-icon" aria-hidden="true"><OfferPresentedIcon /></span>
                   <div>
-                    <strong>Reviewed after closing</strong>
-                    <p>All valid offers are presented after the tender deadline.</p>
+                    <strong>Presented to the seller immediately</strong>
+                    <p>Once submitted, our appointed agent presents your offer to the seller for consideration.</p>
                   </div>
                 </li>
                 <li className="hero-assurance hero-assurance-outcome">
-                  <span className="hero-assurance-icon hero-assurance-icon-pair" aria-hidden="true">
-                    <span className="hero-outcome-accepted"><CheckCircleIcon /></span>
-                    <span><ReturnIcon /></span>
-                  </span>
-                  <div>
-                    <strong>Accepted, or refunded</strong>
-                    <p>Successful buyers proceed through the appointed agent. Otherwise, the refundable deposit is returned in full.</p>
+                  <span className="hero-assurance-icon" aria-hidden="true"><OutcomePathIcon /></span>
+                  <div className="hero-outcome-content">
+                    <strong>A clear outcome either way</strong>
+                    <div className="hero-outcome-grid">
+                      <div className="hero-outcome-option is-accepted">
+                        <span className="hero-outcome-label">Accepted</span>
+                        <span>Proceed through the appointed agent.</span>
+                      </div>
+                      <div className="hero-outcome-option is-refunded">
+                        <span className="hero-outcome-label">Not accepted</span>
+                        <span>Refundable deposit returned in full.</span>
+                      </div>
+                    </div>
                   </div>
                 </li>
               </ul>

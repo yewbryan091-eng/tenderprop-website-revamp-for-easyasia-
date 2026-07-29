@@ -202,6 +202,7 @@
     margin: 0 0 4px; font-family: Newsreader, Georgia, serif; font-weight: 600;
     font-size: clamp(21px, 2vw, 28px); line-height: 1.1; letter-spacing: -.02em; color: var(--ink);
   }
+  .hero-seal-title em { font-style: italic; font-weight: inherit; }
   .hero-flow { list-style: none; margin: 0; padding: 0; }
   .hero-assurance {
     display: grid; grid-template-columns: 40px minmax(0, 1fr);
@@ -217,16 +218,27 @@
   }
   .hero-assurance-icon svg { display: block; width: 30px; height: 30px; }
   .hero-assurance-primary .hero-assurance-icon svg { width: 34px; height: 34px; }
-  .hero-assurance-icon-pair {
-    grid-template-columns: repeat(2, 19px); gap: 1px; width: 40px;
-  }
-  .hero-assurance-icon-pair svg { width: 19px; height: 19px; }
-  .hero-outcome-accepted { color: var(--good); }
   .hero-assurance strong {
     display: block; margin-bottom: 2px; font-size: 14.5px; font-weight: 700;
     line-height: 1.25; letter-spacing: -.01em; color: var(--ink);
   }
   .hero-assurance p { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+  .hero-outcome-content { min-width: 0; }
+  .hero-outcome-grid {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px; margin-top: 8px;
+  }
+  .hero-outcome-option {
+    min-width: 0; padding-top: 6px;
+    border-top: 2px solid var(--burgundy);
+    color: var(--muted); font-size: 11.5px; line-height: 1.38;
+  }
+  .hero-outcome-option.is-accepted { border-top-color: var(--good); }
+  .hero-outcome-label {
+    display: block; margin-bottom: 2px; color: var(--ink);
+    font-size: 10px; font-weight: 800; letter-spacing: .08em;
+    line-height: 1.25; text-transform: uppercase;
+  }
 
   /* Wide desktop: the image panel owns ~2/3 of the hero. Same height, same seam,
      the right panel simply runs a little tighter so all content still fits. */

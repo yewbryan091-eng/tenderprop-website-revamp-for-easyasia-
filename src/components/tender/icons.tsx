@@ -93,6 +93,21 @@ export const CalendarCheckIcon = () => (
     <path d="M8.5 13.5l2.5 2.5 4.5-4.5" />
   </svg>
 );
+export const OfferPresentedIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 5.5h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" />
+    <path d="M7 9h6M7 12.5h4" />
+    <path d="M18 9.5h2.5M19 8l1.5 1.5L19 11" />
+  </svg>
+);
+export const OutcomePathIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 12h3.5c4 0 3.2-6 7.5-6h4" />
+    <path d="m16.5 3.5 3 2.5-3 2.5" />
+    <path d="M7.5 12c4 0 3.2 6 7.5 6h4" />
+    <path d="m16.5 15.5 3 2.5-3 2.5" />
+  </svg>
+);
 export const ArrowLeftCircleIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <circle cx="12" cy="12" r="9" /><path d="M13.5 8.5L10 12l3.5 3.5" /><path d="M10 12h5" />
