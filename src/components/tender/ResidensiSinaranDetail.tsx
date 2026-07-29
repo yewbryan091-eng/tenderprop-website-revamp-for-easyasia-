@@ -32,8 +32,12 @@ export function ResidensiSinaranDetail() {
     <div className="tp-detail">
       <main>
 
+        {/* The overview runs wider than the reading column below it (per Bryan's
+            iNewProject reference). Photos want width; body copy wants ~70ch. The
+            title row widens with the gallery — left at the old width it read as a
+            caption floating away from its own photos. */}
         <section className="overview" id="overview">
-          <div className="wrap">
+          <div className="wrap wrap-wide">
             <div className="crumbs"><a href="#">Home</a> / <a href="/tender">Tender</a> / Residensi Sinaran</div>
             <div className="ovhead">
               <div className="ovtitle">
@@ -70,7 +74,9 @@ export function ResidensiSinaranDetail() {
                 <button type="button" className="thumb on" data-res="ph1"><img src={SINARAN_PHOTOS[0]} alt="Residensi Sinaran photo 1" /></button>
                 <button type="button" className="thumb" data-res="ph2"><img src={SINARAN_PHOTOS[1]} alt="Residensi Sinaran photo 2" /></button>
                 <button type="button" className="thumb" data-res="ph3"><img src={SINARAN_PHOTOS[2]} alt="Residensi Sinaran photo 3" /></button>
-                <button type="button" className="thumb" data-res="ph4" data-rest="ph5,ph6,ph7"><img src={SINARAN_PHOTOS[3]} alt="Residensi Sinaran photo 4" /><span className="more">+3<small>View all photos</small></span></button>
+                <button type="button" className="thumb" data-res="ph4"><img src={SINARAN_PHOTOS[3]} alt="Residensi Sinaran photo 4" /></button>
+                <button type="button" className="thumb" data-res="ph5"><img src={SINARAN_PHOTOS[4]} alt="Residensi Sinaran photo 5" /></button>
+                <button type="button" className="thumb" data-res="ph6" data-rest="ph7"><img src={SINARAN_PHOTOS[5]} alt="Residensi Sinaran photo 6" /><span className="more">+1<small>View all photos</small></span></button>
               </div>
             </div>
 
