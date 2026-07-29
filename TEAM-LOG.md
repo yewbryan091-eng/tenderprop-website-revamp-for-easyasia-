@@ -67,6 +67,21 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 (cont.) — Claude · §4 refinements after Bryan's screenshot
+- Deposit sub was wrapping to three lines while its two neighbours ran to one, leaving the facts
+  row visibly ragged → shortened to "Refundable · part of your 10%". The ladder does the
+  explaining now, so the fact doesn't have to. All three subs measure 15px.
+- "Register before this date" only restated its own label → "Account verified by this date",
+  which matches what step 1 actually asks for.
+- **Architecture:** the ladder explains the RM15,510 in the facts row but was rendering three
+  blocks below it, after the steps and the outcome panel. Reordered to money → money explained
+  → process → outcome, using flex `order` on `.v1` rather than cutting the inline steps markup.
+- Gallery SSR defaults still said "1 / 4" and "View all 4 photos"; the mount script corrected
+  them to 7 at runtime, so the wrong numbers shipped in the static HTML. Fixed at source.
+
+Note for whoever has a working screenshot pipe: the Browser pane here returns blank frames for
+anything below the fold, so §4 was judged from Bryan's own screenshot plus DOM measurement.
+
 ### 30 Jul 2026 (later) — Claude · §2 gallery + §4 deposit ladder & negotiation
 §2: overview widened to `.wrap-wide` 1520px (body stays 1180 for readable measure), gallery
 1.32fr/1fr, thumbs 2x2→2x3 so six of seven photos show at once, stage 16/10→3/2 so thumb rows

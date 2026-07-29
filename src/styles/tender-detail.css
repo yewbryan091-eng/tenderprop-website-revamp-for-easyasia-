@@ -460,3 +460,15 @@
 @media(max-width: 760px) {
   .v1-ladder ol { grid-template-columns: 1fr; gap: 14px; }
 }
+
+/* §4 reading order: money → money explained → process → outcome.
+   The ladder explains the RM15,510 in the facts row, so it belongs directly under
+   it — it was landing three blocks later, after the steps and the outcome panel.
+   Done with flex order because the steps markup is inline in one long line and
+   re-cutting it by hand is riskier than reordering. */
+.v1 { display: flex; flex-direction: column; }
+.v1-top { order: 1; }
+.v1-grid { order: 2; }
+.v1-ladder { order: 3; }
+.v1-steps { order: 4; }
+.v1-negotiate { order: 5; }
