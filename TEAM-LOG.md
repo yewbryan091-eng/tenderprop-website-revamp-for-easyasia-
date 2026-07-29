@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | — |
-| Property detail page | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | — |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Section queue in the plan file; work it in order |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -66,6 +66,13 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 29 Jul 2026 (night) — Claude
+Grid phase CLOSED by Bryan for now. Every card now routes to /tender/residensi-sinaran (demo
+exception #2, see ledger). **Detail-page phase opened: `PLAN-residensi-sinaran.md` is the working
+brief** — 12 sections in review order with per-section rules, known issues and gating founder
+questions. Bryan reviews section by section on localhost:5173. Start at §1 (opening header,
+incl. the Playfair→Newsreader unification). Claim the area before starting.
 
 ### 29 Jul 2026 — Codex (wide KLCC crop)
 Lowered the shared KLCC panorama slightly in the founder-reviewed wide-desktop hero by changing
