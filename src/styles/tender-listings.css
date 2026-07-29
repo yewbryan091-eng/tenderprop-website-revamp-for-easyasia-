@@ -117,8 +117,8 @@
     position: absolute;
     inset: 0;
     background: var(--paper);
-    /* The skyline is a barely-there continuation, not a second focal image. */
-    opacity: .97;
+    /* Keep the panorama legible while leaving the reassurance copy dominant. */
+    opacity: .95;
     pointer-events: none;
   }
   .hero-panel-inner { position: relative; z-index: 1; width: 100%; max-width: 560px; min-width: 0; }

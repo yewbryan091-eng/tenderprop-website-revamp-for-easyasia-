@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | Codex | 29 Jul 2026 | Iterating the right skyline to a visible but quiet balance |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | — |
 | Property detail page | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | — |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -35,6 +35,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 28 Jul | Hero = **full-bleed diagonal split** (`/` direction), no maroon slab | Bryan's design. Left = closing date over KLCC image; right = sealed-tender explainer | Bryan |
 | 28 Jul | Hero shows **days only**, no hours/mins/secs tiles | A tender four months out doesn't need a ticking clock; auction-urgency theatre is wrong for a sealed tender | Claude, accepted by Bryan |
 | 29 Jul | Hero restores a compact **live days/hours/minutes/seconds clock** with a clock glyph | Bryan explicitly said the timer must exist “like a clock,” overriding the 28 Jul days-only direction; it remains visually secondary to the closing date | Bryan |
+| 29 Jul | Right hero continues the skyline beneath a **95% paper wash** (about 5% image visibility) | Bryan wanted the image stylishly visible, not reduced to the earlier 3% watermark; 4.5%, 5%, and 5.5% were rendered and compared at 1470px | Bryan + Codex |
 | 28 Jul | The 12 `demo:true` listings **stay**, badged DEMO, and get **no detail pages** | Bryan wants national state coverage in the demo without generating fake property pages | Bryan |
 | 28 Jul | Fabricated content **removed**: invented price history, borrowed facilities list, dead Video/Drone buttons | This prototype becomes EasyAsia's spec — invented content would be copied as real | Claude, accepted by Bryan |
 | 28 Jul | `REN 123456` is an approved **placeholder** | Real REN + agency registration required before go-live | Bryan |
@@ -61,7 +62,14 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 29 Jul 2026 — Codex (right skyline final balance)
+Rendered and compared 4.5%, 5%, and 5.5% skyline visibility at the founder's effective 1470px
+desktop width. Selected 5% (`.hero-panel-right::before { opacity: .95; }`): the panorama remains
+clearly intentional across the seam without the building edges becoming a competing text layer.
+Rechecked the live clock, clean console, passing build, content fit, and zero overflow at 375px.
+
 ### 29 Jul 2026 — Codex (right skyline visual correction)
+Superseded by the final 5% balance above.
 After reviewing the rendered hero at the founder's effective 1470px desktop width, increased the
 right panel's paper wash from 93% to 97%, reducing the skyline from a visible second image to a
 roughly 3% watermark. The building edges no longer compete with the assurance copy. Rechecked the
