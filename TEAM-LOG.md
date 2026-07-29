@@ -65,6 +65,16 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 29 Jul 2026 (later) — Claude
+Card pass: the closing date was rendering TWICE per card (photo pill + a body "Tender date" row),
+each incomplete — consolidated into the pill, now carrying the year (listings span 2026-2028).
+Detail rows are category-aware: land area is omitted for strata rather than shown as "—" (it does
+not exist for a condo; a dash implies unknown). Property type unboxed so the reserve price is the
+loudest element again. Hero ordinal suffix restyled — it was bold sans at .25em against an italic
+serif date and read as an artefact; now inherits the serif italic at .42em.
+NOTE for whoever picks this up: "5 properties in this cycle" reappeared in the hero rebuild. Bryan
+asked for that line to be REMOVED on 28 Jul. Left in place pending his call — do not assume either way.
+
 ### 29 Jul 2026 — Codex (buyer-choice hero, reapplied at Bryan's direction)
 Reapplied the visually tested hero pass, then changed the eyebrow to
 `WHY BUYERS CHOOSE E-TENDER`, the second heading to `Your offer reaches the seller directly`, and

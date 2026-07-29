@@ -134,10 +134,13 @@
     color: var(--ink); font-variant-numeric: tabular-nums;
   }
   .hero-date time { white-space: nowrap; }
+  /* The ordinal belongs to the date, so it stays in the same italic serif rather
+     than switching to a bold sans (which read as a rendering artefact). Sized as a
+     true superior figure: large enough to read, raised to sit under the cap line. */
   .hero-date sup {
-    position: relative; top: -.58em; margin-left: .05em;
-    font-family: var(--sans); font-size: .25em; font-style: normal;
-    font-weight: 800; letter-spacing: 0; line-height: 0;
+    position: relative; top: -.66em; margin-left: .06em;
+    font-family: inherit; font-size: .42em; font-style: italic;
+    font-weight: 500; letter-spacing: 0; line-height: 0;
   }
   .hero-cycle-count {
     margin: 12px 0 0; font-size: 14.5px; color: var(--muted); min-height: 22px;
