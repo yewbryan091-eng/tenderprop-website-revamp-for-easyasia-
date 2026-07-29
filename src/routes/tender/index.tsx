@@ -8,9 +8,7 @@ import { StateFilters } from "@/components/tender/StateFilters";
 import {
   CheckCircleIcon,
   ClockIcon,
-  DocumentCheckIcon,
   LockIcon,
-  OutcomePathIcon,
   ReturnIcon,
   TaHome,
   TaPin,
@@ -398,18 +396,16 @@ function TenderListings() {
                   <span className="hero-assurance-icon" aria-hidden="true"><LockIcon /></span>
                   <div>
                     <h2 className="hero-seal-title">Your offer stays <em>private</em></h2>
-                    <p>Your offer goes only to the seller, with the process handled privately through an appointed agent — never shown to other buyers or the public.</p>
+                    <p>Nobody else ever sees what you offer — not other buyers, not the public. Your offer stays sealed until the tender closes.</p>
                   </div>
                 </li>
                 <li className="hero-assurance hero-assurance-agent">
-                  <span className="hero-assurance-icon" aria-hidden="true"><DocumentCheckIcon /></span>
                   <div>
                     <strong>Your offer reaches the seller directly</strong>
-                    <p>Once submitted, our appointed agent presents your e-tender offer to the seller for consideration.</p>
+                    <p>Our licensed agent (REA/REN) personally presents your e-tender offer to the seller for consideration.</p>
                   </div>
                 </li>
                 <li className="hero-assurance hero-assurance-outcome">
-                  <span className="hero-assurance-icon" aria-hidden="true"><OutcomePathIcon /></span>
                   <div className="hero-outcome-content">
                     <strong>A clear outcome either way</strong>
                     <div className="hero-outcome-grid">
@@ -418,14 +414,14 @@ function TenderListings() {
                           <span className="hero-outcome-status-icon" aria-hidden="true"><CheckCircleIcon /></span>
                           Accepted
                         </span>
-                        <span>Proceed with the purchase of your property, all the way to SPA signing.</span>
+                        <span>Proceed with the purchase, through to SPA signing.</span>
                       </div>
                       <div className="hero-outcome-option is-refunded">
                         <span className="hero-outcome-label">
                           <span className="hero-outcome-status-icon" aria-hidden="true"><ReturnIcon /></span>
                           Not accepted
                         </span>
-                        <span>Refundable deposit returned in full.</span>
+                        <span>Refundable deposit returned in full within 3 working days.</span>
                       </div>
                     </div>
                   </div>

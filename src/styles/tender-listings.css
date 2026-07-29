@@ -213,11 +213,16 @@
   }
   .hero-seal-title em { font-style: italic; font-weight: inherit; }
   .hero-flow { list-style: none; margin: 0; padding: 0; }
+  /* 1B hierarchy: the privacy promise is the LEAD (icon + serif headline);
+     the two supporting facts below run icon-less at full width. */
   .hero-assurance {
-    display: grid; grid-template-columns: 40px minmax(0, 1fr);
-    gap: 13px; align-items: start;
+    display: grid; grid-template-columns: minmax(0, 1fr);
     padding: clamp(10px, 1vw, 13px) 0;
     border-bottom: 1px solid var(--line);
+  }
+  .hero-assurance-primary {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 13px; align-items: start;
   }
   .hero-assurance:first-child { padding-top: 5px; }
   .hero-assurance:last-child { padding-bottom: 0; border-bottom: 0; }
@@ -227,8 +232,8 @@
   }
   .hero-assurance-icon svg { display: block; width: 30px; height: 30px; }
   .hero-assurance-primary .hero-assurance-icon svg { width: 34px; height: 34px; }
+  /* Lock stays RED per Bryan (29 Jul) — the one non-semantic icon allowed off-burgundy. */
   .hero-assurance-primary .hero-assurance-icon { color: var(--red); }
-  .hero-assurance-agent .hero-assurance-icon { color: #6B1F33; }
   .hero-assurance-outcome .outcome-path-stem { stroke: var(--muted); }
   .hero-assurance-outcome .outcome-path-accepted { color: var(--good); }
   .hero-assurance-outcome .outcome-path-refunded { color: var(--red); }
@@ -242,15 +247,22 @@
     display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 13px; margin-top: 8px;
   }
+  /* Redesigned (Bryan, 29 Jul): the two outcomes are STATES, so each gets its own
+     softly tinted panel — colour as fill rather than a hairline. Body text runs in
+     ink, not muted: these are the promises, they should not whisper. */
   .hero-outcome-option {
-    min-width: 0; padding-top: 7px;
-    border-top: 2px solid var(--burgundy);
-    color: var(--muted); font-size: 13px; line-height: 1.45;
+    min-width: 0; padding: 11px 13px 12px;
+    border-radius: 9px; border: 1px solid;
+    color: var(--ink); font-size: 13px; line-height: 1.45;
   }
-  /* Outcome colour is carried by BOTH the rule and the label, so accepted/declined
-     read at a glance without relying on the icon alone. */
-  .hero-outcome-option.is-accepted { border-top-color: var(--good); }
-  .hero-outcome-option.is-refunded { border-top-color: var(--red); }
+  .hero-outcome-option.is-accepted {
+    background: color-mix(in srgb, var(--good) 7%, var(--card));
+    border-color: color-mix(in srgb, var(--good) 28%, transparent);
+  }
+  .hero-outcome-option.is-refunded {
+    background: color-mix(in srgb, var(--red) 6%, var(--card));
+    border-color: color-mix(in srgb, var(--red) 24%, transparent);
+  }
   .hero-outcome-option.is-accepted .hero-outcome-label { color: var(--good); }
   .hero-outcome-option.is-refunded .hero-outcome-label { color: var(--red); }
   .hero-outcome-label {
@@ -298,10 +310,8 @@
      plane instead of making the whole hero taller. */
   @media (min-width: 821px) and (max-width: 1279px) {
     .hero-panel-right .hero-eyebrow { margin-bottom: 4px; font-size: 10px; }
-    .hero-assurance {
-      grid-template-columns: 34px minmax(0, 1fr); gap: 9px;
-      padding: 7px 0;
-    }
+    .hero-assurance { padding: 7px 0; }
+    .hero-assurance-primary { grid-template-columns: 34px minmax(0, 1fr); gap: 9px; }
     .hero-assurance:first-child { padding-top: 2px; }
     .hero-assurance:last-child { padding-bottom: 0; }
     .hero-assurance-icon { width: 31px; height: 31px; }
@@ -341,7 +351,7 @@
     .hero-cycle-count { margin-top: 10px; }
     .hero-panel-left .hero-cta { width: min(100%, 280px); min-width: 0; }
     .hero-seal-title { font-size: 19px; }
-    .hero-assurance { grid-template-columns: 38px minmax(0, 1fr); gap: 11px; }
+    .hero-assurance-primary { grid-template-columns: 38px minmax(0, 1fr); gap: 11px; }
   }
 
   /* Search band — sits directly below the hero date */

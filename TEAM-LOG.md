@@ -66,6 +66,17 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 29 Jul 2026 (evening) — Claude
+Assurance panel pass, all five approved items (Bryan chose hierarchy option B):
+(4) outcome copy balanced + restored the published "within 3 working days" refund window;
+(3) "licensed agent (REA/REN)" now stated; (2) items 1/2 de-overlapped — privacy vs human
+handling; (1B) lead + two demoted icon-less items — required rescoping TWO responsive
+.hero-assurance grid overrides to .hero-assurance-primary (the narrow-column squeeze bug);
+(5→amended) icon rule: burgundy except semantic — but the LOCK STAYS RED per Bryan, logged
+as the one allowed exception. Outcome block REDESIGNED at Bryan's request: rule-lines out,
+tinted state panels in (green/rose fills, ink body). Cards also gained "Tender start"
+(demo: close − 3 months, see decisions ledger).
+
 ### 29 Jul 2026 (later) — Claude
 Card pass: the closing date was rendering TWICE per card (photo pill + a body "Tender date" row),
 each incomplete — consolidated into the pill, now carrying the year (listings span 2026-2028).
