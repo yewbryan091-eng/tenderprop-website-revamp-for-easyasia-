@@ -426,21 +426,6 @@ function TenderListings() {
         <section className="hero-tender" aria-label="E-Tender overview">
           <div className="hero-panel hero-panel-left is-dark">
             <div className="hero-panel-inner">
-              {/* Ambient clock, top-right of the burgundy panel (Bryan). The DAY COUNT stays
-                  the headline per the founder's rule — this is secondary detail for anyone
-                  who wants the finer grain, deliberately small and quiet so it cannot compete.
-                  aria-hidden: the day count's own label already announces the deadline, and a
-                  second live region reading seconds would be hostile to a screen reader. */}
-              {left && (
-                <span className="hero-clock hero-timer-cells" aria-hidden="true">
-                  {timerUnits.map((u) => (
-                    <span className="hero-timer-cell" key={u.label}>
-                      <span className="hero-timer-value">{u.value}</span>
-                      <span className="hero-timer-unit">{u.label}</span>
-                    </span>
-                  ))}
-                </span>
-              )}
               <div className="hero-timer" aria-live="off" aria-label={countdownLabel}>
                 {/* No clock glyph: it duplicated the live timer in the corner, and centring
                     the icon+text as a unit pushed the LABEL 10px off the axis every other
@@ -448,8 +433,24 @@ function TenderListings() {
                 <span className="hero-timer-heading" aria-hidden="true">
                   <span className="hero-timer-label">Offers close in</span>
                 </span>
+                {/* Bryan's idea, 31 Jul: the corner pill is gone and its H/M/S hangs off the
+                    day count instead. One instrument, not two countdowns — and "134" is no
+                    longer on screen twice. Laid out as a 3-column grid (1fr · numeral · 1fr)
+                    so the numeral and its unit stay dead-centre on the panel's axis while the
+                    strip hangs right; a plain flex row would centre the BLOCK and shove the
+                    numeral off-axis, which is the fault this panel already had once. */}
                 <span className="hero-timer-days" aria-hidden="true">
                   <span className="hero-timer-value">{countdownValue}</span>
+                  {left && !FINAL_DAY && (
+                    <span className="hero-tick">
+                      {timerUnits.slice(1).map((u) => (
+                        <span className="hero-tick-cell" key={u.label}>
+                          <span className="hero-tick-value">{u.value}</span>
+                          <span className="hero-tick-unit">{u.label}</span>
+                        </span>
+                      ))}
+                    </span>
+                  )}
                   <span className="hero-timer-unit">{countdownUnit}</span>
                 </span>
               </div>

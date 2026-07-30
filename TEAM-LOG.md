@@ -69,6 +69,28 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · Bryan's idea: corner pill deleted, H/M/S now hangs off the day count
+His call and a good one — it kills the duplicated "134" (the pill repeated the page's biggest
+number ~200px from it) and puts the fine grain where the scale is, so the panel reads as **one
+instrument instead of two countdowns**. `.hero-clock`, `.hero-timer-cells`, `.hero-timer-cell`
+and all their rules are deleted; the new classes are `.hero-tick*`.
+
+**The layout trap and its fix:** anything placed beside the numeral makes a flex row centre the
+BLOCK, which shoves the numeral off the panel's axis — the exact fault this panel already had
+once. `.hero-timer-days` is now `grid-template-columns: 1fr auto 1fr` with the numeral in the
+centre column and the strip in column 3 (`justify-self: start`); the empty first column mirrors
+the third, so **axis spread stays 0px** no matter how wide the strip gets. The unit sits in row 2
+of the same centre column.
+
+🐛 Caught in the render: those mirrored columns widened the block to **493px**, so the
+`border-bottom` divider ran wider than the date beneath it — a separator out-measuring what it
+separates. The rule is now a `::after` with its own `clamp(190px, 20vw, 280px)` measure: 280px
+against a 338px date, 207px numeral.
+
+📱 Below 700px the grid collapses to one centred column and the strip drops to row 3 — side by
+side it needed ~358px at the smallest numeral, more than a 375px phone has after padding.
+Strip hides entirely on the final day, when `countdownValue` is already showing hours+minutes.
+
 ### 31 Jul 2026 — Claude · Same leading bug, other end: label was 1.7px off the digits
 Bryan: *"something is wrong man"* — the eyebrow was touching the top of "134". My own regression:
 `line-height: .8` makes the glyphs overflow the line box in **both** directions, and I had only

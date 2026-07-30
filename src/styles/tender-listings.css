@@ -159,20 +159,21 @@
     gap: 7px;
     margin: 0 0 clamp(20px, 2vw, 28px);
     padding: 0 0 clamp(12px, 1.2vw, 18px);
-    border-bottom: 1px solid rgba(245, 228, 216, .36);
+    /* Own measure, not the container's. The H/M/S strip widened this block to 493px, so a
+       border-bottom ran wider than the date beneath it and the divider became the widest
+       thing in the panel — a separator should never out-measure what it separates. */
+    position: relative;
     text-align: center;
     font-variant-numeric: tabular-nums;
+  }
+  .hero-timer::after {
+    content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: clamp(190px, 20vw, 280px); height: 1px; background: rgba(245, 228, 216, .36);
   }
   .hero-timer-heading { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
   .hero-timer-label {
     font-size: clamp(10px, .8vw, 12px); font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
     color: var(--muted);
-  }
-  .hero-timer-cells { display: flex; align-items: baseline; justify-content: center; gap: 7px; }
-  .hero-timer-cell { display: inline-flex; align-items: baseline; gap: 2px; white-space: nowrap; }
-  .hero-timer-cell + .hero-timer-cell::before {
-    content: ":"; margin-right: 5px; color: rgba(245, 228, 216, .55);
-    font-size: clamp(14px, 1.25vw, 19px); font-weight: 500; line-height: 1;
   }
   .hero-timer-value {
     /* Down from 29px. It repeats the day count verbatim, so at equal weight it read as a
@@ -180,7 +181,6 @@
     min-width: 2ch; font-size: clamp(19px, 1.6vw, 24px); font-weight: 800;
     line-height: .95; letter-spacing: -.025em; color: var(--ink);
   }
-  .hero-timer-cell:first-child .hero-timer-value { min-width: 3ch; }
   .hero-timer-unit {
     font-size: clamp(9px, .7vw, 10px); font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
     color: var(--muted);
@@ -1075,7 +1075,41 @@
    centred — which pushed the numeral itself ~53px left of the axis the eyebrow, rule and
    date all share, and the composition read as misaligned. Stacked, every element in the
    panel sits on one vertical axis. */
-.hero-timer-days { display: flex; flex-direction: column; align-items: center; gap: 0; }
+/* 1fr · numeral · 1fr. The empty first column mirrors the third, so the numeral stays on
+   the panel's vertical axis no matter how wide the H/M/S strip gets. Row 2 holds the unit
+   in the same centre column, so it stays on that axis too. */
+.hero-timer-days {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: baseline;
+}
+.hero-timer-days .hero-timer-value { grid-column: 2; grid-row: 1; }
+.hero-timer-days .hero-timer-unit  { grid-column: 2; grid-row: 2; justify-self: center; }
+/* Live H/M/S, hanging off the day count's baseline. This is the only place the finer grain
+   appears now — the corner pill it replaced repeated "134" verbatim, ~200px from a 112px
+   numeral saying the same thing. */
+.hero-tick {
+  grid-column: 3; grid-row: 1; justify-self: start; align-self: baseline;
+  margin-left: clamp(12px, 1.2vw, 18px);
+  display: inline-flex; align-items: baseline; gap: 9px;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.hero-tick-cell { display: inline-flex; align-items: baseline; gap: 2px; }
+.hero-tick-value {
+  font-size: clamp(15px, 1.25vw, 18px); font-weight: 700; letter-spacing: -.01em;
+  color: rgba(245, 228, 216, .92);
+}
+.hero-tick-unit {
+  font-size: clamp(9px, .72vw, 10.5px); font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: rgba(245, 228, 216, .58);
+}
+@media (max-width: 700px) {
+  /* Side by side, the mirrored columns need ~358px at the smallest numeral — more than a
+     375px phone has after padding. Drop the strip to its own row and collapse the grid to
+     one centred column so nothing has to shrink. */
+  .hero-timer-days { grid-template-columns: auto; justify-items: center; }
+  .hero-timer-days .hero-timer-value,
+  .hero-timer-days .hero-timer-unit { grid-column: 1; }
+  .hero-tick { grid-column: 1; grid-row: 3; justify-self: center; margin: 11px 0 0; }
+}
 /* MEASURED with canvas TextMetrics, not guessed: below an 81px-cap numeral sits 24.5px of
    invisible leading, so a 10px box gap rendered as a 34.5px hole and the unit read as
    orphaned. -.076em cancels the leading and leaves a true 16px optical gap. In the
@@ -1104,59 +1138,8 @@
   letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.82);
 }
 
-/* Ambient clock, top-right of the burgundy hero panel. IN FLOW, not absolute: the panel's
-   own padding-right already follows the diagonal (`calc(100% - var(--hero-bot-split) + 2%)`),
-   so aligning to the content box's right edge clears the seam for free and keeps doing so if
-   the split angle ever changes. The absolute version had to re-derive the seam from
-   --hero-top-split and landed beside the day count instead of in the corner.
-   Quiet by design: the day count is the headline, this is only the finer grain. */
-.hero-panel-left .hero-clock {
-  align-self: flex-end;
-  margin-bottom: clamp(10px, 1.6vh, 18px);
-  /* Pull right, toward the seam. The panel's padding-right is sized for the diagonal at the
-     BOTTOM edge (43%), but this sits at the TOP where the seam is at 57% — so ~14% of width
-     goes spare up here. Reclaim it minus a 2% safety gap, derived from the split tokens so
-     it follows if the angle ever changes. */
-  margin-right: calc(-1 * (var(--hero-top-split) - var(--hero-bot-split)) + 2%);
-  justify-content: flex-end;
-  /* Scaled down from the headline treatment: same D/H/M/S strip the hero used to lead
-     with, now secondary to the day count. Sizes are local so the big .hero-timer-days
-     figure and this corner strip can never be confused for the same element. */
-  --corner: 1;
-}
-/* Contained, not floating: a soft dark pill so it reads as placed rather than as leftover
-   text, and stays legible over the KLCC towers regardless of how the wash falls.
-   ALL FOUR UNITS STAY. Dropping days was proposed and rejected (Bryan): without the day
-   count, "23:45:15" reads as closing tonight — the days are the scale that makes the rest
-   mean anything, not a duplicate of the headline. */
-.hero-panel-left .hero-clock {
-  padding: 7px 14px 8px;
-  border-radius: 999px;
-  background: rgba(23, 19, 15, .34);
-  backdrop-filter: blur(3px);
-  /* Locks digit width so a live seconds counter cannot twitch every tick. The base rule
-     fakes this with min-width per cell, which reserves the box but not the glyphs. */
-  font-variant-numeric: tabular-nums;
-}
-.hero-panel-left .hero-clock .hero-timer-value {
-  /* Down from 28px. The chip repeats the day count verbatim, so at 28 against a 74px
-     headline it read as a second headline. At 22 against 112 the ratio is 5:1 and it
-     settles into what it is — the finer grain, for anyone who wants it. */
-  font-size: clamp(18px, 1.5vw, 22px); font-weight: 700; letter-spacing: -.015em;
-  color: rgba(255, 255, 255, .96);
-  font-variant-numeric: tabular-nums;
-}
-.hero-panel-left .hero-clock .hero-timer-unit {
-  font-size: 10px; font-weight: 700; letter-spacing: .07em;
-  color: rgba(255, 255, 255, .66);
-}
-.hero-panel-left .hero-clock .hero-timer-cell + .hero-timer-cell::before {
-  color: rgba(255, 255, 255, .38); font-size: 15px; margin-right: 4px;
-}
-.hero-panel-left .hero-clock .hero-timer-cell:first-child .hero-timer-value { min-width: 0; }
 @media (max-width: 860px) {
   /* Diagonal is gone below this; centre it with the rest of the stacked panel. */
-  .hero-panel-left .hero-clock { align-self: center; margin-right: 0; }
 }
 
 /* ══ "NEW TO E-TENDER?" — beside the search heading ══════════════════════════════════
