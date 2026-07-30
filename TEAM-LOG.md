@@ -68,6 +68,27 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §5 list de-duplicated and refilled with real subsale fields
+Bryan spotted the repetition. Removed from the list because they are already on the page:
+**tenure, lease expiry, land title** (pricing heading) · **bedrooms, bathrooms, built-up, storeys,
+car parks** (icon band) · **property type** (page header address line). Verified programmatically:
+**0 duplicates** between the list, the band and the heading strip.
+
+**The band now reads straight off `SINARAN_TENDER`** instead of looking values up in
+PROPERTY_DETAILS — same source the listing cards use, so it cannot drift, and those five facts no
+longer need to exist in the list at all. Slots with no value in the record don't render.
+
+**17 new rows, grounded in a real Malaysian land search + listing sheet** (researched, not
+invented terminology): title type, unit position (intermediate/corner/end is a real price factor
+here), land area, **category of land use**, **restriction in interest**, **encumbrance** — the
+three particulars that actually appear on a Malaysian title — plus the annual carrying costs,
+renovation state, gated & guarded, and the development facts from iNewProject.
+
+⚠️ **One accuracy point worth keeping:** Sinaran is STRATA in Selangor, so its annual land tax is
+**parcel rent, not quit rent** — Selangor moved stratified property onto parcel rent. Do not
+"correct" it back to quit rent. A non-strata landed listing WOULD say quit rent.
+Verified: 17 rows, 0 duplicates, 0 blanks, list 465px, section 1021px, no overflow.
+
 ### 30 Jul 2026 — Claude · §5 design pass (architecture kept, presentation redone)
 Bryan: architecture right, "this is ugly." It was — measured, not guessed:
 - **Rows ran ~124px to carry ~18 characters.** Label stacked over value in a 900px column left

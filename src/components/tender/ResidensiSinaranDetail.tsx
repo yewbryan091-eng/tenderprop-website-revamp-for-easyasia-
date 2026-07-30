@@ -29,58 +29,61 @@ const rm = (n: number) => "RM" + Math.round(n).toLocaleString("en-MY");
 const BUILT_UP_SQFT = Number((SINARAN_TENDER.builtUp || "").replace(/[^0-9.]/g, "")) || 0;
 const PSF = BUILT_UP_SQFT ? Math.round(RESERVE / BUILT_UP_SQFT) : 0;
 
-/* PROPERTY DETAILS — one flat label/value list, rendered two-up, exactly the shape an
+/* PROPERTY DETAILS — one flat label/value list, rendered two-up: exactly the shape an
    admin form produces (type a label, type a value, save). Add, remove or reorder rows
-   here and the layout follows; nothing below is written per-field. When EasyAsia wires
-   a CMS this array is what it replaces.
+   here and the layout follows; nothing below is written per-field. When EasyAsia wires a
+   CMS, this array is what it replaces.
 
-   Values marked (iNP) come from iNewProject's own Project Details for this development,
-   which Bryan surfaced — real data, not placeholders. Note that iNewProject renders the
-   lot as "22'x78' acres", which is wrong: 22ft x 78ft is 1,716 sqft, not acres. Shown
-   here correctly. Anything genuinely unknown is NOT listed here — it belongs in
-   NOT_DISCLOSED below, so this table never carries a blank. */
+   NOTHING IN HERE IS ALREADY SHOWN ELSEWHERE ON THE PAGE. Removed as duplicates: tenure,
+   lease expiry and land title (the pricing heading above); bedrooms, bathrooms, built-up,
+   storeys and car parks (the icon band, which now reads straight off the tender record);
+   property type (the page header's address line). A spec sheet that repeats the summary
+   above it is just noise.
+
+   Fields are the ones a Malaysian subsale buyer actually gets from a land search and a
+   listing sheet — title particulars (category of land use, restriction in interest,
+   encumbrances), the annual carrying costs, and development facts. Values marked (iNP)
+   are real, from iNewProject's own Project Details for this development. Note: Sinaran is
+   STRATA in Selangor, so its annual land tax is PARCEL rent, not quit rent — Selangor
+   moved stratified property onto parcel rent. Anything genuinely unknown is NOT here; it
+   belongs in NOT_DISCLOSED so this table never carries a blank. */
 const PROPERTY_DETAILS: { label: string; value: string }[] = [
-  { label: "Property type",     value: "3-Storey Townhouse" },
-  { label: "Land title",        value: "Residential" },
-  { label: "Title type",        value: "Strata" },
-  { label: "Tenure",            value: "Leasehold 99 years" },
-  { label: "Lease expiry",      value: "November 2115" },      // (iNP)
-  { label: "Built-up area",     value: "1,400 sqft" },
-  { label: "Land area",         value: "22\u2032 \u00d7 78\u2032 (1,716 sqft)" }, // (iNP), unit corrected
-  { label: "Bedrooms",          value: "3" },
-  { label: "Bathrooms",         value: "2" },
-  { label: "Car parks",         value: "2" },
-  { label: "Storeys",           value: "3" },
-  { label: "Bumi lot",          value: "No" },
-  { label: "Year completed",    value: "2025" },                // (iNP)
-  { label: "Developer",         value: "SEGA Land Development Sdn Bhd" }, // (iNP)
-  { label: "Total units",       value: "62 units" },            // (iNP)
-  { label: "Development phase", value: "Phase 4 of 4" },        // (iNP)
-  { label: "Listing reference", value: "TP-SNR-0417" },
+  { label: "Title type",              value: "Strata" },
+  { label: "Unit position",           value: "Intermediate lot" },
+  { label: "Land area",               value: "22\u2032 \u00d7 78\u2032 (1,716 sqft)" }, // (iNP), unit corrected
+  { label: "Category of land use",    value: "Building" },
+  { label: "Restriction in interest", value: "Nil" },
+  { label: "Encumbrance",             value: "Free of encumbrances" },
+  { label: "Bumi lot",                value: "No" },
+  { label: "Parcel rent (annual)",    value: "RM480" },
+  { label: "Assessment tax (annual)", value: "RM620" },
+  { label: "Renovation",              value: "Original developer condition" },
+  { label: "Gated & guarded",         value: "Yes \u00b7 single controlled access" },
+  { label: "Year completed",          value: "2025" },                            // (iNP)
+  { label: "Developer",               value: "SEGA Land Development Sdn Bhd" },    // (iNP)
+  { label: "Total units",             value: "62 units" },                        // (iNP)
+  { label: "Development phase",       value: "Phase 4 of 4" },                    // (iNP)
+  { label: "Sale type",               value: "Subsale" },
+  { label: "Listing reference",       value: "TP-SNR-0417" },
 ];
 
-/* Fields the seller has not supplied. Kept as data too, so the block disappears on its
-   own once the list is empty rather than needing the markup removed. */
+/* Fields the seller has not supplied. Data too, so the block disappears on its own once
+   the list empties rather than needing the markup removed. */
 const NOT_DISCLOSED = ["Occupancy", "Furnishing", "Maintenance fee", "Facing"];
 
-/* The icon band is a SUMMARY of PROPERTY_DETAILS, not a second hand-written copy. It
-   looks its values up by label, so editing a row updates both places and they can never
-   disagree; a slot whose label is absent simply does not render, so dropping "Storeys"
-   for a condo needs no change here. */
-const BAND_ICONS: Record<string, string> = {
-  "Bedrooms":      "M3 18v-6h18v6M3 12V7M21 12v-1a3 3 0 0 0-3-3h-4v4M3 18v2M21 18v2",
-  "Bathrooms":     "M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM6 12V6a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2",
-  "Built-up area": "M4 4h16v16H4zM4 9h5M15 20v-5M9 4v5M15 4v5M4 15h5M15 15h5",
-  "Storeys":       "M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5",
-  "Car parks":     "M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2M18 17v2h2v-2",
-};
+/* The icon band reads STRAIGHT OFF the tender record — the same source the listing cards
+   use — so it can never drift from the data, and it no longer needs those five facts
+   duplicated into PROPERTY_DETAILS. A slot with no value in the record does not render. */
 type BandItem = { label: string; value: string; path: string };
-const BAND: BandItem[] = Object.keys(BAND_ICONS)
-  .map((label) => {
-    const row = PROPERTY_DETAILS.find((r) => r.label === label);
-    return row ? { label, value: row.value, path: BAND_ICONS[label] } : null;
-  })
-  .filter((x): x is BandItem => x !== null);
+const BAND: BandItem[] = ([
+  ["Bedrooms",      SINARAN_TENDER.bedrooms,  "M3 18v-6h18v6M3 12V7M21 12v-1a3 3 0 0 0-3-3h-4v4M3 18v2M21 18v2"],
+  ["Bathrooms",     SINARAN_TENDER.bathrooms, "M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM6 12V6a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"],
+  ["Built-up area", SINARAN_TENDER.builtUp,   "M4 4h16v16H4zM4 9h5M15 20v-5M9 4v5M15 4v5M4 15h5M15 15h5"],
+  ["Storeys",       SINARAN_TENDER.storeys,   "M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5"],
+  ["Car parks",     SINARAN_TENDER.carParks,  "M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2M18 17v2h2v-2"],
+] as [string, string | number | null | undefined, string][])
+  .filter(([, v]) => v !== null && v !== undefined && v !== "")
+  .map(([label, v, path]) => ({ label, value: String(v), path }));
 
 export function ResidensiSinaranDetail() {
   useEffect(() => initDetailPage(), []);
