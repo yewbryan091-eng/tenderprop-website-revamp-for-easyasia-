@@ -69,6 +69,24 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · "New to e-tender?" SHIPPED — treatment 2, set against the title
+Bryan picked **treatment 2** and asked for it close to the title. Done, and **compare mode is
+fully removed**: `HOWTO_TREATMENT`, the `.map()`, the `"all"` branch, `.howto-compare-row`,
+`.howto-tag`, the unused `.howto-mark`, and treatments 1 and 3 are all deleted. One
+`.search-intro`, one `.howto-link`.
+
+Final: heading and line share a baseline, 22px apart, separated by a 30px 2px burgundy rule.
+Why close beats far-right — it's not only looks: at the far right it sat ~375px from the
+heading, outside the same fixation band, so it read as a section action ("View all →") rather
+than part of the title. At 22px it is inside the heading's own reading unit.
+
+🐛 Caught before shipping: the rule was removed by a `@media (max-width: 1020px)` while the
+wrap itself was driven by `flex-wrap` and available width — so for a band of viewport widths
+the divider vanished while the line was still inline, which reads as a render glitch. The
+media query now forces `display: block` at the same breakpoint, so layout and rule change
+together. **Rule: if a media query removes decoration, it must also own the layout change that
+decoration depends on — never let flex-wrap and a breakpoint disagree.**
+
 ### 31 Jul 2026 — Claude · All 3 "New to e-tender?" treatments rendered together for Bryan to pick
 `HOWTO_TREATMENT = "all"` in `src/routes/tender/index.tsx` renders three labelled copies of the
 search heading row, one per treatment, stacked with dashed separators. **This is temporary.**

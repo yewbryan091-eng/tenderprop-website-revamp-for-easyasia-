@@ -42,12 +42,6 @@ export const Route = createFileRoute("/tender/")({
   component: TenderListings,
 });
 
-/* TEMPORARY — three treatments of the "New to e-tender?" line while Bryan picks.
-   "1" = sub-line under the heading (his idea) · "2" = right of the heading, ruled ·
-   "3" = tinted pill, right of the heading. "all" stacks all three, labelled, so Bryan can
-   compare them in one look. Set it to the winning number and delete the losers. */
-const HOWTO_TREATMENT: "1" | "2" | "3" | "all" = "all";
-
 const PER_PAGE = 12;
 const SAVE_KEY = "tp_shortlist";
 
@@ -514,31 +508,21 @@ function TenderListings() {
         {/* SEARCH BAND — sits directly below the hero date */}
         <section className="hero-search-band" aria-labelledby="property-search-title">
           <div className="wrap">
-            {/* "New to e-tender?" — Bryan's read: the filled maroon block was the problem,
-                not the position. Everything else on this page is flat cream and restrained
-                type, so a saturated box reads as an ad wherever it sits. His idea: hang the
-                line off the search heading as type, not chrome. data-howto switches the
-                three treatments while he picks; the losers get deleted. */}
-            {(HOWTO_TREATMENT === "all" ? ["1", "2", "3"] : [HOWTO_TREATMENT]).map((v, i) => (
-              <div className={HOWTO_TREATMENT === "all" ? "howto-compare-row" : "howto-compare-row is-solo"} key={v}>
-                {HOWTO_TREATMENT === "all" && <span className="howto-tag">Treatment {v}</span>}
-                <div className="search-intro" data-howto={v}>
-                  {/* Only the first heading may carry the id — duplicate ids break the
-                      aria-labelledby on the section. Compare mode is temporary anyway. */}
-                  <h2 id={i === 0 ? "property-search-title" : undefined}>
-                    Find a property <span className="hl">open for e-tender</span>
-                  </h2>
-                  <a className="howto-link" href="/how-e-tender-works">
-                    <span className="howto-mark" aria-hidden="true">?</span>
-                    <b>New to e-tender?</b>
-                    <span className="howto-rest">See how it works</span>
-                    <svg className="howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M5 12h13M13 6l6 6-6 6" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            ))}
+            {/* "New to e-tender?" — CHOSEN 31 Jul (treatment 2 of 3), set beside the heading
+                at Bryan's request. Type, never a filled block: the maroon card this replaced
+                read as an ad wherever it was placed, because a saturated block is the loudest
+                object on a flat cream page. The 2px rule gives the line an edge to sit against
+                so it reads as part of the masthead, not a stray link. */}
+            <div className="search-intro">
+              <h2 id="property-search-title">Find a property <span className="hl">open for e-tender</span></h2>
+              <a className="howto-link" href="/how-e-tender-works">
+                <b>New to e-tender?</b>
+                <span className="howto-rest">See how it works</span>
+                <svg className="howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h13M13 6l6 6-6 6" />
+                </svg>
+              </a>
+            </div>
             <form
               className="search-form"
               onSubmit={(e) => {

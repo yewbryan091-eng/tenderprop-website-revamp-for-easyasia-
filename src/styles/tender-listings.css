@@ -363,8 +363,9 @@
 
   /* Search band — sits directly below the hero date */
   .hero-search-band { background: var(--paper-deep); border-bottom: 1px solid var(--line); padding: clamp(34px, 5vw, 52px) 0 22px; }
-  .hero-search-band .search-intro { margin-bottom: 22px; }
-  .hero-search-band .search-intro h2 { max-width: 760px; margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-weight: 600; font-size: clamp(30px, 4vw, 46px); line-height: 1.08; letter-spacing: -.015em; color: var(--ink); }
+  /* Heading and the "New to e-tender?" line share a baseline, side by side. */
+  .hero-search-band .search-intro { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 22px; margin-bottom: 22px; }
+  .hero-search-band .search-intro h2 { flex: 0 1 auto; max-width: 760px; margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-weight: 600; font-size: clamp(30px, 4vw, 46px); line-height: 1.08; letter-spacing: -.015em; color: var(--ink); }
   .hero-search-band .search-intro h2 .hl { color: var(--burgundy); font-style: italic; }
   .search-form { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--burgundy); border-radius: 12px; padding: 18px 18px 20px; box-shadow: 0 1px 2px rgba(23,19,15,.03); }
   .search-bar { display: grid; grid-template-columns: minmax(0,5fr) minmax(0,2fr) minmax(0,1.6fr); gap: 12px; align-items: end; }
@@ -445,8 +446,12 @@
   @media(max-width: 1020px) {
     /* Below this the heading would wrap to two lines to make room for a side-by-side
        treatment. Every variant collapses to the sub-line — which is treatment 1. */
+    /* Side by side would wrap the heading to two lines. Drop to its own line — and drop
+       the rule with it, or it reads as a blockquote under the heading. The layout change
+       and the rule removal MUST share one breakpoint: left to flex-wrap alone, the rule
+       would vanish while the line was still inline, which looks like a render glitch. */
     .hero-search-band .search-intro { display: block; }
-    .hero-search-band .search-intro .howto-link { margin-top: 12px; }
+    .hero-search-band .search-intro .howto-link { margin-top: 12px; padding-left: 0; border-left: 0; }
   }
   @media(max-width: 640px) {
     .hero-search-band .search-intro { margin-bottom: 18px; }
@@ -1126,12 +1131,17 @@
   .hero-panel-left .hero-clock { align-self: center; margin-right: 0; }
 }
 
-/* ══ "NEW TO E-TENDER?" — three typographic treatments ═══════════════════════════════
-   The solid maroon card was the fault, not its position: this page is flat cream and
-   restrained type, so a saturated block reads as an ad wherever it sits. All three
-   treatments below are type first. Delete the two Bryan doesn't pick. */
+/* ══ "NEW TO E-TENDER?" — beside the search heading ══════════════════════════════════
+   CHOSEN 31 Jul (treatment 2 of 3). Bryan asked for it close to the title: at the far
+   right of the row it had no relationship to the heading and read as a stray link.
+   Type, never a filled block — the maroon card this replaced read as an ad wherever it
+   was placed, because a saturated block is the loudest object on a flat cream page.
+   The 2px rule gives it an edge to sit against, so it reads as part of the masthead. */
 .howto-link {
+  flex: none;
   display: inline-flex; align-items: baseline; gap: 7px;
+  padding: 4px 0 5px 20px;
+  border-left: 2px solid color-mix(in srgb, var(--burgundy) 55%, transparent);
   text-decoration: none; font-size: 16px; line-height: 1.3;
 }
 .howto-link b { font-weight: 600; color: var(--ink); }
@@ -1151,53 +1161,4 @@
 }
 .howto-link:hover .howto-arrow { transform: translateX(3px); }
 .howto-link:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 4px; border-radius: 3px; }
-.howto-mark { display: none; }
-
-/* ── 1 · Sub-line under the heading (Bryan's idea) ──────────────────────────────────
-   Reads as the heading's own second line, so it inherits the largest type on the page
-   without competing with it. Zero chrome. */
-.search-intro[data-howto="1"] { display: block; }
-.search-intro[data-howto="1"] .howto-link { margin-top: 11px; }
-
-/* ── 2 · Right of the heading, burgundy rule ────────────────────────────────────────
-   Same type, moved into the row's dead space. The 2px rule gives it an edge to sit
-   against so it reads as a deliberate object, not a stray link. */
-.search-intro[data-howto="2"] { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
-.search-intro[data-howto="2"] .howto-link {
-  flex: none; padding: 3px 0 3px 16px;
-  border-left: 2px solid color-mix(in srgb, var(--burgundy) 55%, transparent);
-}
-
-/* ── 3 · Tinted pill, right of the heading ─────────────────────────────────────────
-   Keeps the "object" quality of the old card at a fraction of its weight: burgundy at
-   7% on the cream band instead of a solid fill. */
-.search-intro[data-howto="3"] { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
-.search-intro[data-howto="3"] .howto-link {
-  flex: none; align-items: center; gap: 9px; padding: 11px 20px 12px; border-radius: 999px;
-  background: color-mix(in srgb, var(--burgundy) 7%, var(--paper-deep));
-  border: 1px solid color-mix(in srgb, var(--burgundy) 20%, transparent);
-  transition: background .16s ease, border-color .16s ease;
-}
-.search-intro[data-howto="3"] .howto-link:hover {
-  background: color-mix(in srgb, var(--burgundy) 12%, var(--paper-deep));
-  border-color: color-mix(in srgb, var(--burgundy) 34%, transparent);
-}
-.search-intro[data-howto="3"] .howto-mark {
-  display: block; margin-right: -1px;
-  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-size: 26px; font-weight: 600; line-height: .8;
-  color: color-mix(in srgb, var(--burgundy) 72%, transparent);
-}
-@media (prefers-reduced-motion: reduce) { .howto-link *, .howto-link { transition: none; } }
-
-/* ══ TEMPORARY — side-by-side compare of the three "New to e-tender?" treatments ══════
-   Delete this block, .howto-compare-row and the "all" branch once Bryan picks a number. */
-.howto-compare-row.is-solo { display: contents; }
-.howto-compare-row:not(.is-solo) { padding: 0 0 26px; border-bottom: 1px dashed var(--line); margin-bottom: 26px; }
-.howto-compare-row:not(.is-solo):last-of-type { border-bottom: 0; margin-bottom: 22px; }
-.howto-tag {
-  display: inline-block; margin-bottom: 12px;
-  font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--muted);
-}
-.howto-compare-row:not(.is-solo) .search-intro { margin-bottom: 0; }
+@media (prefers-reduced-motion: reduce) { .howto-link, .howto-link * { transition: none; } }
