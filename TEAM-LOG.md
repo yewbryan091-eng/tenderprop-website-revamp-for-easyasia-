@@ -69,6 +69,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · Hero time showcase re-cut (positioning, size, hierarchy)
+Bryan: *"make it eye stunning… mostly positioning and font size"*. Measured first: the day count
+was **74px against a 58.8px date — a 1.26:1 ratio**, and the date string is 3.5x wider, so the
+DATE was visually the headline. That inverts the founder's rule. Now:
+- Day count **74 → 112px**, date **62 → 44px** (clamp caps). Ratio **2.63:1**, unambiguous.
+- Corner chip **28 → 22px** (5:1 against the headline). It repeats the day count verbatim, so at
+  equal weight it read as a second headline. Content unchanged — Bryan wants the D/H/M/S there.
+- Unit **stacked under the numeral**. Inline, the block was centred, which put the numeral 53px
+  off the shared axis. **Axis spread is now 0px** across all six elements.
+- Clock glyph on "OFFERS CLOSE IN" deleted — it duplicated the live corner timer AND pushed the
+  label 10px off that axis.
+- Panel 38px top and bottom, no overflow.
+
+❌ **I changed "days left" to "days" on a redundancy argument and Bryan caught it — that copy was
+not mine to change.** Restored. Wording is the founder's; treat it as fixed unless he says
+otherwise.
+🐛 A regex edit merged two selectors into `.hero-panel-left.is-dark .hero-panel-left.is-dark
+.hero-timer-label`, which matches nothing and would have killed the label colours on the dark
+panel. Caught by reading the file back. **Don't use regex on selector lists.**
+
 ### 31 Jul 2026 — Claude · Hero CTA removed; the left panel is now purely the deadline
 Bryan: *"should i remove the view etender properties button, its kinda redundant no? the
 properties is literally right below... i kinda want to make the left side as like a proper

@@ -213,6 +213,15 @@ Zero the margin below 860px, where the diagonal collapses.
   it works" and called it weird, correctly. Either make the whole thing look like a link, or put
   the anchor around only the link text. Bigger tap targets are not worth surprise navigation.
 
+- **Display type hides its gap in the leading — measure glyphs, not boxes.** Under a 112px
+  numeral sat 24.5px of invisible leading, so a 10px `gap` rendered as a **34.5px** hole and the
+  unit read as orphaned. `getBoundingClientRect()` cannot see this; canvas `TextMetrics`
+  (`actualBoundingBoxDescent` / `fontBoundingBoxAscent`) can. Cancel it with a negative margin
+  expressed **in the display element's own em** so the correction scales with its clamp.
+- **Centring a unit is not centring its parts.** "134 DAYS LEFT" centred as one flex row put the
+  numeral 53px off the axis every other element shared. Stack the unit under the numeral, or
+  accept that the big element — the one the eye actually tracks — is off-centre.
+
 ## 6. Brand — non-negotiable
 
 - Cream / burgundy / red. **Never** import iNewProject's maroon palette. Adopt *patterns* from

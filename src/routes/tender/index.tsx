@@ -7,7 +7,6 @@ import { SiteHeader } from "@/components/tender/SiteHeader";
 import { StateFilters } from "@/components/tender/StateFilters";
 import {
   CheckCircleIcon,
-  ClockIcon,
   LockIcon,
   ReturnIcon,
   TaHome,
@@ -156,6 +155,8 @@ function TenderListings() {
   ];
   const FINAL_DAY = Boolean(left) && left!.days < 1;
   const countdownValue = !left ? "\u00a0" : FINAL_DAY ? `${left.hours}h ${pad2(left.minutes)}m` : String(left.days);
+  /* "days left", not "days" — the founder's framing, and Bryan's. I shortened it once on
+     a redundancy argument; it was not mine to change. Leave this wording alone. */
   const countdownUnit = !left ? "" : FINAL_DAY ? "left today" : left.days === 1 ? "day left" : "days left";
   const countdownLabel = !left
     ? "Offers close soon"
@@ -441,8 +442,10 @@ function TenderListings() {
                 </span>
               )}
               <div className="hero-timer" aria-live="off" aria-label={countdownLabel}>
+                {/* No clock glyph: it duplicated the live timer in the corner, and centring
+                    the icon+text as a unit pushed the LABEL 10px off the axis every other
+                    element in this panel sits on. */}
                 <span className="hero-timer-heading" aria-hidden="true">
-                  <span className="hero-timer-clock"><ClockIcon /></span>
                   <span className="hero-timer-label">Offers close in</span>
                 </span>
                 <span className="hero-timer-days" aria-hidden="true">

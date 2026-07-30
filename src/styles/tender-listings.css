@@ -132,7 +132,7 @@
   }
   .hero-date {
     display: block; margin: 0; font-family: Newsreader, Georgia, serif; font-style: italic; font-weight: 500;
-    font-size: clamp(40px, 4vw, 62px); line-height: .96; letter-spacing: -.035em;
+    font-size: clamp(30px, 2.9vw, 44px); line-height: 1; letter-spacing: -.03em;
     color: var(--ink); font-variant-numeric: tabular-nums;
   }
   .hero-date time { white-space: nowrap; }
@@ -154,16 +154,16 @@
      competing with it. One unboxed digital line keeps it professional. */
   .hero-timer {
     display: inline-flex; flex-direction: column; align-items: center;
-    gap: 4px;
-    margin: 0 0 clamp(16px, 1.6vw, 22px);
-    padding: 0 0 9px;
+    /* Rhythm re-cut for the 112px numeral: label sits tight to its number (one unit),
+       then a deliberate step to the rule, then a wider step to the date block. */
+    gap: 7px;
+    margin: 0 0 clamp(20px, 2vw, 28px);
+    padding: 0 0 clamp(12px, 1.2vw, 18px);
     border-bottom: 1px solid rgba(245, 228, 216, .36);
     text-align: center;
     font-variant-numeric: tabular-nums;
   }
   .hero-timer-heading { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-  .hero-timer-clock { display: inline-grid; place-items: center; width: 14px; height: 14px; color: var(--muted); }
-  .hero-timer-clock svg { display: block; width: 100%; height: 100%; }
   .hero-timer-label {
     font-size: clamp(10px, .8vw, 12px); font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
     color: var(--muted);
@@ -171,11 +171,13 @@
   .hero-timer-cells { display: flex; align-items: baseline; justify-content: center; gap: 7px; }
   .hero-timer-cell { display: inline-flex; align-items: baseline; gap: 2px; white-space: nowrap; }
   .hero-timer-cell + .hero-timer-cell::before {
-    content: ":"; margin-right: 5px; color: rgba(245, 228, 216, .62);
-    font-size: clamp(17px, 1.55vw, 23px); font-weight: 500; line-height: 1;
+    content: ":"; margin-right: 5px; color: rgba(245, 228, 216, .55);
+    font-size: clamp(14px, 1.25vw, 19px); font-weight: 500; line-height: 1;
   }
   .hero-timer-value {
-    min-width: 2ch; font-size: clamp(22px, 2vw, 29px); font-weight: 800;
+    /* Down from 29px. It repeats the day count verbatim, so at equal weight it read as a
+       second headline; it is the finer grain, not a rival. */
+    min-width: 2ch; font-size: clamp(19px, 1.6vw, 24px); font-weight: 800;
     line-height: .95; letter-spacing: -.025em; color: var(--ink);
   }
   .hero-timer-cell:first-child .hero-timer-value { min-width: 3ch; }
@@ -193,14 +195,14 @@
   .hero-panel-left .hero-cycle-count { max-width: 30ch; }
   /* The footnote now hangs off the date directly — 8px was spacing for a button, and
      reads as cramped under 46px type. */
-  .hero-panel-left .hero-foot { max-width: 46ch; margin-top: 16px; }
+  .hero-panel-left .hero-foot { max-width: 46ch; margin-top: 18px; }
+  .hero-panel-left .hero-eyebrow { margin-bottom: 9px; }
   /* Light-text modifier for the future background photograph */
   .hero-panel-left.is-dark .hero-eyebrow { color: var(--burgundy-ink); }
   .hero-panel-left.is-dark .hero-date { color: var(--card); }
   .hero-panel-left.is-dark .hero-cycle-count { color: var(--burgundy-ink); }
   .hero-panel-left.is-dark .hero-cycle-count strong { color: var(--card); }
   .hero-panel-left.is-dark .hero-foot { color: var(--burgundy-ink); }
-  .hero-panel-left.is-dark .hero-timer-clock,
   .hero-panel-left.is-dark .hero-timer-label,
   .hero-panel-left.is-dark .hero-timer-unit { color: var(--burgundy-ink); }
   .hero-panel-left.is-dark .hero-timer-value { color: var(--card); }
@@ -351,7 +353,8 @@
       padding: 40px 20px 28px;
     }
     .hero-panel-inner { max-width: none; }
-    .hero-date { font-size: clamp(32px, 9.2vw, 42px); }
+    .hero-date { font-size: clamp(26px, 6.6vw, 34px); }
+    .hero-timer-days .hero-timer-value { font-size: clamp(58px, 17vw, 78px); }
     .hero-timer { align-self: center; margin-bottom: 16px; }
     .hero-cycle-count { margin-top: 10px; }
     .hero-seal-title { font-size: 19px; }
@@ -1068,15 +1071,32 @@
 
 /* Days-led countdown (founder guidance, 30 Jul): one number, not a four-cell clock.
    Sized to carry the panel on its own now that it is the only figure there. */
-.hero-timer-days { display: flex; align-items: baseline; gap: 10px; justify-content: center; }
+/* Stacked, not inline. Inline, the unit hung off the numeral's right and the BLOCK was
+   centred — which pushed the numeral itself ~53px left of the axis the eyebrow, rule and
+   date all share, and the composition read as misaligned. Stacked, every element in the
+   panel sits on one vertical axis. */
+.hero-timer-days { display: flex; flex-direction: column; align-items: center; gap: 0; }
+/* MEASURED with canvas TextMetrics, not guessed: below an 81px-cap numeral sits 24.5px of
+   invisible leading, so a 10px box gap rendered as a 34.5px hole and the unit read as
+   orphaned. -.076em cancels the leading and leaves a true 16px optical gap. In the
+   numeral's OWN em, so it stays proportional across the whole clamp. */
+.hero-timer-days .hero-timer-value { margin-bottom: -.076em; }
 .hero-timer-days .hero-timer-value {
   font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-size: clamp(46px, 6vw, 74px); font-weight: 600; line-height: 1;
-  letter-spacing: -.02em; font-variant-numeric: tabular-nums; color: #fff;
+  /* 112px, up from 74px. At 74 against a 58.8px date the ratio was 1.26:1 and the date
+     — 3.5x wider as a string — was visually winning, which inverts the founder's rule that
+     the DAY COUNT is the headline. 112/42.6 = 2.6:1 settles it. The CTA's removal freed
+     the vertical room for it. Proportional, not tabular: this figure changes once a day,
+     and display numerals set proportionally are better spaced. */
+  /* .8, not .92: digits carry no descenders, so the default leading opened a ~45px hole
+     between the numeral and its unit and the two stopped reading as one object. Safe to
+     go this tight for figures only — never reuse this line-height on mixed-case text. */
+  font-size: clamp(64px, 8.2vw, 112px); font-weight: 600; line-height: .8;
+  letter-spacing: -.025em; color: #fff;
 }
 .hero-timer-days .hero-timer-unit {
-  font-size: clamp(13px, 1.3vw, 15px); font-weight: 700;
-  letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.82);
+  font-size: clamp(13px, 1.15vw, 16px); font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.82);
 }
 
 /* Ambient clock, top-right of the burgundy hero panel. IN FLOW, not absolute: the panel's
@@ -1114,16 +1134,19 @@
   font-variant-numeric: tabular-nums;
 }
 .hero-panel-left .hero-clock .hero-timer-value {
-  font-size: clamp(24px, 2vw, 28px); font-weight: 700; letter-spacing: -.015em;
+  /* Down from 28px. The chip repeats the day count verbatim, so at 28 against a 74px
+     headline it read as a second headline. At 22 against 112 the ratio is 5:1 and it
+     settles into what it is — the finer grain, for anyone who wants it. */
+  font-size: clamp(18px, 1.5vw, 22px); font-weight: 700; letter-spacing: -.015em;
   color: rgba(255, 255, 255, .96);
   font-variant-numeric: tabular-nums;
 }
 .hero-panel-left .hero-clock .hero-timer-unit {
-  font-size: 11.5px; font-weight: 700; letter-spacing: .07em;
+  font-size: 10px; font-weight: 700; letter-spacing: .07em;
   color: rgba(255, 255, 255, .66);
 }
 .hero-panel-left .hero-clock .hero-timer-cell + .hero-timer-cell::before {
-  color: rgba(255, 255, 255, .42); font-size: 19px; margin-right: 4px;
+  color: rgba(255, 255, 255, .38); font-size: 15px; margin-right: 4px;
 }
 .hero-panel-left .hero-clock .hero-timer-cell:first-child .hero-timer-value { min-width: 0; }
 @media (max-width: 860px) {
