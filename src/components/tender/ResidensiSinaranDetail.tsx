@@ -29,6 +29,40 @@ const rm = (n: number) => "RM" + Math.round(n).toLocaleString("en-MY");
 const BUILT_UP_SQFT = Number((SINARAN_TENDER.builtUp || "").replace(/[^0-9.]/g, "")) || 0;
 const PSF = BUILT_UP_SQFT ? Math.round(RESERVE / BUILT_UP_SQFT) : 0;
 
+/* PROPERTY DETAILS — one flat label/value list, rendered two-up, exactly the shape an
+   admin form produces (type a label, type a value, save). Add, remove or reorder rows
+   here and the layout follows; nothing below is written per-field. When EasyAsia wires
+   a CMS this array is what it replaces.
+
+   Values marked (iNP) come from iNewProject's own Project Details for this development,
+   which Bryan surfaced — real data, not placeholders. Note that iNewProject renders the
+   lot as "22'x78' acres", which is wrong: 22ft x 78ft is 1,716 sqft, not acres. Shown
+   here correctly. Anything genuinely unknown is NOT listed here — it belongs in
+   NOT_DISCLOSED below, so this table never carries a blank. */
+const PROPERTY_DETAILS: { label: string; value: string }[] = [
+  { label: "Property type",     value: "3-Storey Townhouse" },
+  { label: "Land title",        value: "Residential" },
+  { label: "Title type",        value: "Strata" },
+  { label: "Tenure",            value: "Leasehold 99 years" },
+  { label: "Lease expiry",      value: "November 2115" },      // (iNP)
+  { label: "Built-up area",     value: "1,400 sqft" },
+  { label: "Land area",         value: "22\u2032 \u00d7 78\u2032 (1,716 sqft)" }, // (iNP), unit corrected
+  { label: "Bedrooms",          value: "3" },
+  { label: "Bathrooms",         value: "2" },
+  { label: "Car parks",         value: "2" },
+  { label: "Storeys",           value: "3" },
+  { label: "Bumi lot",          value: "No" },
+  { label: "Year completed",    value: "2025" },                // (iNP)
+  { label: "Developer",         value: "SEGA Land Development Sdn Bhd" }, // (iNP)
+  { label: "Total units",       value: "62 units" },            // (iNP)
+  { label: "Development phase", value: "Phase 4 of 4" },        // (iNP)
+  { label: "Listing reference", value: "TP-SNR-0417" },
+];
+
+/* Fields the seller has not supplied. Kept as data too, so the block disappears on its
+   own once the list is empty rather than needing the markup removed. */
+const NOT_DISCLOSED = ["Occupancy", "Furnishing", "Maintenance fee", "Facing"];
+
 export function ResidensiSinaranDetail() {
   useEffect(() => initDetailPage(), []);
 
@@ -265,21 +299,12 @@ export function ResidensiSinaranDetail() {
 
 
         {/* ── PROPERTY DETAILS ──────────────────────────────────────────────
-            Rebuilt 30 Jul. Three faults in the old sheet: (1) 19 rows of which 10 were
-            empty, so it read as an unfilled form; (2) the icon band and the Layout/Size
-            groups listed the SAME five facts twice; (3) two competing empty states
-            ("Not stated" vs an em dash) whose meanings had inverted in places.
-
-            The reframe: a sealed-tender buyer prices the property ONCE, with no
-            iterative negotiation to discover things in. So this section's job is not
-            "describe the home" — it is "give me what I need to put a number on it".
-            Hence four zones in decreasing pricing impact:
-              1. What you're pricing — psf (DERIVED), tenure, land title
-              2. Measurements — the comparison set, icon band, no duplication below
-              3. Not disclosed — the gaps, turned into a checklist to ask the agent
-              4. Full specification — collapsed, only rows that actually have values
-            Zone 3 is the important one: on a portal you'd uncover these during
-            negotiation. Here you cannot, so naming them is a service, not an apology. */}
+            Rebuilt again 30 Jul on Bryan's iNewProject reference. The three pricing
+            facts (psf / tenure / land title) act as the section's HEADING — they are
+            what a sealed-tender buyer prices on. Everything else is one flat
+            label/value list rendered two-up, which is the shape the backend actually
+            edits: type a label, type a value. Hardcoded groups are gone; the array
+            above is the single place a field is added or removed. */}
         <section className="blk band-card" id="details">
           <div className="wrap">
             <div className="blkcard dcard">
@@ -294,7 +319,7 @@ export function ResidensiSinaranDetail() {
                 <div>
                   <span className="lbl">Tenure</span>
                   <b>Leasehold 99 yrs</b>
-                  <span className="sub">Expiring 2124 &middot; 98 years remaining</span>
+                  <span className="sub">Expiring Nov 2115 &middot; 89 years remaining</span>
                 </div>
                 <div>
                   <span className="lbl">Land title</span>
@@ -302,6 +327,39 @@ export function ResidensiSinaranDetail() {
                   <span className="sub">Standard residential financing applies</span>
                 </div>
               </div>
+
+              <dl className="pd-list">
+                {PROPERTY_DETAILS.map((row) => (
+                  <div className="pd-row" key={row.label}>
+                    <dt>{row.label}</dt>
+                    <dd>{row.value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              {NOT_DISCLOSED.length > 0 && (
+                <div className="pd-ask">
+                  <div className="pd-ask-main">
+                    <p className="pd-ask-head">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 8v5" /><circle cx="12" cy="16.4" r="1" fill="currentColor" stroke="none" /></svg>
+                      Not disclosed by the seller
+                    </p>
+                    <ul className="pd-ask-list">
+                      {NOT_DISCLOSED.map((f) => <li key={f}>{f}</li>)}
+                    </ul>
+                    <p className="pd-ask-body">
+                      A sealed tender gives you one offer, so there is no negotiation stage to
+                      uncover these in. Each one changes what the property is worth to you.
+                    </p>
+                  </div>
+                  {/* Straight to the Listing Agent section (Bryan) rather than off-site to
+                      WhatsApp — the agent block already holds every way to reach them. */}
+                  <a className="pd-ask-cta" href="#agent">
+                    Ask the listing agent
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
+                  </a>
+                </div>
+              )}
 
               <div className="pd">
                 <div className="band">
@@ -311,55 +369,7 @@ export function ResidensiSinaranDetail() {
                   <div className="stat" data-field="storeys"><svg className="ic" viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5"/></svg><div className="txt"><span className="v">3</span><span className="k">Storeys</span></div></div>
                   <div className="stat" data-field="car_parks"><svg className="ic" viewBox="0 0 24 24"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2M18 17v2h2v-2"/></svg><div className="txt"><span className="v">2</span><span className="k">Car parks</span></div></div>
                 </div>
-                {/* Land area is omitted, not dashed: a stratified townhouse has no
-                    individual land title, so the field does not apply. Only genuinely
-                    unknown-but-applicable fields belong in the "not disclosed" list. */}
               </div>
-
-              <div className="pd-ask">
-                <p className="pd-ask-head">Not disclosed by the seller</p>
-                <p className="pd-ask-body">
-                  <b>Occupancy &middot; Furnishing &middot; Maintenance fee &middot; Facing</b>
-                  <span>
-                    A sealed tender gives you one offer, so there is no negotiation stage to
-                    uncover these in. Ask the agent before you submit &mdash; each one changes what
-                    the property is worth to you.
-                  </span>
-                </p>
-                <a className="pd-ask-cta" href="https://wa.me/60123938255" target="_blank" rel="noopener">
-                  Ask the agent on WhatsApp &rarr;
-                </a>
-              </div>
-
-              <details className="pd-full">
-                <summary>
-                  <span>
-                    <b>Full specification</b>
-                    <small>Title, building and terms</small>
-                  </span>
-                  <svg className="chev" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5.5 7 9.5l4-4" /></svg>
-                </summary>
-                <div className="pd-groups">
-                  <div className="grp">
-                    <p className="kick">Ownership &amp; title</p>
-                    <div className="row" data-field="tenure"><span>Tenure</span><b>Leasehold 99 yrs</b></div>
-                    <div className="row" data-field="land_title"><span>Land title</span><b>Residential</b></div>
-                    <div className="row" data-field="strata"><span>Strata title</span><b>Yes &middot; stratified townhouse</b></div>
-                  </div>
-                  <div className="grp">
-                    <p className="kick">Building</p>
-                    <div className="row" data-field="property_type"><span>Property type</span><b>3-Storey Townhouse</b></div>
-                    <div className="row" data-field="year_completed"><span>Year completed</span><b>2025</b></div>
-                    <div className="row" data-field="development"><span>Development size</span><b>62 units</b></div>
-                  </div>
-                  <div className="grp">
-                    <p className="kick">Layout</p>
-                    <div className="row" data-field="bedrooms"><span>Bedrooms</span><b>3</b></div>
-                    <div className="row" data-field="bathrooms"><span>Bathrooms</span><b>2</b></div>
-                    <div className="row" data-field="car_parks"><span>Car parks</span><b>2</b></div>
-                  </div>
-                </div>
-              </details>
             </div>
           </div>
         </section>

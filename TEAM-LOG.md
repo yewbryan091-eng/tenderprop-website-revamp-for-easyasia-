@@ -68,6 +68,28 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §5 rebuilt AGAIN on Bryan's iNewProject reference
+Hardcoded groups are gone. §5 is now:
+1. **Heading strip** — psf (derived) / tenure / land title. Bryan's call: these three are the
+   section's heading because they are what a sealed-tender buyer prices on.
+2. **`PROPERTY_DETAILS`** — one flat `{label, value}[]` in ResidensiSinaranDetail, rendered
+   two-up. **This is the shape the backend edits: type a label, type a value.** Add, remove or
+   reorder rows in the array and the layout follows; nothing is styled per-field. When EasyAsia
+   wires a CMS, this array is what it replaces. 17 rows currently.
+   ⚠️ `.pd-list` uses `grid-auto-flow: column` with `grid-template-rows: repeat(9, auto)` so the
+   left column fills first — **if the list grows well past 18 rows, bump that 9.**
+3. **`NOT_DISCLOSED`** — also data, so the block self-removes when the array empties. Restyled:
+   warning icon, fields as chips, and the CTA is now a solid burgundy button reading **"Ask the
+   listing agent" that jumps to `#agent`** (Bryan) instead of going off-site to WhatsApp.
+4. Measurement band moved below.
+
+**Real data recovered:** the iNewProject Project Details Bryan surfaced IS this development —
+developer **SEGA Land Development Sdn Bhd**, **62 units**, **Phase 4**, **2025**, lot **22′×78′**,
+lease **expiring November 2115**. Two corrections from it: I had invented "expiring 2124" (now
+Nov 2115, 89 years remaining), and iNewProject renders the lot as "22'x78' **acres**", which is
+wrong — 22ft × 78ft is 1,716 sqft. Shown correctly here; **worth fixing on iNewProject too.**
+Verified: 17 rows in 9+8 columns, 0 blanks, CTA → #agent (section exists), section 1223px, no overflow.
+
 ### 30 Jul 2026 — Claude · §5 Property Details rebuilt (structure first)
 Old sheet: 19 rows, **10 empty**; icon band and Layout/Size groups duplicated the same five facts;
 two empty states with inverted meanings. Rebuilt into four zones ordered by pricing impact —

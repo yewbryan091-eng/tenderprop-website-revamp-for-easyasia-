@@ -838,62 +838,69 @@
 }
 .pd-pricing .sub { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.45; }
 
-/* Zone 3 — the gaps, stated as a checklist. This is the section's most useful element:
-   in a sealed tender there is no negotiation stage to uncover them in. */
-.pd-ask {
-  margin: 24px 0 0; padding: 17px 19px; border-radius: 11px;
-  background: color-mix(in srgb, var(--warn, #9A6A00) 6%, var(--card));
-  border: 1px solid color-mix(in srgb, var(--warn, #9A6A00) 24%, transparent);
+/* Zone 2 — the editable label/value list, two-up. iNewProject's Project Details shape:
+   label above value, a rule under every row, nothing styled per-field so the backend
+   can add rows without a stylesheet change. Column-flow so a 17-row list fills the
+   left column first and reads top-to-bottom, not left-to-right. */
+.pd-list {
+  margin: 0; padding: 0;
+  display: grid; grid-auto-flow: column;
+  grid-template-rows: repeat(9, auto);   /* ceil(rows / 2) — bump if the list grows a lot */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(28px, 4vw, 64px);
 }
+.pd-row { min-width: 0; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.pd-row dt {
+  color: var(--muted); font-size: 11px; font-weight: 800;
+  letter-spacing: .09em; text-transform: uppercase;
+}
+.pd-row dd {
+  margin: 5px 0 0; color: var(--ink);
+  font-size: 16px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em;
+}
+
+/* Zone 3 — the gaps, as a service. In a sealed tender there is no negotiation stage in
+   which to uncover these, so the page names them and routes straight to the agent. */
+.pd-ask {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: clamp(18px, 3vw, 40px); flex-wrap: wrap;
+  margin: 26px 0 0; padding: 20px 22px; border-radius: 12px;
+  background: color-mix(in srgb, var(--warn, #9A6A00) 5%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--warn, #9A6A00) 22%, transparent);
+}
+.pd-ask-main { min-width: 0; flex: 1 1 380px; }
 .pd-ask-head {
-  margin: 0 0 8px; color: var(--warn, #9A6A00);
+  display: flex; align-items: center; gap: 7px; margin: 0 0 10px;
+  color: var(--warn, #9A6A00);
   font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
 }
-.pd-ask-body { margin: 0; }
-.pd-ask-body b { display: block; margin-bottom: 5px; color: var(--ink); font-size: 15px; font-weight: 700; }
-.pd-ask-body span { display: block; color: var(--muted); font-size: 13.5px; line-height: 1.55; max-width: 68ch; }
+.pd-ask-head svg {
+  width: 15px; height: 15px; flex: none; fill: none;
+  stroke: currentColor; stroke-width: 1.9; stroke-linecap: round;
+}
+.pd-ask-list { display: flex; flex-wrap: wrap; gap: 7px; list-style: none; margin: 0 0 11px; padding: 0; }
+.pd-ask-list li {
+  padding: 5px 11px; border-radius: 999px;
+  background: var(--card); border: 1px solid color-mix(in srgb, var(--warn, #9A6A00) 26%, transparent);
+  color: var(--ink); font-size: 13px; font-weight: 700;
+}
+.pd-ask-body { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.55; max-width: 62ch; }
 .pd-ask-cta {
-  display: inline-block; margin-top: 12px;
-  color: var(--burgundy); font-size: 13.5px; font-weight: 700; text-decoration: none;
+  flex: none; display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: 9px;
+  background: var(--burgundy); color: var(--burgundy-ink, #F5E4D8);
+  font-size: 14px; font-weight: 700; text-decoration: none;
 }
-.pd-ask-cta:hover { text-decoration: underline; }
+.pd-ask-cta:hover { background: #411322; }
+.pd-ask-cta svg { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* Zone 4 — collapsed by default (the Zillow pattern): only rows that carry a value,
-   so the sheet can never look like an unfilled form again. */
-.pd-full { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
-.pd-full summary {
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  cursor: pointer; list-style: none;
-}
-.pd-full summary::-webkit-details-marker { display: none; }
-.pd-full summary b { display: block; color: var(--ink); font-size: 15.5px; font-weight: 700; }
-.pd-full summary small { color: var(--muted); font-size: 12.5px; }
-.pd-full summary .chev {
-  flex: none; width: 16px; height: 16px; fill: none;
-  stroke: var(--burgundy); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-  transition: transform .18s ease;
-}
-.pd-full[open] summary .chev { transform: rotate(180deg); }
-@media (prefers-reduced-motion: reduce) { .pd-full summary .chev { transition: none; } }
-.pd-groups {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(20px, 3vw, 38px); margin-top: 20px;
-}
-.pd-groups .kick {
-  margin: 0 0 10px; color: var(--muted);
-  font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
-}
-.pd-groups .row {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-  padding: 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
-  font-size: 13.5px;
-}
-.pd-groups .row span { color: var(--muted); }
-.pd-groups .row b { color: var(--ink); font-weight: 700; text-align: right; }
+.pd { margin-top: 26px; }
 
 @media (max-width: 860px) {
   .pd-pricing { grid-template-columns: 1fr; gap: 16px; }
   .pd-pricing > div { padding: 0; border-left: 0; }
   .pd-pricing > div + div { padding-top: 16px; border-top: 1px solid var(--line); }
-  .pd-groups { grid-template-columns: 1fr; }
+  /* Single column: row-flow so the list stays in authored order. */
+  .pd-list { grid-auto-flow: row; grid-template-rows: none; grid-template-columns: minmax(0, 1fr); }
+  .pd-ask-cta { width: 100%; justify-content: center; }
 }
