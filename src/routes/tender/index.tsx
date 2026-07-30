@@ -488,7 +488,7 @@ function TenderListings() {
         <section className="hero-search-band" aria-labelledby="property-search-title">
           <div className="wrap">
             <div className="search-intro">
-              <h2 id="property-search-title">Find a property <span className="hl">open for tender</span></h2>
+              <h2 id="property-search-title">Find a property <span className="hl">open for e-tender</span></h2>
             </div>
             <form
               className="search-form"
