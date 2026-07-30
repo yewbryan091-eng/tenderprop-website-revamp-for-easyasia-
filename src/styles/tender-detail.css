@@ -854,7 +854,7 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
 .pd-pricing .pd-psf {
   font-family: var(--serif); font-optical-sizing: auto;
   font-size: clamp(28px, 3vw, 34px); font-weight: 600; letter-spacing: -.02em;
-  color: var(--burgundy); font-variant-numeric: tabular-nums;
+  color: var(--ink); font-variant-numeric: tabular-nums;
 }
 .pd-pricing .pd-psf i {
   font-style: normal; margin-left: 5px; font-family: var(--sans);
