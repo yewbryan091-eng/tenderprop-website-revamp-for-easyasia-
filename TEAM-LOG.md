@@ -69,6 +69,19 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · H/M/S strip enlarged + colon separators
+Bryan: *"make the larger abit, and perhaps add a :"*. Value **18 → 22px**, unit **10.5 → 12px**,
+colons back between cells as `.hero-tick-cell + .hero-tick-cell::before` at `.82em` / 45% cream —
+the same treatment the deleted pill used. Flex gap 6px and colon `margin-right: 6px` so the glyph
+sits evenly between cells rather than clumping to one side.
+
+⚠️ **Growing the strip moved the mobile breakpoint.** The mirrored grid columns now need ~418px
+at the smallest numeral, and the diagonal leaves the left panel only ~400px at a 720px viewport —
+so the collapse-to-one-column query went **700 → 820px**. Any further change to the strip's size
+or copy must re-check this number: the strip is duplicated on BOTH sides of the numeral by the
+`1fr auto 1fr` grid, so every pixel it gains costs two.
+Day-count block now 553px inside a 720px panel; axis spread still 0.
+
 ### 31 Jul 2026 — Claude · Bryan's idea: corner pill deleted, H/M/S now hangs off the day count
 His call and a good one — it kills the duplicated "134" (the pill repeated the page's biggest
 number ~200px from it) and puts the fine grain where the scale is, so the panel reads as **one
