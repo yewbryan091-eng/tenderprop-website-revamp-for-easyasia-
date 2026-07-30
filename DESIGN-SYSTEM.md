@@ -106,6 +106,10 @@ one block, one of them is wrong.
 7. **Cut multi-line JSX by line index, not `str.index`.** Character offsets have mangled this file
    twice.
 8. **SSR: anything clock-derived starts `null` until mount**, or server and client disagree.
+9. **A clamp and its toggle are ONE feature — remove both or neither.** Removing About's "View
+   more" button while leaving `max-height: 8.4em` clipped the text with no way to open it, and it
+   threw nothing: the toggle script guards with `if (!btn) return` and silently disabled itself.
+   After removing any progressive-disclosure control, assert `scrollHeight <= clientHeight`.
 
 ## 6. Brand — non-negotiable
 

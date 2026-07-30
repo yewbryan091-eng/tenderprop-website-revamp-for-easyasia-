@@ -68,6 +68,21 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · BUG I SHIPPED: About was clipped with no way to open it
+Bryan asked where "View more" went. I had removed the button but **left `max-height: 8.4em` on
+`.aboutbody`** — so the last paragraph and a half were clipped and unreachable. Verified before
+the fix: `scrollHeight > clientHeight`, body stuck at 134px. No console error, because the toggle
+script guards with `if (!body || !btn) return` and silently disabled itself, which is exactly why
+I did not notice.
+
+Removed the clamp, the `::after` fade and the now-dead `.viewmore` styles. About is 500px and
+fully visible; the script block is left in place but marked INERT so the pattern survives if a
+longer About ever needs it.
+
+**Rule: a clamp and its toggle are one feature — remove both or neither.** Added to
+DESIGN-SYSTEM §5. And when removing a progressive-disclosure control, assert
+`scrollHeight <= clientHeight` afterwards; a guarded script will hide the breakage from console.
+
 ### 30 Jul 2026 — Claude · band value derived; §4 card de-filled; §6 About rebuilt
 **1. `--band-alt: #F6EEE7` is a DERIVED value — do not nudge it.** `--paper` measured 1.083 vs
 white (Bryan: invisible) and `--paper-deep` 1.211 (Bryan: too deep). #F6EEE7 is the exact luminance

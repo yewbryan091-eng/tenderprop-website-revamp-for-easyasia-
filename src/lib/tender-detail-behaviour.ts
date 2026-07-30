@@ -168,7 +168,9 @@ export function initDetailPage(): () => void {
     sections.forEach(function (s) { io.observe(s); });
   })();
 
-  // ── About view more ──
+  // ── About view more — INERT since 30 Jul: the clamp and its button were removed once
+  //    About was cut to 164 words. Left in place (it self-disables on the null check) so
+  //    the pattern is here if a longer About ever needs it again. ──
   (function () {
     var body = document.getElementById("about-body");
     var btn = document.getElementById("about-toggle");
