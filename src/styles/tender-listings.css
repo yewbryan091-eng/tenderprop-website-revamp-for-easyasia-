@@ -696,9 +696,13 @@
      on the same y and their content starts on the same line. The band lives HERE and
      not on .rail-title, because the title is a flex item inside this row and is only
      as wide as its own text — putting the border there stopped the rule halfway. */
+  /* Heading sits directly on its card (Bryan). The tall header band that mirrored
+     .results-header is gone — matching the toolbar's baseline pushed the card ~77px
+     down and broke the heading away from the thing it labels. Grouping beats
+     cross-column alignment here: the rail reads as one unit. */
   .rail-head {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    min-height: var(--head-band); margin: 0 0 20px; padding-bottom: 12px;
+    margin: 0 0 12px;
   }
   /* Two-tone, accent on the second half — the pattern from the iNewProject rail, in
      TenderProp's burgundy rather than iNewProject's red (identity rule: adopt the
