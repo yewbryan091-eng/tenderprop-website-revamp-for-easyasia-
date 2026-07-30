@@ -1014,7 +1014,11 @@
   content: ""; position: absolute; inset: 0; z-index: 1;
   border-radius: inherit;
 }
-.prop-card .save-btn,
+/* Raise these above the stretched link WITHOUT touching their position. The save
+   button is already `position: absolute` inside .pc-media — setting `relative` here
+   dropped it into normal flow, stretched .pc-media from 202px to 246px and shoved the
+   deadline pill off the photo. z-index alone is all that was needed. */
+.prop-card .save-btn { z-index: 2; }
 .prop-card .pc-tel { position: relative; z-index: 2; }
 .prop-card .pc-cta { cursor: pointer; }
 /* The CTA is decorative now — the stretched link takes the click — so it must still

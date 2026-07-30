@@ -68,6 +68,18 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · fixed my own regression from the stretched-link change
+The stretched-link work needed the save button above the card-wide `::after`, and I wrote
+`.prop-card .save-btn, .prop-card .pc-tel { position: relative; z-index: 2; }`. The save button
+was **already `position: absolute`** inside `.pc-media`; forcing `relative` dropped it into normal
+flow, stretched `.pc-media` from 202px to 246px and pushed the deadline pill off the bottom of the
+photo onto the card body. `z-index` alone was all it needed — the rule is now split so only
+`.pc-tel` (which is in flow) gets `position: relative`.
+**Rule of thumb: to raise something over the stretched link, set z-index only; never restate
+`position` on an element that already has one.**
+Verified: media height 202 = photo height, save button `absolute` with z-index 2, pill and save
+both back over the photo, all grid cards 581px.
+
 ### 30 Jul 2026 — Claude · rail header band moved to the right element
 Follow-up to the toolbar/rail alignment above: I had put the band (min-height, padding, bottom
 rule) on `.rail-title`, but the title is a **flex item inside `.rail-head`**, so it is only as
