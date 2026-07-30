@@ -68,6 +68,20 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §5 ask band: typeset "?" and a red CTA
+- **The icon is now a typeset question mark, not an SVG.** Reasoning: every emphasis on this page
+  is Newsreader — H1, prices, dates, section titles — so a serif glyph belongs to that system where
+  a stroked help-circle belongs to a generic UI kit. Flat, no SVG, and at 44px it carries the band
+  without adding height. Needs `line-height: 1` and a 2px optical nudge because a serif "?" sits
+  high in its box. Considered and rejected: speech bubble (generic), envelope (implies email, but
+  it jumps to `#agent`), person+question (illegible at this size), no icon (band loses its anchor).
+- **Glyph stays burgundy while the button goes red** — one action accent per zone. Red means "this
+  is the thing to click" everywhere else on the site; a red glyph would compete with it.
+- CTA arrow removed and background switched to `var(--red)` / `#A81F15` hover, the same pair
+  `.btn.red` uses, so it matches every other primary action on the site.
+Verified: 44px Newsreader burgundy glyph, CTA rgb(200,40,28) on white with no SVG, both vertically
+centred in the band, box still 98px, no overflow.
+
 ### 30 Jul 2026 — Claude · §5 ask box final form: one line + button (315px → 98px)
 **Codex: do NOT re-add a list here.** It went through three versions and the third is deliberate:
 - v1 "Not disclosed by the seller" + 4 chips — apologises for our data gap, and the list shrinks

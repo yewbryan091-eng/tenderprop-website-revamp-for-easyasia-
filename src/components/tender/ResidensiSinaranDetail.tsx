@@ -372,9 +372,12 @@ export function ResidensiSinaranDetail() {
                   honest and permanent version is simply: whatever the details above do not
                   answer, the agent will. Slimmest possible form — invitation plus button. */}
               <section className="pd-ask">
-                <span className="pd-ask-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .9-1 1.6v.3" /><circle cx="12" cy="17" r=".9" fill="currentColor" stroke="none" /></svg>
-                </span>
+                {/* A typeset question mark, not a stroked icon. Every emphasis on this page is
+                    Newsreader — the H1, the prices, the dates — so a serif glyph belongs to the
+                    same system, where a UI-kit help-circle belongs to a generic one. It is also
+                    flat, needs no SVG, and at this size carries the band on its own. Burgundy,
+                    not red: red is reserved for the action beside it. */}
+                <span className="pd-ask-mark" aria-hidden="true">?</span>
                 <div className="pd-ask-main">
                   <h3 className="pd-ask-title">Still have questions about this property?</h3>
                   <p className="pd-ask-lede">
@@ -382,10 +385,7 @@ export function ResidensiSinaranDetail() {
                     and a sealed tender gives you one offer, so ask before you submit.
                   </p>
                 </div>
-                <a className="pd-ask-cta" href="#agent">
-                  Ask the agent
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
-                </a>
+                <a className="pd-ask-cta" href="#agent">Ask the agent</a>
               </section>
 
             </div>
