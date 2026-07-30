@@ -67,6 +67,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · lock spans the copy block; assurance copy = Bryan's wording
+- Assurance line is now Bryan's: *"Every e-tender offer is presented directly to the seller for
+  fair and confidential consideration."* Passive voice removes the need to name who presents the
+  offer at all — the cleanest resolution of the VOICE RULE rather than a workaround for it.
+- **Lock now spans the full height of the copy beside it** (Bryan: "as big until it reaches
+  'sealed until the tender closes'"). Two parts, and the first is the non-obvious one:
+  1. `LockIcon`'s viewBox was `0 0 24 24` while the glyph only occupied y 3..21 — so ~25% of the
+     box was empty and scaling the box never made the *lock* reach anything. Cropped to
+     `3.2 2.2 17.6 19.6` (glyph bounds + half-stroke). Hero-only icon, safe to crop.
+  2. The icon cell is `align-self: stretch` with the svg at 100%/100%, so it re-measures itself
+     against the copy at every breakpoint — no magic per-breakpoint pixel values to maintain.
+     `--hero-lock-box` now only sets the column WIDTH (66 base / 64 / 58 / 62 mobile);
+     `--hero-lock` is retired.
+  Verified: svg and copy block share top and bottom exactly at 1280 (64x72) and 375 (62x79);
+  lock is 19% of row width on mobile; 0px overflow at both.
+
 ### 30 Jul 2026 (late) — Claude · voice rule + hero polish
 **VOICE RULE ADDED TO AGENTS.md — read it.** TenderProp speaks as a platform in all marketing
 copy; the licensed-agency/REN disclosure lives only in the footer, About, FAQ, agent block and

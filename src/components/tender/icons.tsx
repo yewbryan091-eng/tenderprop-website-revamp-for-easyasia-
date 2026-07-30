@@ -81,7 +81,9 @@ export const ReturnIcon = () => (
   </svg>
 );
 export const LockIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  /* viewBox cropped to the glyph (not 0 0 24 24) so the drawn lock fills its box —
+     the hero sizes this by the height of the copy beside it. Hero-only icon. */
+  <svg viewBox="3.2 2.2 17.6 19.6" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <rect x="4" y="10" width="16" height="11" rx="2" />
     <path d="M8 10V7a4 4 0 0 1 8 0v3" />
     <circle cx="12" cy="15" r="1.4" /><path d="M12 16.4V18" />
