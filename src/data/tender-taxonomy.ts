@@ -11,7 +11,7 @@ export type TypeOption = {
 export const TYPE_TAXONOMY: TypeOption[] = [
     { value: "all",            label: "All Property Types" },
     { value: "cat:residential", label: "----All Residential----", cat: "residential" },
-    { value: "res-apt",   label: "Apartment/Condominium/Serviced Residence", types: ["Apartment", "Condominium", "Serviced Residence"] },
+    { value: "res-apt",   label: "Apartment/Condominium/Serviced Apartment", types: ["Apartment", "Condominium", "Serviced Apartment", "Serviced Residence"] },
     { value: "res-ter",   label: "Terrace/link/Townhouse",                   types: ["Terrace House", "Link House", "Townhouse"] },
     { value: "res-semid", label: "Semi-D/Bungalow/Villa",                    types: ["Semi-Detached House", "Bungalow", "Villa"] },
     { value: "cat:commercial", label: "----All Commercial----", cat: "commercial" },

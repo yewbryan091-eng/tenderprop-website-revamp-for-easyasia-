@@ -104,6 +104,10 @@ export function displayType(x: Tender) {
    today but kept separate on purpose: one set is about naming, this one is about
    what a buyer is actually purchasing, and they can diverge later. */
 const FLOOR_AREA_TYPES = new Set([
+  /* "Serviced Residence" is retained alongside "Serviced Apartment" (renamed 30 Jul,
+     Bryan) so any record still carrying the old spelling — real inventory, EasyAsia's
+     CMS, a stale import — keeps resolving to floor area instead of silently falling
+     through to land area. Cheap insurance; both are the same product. */
   "Apartment", "Condominium", "Serviced Residence", "Serviced Apartment",
   "Flat", "SOHO", "SOVO", "SOFO", "Townhouse",
 ]);
