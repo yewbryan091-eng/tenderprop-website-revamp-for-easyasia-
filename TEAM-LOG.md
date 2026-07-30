@@ -68,6 +68,15 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · rail header band moved to the right element
+Follow-up to the toolbar/rail alignment above: I had put the band (min-height, padding, bottom
+rule) on `.rail-title`, but the title is a **flex item inside `.rail-head`**, so it is only as
+wide as its own text — 147px of a 280px column. The rule therefore stopped halfway across the
+rail. Band moved to `.rail-head`, which is the actual full-width header row and the true
+counterpart of `.results-header`. `.rail-title` is back to typography only.
+Verified at 1600px: rail head spans the full 280px column, both rules land on y=921, and the rail
+card top matches the grid top at y=941.
+
 ### 30 Jul 2026 — Claude · REVERTED my own duplicate; card = one link; toolbar/rail aligned
 1. **REVERTED the location-search browse list I added an hour earlier.** It listed states with
    counts — duplicating the "Tender by State" rail on the same screen, item for item, with no

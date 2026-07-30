@@ -691,20 +691,17 @@
   /* Standalone state navigator: heading sits outside the panel, no inner scroll. */
   .sidebar-filters { display: flex; flex-direction: column; min-width: 0; }
   .filters-scroll { min-height: 0; display: flex; flex-direction: column; }
-  .rail-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 10px; }
-  /* The rail title occupies its own header row that mirrors .results-header exactly —
-     same min-height, same 12px padding, same bottom rule. Previously the rail card
-     started at the toolbar's top and its border cut straight through the toolbar's
-     bottom rule, while the serif heading's baseline missed the count text's by ~7px:
-     two prominent labels on one row, almost aligned. Now both columns share one
-     header band and their content starts on the same line. */
-  .rail-title {
-    margin: 0 0 20px; padding-bottom: 12px;
-    min-height: var(--head-band); display: flex; align-items: center;
+  /* The rail's header band, mirroring .results-header in the results column: same
+     --head-band min-height, same 12px padding, same rule, so both columns' rules land
+     on the same y and their content starts on the same line. The band lives HERE and
+     not on .rail-title, because the title is a flex item inside this row and is only
+     as wide as its own text — putting the border there stopped the rule halfway. */
+  .rail-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    min-height: var(--head-band); margin: 0 0 20px; padding-bottom: 12px;
     border-bottom: 1px solid var(--line);
-    font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-    font-size: 23px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink);
   }
+  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 23px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); }
   .state-panel { border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--paper) 32%, var(--card)); padding: 5px 6px; }
   .sheet-head { display: none; }
   .filters-backdrop { display: none; }
