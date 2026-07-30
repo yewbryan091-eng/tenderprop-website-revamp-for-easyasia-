@@ -80,9 +80,17 @@ one block, one of them is wrong.
   promoted facts do not repeat in the specification list below.
 - **Facts strip** (`.v1-facts`): three cells, vertical rules between, label / value / sub-line.
 - **Slim invitation band** (`.pd-ask`): 44px serif glyph + title + one line + red CTA. ~98px tall.
-- **Body prose**: `max-width: 62ch` (≈71 real characters — the `ch` unit over-counts in Inter),
-  `line-height: 1.72`, with a slightly larger lead paragraph as the entry point and at most one
-  pull-quote (`border-left: 2px solid var(--burgundy)`) as the anchor.
+- **Body prose**: **two columns at full width**, `line-height: 1.72`, with at most one pull-quote
+  (`border-left: 2px solid var(--burgundy)`) as the anchor, placed *outside* any disclosure.
+  A single column across the full 1100px is ~137 characters per line — roughly double the ~75
+  readable ceiling — but two columns land at **~65 each**, so filling the width and staying
+  readable are the same move. This is also how `.pd-list` fills the identical space, so the two
+  sections share a horizontal rhythm.
+- **Progressive disclosure over columns: render FEWER ITEMS, never clip with `max-height`.**
+  Clipping across two columns cuts column 1 mid-sentence and starts column 2 on a new thought, so
+  the reading order breaks; a fade over a column boundary reads as a rendering fault. Hold the
+  prose as data and slice it (`ABOUT_PARAS.slice(0, N)`), and put the remaining count in the
+  button label ("View more (6 more)") so the control declares its own payload.
 - **Disclosure** (`<details>`): summary carries a `<b>` label and a `<small>` summary of what is
   inside, plus a chevron that rotates on `[open]`.
 - **Pills / chips**: `999px` radius, `--card` background, 1px border, 13px/700.

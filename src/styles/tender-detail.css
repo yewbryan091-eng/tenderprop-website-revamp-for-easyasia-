@@ -571,19 +571,11 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
      are ONE feature — never ship one without the other (see DESIGN-SYSTEM §5.9). The
      pull-quote deliberately sits OUTSIDE this container so the section's argument is never
      behind the fold. Fade uses --band-bg so it re-matches whichever band the section is on. */
-  /* The clamp lives on :not(.open) rather than being overridden by .open. Two rules both
-     setting max-height on the same element is a fight waiting to be lost — and it was:
-     `.aboutbody.open { max-height: 220em }` never took effect, so the button flipped its
-     label and aria-expanded while the text stayed clipped at 137.6px. With the clamp
-     scoped to the closed state there is nothing to override; the rule simply stops
-     matching. No transition, because max-height cannot animate to `none`. */
+  /* No max-height clamp and no fade: the closed state renders FEWER PARAGRAPHS instead of
+     clipping. Clipping across two columns cuts column 1 mid-sentence and starts column 2 on
+     a new thought, which breaks the reading order — and a fade over a column boundary reads
+     as a rendering fault rather than an invitation. */
   .aboutbody { position: relative; }
-  .aboutbody:not(.open) { max-height: 8.6em; overflow: hidden; }
-  .aboutbody:not(.open)::after {
-    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3.2em;
-    background: linear-gradient(180deg, transparent, var(--band-bg));
-    pointer-events: none;
-  }
   .viewmore {
     display: inline-flex; align-items: center; gap: 7px;
     margin-top: 16px; padding: 0; background: none; border: 0;
@@ -992,13 +984,21 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
    re-find the line start, which is why four short paragraphs still felt like work.
    Capped at 68ch, with a lead paragraph as the entry point and one pull-quote to give
    the section a scannable anchor and somewhere for the eye to land. */
-/* 62ch, not 68: the `ch` unit is the advance of "0", which in Inter is wider than the
-   average lowercase glyph — so a 68ch box actually fits ~78 characters, over the ~75
-   readable ceiling. 62ch measures out at ~71. */
-.aboutbody { max-width: 62ch; }
-.aboutbody p { margin: 0 0 16px; color: var(--ink); font-size: 16px; line-height: 1.72; }
-.aboutbody p:last-child { margin-bottom: 0; }
-.aboutbody .about-lead { font-size: 17.5px; line-height: 1.66; }
+/* Two-up, full width (Bryan: make it long like the section above). The honest constraint:
+   a single column across the full 1100px is ~137 characters per line, roughly double the
+   ~75 readable ceiling. But Property Details above fills this same width with TWO columns,
+   not long lines — so matching the page's horizontal rhythm and keeping a readable measure
+   are the same move. Each column lands around 65 characters. */
+.aboutbody {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(30px, 4vw, 60px);
+  align-items: start;
+}
+.aboutbody p { margin: 0 0 18px; color: var(--ink); font-size: 16px; line-height: 1.72; }
+@media (max-width: 760px) {
+  .aboutbody { grid-template-columns: minmax(0, 1fr); }
+}
 
 /* The one argument nothing else on the page makes. Left rule rather than a box: it is
    the same emphasis language as .v1-reassure, so it belongs to the existing system. */

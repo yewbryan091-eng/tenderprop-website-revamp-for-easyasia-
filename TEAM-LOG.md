@@ -68,6 +68,23 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · About runs full width, two-up; disclosure now slices data
+Bryan: make the prose long horizontally like the section above. The honest constraint is that a
+single column across the full 1100px is **~137 characters per line**, roughly double the ~75
+readable ceiling. But `.pd-list` above fills that same width with **two columns**, not long lines
+— so matching the page's horizontal rhythm and keeping a readable measure turned out to be the
+same move. About is now two-up at the full 1100px, **65 characters per column**, and its width
+matches `.pd-list` exactly (both 1100px, columns at x=243 and x=823).
+
+**The clamp is gone entirely.** Clipping with `max-height` across two columns cuts column 1
+mid-sentence and starts column 2 on a new thought — the reading order breaks — and a fade over a
+column boundary reads as a rendering fault. Instead the prose is **data** (`ABOUT_PARAS`) and the
+closed state renders the first two whole paragraphs; open renders all eight. Nothing is ever
+clipped in either state, and the button declares its payload: **"View more (6 more)"**.
+Both rules recorded in DESIGN-SYSTEM §4.
+Verified: closed 2 paras / 156px, open 8 paras / 567px, never clipped in either state, label
+cycles, no overflow. Tender Information still untouched — Codex's.
+
 ### 30 Jul 2026 — Claude · About toggle moved to React state; 8 paragraphs for the demo
 🐛 **Bryan was right that About was broken, and my verification was misleading.** The toggle was
 bound imperatively inside `initDetailPage()`, which runs once on mount — so **any hot reload

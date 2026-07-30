@@ -84,14 +84,25 @@ const BAND: BandItem[] = ([
   .filter(([, v]) => v !== null && v !== undefined && v !== "")
   .map(([label, v, path]) => ({ label, value: String(v), path }));
 
+const ABOUT_PARAS: string[] = [
+  `Residensi Sinaran sits inside Taman Sri Muda, one of the older established          townships in Shah Alam &mdash; the kind of neighbourhood that finished growing a          decade ago. Sixty-two homes behind a single controlled entrance, which is small          enough that the place stays quiet.`,
+  `Each home runs over three storeys, which puts the shared living areas downstairs          and the private rooms above &mdash; the practical reason a family chooses a          townhouse over an apartment of the same size, and the reason the layout still          works as a household grows rather than forcing a move.`,
+  `Because it is stratified, the things that usually make landed property tiring are          handled collectively: the guardhouse, the shared grounds and the upkeep of common          areas sit with the management body rather than with you. It is landed living with          the administrative load of a strata development, which is an unusual combination          at this size.`,
+  `Completion also changes what your lender is looking at. A bank valuing a finished          unit is valuing something that exists &mdash; a real floor plate, real finishes,          a real neighbourhood &mdash; rather than a projection off a masterplan. If you          want a valuer to walk it before you decide your number, that is possible here in          a way it is not with a launch.`,
+  `The intermediate position is worth understanding rather than glossing over. It          means one shared wall on each side and a narrower frontage than a corner lot,          which is reflected in the price &mdash; and it also means less external wall to          maintain and a cooler interior through the afternoon than a west-facing corner          typically gets.`,
+  `Three storeys ask something of a household, and it is fair to say so plainly:          there are stairs every day, and families with very young children or elderly          parents should walk the unit before deciding whether the layout suits them. That          is precisely the kind of judgement a completed property lets you make in advance.`,
+  `Parking is two dedicated bays rather than a shared allocation, which in a          sixty-two unit development means the arithmetic actually works &mdash; visitors          included. It is a small detail that becomes a daily one.`,
+  `That the township is older is the point. Everything around it already exists, and          nothing about living here depends on a masterplan being finished or a neighbouring          phase being sold.`,
+];
+
 export function ResidensiSinaranDetail() {
   useEffect(() => initDetailPage(), []);
 
   /* Days remaining is computed, never hand-typed. Starts neutral so SSR and a
      Malaysian browser can't disagree on the day count during hydration. */
   const [daysLabel, setDaysLabel] = useState<string | null>(null);
-  /* Live countdown for the tender rail — same segmented D:H:M:S language as the
-     grid hero, so both pages tell time the same way. Null until mount (SSR-safe). */
+  /* Live countdown for the standard tender-information deadline panel. It is null
+     until mount so the server and browser never disagree during hydration. */
   const [cd, setCd] = useState<{ d: number; h: number; m: number; s: number } | null>(null);
   /* About's expand is REACT STATE, not a DOM listener. It was wired imperatively inside
      initDetailPage(), which runs once on mount — so after any hot reload React rebuilt the
@@ -99,10 +110,11 @@ export function ResidensiSinaranDetail() {
      worked and a reloaded page was dead, which is exactly the "sometimes broken" Bryan saw.
      Anything React renders should be driven by React state. */
   const [aboutOpen, setAboutOpen] = useState(false);
-  /* Below this many days the segmented D:H:M:S clock earns its place; above it the
-     seconds are noise and the plain day count reads as confidence, not theatre. */
-  const CLOCK_FROM_DAYS = 90;
-  const showClock = cd !== null && cd.d < CLOCK_FROM_DAYS;
+  /* Shown two-up. Closed renders the first two ENTIRE paragraphs rather than clipping at a
+     line count: a max-height clamp across columns cuts column 1 mid-sentence and then starts
+     column 2 at a new thought, so the reading order breaks. Rendering fewer whole paragraphs
+     keeps every visible sentence complete. */
+  const ABOUT_CLOSED_COUNT = 2;
   useEffect(() => {
     const calc = () => {
       const diff = new Date(TENDER_CLOSE_ISO).getTime() - Date.now();
@@ -116,7 +128,7 @@ export function ResidensiSinaranDetail() {
       setCd({ d, h, m, s: sec });
     };
     calc();
-    const id = window.setInterval(calc, 1000); /* 1s: only meaningful inside CLOCK_FROM_DAYS, harmless outside */
+    const id = window.setInterval(calc, 1000);
     return () => window.clearInterval(id);
   }, []);
 
@@ -189,12 +201,68 @@ export function ResidensiSinaranDetail() {
         <section className="blk" id="tender">
           <div className="wrap">
             <div className="v1">
-              <div className="v1-top">
-                <h3>Tender Information</h3>
-              </div>
-
               <div className="v1-grid">
-                <div className="v1-main">
+                {/* Standard across every real listing: this is a platform-level tender
+                    deadline image, not a photograph of the property. Source: Yamiko Ling
+                    on Pexels, photo 21898339. */}
+                <section className="v1-deadline-panel" aria-labelledby="tender-deadline-heading">
+                  <img
+                    className="v1-deadline-image"
+                    src="/assets/layout/tender-information-kl.jpg"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="v1-deadline-content">
+                    <div>
+                      <span className="v1-deadline-kicker">Sealed E-Tender</span>
+                      <h3 id="tender-deadline-heading">Tender closes in</h3>
+                    </div>
+
+                    <div
+                      className="v1-timer"
+                      role="timer"
+                      aria-label={
+                        cd
+                          ? `${cd.d} days, ${cd.h} hours, ${cd.m} minutes and ${cd.s} seconds remaining`
+                          : "Time remaining until the tender closes"
+                      }
+                      aria-live="off"
+                    >
+                      {([
+                        ["Days", cd ? String(cd.d) : "\u00a0"],
+                        ["Hours", cd ? String(cd.h).padStart(2, "0") : "\u00a0"],
+                        ["Minutes", cd ? String(cd.m).padStart(2, "0") : "\u00a0"],
+                        ["Seconds", cd ? String(cd.s).padStart(2, "0") : "\u00a0"],
+                      ] as const).map(([label, value]) => (
+                        <span className="u" key={label} aria-hidden="true">
+                          <b>{value}</b>
+                          <i>{label}</i>
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="v1-deadline-meta">
+                      <div>
+                        <span>Closing date</span>
+                        <b>{TENDER_CLOSE_LABEL}</b>
+                        <small>End of day (MYT)</small>
+                      </div>
+                      <div>
+                        <span>Register by</span>
+                        <b>17 Dec 2028</b>
+                        <small>Account verified by this date</small>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <div className="v1-main" id="tender-action-panel">
+                  <div className="v1-top">
+                    <span className="v1-kicker">Property tender notice</span>
+                    <h3>Tender Information</h3>
+                  </div>
+
                   <div className="v1-facts">
                     <div className="v1-price">
                       <span className="lbl">Reserve price</span>
@@ -213,8 +281,8 @@ export function ResidensiSinaranDetail() {
                     </div>
                   </div>
                   <p className="v1-reassure">
-                    <b>Not an extra charge.</b> Your 3% deposit counts toward the standard 10%
-                    down payment, and is returned in full immediately if no sale proceeds.
+                    <b>Your deposit is not an extra charge.</b> It forms the first 3% of the
+                    standard 10% down payment and is returned in full immediately if no sale proceeds.
                   </p>
 
                   <div className="v1-steps">
@@ -222,102 +290,60 @@ export function ResidensiSinaranDetail() {
                     <ol>
                       <li>
                         <span className="n">1</span>
-                        <div><b>Register and verify</b><p>Complete account verification before the registration deadline.</p></div>
+                        <div><b>Register and verify</b><p>Complete your account before the registration deadline.</p></div>
                       </li>
                       <li>
                         <span className="n">2</span>
-                        <div><b>Submit your tender</b><p>Send your sealed offer and review the deposit terms in your member account.</p></div>
+                        <div><b>Submit your tender</b><p>Send one confidential offer and review the deposit terms.</p></div>
                       </li>
                       <li>
                         <span className="n">3</span>
-                        <div><b>The seller responds</b><p>Expect an acceptance, decline or counter within 5 working days of closing.</p></div>
+                        <div><b>The seller responds</b><p>Expect an acceptance, decline or counter within 5 working days.</p></div>
                       </li>
                     </ol>
-                    <p className="v1-negotiate">
-                      <b>Three possible outcomes.</b> The seller may accept, decline or counter through
-                      the appointed agent. The moment it is clear no sale will proceed, your deposit is
-                      returned in full — immediately, not after a processing period.
-                    </p>
                   </div>
-                </div>
 
-                <aside className="v1-rail" id="tender-action-panel">
-                  <svg className="tp-clip tp-clip-back" viewBox="0 0 28 72" aria-hidden="true" focusable="false">
-                    <path d="M9 48V16a5 5 0 0 1 10 0v40a8 8 0 0 1-16 0V12a7 7 0 0 1 7-7h2" />
-                  </svg>
-                  <svg className="tp-clip tp-clip-front" viewBox="0 0 28 72" aria-hidden="true" focusable="false">
-                    <path d="M9 30v18" />
-                  </svg>
-                  <span className="v1-rail-kicker">Tender notice</span>
-                  <div className="v1-register">
-                    <span className="lbl">Register by</span>
-                    <b>17 Dec 2028</b>
-                    <span>Account verified by this date</span>
+                  <div className="v1-actions">
+                    <a className="btn-red" href="#">Apply for Tender</a>
+                    <a className="btn-wa" href="https://wa.me/60123938255" target="_blank" rel="noopener">
+                      Ask the agent on WhatsApp &rarr;
+                    </a>
                   </div>
-                  <div className="v1-deadline">
-                    <span className="lbl">Tender closes</span>
-                    <div className="v1-date">{TENDER_CLOSE_LABEL}</div>
-                    <div
-                      className="v1-timer"
-                      role="timer"
-                      aria-label="Time remaining until tender closes"
-                      aria-live="off"
-                    >
-                      {showClock && cd ? (
-                        <>
-                          <span className="u"><b>{cd.d}</b><i>d</i></span>
-                          <span className="sep">:</span>
-                          <span className="u"><b>{String(cd.h).padStart(2, "0")}</b><i>h</i></span>
-                          <span className="sep">:</span>
-                          <span className="u"><b>{String(cd.m).padStart(2, "0")}</b><i>m</i></span>
-                          <span className="sep">:</span>
-                          <span className="u"><b>{String(cd.s).padStart(2, "0")}</b><i>s</i></span>
-                        </>
-                      ) : (
-                        <span className="u v1-timer-days"><b>{daysLabel ?? "\u2014"}</b></span>
-                      )}
+
+                  <details className="v1-ladder">
+                    <summary>
+                      <span>
+                        <b>How payments work</b>
+                        <small>3% deposit &middot; +7% at SPA &middot; 90% on completion</small>
+                      </span>
+                      <span className="v1-ladder-toggle" aria-hidden="true">+</span>
+                    </summary>
+                    <div className="v1-ladder-body">
+                      <p className="v1-ladder-basis">
+                        Illustration based on the {rm(RESERVE)} reserve price. Final amounts follow the agreed price.
+                      </p>
+                      <ol>
+                        <li>
+                          <span className="pct">3%</span>
+                          <div><b>{DEPOSIT}</b><span>Tender deposit. Returned in full immediately if no sale proceeds.</span></div>
+                        </li>
+                        <li>
+                          <span className="pct">+7%</span>
+                          <div><b>{rm(RESERVE * 0.07)}</b><span>Balance of the 10% down payment on signing the SPA.</span></div>
+                        </li>
+                        <li>
+                          <span className="pct">90%</span>
+                          <div><b>{rm(RESERVE * 0.9)}</b><span>On completion, usually through your bank loan.</span></div>
+                        </li>
+                      </ol>
+                      <p className="laddernote">
+                        <b>Your tender deposit is the first part of the standard 10% down payment.</b>{" "}
+                        Read the full process and terms on the <a href="#">How To Tender</a> page.
+                      </p>
                     </div>
-                    <span className="v1-cd">Offers close at the end of this date</span>
-                  </div>
-                  <a className="btn-red" href="#">Apply for Tender</a>
-                  <a className="btn-wa" href="https://wa.me/60123938255" target="_blank" rel="noopener">
-                    Ask the agent on WhatsApp &rarr;
-                  </a>
-                </aside>
-              </div>
-
-              <details className="v1-ladder">
-                <summary>
-                  <span>
-                    <b>How payments work</b>
-                    <small>3% deposit &middot; +7% at SPA &middot; 90% on completion</small>
-                  </span>
-                  <span className="v1-ladder-toggle" aria-hidden="true">+</span>
-                </summary>
-                <div className="v1-ladder-body">
-                  <p className="v1-ladder-basis">
-                    Illustration based on the {rm(RESERVE)} reserve price. Final amounts follow the agreed price.
-                  </p>
-                  <ol>
-                    <li>
-                      <span className="pct">3%</span>
-                      <div><b>{DEPOSIT}</b><span>Tender deposit. Returned in full immediately if no sale proceeds.</span></div>
-                    </li>
-                    <li>
-                      <span className="pct">+7%</span>
-                      <div><b>{rm(RESERVE * 0.07)}</b><span>Balance of the 10% down payment on signing the SPA.</span></div>
-                    </li>
-                    <li>
-                      <span className="pct">90%</span>
-                      <div><b>{rm(RESERVE * 0.9)}</b><span>On completion, usually through your bank loan.</span></div>
-                    </li>
-                  </ol>
-                  <p className="laddernote">
-                    <b>Your tender deposit is the first part of the standard 10% down payment.</b>{" "}
-                    Read the full process and terms on the <a href="#">How To Tender</a> page.
-                  </p>
+                  </details>
                 </div>
-              </details>
+              </div>
             </div>
           </div>
         </section>
@@ -442,56 +468,10 @@ export function ResidensiSinaranDetail() {
                 matters more here than in a normal sale: a sealed tender gives you one number
                 and no second attempt.
               </blockquote>
-              <div className={"aboutbody" + (aboutOpen ? " open" : "")} id="about-body">
-                <p>
-                  Residensi Sinaran sits inside Taman Sri Muda, one of the older established
-                  townships in Shah Alam &mdash; the kind of neighbourhood that finished growing a
-                  decade ago. Sixty-two homes behind a single controlled entrance, which is small
-                  enough that the place stays quiet.
-                </p>
-                <p>
-                  Each home runs over three storeys, which puts the shared living areas downstairs
-                  and the private rooms above &mdash; the practical reason a family chooses a
-                  townhouse over an apartment of the same size, and the reason the layout still
-                  works as a household grows rather than forcing a move.
-                </p>
-                <p>
-                  Because it is stratified, the things that usually make landed property tiring are
-                  handled collectively: the guardhouse, the shared grounds and the upkeep of common
-                  areas sit with the management body rather than with you. It is landed living with
-                  the administrative load of a strata development, which is an unusual combination
-                  at this size.
-                </p>
-                <p>
-                  Completion also changes what your lender is looking at. A bank valuing a finished
-                  unit is valuing something that exists &mdash; a real floor plate, real finishes,
-                  a real neighbourhood &mdash; rather than a projection off a masterplan. If you
-                  want a valuer to walk it before you decide your number, that is possible here in
-                  a way it is not with a launch.
-                </p>
-                <p>
-                  The intermediate position is worth understanding rather than glossing over. It
-                  means one shared wall on each side and a narrower frontage than a corner lot,
-                  which is reflected in the price &mdash; and it also means less external wall to
-                  maintain and a cooler interior through the afternoon than a west-facing corner
-                  typically gets.
-                </p>
-                <p>
-                  Three storeys ask something of a household, and it is fair to say so plainly:
-                  there are stairs every day, and families with very young children or elderly
-                  parents should walk the unit before deciding whether the layout suits them. That
-                  is precisely the kind of judgement a completed property lets you make in advance.
-                </p>
-                <p>
-                  Parking is two dedicated bays rather than a shared allocation, which in a
-                  sixty-two unit development means the arithmetic actually works &mdash; visitors
-                  included. It is a small detail that becomes a daily one.
-                </p>
-                <p>
-                  That the township is older is the point. Everything around it already exists, and
-                  nothing about living here depends on a masterplan being finished or a neighbouring
-                  phase being sold.
-                </p>
+              <div className="aboutbody">
+                {(aboutOpen ? ABOUT_PARAS : ABOUT_PARAS.slice(0, ABOUT_CLOSED_COUNT)).map((t) => (
+                  <p key={t.slice(0, 24)} dangerouslySetInnerHTML={{ __html: t }} />
+                ))}
               </div>
               <button
                 type="button"
@@ -500,7 +480,7 @@ export function ResidensiSinaranDetail() {
                 aria-controls="about-body"
                 onClick={() => setAboutOpen((v) => !v)}
               >
-                <span>{aboutOpen ? "View less" : "View more"}</span>
+                <span>{aboutOpen ? "View less" : `View more (${ABOUT_PARAS.length - ABOUT_CLOSED_COUNT} more)`}</span>
                 <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5.5 7 9.5l4-4" /></svg>
               </button>
             </div>
