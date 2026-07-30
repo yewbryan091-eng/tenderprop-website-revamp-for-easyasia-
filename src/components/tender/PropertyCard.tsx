@@ -1,6 +1,6 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
-import { ClockIcon, HeartIcon, PinIcon } from "./icons";
+import { ClockIcon, HeartIcon, PhoneIcon, PinIcon } from "./icons";
 import { daysLeft, depositOf, displayType, fmtDate, fmtPrice, hrefFor, tenderId, tenderStartOf } from "@/lib/tender-utils";
 
 /* The photo pill is the card's ONLY date. It carries the year because listings
@@ -17,7 +17,12 @@ function detailRows(x: Tender) {
       : STRATA.includes(x.propertyType)
         ? [["Built-up", x.builtUp], ["Tenure", x.tenure], ["Land area", x.landArea]]
         : [["Land area", x.landArea], ["Built-up", x.builtUp], ["Tenure", x.tenure]];
-  return order.filter(([, v]) => Boolean(v)).slice(0, 2).map(([label, value]) => ({ label, value }));
+  /* Take the first two REGARDLESS of emptiness. Filtering by presence was what made
+     cards inconsistent: one showed "Tender start / Built-up", the next "Tender start /
+     Land area / Built-up" — three different schemas in one list. Every card now has the
+     same three aligned slots, with an em dash where a value is missing, which is what
+     the .pc-details comment in the stylesheet has always promised. */
+  return order.slice(0, 2).map(([label, value]) => ({ label, value: value || "\u2014" }));
 }
 
 /* One semantic tender-notice card. Grid mode stacks it; list mode splits it into
@@ -104,7 +109,7 @@ export function PropertyCard({
           <div className="pc-foot">
             <img className="pc-avatar" src={AGENT_PHOTO} alt="Stephen Yew, listing agent" loading="lazy" />
             <span className="pc-agent"><b>Stephen Yew</b><span>REN 123456</span></span>
-            <a className="pc-tel" href="tel:+60123938255">012-393 8255</a>
+            <a className="pc-tel" href="tel:+60123938255"><PhoneIcon /><span>012-393 8255</span></a>
           </div>
           <a className="pc-cta" href={href}>View tender details</a>
         </div>

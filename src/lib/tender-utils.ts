@@ -77,15 +77,18 @@ export function hrefFor(_x: Tender) {
    the same data: a bungalow is a "Bungalow House", and a shop is a "Shop Lot" at
    one storey but a "Shop-Office" at two or more, which is how the market names it.
    Filters still match on the raw `propertyType` — this is display only. */
-const HIGH_RISE = new Set([
+/* Types that are never storey-prefixed. High-rise strata for the obvious reason,
+   plus Townhouse — per Bryan, "townhouse is fine" on its own: the name already
+   implies the multi-storey stacked form, so "3-Storey Townhouse" is redundant. */
+const NO_STOREY_PREFIX = new Set([
   "Apartment", "Condominium", "Serviced Residence", "Serviced Apartment",
-  "Flat", "SOHO", "SOVO", "SOFO",
+  "Flat", "SOHO", "SOVO", "SOFO", "Townhouse",
 ]);
 
 export function displayType(x: Tender) {
   const t = x.propertyType?.trim();
   if (!t) return "";
-  if (HIGH_RISE.has(t) || x.propertyCategory === "land") return t;
+  if (NO_STOREY_PREFIX.has(t) || x.propertyCategory === "land") return t;
   const n = x.storeys ?? null;
   const base =
     t === "Bungalow" ? "Bungalow House"

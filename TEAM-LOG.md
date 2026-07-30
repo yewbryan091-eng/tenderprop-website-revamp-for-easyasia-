@@ -68,6 +68,30 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · list-card consistency, type scale, phone icon, townhouse
+1. **Root cause of "cards aren't consistent":** `detailRows()` filtered slots by
+   `Boolean(value)`, so one card rendered "Tender start / Built-up" and the next
+   "Tender start / Land area / Built-up" — **2 or 3 slots, three different schemas in one
+   list.** Now `.slice(0, 2)` with no filter and an em dash for missing values, which is exactly
+   what the `.pc-details` comment in the stylesheet has always claimed ("three permanent
+   comparison slots... missing render as an em dash"). Code and comment finally agree.
+   Verified: every card 308px tall, every card 3 slots.
+2. **Long types were truncating**, not wrapping: `.pc-type` was `nowrap` + `overflow:hidden`, so
+   "2-Storey Semi-Detached House" became "2-Storey Semi-Detached H." in the narrow grid card.
+   Now wraps. Never truncate a property's own type name — abbreviating to "Semi-D" would have
+   patched this one case and still clipped "Commercial Building/Bungalow".
+3. **List type scale** (Bryan: bigger left side): title 19.5→25px, location 12.5→14.5,
+   type label 9.5→11, type value 13.5→16.5, fact dt 9.5→11, dd 12→15.5. Scoped to list mode
+   only — grid stays as approved.
+4. **Image** 300→372px wide. NOTE: I first set `min-height: 292px` and the image floor started
+   driving card height instead of content; back to 250 and `pc-foot`'s `margin-top:auto` removed,
+   which was opening a gap under the money box. `.pc-ident` is now a flex column with the facts
+   at `margin-top:auto`, so the identity column fills the card height.
+5. **Townhouse loses the storey prefix** (Bryan: "townhouse is fine") — `HIGH_RISE` renamed
+   `NO_STOREY_PREFIX` since it now holds a landed type. The name already implies the stacked form.
+6. Phone icon added left of the agent number. The icon sits OUTSIDE the underline — only the
+   number span carries the rule, because an underlined phone glyph reads as a rendering fault.
+
 ### 30 Jul 2026 — Claude · storey-specific property type labels
 Bryan: landed stock should read "2-Storey Terrace House", not "Terrace House"; high-rise stays
 plain. New `displayType(x)` in `tender-utils.ts` is the single source for the label:
