@@ -1082,13 +1082,15 @@
      figure and this corner strip can never be confused for the same element. */
   --corner: 1;
 }
+/* Bumped 19→28px. Still well clear of the day count's 46–74px, so the ranking holds:
+   the headline is what a buyer reads, this is what they check. */
 .hero-panel-left .hero-clock .hero-timer-value {
-  font-size: 19px; font-weight: 700; letter-spacing: -.01em;
-  color: rgba(255, 255, 255, .92);
+  font-size: clamp(24px, 2vw, 28px); font-weight: 700; letter-spacing: -.015em;
+  color: rgba(255, 255, 255, .95);
 }
 .hero-panel-left .hero-clock .hero-timer-unit {
-  font-size: 10px; font-weight: 700; letter-spacing: .08em;
-  color: rgba(255, 255, 255, .58);
+  font-size: 12px; font-weight: 700; letter-spacing: .07em;
+  color: rgba(255, 255, 255, .62);
 }
 .hero-panel-left .hero-clock .hero-timer-cell:first-child .hero-timer-value { min-width: 0; }
 @media (max-width: 860px) {
