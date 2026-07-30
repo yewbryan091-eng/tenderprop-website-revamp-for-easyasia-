@@ -543,20 +543,24 @@
      reads like a dossier index tab, not another floating badge or decoration. */
   /* Unboxed: property type is filter information, the reserve price is decision
      information. Only the money block is emphasised so price outranks type. */
-  .prop-card .pc-type { flex-wrap: wrap; }
-  .prop-card .pc-type-value { white-space: normal; overflow: visible; }
+  /* Label above value, always — not inline. `flex-wrap` gave a hybrid where short
+     types ("Condominium") stayed on the label's line and long ones ("2-Storey
+     Semi-Detached House") dropped below, so no two cards agreed. Stacking is also
+     the same shape as the TENDER START / BUILT-UP / TENURE rows underneath, so the
+     whole identity column now reads in one pattern. Full width means a property's
+     type name is never truncated or broken mid-phrase. */
   .prop-card .pc-type {
-    order: 3; min-width: 0; display: flex; align-items: baseline; gap: 8px;
-    margin-top: 12px; padding: 0;
+    order: 3; min-width: 0; display: flex; flex-direction: column; gap: 5px;
+    margin-top: 14px; padding: 0;
   }
   .prop-card .pc-type-label {
-    flex: none; color: var(--muted); font-size: 9.5px; font-weight: 800;
+    color: var(--muted); font-size: 10px; font-weight: 800;
     letter-spacing: .11em; line-height: 1.25; text-transform: uppercase;
   }
   .prop-card .pc-type-value {
-    min-width: 0; overflow: hidden; color: var(--ink); font-size: 13.5px;
-    font-weight: 700; letter-spacing: -.01em; line-height: 1.3;
-    text-overflow: ellipsis; white-space: nowrap;
+    min-width: 0; color: var(--ink); font-size: 16px;
+    font-weight: 700; letter-spacing: -.015em; line-height: 1.3;
+    white-space: normal; overflow-wrap: break-word;
   }
     .prop-card .pc-type.is-missing .pc-type-label,
   .prop-card .pc-type.is-missing .pc-type-value { color: var(--muted); }
@@ -946,9 +950,9 @@
   .props-grid.list-mode .pc-title { font-size: 25px; letter-spacing: -.02em; }
   .props-grid.list-mode .pc-loc { font-size: 14.5px; }
   .props-grid.list-mode .pc-loc svg { width: 15px; height: 15px; }
-  .props-grid.list-mode .pc-type { margin-top: 12px; }
+  .props-grid.list-mode .pc-type { margin-top: 16px; }
   .props-grid.list-mode .pc-type-label { font-size: 11px; letter-spacing: .085em; }
-  .props-grid.list-mode .pc-type-value { font-size: 16.5px; }
+  .props-grid.list-mode .pc-type-value { font-size: 19.5px; }
   .props-grid.list-mode .pc-detail dt { font-size: 11px; letter-spacing: .075em; }
   .props-grid.list-mode .pc-detail dd { font-size: 15.5px; margin-top: 5px; }
   .props-grid.list-mode .pc-detail + .pc-detail { margin-left: 16px; padding-left: 16px; }

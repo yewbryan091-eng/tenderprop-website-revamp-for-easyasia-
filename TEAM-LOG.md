@@ -68,6 +68,21 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · property type standardised to label-above-value
+My own `flex-wrap: wrap` fix created a hybrid: short types ("Condominium") stayed on the label's
+line, long ones ("2-Storey Semi-Detached House") dropped below — so no two cards agreed. Now
+`.pc-type` is **always** a flex column, label above value. Three wins at once: every card
+identical, the value gets full column width so a type name is never truncated or broken
+mid-phrase, and it is the same shape as the TENDER START / BUILT-UP / TENURE rows below it, so
+the identity column reads in one pattern. Value scaled 13.5→16px (grid) and 16.5→19.5px (list).
+
+Verified both modes: all stacked, zero clipping, every type on a single line, list cards uniform
+at 308px.
+
+⚠️ **Open for next session:** grid cards still vary 614 vs 637px (~23px, one text line). Pre-existing,
+not from this change — likely `.pc-loc` wrapping on long "area, state" strings. Worth a look if
+Bryan asks about grid consistency; a `min-height` on `.pc-loc` is the likely fix.
+
 ### 30 Jul 2026 — Claude · list-card consistency, type scale, phone icon, townhouse
 1. **Root cause of "cards aren't consistent":** `detailRows()` filtered slots by
    `Boolean(value)`, so one card rendered "Tender start / Built-up" and the next
