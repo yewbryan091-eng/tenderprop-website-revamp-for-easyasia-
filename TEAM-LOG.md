@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 30 Jul 2026 | Inspecting current structure and rendered baseline; awaiting Bryan's next instruction |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Baseline inspected at desktop and 375px; awaiting Bryan's next instruction |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -67,6 +67,17 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 30 Jul 2026 — Codex · Residensi Sinaran baseline inspection
+Read the full project rules, decisions ledger and active detail-page plan, then inspected the
+component, dedicated CSS and mount-time behaviours without changing page code. Reviewed the
+rendered opening, gallery and Tender Information panel at 1440px and 375px: the live timer ticks,
+the console is clean, and document `scrollWidth` equals `clientWidth` at 375px. Confirmed the
+plan's known mobile issue: the horizontal section nav sits beneath the tall sticky site header
+while scrolling. Production build passes; repository-wide lint remains red on the pre-existing
+Prettier backlog. Also note that the detail component currently computes its 3% deposit locally
+instead of calling `depositOf()`; preserve the correct amount and route a future data refactor
+through the shared utility.
 
 ### 30 Jul 2026 — Claude · Serviced Apartment rename + location search empty state
 1. **"Serviced Residence" → "Serviced Apartment"** (Bryan). Data (2 records) + taxonomy label.
