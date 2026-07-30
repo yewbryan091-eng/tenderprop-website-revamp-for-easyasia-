@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 30 Jul 2026 | Compacting and restructuring the Tender Information section |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Compact Tender Information dossier shipped |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -67,6 +67,17 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 30 Jul 2026 — Codex · compact Tender Information dossier
+Removed the glossy red pin and kept the paperclip as the section's sole tender-notice signature.
+Rebuilt the section as a compact three-fact summary, clipped closing/action notice and three-step
+process; the 3% / +7% / 90% payment explanation is now a native disclosure, closed by default.
+Replaced the unsupported “many sales here close through negotiation” claim with the confirmed
+accept / decline / counter outcomes, and routed the displayed reserve, closing date and 3% deposit
+through the Sinaran data record and `depositOf()`. Kept the unconfirmed registration date because
+it already existed, but avoided adding a new deposit-payment timing claim. Rendered review: default
+card is 556px desktop / 1,338px at 375px, the timer ticks, disclosure works, no console errors and
+zero horizontal overflow. Production build and targeted ESLint pass.
 
 ### 30 Jul 2026 — Claude · fixed my own regression from the stretched-link change
 The stretched-link work needed the save button above the card-wide `::after`, and I wrote

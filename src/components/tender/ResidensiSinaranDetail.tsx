@@ -1,23 +1,28 @@
 import { useEffect, useState } from "react";
 
+import { TENDERS } from "@/data/tenders";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
+import { depositOf, fmtDate } from "@/lib/tender-utils";
 import "@/styles/tender-detail.css";
 
 /* Ported 1:1 from residensi-sinaran-detail.html — the design canon.
    Class names and DOM ids are unchanged so EasyAsia can lift the markup. */
 
-/* Single source of truth for this listing's tender close. */
-const TENDER_CLOSE_ISO = "2028-12-31T17:00:00+08:00";
-const TENDER_CLOSE_LABEL = "31 Dec 2028";
+const SINARAN_TENDER = TENDERS.find((tender) => tender.name === "Residensi Sinaran");
+if (!SINARAN_TENDER) throw new Error("Residensi Sinaran tender data is missing");
+
+/* Single source of truth for this listing's reserve, deposit and tender close. */
+const TENDER_CLOSE_ISO = `${SINARAN_TENDER.closingDate}T17:00:00+08:00`;
+const TENDER_CLOSE_LABEL = fmtDate(SINARAN_TENDER.closingDate);
 
 /* The payment ladder is derived, never typed. Founder-confirmed 30 Jul 2026: the 3%
    tender deposit is the Malaysian earnest deposit — the first slice of the standard
    10% down payment, not a separate platform charge. Balance to 10% falls due at SPA,
    the remaining 90% on completion. */
-const RESERVE = 517_000;
+const RESERVE = SINARAN_TENDER.reservePrice;
+const DEPOSIT = depositOf(SINARAN_TENDER);
 const rm = (n: number) => "RM" + Math.round(n).toLocaleString("en-MY");
-const DEPOSIT_PCT = 0.03;
 
 export function ResidensiSinaranDetail() {
   useEffect(() => initDetailPage(), []);
@@ -113,25 +118,136 @@ export function ResidensiSinaranDetail() {
 
         <section className="blk" id="tender">
           <div className="wrap">
-            <div className="v1"><svg className="tp-pin" viewBox="0 0 44 44" aria-hidden="true" focusable="false"><defs><radialGradient id="tpPinDome" cx="34%" cy="28%" r="74%"><stop offset="0%" stopColor="#EC6C5E"/><stop offset="40%" stopColor="#B32218"/><stop offset="100%" stopColor="#63120D"/></radialGradient><radialGradient id="tpPinGloss" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#FFFFFF" stopOpacity=".9"/><stop offset="100%" stopColor="#FFFFFF" stopOpacity="0"/></radialGradient><filter id="tpPinBlur" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="1.7"/></filter></defs><ellipse cx="23.4" cy="32.4" rx="9.6" ry="3.3" fill="#17130F" opacity=".26" filter="url(#tpPinBlur)"/><circle cx="22" cy="20" r="11.2" fill="url(#tpPinDome)"/><circle cx="22" cy="20" r="11.2" fill="none" stroke="#54100B" strokeOpacity=".5" strokeWidth="1"/><ellipse cx="17.9" cy="15.3" rx="5.6" ry="4.3" fill="url(#tpPinGloss)" opacity=".5"/><ellipse cx="17.1" cy="14.4" rx="2.2" ry="1.5" fill="#FFFFFF" opacity=".92" transform="rotate(-28 17.1 14.4)"/></svg><div className="v1-top"><h3>Tender Information</h3></div><div className="v1-grid"><div className="v1-main"><div className="v1-price"><span className="lbl">Reserve price</span><div className="num">RM517,000</div></div><div className="v1-facts"><div><span className="lbl">Tender deposit</span><b className="dep-amt">{rm(RESERVE * DEPOSIT_PCT)}</b><span className="sub">Refundable &middot; part of your 10%</span></div><div><span className="lbl">Tender method</span><b>Sealed E-Tender</b><span className="sub">Offers confidential until close</span></div><div><span className="lbl">Registration by</span><b>17 Dec 2028</b><span className="sub">Account verified by this date</span></div></div></div><aside className="v1-rail" id="tender-action-panel"><svg className="tp-clip tp-clip-back" viewBox="0 0 28 72" aria-hidden="true" focusable="false"><path d="M9 48V16a5 5 0 0 1 10 0v40a8 8 0 0 1-16 0V12a7 7 0 0 1 7-7h2"/></svg><svg className="tp-clip tp-clip-front" viewBox="0 0 28 72" aria-hidden="true" focusable="false"><path d="M9 30v18"/></svg><span className="lbl">Tender closes</span><div className="v1-date">{TENDER_CLOSE_LABEL}</div><div className="v1-timer" role="timer" aria-label="Time remaining until tender closes">{cd ? (<><span className="u"><b>{cd.d}</b><i>d</i></span><span className="sep">:</span><span className="u"><b>{String(cd.h).padStart(2, "0")}</b><i>h</i></span><span className="sep">:</span><span className="u"><b>{String(cd.m).padStart(2, "0")}</b><i>m</i></span><span className="sep">:</span><span className="u"><b>{String(cd.s).padStart(2, "0")}</b><i>s</i></span></>) : (<span className="u"><b>{daysLabel ?? "\u2014"}</b></span>)}</div><span className="v1-cd">Offers close 5:00 PM (MYT)</span><a className="btn-red" href="#">Apply for Tender</a><a className="btn-wa" href="https://wa.me/60123938255" target="_blank" rel="noopener">Ask the agent on WhatsApp &rarr;</a></aside></div><div className="v1-steps"><div className="stepshead">How the tender works</div><ol><li><span className="n">1</span><div><b>Register and verify</b><p>Create your account and complete verification.</p></div></li><li><span className="n">2</span><div><b>Submit your tender</b><p>Enter your confidential offer, then place the deposit in your member account.</p></div></li><li><span className="n">3</span><div><b>The seller responds</b><p>Results within 5 working days of closing — accepted, countered, or refunded in full.</p></div></li></ol></div>
+            <div className="v1">
+              <div className="v1-top">
+                <h3>Tender Information</h3>
+              </div>
 
-              {/* Founder, 30 Jul: "it's not about win or lose... there's always a chance/room for
-                  negotiation done by the agent, the agent can also pursue the buyer or the seller."
-                  The outcome is NOT binary, and saying so removes the all-or-nothing fear that
-                  stops people submitting at all. */}
-              <p className="v1-negotiate"><b>Not the highest offer? That isn&rsquo;t the end.</b> A tender is an opening position, not a lottery ticket. TenderProp can take your offer back to the seller, or come back to you with a counter — many sales here close through negotiation rather than on the first number submitted.</p>
+              <div className="v1-grid">
+                <div className="v1-main">
+                  <div className="v1-facts">
+                    <div className="v1-price">
+                      <span className="lbl">Reserve price</span>
+                      <b className="num">{rm(RESERVE)}</b>
+                      <span className="sub">Minimum offer considered</span>
+                    </div>
+                    <div>
+                      <span className="lbl">Tender deposit</span>
+                      <b className="dep-amt">{DEPOSIT}</b>
+                      <span className="sub">Refundable &middot; part of your 10%</span>
+                    </div>
+                    <div>
+                      <span className="lbl">Tender method</span>
+                      <b>Sealed E-Tender</b>
+                      <span className="sub">Your offer stays confidential</span>
+                    </div>
+                  </div>
+                  <p className="v1-reassure">
+                    <b>Not an extra charge.</b> Your 3% deposit counts toward the standard 10%
+                    down payment and is refunded in full if no sale proceeds.
+                  </p>
 
-              {/* The deposit read as a standalone RM15,510 risk. It is the earnest deposit —
-                  the buyer's first payment toward the house, not a fee for entering. */}
-              <div className="v1-ladder">
-                <div className="ladderhead">Where your deposit goes</div>
-                <ol>
-                  <li><span className="pct">3%</span><div><b>{rm(RESERVE * DEPOSIT_PCT)}</b><span>Tender deposit, paid in your member account. Refunded in full if no sale proceeds.</span></div></li>
-                  <li><span className="pct">+7%</span><div><b>{rm(RESERVE * (0.1 - DEPOSIT_PCT))}</b><span>Balance of the 10% down payment, on signing the SPA.</span></div></li>
-                  <li><span className="pct">90%</span><div><b>{rm(RESERVE * 0.9)}</b><span>On completion, usually through your bank loan.</span></div></li>
-                </ol>
-                <p className="laddernote"><b>Your tender deposit is not an extra cost.</b> It is the first part of the standard 10% down payment every Malaysian subsale buyer pays — you are simply paying it earlier. Figures shown against the reserve price; the final amount follows the agreed price. Full process and terms on the <a href="#">How To Tender</a> page.</p>
-              </div></div>
+                  <div className="v1-steps">
+                    <div className="stepshead">How the tender works</div>
+                    <ol>
+                      <li>
+                        <span className="n">1</span>
+                        <div><b>Register and verify</b><p>Complete account verification before the registration deadline.</p></div>
+                      </li>
+                      <li>
+                        <span className="n">2</span>
+                        <div><b>Submit your tender</b><p>Send your sealed offer and review the deposit terms in your member account.</p></div>
+                      </li>
+                      <li>
+                        <span className="n">3</span>
+                        <div><b>The seller responds</b><p>Expect an acceptance, decline or counter within 5 working days of closing.</p></div>
+                      </li>
+                    </ol>
+                    <p className="v1-negotiate">
+                      <b>Three possible outcomes.</b> The seller may accept, decline or counter through
+                      the appointed agent. If no sale proceeds, the deposit is refunded in full.
+                    </p>
+                  </div>
+                </div>
+
+                <aside className="v1-rail" id="tender-action-panel">
+                  <svg className="tp-clip tp-clip-back" viewBox="0 0 28 72" aria-hidden="true" focusable="false">
+                    <path d="M9 48V16a5 5 0 0 1 10 0v40a8 8 0 0 1-16 0V12a7 7 0 0 1 7-7h2" />
+                  </svg>
+                  <svg className="tp-clip tp-clip-front" viewBox="0 0 28 72" aria-hidden="true" focusable="false">
+                    <path d="M9 30v18" />
+                  </svg>
+                  <span className="v1-rail-kicker">Tender notice</span>
+                  <div className="v1-register">
+                    <span className="lbl">Register by</span>
+                    <b>17 Dec 2028</b>
+                    <span>Account verified by this date</span>
+                  </div>
+                  <div className="v1-deadline">
+                    <span className="lbl">Tender closes</span>
+                    <div className="v1-date">{TENDER_CLOSE_LABEL}</div>
+                    <div
+                      className="v1-timer"
+                      role="timer"
+                      aria-label="Time remaining until tender closes"
+                      aria-live="off"
+                    >
+                      {cd ? (
+                        <>
+                          <span className="u"><b>{cd.d}</b><i>d</i></span>
+                          <span className="sep">:</span>
+                          <span className="u"><b>{String(cd.h).padStart(2, "0")}</b><i>h</i></span>
+                          <span className="sep">:</span>
+                          <span className="u"><b>{String(cd.m).padStart(2, "0")}</b><i>m</i></span>
+                          <span className="sep">:</span>
+                          <span className="u"><b>{String(cd.s).padStart(2, "0")}</b><i>s</i></span>
+                        </>
+                      ) : (
+                        <span className="u"><b>{daysLabel ?? "\u2014"}</b></span>
+                      )}
+                    </div>
+                    <span className="v1-cd">Offers close 5:00 PM (MYT)</span>
+                  </div>
+                  <a className="btn-red" href="#">Apply for Tender</a>
+                  <a className="btn-wa" href="https://wa.me/60123938255" target="_blank" rel="noopener">
+                    Ask the agent on WhatsApp &rarr;
+                  </a>
+                </aside>
+              </div>
+
+              <details className="v1-ladder">
+                <summary>
+                  <span>
+                    <b>How payments work</b>
+                    <small>3% deposit &middot; +7% at SPA &middot; 90% on completion</small>
+                  </span>
+                  <span className="v1-ladder-toggle" aria-hidden="true">+</span>
+                </summary>
+                <div className="v1-ladder-body">
+                  <p className="v1-ladder-basis">
+                    Illustration based on the {rm(RESERVE)} reserve price. Final amounts follow the agreed price.
+                  </p>
+                  <ol>
+                    <li>
+                      <span className="pct">3%</span>
+                      <div><b>{DEPOSIT}</b><span>Tender deposit. Refunded in full if no sale proceeds.</span></div>
+                    </li>
+                    <li>
+                      <span className="pct">+7%</span>
+                      <div><b>{rm(RESERVE * 0.07)}</b><span>Balance of the 10% down payment on signing the SPA.</span></div>
+                    </li>
+                    <li>
+                      <span className="pct">90%</span>
+                      <div><b>{rm(RESERVE * 0.9)}</b><span>On completion, usually through your bank loan.</span></div>
+                    </li>
+                  </ol>
+                  <p className="laddernote">
+                    <b>Your tender deposit is the first part of the standard 10% down payment.</b>{" "}
+                    Read the full process and terms on the <a href="#">How To Tender</a> page.
+                  </p>
+                </div>
+              </details>
+            </div>
           </div>
         </section>
 
