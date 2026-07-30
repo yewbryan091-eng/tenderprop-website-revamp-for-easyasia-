@@ -145,6 +145,31 @@ gradients, no glossy 3D, no imported iNewProject palette. Adopt patterns, never 
 **14. Measure it.** Do not claim it is better — measure it. Row heights, alignment positions,
 contrast, overflow, before/after. Numbers in the report.
 
+## 🔴 PUSH BEFORE YOU STOP — non-negotiable (Bryan, 30 Jul 2026)
+
+*"why every time codex didnt push, he must push always, that means the agents.md is not good
+enough."* He is right — the old protocol said how to push, never **when**. It does now.
+
+**A turn is not finished until `git push origin main` has run and you have reported the result.**
+Work that exists only in your working tree does not exist:
+- Bryan reviews on `localhost:5173`, which serves the **working tree** — so *you* can see your work
+  while the repo, EasyAsia and the other agent cannot.
+- The other agent pulls before starting. Unpushed work is invisible to them, so they plan against
+  a stale page and you get a conflict or duplicated effort.
+- A session can end without warning. Anything unpushed is lost.
+
+**Rules:**
+1. **Push at the end of every turn.** Not "when the feature is done" — every turn.
+2. **If the work is mid-flight, still commit and push it**, with `WIP:` in the subject and a note
+   in `TEAM-LOG.md` saying what is half-built. A pushed WIP is infinitely better than a clean
+   working tree nobody else can see.
+3. **Say so in your reply.** State the pushed range (e.g. `af5c726..4add2bf`). "I've made the
+   change" without a push line is an unfinished report.
+4. **Never leave another agent's uncommitted files in your commit.** `git status` first; stage only
+   your own paths. If the tree has someone else's work in it, say so rather than sweeping it in.
+5. **Before starting, `git pull` and claim your area** in the TEAM-LOG claims table. Release it
+   when you push.
+
 ## Git protocol (prevents agents clobbering each other)
 1. `git pull` before you touch anything.
 2. Leave the working tree CLEAN when you stop: commit + push, or discard. Never leave uncommitted edits for the next agent to trip over.
