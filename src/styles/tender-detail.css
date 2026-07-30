@@ -85,15 +85,8 @@
   outline: 2px solid var(--burgundy);
   outline-offset: 4px;
 }
-.v1-top { margin-bottom: 20px; }
-.v1-top h3 {
-  margin: 0;
-  font-family: var(--serif);
-  font-size: clamp(28px, 3vw, 34px);
-  font-weight: 600;
-  letter-spacing: -.01em;
-  line-height: 1.1;
-}
+.v1-top { margin-bottom: 0; }  /* the shared title rule supplies the gap */
+/* metrics now come from the shared .sec-title rule above */
 .v1-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
@@ -322,6 +315,23 @@
   .wrap-wide { max-width: 1520px; }
   .num { font-variant-numeric: tabular-nums; }
 
+  /* ══ SECTION FLOW SYSTEM (30 Jul 2026) ═══════════════════════════════════════════
+     Bryan: standardise and finalise the gap, the type, and the section-to-section flow.
+     Measured audit of all 11 sections found three faults:
+       1. Padding was already uniform at 36/36 — but that is only 72px between sections
+          on an 11-section page, which is what made the flow feel cramped.
+       2. The band alternation had DRIFTED: #location and #agent were both white, so the
+          rhythm broke halfway down. Hand-assigned classes always drift eventually, so
+          the alternation is now positional and cannot.
+       3. #tender's heading was an H3 at 34px with margin-bottom 0, while every other
+          section used an H2 at 36px with 18px — a different tag AND a different size.
+     Every value below derives from these three, so changing the page's rhythm is one edit. */
+  :root {
+    --sec-pad: clamp(40px, 4vw, 56px);          /* per side → 80–112px between sections */
+    --sec-title-size: clamp(1.75rem, 2.4vw, 2.25rem);
+    --sec-title-gap: 26px;                      /* section title → its first content */
+  }
+
   /* Header */
   header.site { background: var(--paper); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 60; }
   .nav { display: flex; align-items: center; gap: 28px; padding: 14px 0; }
@@ -442,9 +452,22 @@
   @media(max-width: 860px) { .subnav { top: 0; } }
 
   /* Section scaffolding */
-  section.blk { padding: clamp(28px, 4vh, 46px) 0; scroll-margin-top: 128px; }section.blk { --band-bg: var(--paper); }section.blk.band-card { background: var(--card); --band-bg: var(--card); }section.blk.band-deep { background: var(--paper-deep); --band-bg: var(--paper-deep); }section.blk.band-paper { background: var(--paper); --band-bg: var(--paper); }
+  section.blk { padding: var(--sec-pad) 0; scroll-margin-top: 128px; }
+  section.blk { --band-bg: var(--paper); }
+  /* Positional: #tender is section 2 and paper, then it alternates all the way down.
+     Inserting or removing a section re-solves the whole chain. --band-bg travels with the
+     background so nested cards that match their band stay correct. */
+  main > section.blk:nth-of-type(even) { background: var(--paper); --band-bg: var(--paper); }
+  main > section.blk:nth-of-type(odd)  { background: var(--card);  --band-bg: var(--card); }
+section.blk.band-card { background: var(--card); --band-bg: var(--card); }section.blk.band-deep { background: var(--paper-deep); --band-bg: var(--paper-deep); }section.blk.band-paper { background: var(--paper); --band-bg: var(--paper); }
   .blkcard { background: transparent; border: none; border-radius: 0; padding: 0; }
-  .sec-title { font-family: var(--serif); font-size: clamp(1.7rem, 2.4vw, 2.25rem); font-weight: 600; letter-spacing: -.01em; margin: 0 0 18px; }
+  .sec-title,
+  .v1-top h3 {
+    font-family: var(--serif); font-optical-sizing: auto;
+    font-size: var(--sec-title-size); font-weight: 600;
+    letter-spacing: -.015em; line-height: 1.15;
+    margin: 0 0 var(--sec-title-gap);
+  }
   
   .kicker { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--burgundy); opacity: .9; margin: 0 0 6px; }
 
@@ -814,7 +837,7 @@
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   /* No top rule: it sat immediately under the "Property Details" heading and read as a
      second underline. The bottom rule stays — it separates pricing from the band. */
-  margin: 0 0 24px; padding: 2px 0 20px;
+  margin: 0 0 24px; padding: 0 0 20px;   /* title→content gap is --sec-title-gap's job */
   border-bottom: 1px solid var(--line);
 }
 .pd-pricing > div { min-width: 0; padding: 0 20px; border-left: 1px solid var(--line); }

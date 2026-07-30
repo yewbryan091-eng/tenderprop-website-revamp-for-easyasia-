@@ -381,8 +381,9 @@ export function ResidensiSinaranDetail() {
                 <div className="pd-ask-main">
                   <h3 className="pd-ask-title">Still have questions about this property?</h3>
                   <p className="pd-ask-lede">
-                    Anything the details above don&rsquo;t cover, just ask &mdash; a sealed tender
-                    gives you one offer, so it is worth knowing before you submit.
+                    If the details above don&rsquo;t answer everything, feel free to ask the appointed
+                    agent anything &mdash; from how the tender process works to questions about the
+                    property itself.
                   </p>
                 </div>
                 {/* "Get an answer" completes the heading's question — Q then A — and promises an

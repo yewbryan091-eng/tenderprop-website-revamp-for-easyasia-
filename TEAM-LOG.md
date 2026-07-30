@@ -68,6 +68,28 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · SECTION FLOW SYSTEM finalised (measured audit of all 11 sections)
+**Codex: never hand-tune a section's padding, title size or background again.** Three `:root`
+tokens in `tender-detail.css` govern the page: `--sec-pad` (clamp 40–56px per side → 80–112px
+between sections), `--sec-title-size` (36px), `--sec-title-gap` (26px). See
+`PLAN-residensi-sinaran.md` → SECTION FLOW SYSTEM.
+
+What the audit actually found — Bryan was right that something was off, and one of them was a bug:
+1. **Padding was already uniform (36/36)** but only gave 72px between sections on an 11-section
+   page. Now 80–112px.
+2. 🐛 **The alternation had DRIFTED.** `#location` and `#agent` were BOTH white, so the paper/white
+   rhythm broke halfway down. That is the "flow" problem Bryan could feel but not name. Fixed
+   positionally — `main > section.blk:nth-of-type(even|odd)` — so it cannot drift again and a new
+   section re-solves the chain. `--band-bg` travels with the background.
+3. **`#tender`'s heading was an H3 at 34px with margin-bottom 0** while the other nine were H2 at
+   36px with 18px. One shared rule now covers `.sec-title` and `.v1-top h3`; §4's bespoke metrics
+   are deleted.
+4. Bryan's specific complaint — Property Details title sitting too close to "Reserve price per sq
+   ft" — was `.pd-pricing`'s `padding-top: 2px` fighting an 18px title margin. Gap is now a single
+   token at 26px.
+Verified: 10 sections, ONE padding value, ONE title size, ONE title gap, ZERO alternation
+collisions, no overflow.
+
 ### 30 Jul 2026 — Claude · §5 CTA copy: "Get an answer" (no "agent" front-of-house)
 Bryan did not want "agent" on the button — that is the **VOICE RULE** biting: agency identity
 belongs in the agent block, About, FAQ and footer, not in front-of-house CTAs.

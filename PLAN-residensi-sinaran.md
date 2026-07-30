@@ -193,6 +193,30 @@ buyer paranoid and suspicious for no reason."*
 6. ❓ Exact SPA day-counts and the loan-declined case — still open.
 7. ❓ Is "Registration by = close minus 14 days" the real rule? The shown date is assumed.
 
+## SECTION FLOW SYSTEM — finalised 30 Jul 2026 (do not hand-tune per section)
+
+Three variables in `tender-detail.css` `:root` govern the whole page's rhythm. Change the page's
+feel by editing these, never by adding margins to individual sections:
+
+| Token | Value | Governs |
+|---|---|---|
+| `--sec-pad` | `clamp(40px, 4vw, 56px)` | section padding per side → **80–112px between sections** |
+| `--sec-title-size` | `clamp(1.75rem, 2.4vw, 2.25rem)` | every section heading → **36px** at desktop |
+| `--sec-title-gap` | `26px` | section heading → its first content |
+
+**Backgrounds alternate positionally**, not by hand-assigned class:
+`main > section.blk:nth-of-type(even)` = paper `#FAF5F0`, `:nth-of-type(odd)` = card `#FFF`.
+`--band-bg` travels with it so nested cards that match their band stay correct. Inserting or
+removing a section re-solves the entire chain — which matters, because the hand-assigned version
+**had already drifted**: `#location` and `#agent` were both white, breaking the rhythm halfway
+down the page. `.band-card` / `.band-paper` remain as deliberate opt-outs only.
+
+**One title treatment** shared by `.sec-title` and `.v1-top h3`. Before this, `#tender` used an
+H3 at 34px with `margin-bottom: 0` while all nine other sections used an H2 at 36px with 18px.
+
+Verified after the change: 10 sections, **one** padding value (56/56), **one** title size (36px),
+**one** title gap (26px), **zero** alternation collisions, paper/white perfectly interleaved.
+
 ## Standing constraints (from AGENTS.md — binding)
 Sealed-tender vocabulary only · deposit computed at 3% of reserve, never hardcoded · no invented
 content except the two logged demo exceptions (tender start date on cards; every card routing
