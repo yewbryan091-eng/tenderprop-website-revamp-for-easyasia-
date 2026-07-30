@@ -69,6 +69,15 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · All 3 "New to e-tender?" treatments rendered together for Bryan to pick
+`HOWTO_TREATMENT = "all"` in `src/routes/tender/index.tsx` renders three labelled copies of the
+search heading row, one per treatment, stacked with dashed separators. **This is temporary.**
+When Bryan picks, set the constant to that number, delete `.howto-compare-row` / `.howto-tag`
+from `tender-listings.css`, delete the other two `[data-howto]` blocks, and drop the `"all"`
+branch and the `.map()` in the route — the row goes back to a single `.search-intro`.
+Only the first heading carries `id="property-search-title"`; duplicate ids would break the
+section's `aria-labelledby`. Don't ship compare mode.
+
 ### 31 Jul 2026 — Claude · "New to e-tender?" is now TYPE, not a card — 3 treatments live
 Bryan diagnosed it and he was right: **the solid maroon fill was the fault, not the position.**
 This page is flat cream and restrained type, so a saturated block reads as an ad wherever it

@@ -1189,3 +1189,15 @@
   color: color-mix(in srgb, var(--burgundy) 72%, transparent);
 }
 @media (prefers-reduced-motion: reduce) { .howto-link *, .howto-link { transition: none; } }
+
+/* ══ TEMPORARY — side-by-side compare of the three "New to e-tender?" treatments ══════
+   Delete this block, .howto-compare-row and the "all" branch once Bryan picks a number. */
+.howto-compare-row.is-solo { display: contents; }
+.howto-compare-row:not(.is-solo) { padding: 0 0 26px; border-bottom: 1px dashed var(--line); margin-bottom: 26px; }
+.howto-compare-row:not(.is-solo):last-of-type { border-bottom: 0; margin-bottom: 22px; }
+.howto-tag {
+  display: inline-block; margin-bottom: 12px;
+  font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.howto-compare-row:not(.is-solo) .search-intro { margin-bottom: 0; }
