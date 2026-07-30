@@ -453,8 +453,8 @@
      overflow guard. **If the heading or link copy changes, re-measure this number.** */
   @media(max-width: 1200px) {
     .hero-search-band .search-intro { display: block; }
-    .hero-search-band .search-intro .howto-link { margin-top: 12px; }
-    .hero-search-band .search-intro .howto-link::before { display: none; }
+    .hero-search-band .search-intro .howto-line { margin-top: 12px; }
+    .hero-search-band .search-intro .howto-line::before { display: none; }
   }
   @media(max-width: 640px) {
     .hero-search-band .search-intro { margin-bottom: 18px; }
@@ -1138,43 +1138,44 @@
    CHOSEN 31 Jul (treatment 2 of 3). Bryan asked for it close to the title: at the far
    right of the row it had no relationship to the heading and read as a stray link.
    Type, never a filled block — the maroon card this replaced read as an ad wherever it
-   was placed, because a saturated block is the loudest object on a flat cream page.
-   The 2px rule gives it an edge to sit against, so it reads as part of the masthead. */
-.howto-link {
-  flex: none;
+   was placed, because a saturated block is the loudest object on a flat cream page. */
+.howto-line {
+  flex: none; margin: 0;
   /* Centred on the rule, NOT baseline-aligned to the heading. Against 46px type a 17px
      line sitting on the shared baseline hangs at the foot of the rule and reads as
-     sinking; with this size gap optical centring beats baseline alignment. The rule
-     itself still ends on the heading's baseline — see ::before. */
+     sinking; past roughly a 2:1 size ratio, optical centring beats baseline alignment.
+     The rule itself still ends on the heading's baseline — see ::before. */
   display: inline-flex; align-items: center;
-  text-decoration: none; font-size: 17px; line-height: 1.3;
+  font-size: 17px; line-height: 1.3;
 }
-/* Text and arrow live in their own row so the arrow centres on the TEXT. As a direct
-   sibling of the rule it centred against the flex line — which the 33px rule had made
-   far taller than the type — and floated up near the cap line. */
-.howto-text { display: inline-flex; align-items: center; gap: 7px; }
 /* The rule is a flex item, not a border. An empty block flex item baseline-aligns on its
    BOTTOM edge, so the rule ends exactly on the shared baseline and rises to the heading's
    cap height — derived from --head-size so it tracks the clamp instead of being a guessed
-   pixel value. As a border on the link box it sagged 16px below the cap and stopped 4px
-   short of the baseline, which read as an arbitrary tick rather than a divider. */
-.howto-link::before {
+   pixel value. As a border it sagged 16px below the cap and stopped short of the baseline. */
+.howto-line::before {
   content: ""; flex: none; width: 2px; height: calc(var(--head-size) * .72);
   margin-right: 20px;
   background: color-mix(in srgb, var(--burgundy) 55%, transparent);
   transition: background .16s ease;
 }
-/* Hover moves the rule too, so the divider and the link read as one object. */
-.howto-link:hover::before { background: var(--burgundy); }
-.howto-link b { font-weight: 600; color: var(--ink); }
-.howto-rest {
-  color: var(--burgundy);
+/* The rule belongs to the link even though it is not inside it, so it answers the link's
+   hover — the divider and the link read as one object. */
+.howto-line:has(.howto-link:hover)::before { background: var(--burgundy); }
+.howto-line b { flex: none; margin-right: 8px; font-weight: 600; color: var(--ink); }
+
+/* Underlined AND burgundy AND arrowed: colour alone is never a link affordance, and the
+   underline is what makes it read as clickable at a glance without going blue, which
+   would be the only non-brand colour on the page. */
+.howto-link {
+  display: inline-flex; align-items: center; gap: 7px;
+  color: var(--burgundy); font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 4px; text-decoration-thickness: 1.5px;
-  text-decoration-color: color-mix(in srgb, var(--burgundy) 38%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--burgundy) 55%, transparent);
   transition: text-decoration-color .16s ease;
 }
-.howto-link:hover .howto-rest { text-decoration-color: var(--burgundy); }
+.howto-link:hover { text-decoration-color: var(--burgundy); }
+.howto-link:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 4px; border-radius: 3px; }
 .howto-arrow {
   /* The path starts at x=5 of a 24 viewBox, so the glyph carries ~3px of its own left
      padding — pulled back so the optical gap matches the 7px metric one. */
@@ -1184,5 +1185,4 @@
   transition: transform .16s ease;
 }
 .howto-link:hover .howto-arrow { transform: translateX(3px); }
-.howto-link:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 4px; border-radius: 3px; }
-@media (prefers-reduced-motion: reduce) { .howto-link, .howto-link * { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .howto-line *, .howto-line::before { transition: none; } }

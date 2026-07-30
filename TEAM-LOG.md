@@ -69,6 +69,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · Only the link is a link now + link affordance settled (no blue)
+Bryan: *"why can i click on the link when i click on new to e-tender? thats so weird"* — correct,
+that was a real bug. The whole line was one `<a>`, so clicking apparently-inert text navigated.
+**Hit area must match affordance.** `<b>New to e-tender?</b>` now sits OUTSIDE the anchor in a
+`.howto-line` wrapper; only "See how it works →" is clickable. Verified by hit-testing
+`elementFromPoint` at the centre of each: question `false`, link `true`.
+
+The rule moved to `.howto-line::before` and answers the link's hover through
+`:has(.howto-link:hover)`, so the divider still lights with the link.
+
+**No blue.** Blue would be the only non-brand colour on the page and it is not needed: the link
+already carries three affordances — burgundy, underline, arrow. Colour alone is never sufficient,
+but colour + underline is the web's oldest convention and it works in any palette. Strengthened
+the underline 38% → 55% burgundy (solid on hover) and took the link to weight 500 so it separates
+from the 600 question. Classes `.howto-text` / `.howto-rest` are gone.
+
 ### 31 Jul 2026 — Claude · The line is now CENTRED on the rule, not baseline-aligned
 Bryan: *"move it to the middle man"*. He was reading the 17px line as hanging at the foot of the
 33px rule — because it was baseline-aligned to the heading, which is typographically correct and

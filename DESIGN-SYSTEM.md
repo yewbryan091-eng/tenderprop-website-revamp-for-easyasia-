@@ -207,6 +207,12 @@ Zero the margin below 860px, where the diagonal collapses.
   the tall element is a sibling of the group, not of its members. Verify by measuring both
   centres — they must be equal, not merely close.
 
+- **Hit area must match affordance.** If only part of a phrase looks clickable, only that part
+  may be clickable. Wrapping a whole line in `<a>` while styling one clause as the link means a
+  click on apparently-inert text navigates the page — Bryan hit this on "New to e-tender? See how
+  it works" and called it weird, correctly. Either make the whole thing look like a link, or put
+  the anchor around only the link text. Bigger tap targets are not worth surprise navigation.
+
 ## 6. Brand — non-negotiable
 
 - Cream / burgundy / red. **Never** import iNewProject's maroon palette. Adopt *patterns* from

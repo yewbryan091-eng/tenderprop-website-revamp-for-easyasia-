@@ -515,17 +515,18 @@ function TenderListings() {
                 so it reads as part of the masthead, not a stray link. */}
             <div className="search-intro">
               <h2 id="property-search-title">Find a property <span className="hl">open for e-tender</span></h2>
-              <a className="howto-link" href="/how-e-tender-works">
-                {/* The rule is a sibling of this span, not of the arrow — otherwise
-                    the arrow centres against the 33px rule instead of the text. */}
-                <span className="howto-text">
-                  <b>New to e-tender?</b>
-                  <span className="howto-rest">See how it works</span>
+              {/* The question is NOT inside the anchor. Only "See how it works" looks
+                  clickable, so only it may be clickable — a hit area larger than its
+                  affordance means a click that looks inert navigates the page. */}
+              <p className="howto-line">
+                <b>New to e-tender?</b>
+                <a className="howto-link" href="/how-e-tender-works" aria-label="See how e-tender works">
+                  See how it works
                   <svg className="howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M5 12h13M13 6l6 6-6 6" />
                   </svg>
-                </span>
-              </a>
+                </a>
+              </p>
             </div>
             <form
               className="search-form"
