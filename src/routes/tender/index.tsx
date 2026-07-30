@@ -402,7 +402,7 @@ function TenderListings() {
                 <li className="hero-assurance hero-assurance-agent">
                   <div>
                     <strong>Your offer reaches the seller directly</strong>
-                    <p>TenderProp puts your sealed offer in front of the seller for consideration &mdash; exactly as you submitted it, with nothing added or shopped around.</p>
+                    <p>Every e-tender offer is presented directly to the seller for fair and confidential consideration.</p>
                   </div>
                 </li>
                 <li className="hero-assurance hero-assurance-outcome">
