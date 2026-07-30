@@ -9,7 +9,7 @@ export type TypeOption = {
 };
 
 export const TYPE_TAXONOMY: TypeOption[] = [
-    { value: "all",            label: "All Property Type" },
+    { value: "all",            label: "All Property Types" },
     { value: "cat:residential", label: "----All Residential----", cat: "residential" },
     { value: "res-apt",   label: "Apartment/Condominium/Serviced Residence", types: ["Apartment", "Condominium", "Serviced Residence"] },
     { value: "res-ter",   label: "Terrace/link/Townhouse",                   types: ["Terrace House", "Link House", "Townhouse"] },

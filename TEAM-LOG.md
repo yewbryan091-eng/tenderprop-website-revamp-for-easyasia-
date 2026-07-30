@@ -68,6 +68,30 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · filter popup, search-bar alignment, list card, copy
+**Codex — credit where due, your filter LOGIC is kept wholesale and it is good:** closing-cycle
+filter (the tender-native dimension), reserve min/max with cross-disabled bounds, per-option live
+counts that disable zero-result choices, tenure/built-up/land ranges, aria-live match count,
+active-filter badge. I changed only presentation, plus one real bug:
+
+1. **Inline panel → modal.** Bryan asked for "the filter box pop up" like iProperty; the panel
+   was an inline region that shoved the page down. Now a centred `role="dialog"` + scrim, Escape
+   and backdrop close, scrollable body, sticky footer, full-screen sheet under 620px. Palette is
+   TenderProp's — iProperty's navy/black chrome is *their* brand, not a spec.
+   Footer's primary button reads **"Show N properties"** rather than "Apply": it names the outcome.
+2. **BUG (list card).** `.props-grid.list-mode .pc-details` set `grid-template-columns` — which
+   does NOT override the base rule's `grid-auto-flow: column`. So the three facts stayed in
+   columns inside the ~250px rail and clipped to "1", "9.", "F". Fixed by moving `.pc-details`
+   into `.pc-ident` (the wide column) in the TSX — safe for grid mode, where `.pc-ident`/`.pc-side`
+   are `display:contents` and position comes from `order`, not DOM parent. Facts now 200/190/190px,
+   no clipping; the rail keeps money + agent + CTA (the decision, not the description).
+3. **Search bar.** `.search-actions` used `padding-top: 18px` to guess the label height while a
+   stacked Search+Filters came to ~90px against a 66px label+input — so Search floated above the
+   label line. Now one row; all four controls share a baseline. Also `All Property Type` →
+   `Types` in `tender-taxonomy.ts`.
+4. Hero cycle-count line removed (Bryan, second time — do not reinstate). Privacy and
+   seller-presentation copy replaced with Bryan's own wording.
+
 ### 30 Jul 2026 — Codex · Tender listing property filters
 - Studied the current iProperty / PropertyGuru / EdgeProp filtering patterns, then kept only
   buyer-relevant fields backed by this inventory. Omitted catalogue clutter such as furnishing,

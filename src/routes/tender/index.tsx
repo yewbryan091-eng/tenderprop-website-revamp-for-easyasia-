@@ -427,9 +427,6 @@ function TenderListings() {
                   {HERO_DATE.day}<sup>{HERO_DATE.suffix}</sup> {HERO_DATE.month} {HERO_DATE.year}
                 </time>
               </p>
-              <p className="hero-cycle-count">
-                <strong>{NEXT_BATCH.count}</strong> {NEXT_BATCH.count === 1 ? "property" : "properties"} in this cycle
-              </p>
               <a className="btn red hero-cta" href="#listings">
                 View Tender Properties
               </a>
@@ -550,6 +547,8 @@ function TenderListings() {
                   </select>
                 </div>
                 <div className="search-actions">
+                  {/* One row, not a stack: a stacked Search+Filters is ~90px against a
+                      66px label+input, which is what pushed Search above the label line. */}
                   <button type="submit" className="btn red btn-search">Search</button>
                   <button
                     type="button"
@@ -572,11 +571,19 @@ function TenderListings() {
                 </div>
               </div>
 
+              {propertyFiltersOpen && (
+                <div
+                  className="property-filter-scrim"
+                  onClick={() => setPropertyFiltersOpen(false)}
+                  aria-hidden="true"
+                />
+              )}
               <div
                 className="property-filter-panel"
                 id="property-filters"
-                role="region"
-                aria-label="Property filters"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Filter tender properties"
                 hidden={!propertyFiltersOpen}
               >
                 <div className="property-filter-head">
@@ -599,6 +606,8 @@ function TenderListings() {
                     </button>
                   </div>
                 </div>
+
+                <div className="property-filter-body">
 
                 <div className="property-filter-grid">
                   <label className="property-filter-field is-closing">
@@ -709,6 +718,27 @@ function TenderListings() {
                       ))}
                     </select>
                   </label>
+                </div>
+                </div>
+
+                {/* Footer states the outcome — "Show 12 properties" beats a bare
+                    "Apply", which makes you guess what you are about to get. */}
+                <div className="property-filter-foot">
+                  <button
+                    type="button"
+                    className="pf-clear"
+                    onClick={clearPropertyFilters}
+                    disabled={activePropertyFilterCount === 0}
+                  >
+                    Clear all
+                  </button>
+                  <button
+                    type="button"
+                    className="pf-apply"
+                    onClick={() => setPropertyFiltersOpen(false)}
+                  >
+                    Show {sorted.length} {sorted.length === 1 ? "property" : "properties"}
+                  </button>
                 </div>
               </div>
             </form>

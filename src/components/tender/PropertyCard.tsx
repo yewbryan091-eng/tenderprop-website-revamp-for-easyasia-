@@ -77,6 +77,16 @@ export function PropertyCard({
             <span className="pc-type-label">Property type</span>
             <strong className="pc-type-value">{propertyType}</strong>
           </div>
+          {rows.length > 0 && (
+            <dl className="pc-details">
+              {rows.map((r) => (
+                <div className="pc-detail" key={r.label}>
+                  <dt>{r.label}</dt>
+                  <dd>{r.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
         </div>
 
         <div className="pc-side">
@@ -90,16 +100,6 @@ export function PropertyCard({
               <span className="pc-deposit-value">{depositOf(x)}</span>
             </div>
           </div>
-          {rows.length > 0 && (
-            <dl className="pc-details">
-              {rows.map((r) => (
-                <div className="pc-detail" key={r.label}>
-                  <dt>{r.label}</dt>
-                  <dd>{r.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
           <div className="pc-foot">
             <img className="pc-avatar" src={AGENT_PHOTO} alt="Stephen Yew, listing agent" loading="lazy" />
             <span className="pc-agent"><b>Stephen Yew</b><span>REN 123456</span></span>
