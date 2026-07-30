@@ -363,8 +363,9 @@
 
   /* Search band — sits directly below the hero date */
   .hero-search-band { background: var(--paper-deep); border-bottom: 1px solid var(--line); padding: clamp(34px, 5vw, 52px) 0 22px; }
-  .hero-search-band .search-intro { margin-bottom: 22px; max-width: 760px; }
-  .hero-search-band .search-intro h2 { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-weight: 600; font-size: clamp(30px, 4vw, 46px); line-height: 1.08; letter-spacing: -.015em; color: var(--ink); }
+  /* Heading left, "New to e-tender?" card right, bottoms on one line. */
+  .hero-search-band .search-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 22px; }
+  .hero-search-band .search-intro h2 { max-width: 760px; margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-weight: 600; font-size: clamp(30px, 4vw, 46px); line-height: 1.08; letter-spacing: -.015em; color: var(--ink); }
   .hero-search-band .search-intro h2 .hl { color: var(--burgundy); font-style: italic; }
   .search-form { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--burgundy); border-radius: 12px; padding: 18px 18px 20px; box-shadow: 0 1px 2px rgba(23,19,15,.03); }
   .search-bar { display: grid; grid-template-columns: minmax(0,5fr) minmax(0,2fr) minmax(0,1.6fr); gap: 12px; align-items: end; }
@@ -442,8 +443,15 @@
     .property-filter-field.is-built-up,
     .property-filter-field.is-land-area { grid-column: span 1; }
   }
+  @media(max-width: 1020px) {
+    /* Below this the heading would wrap to two lines to make room. Stack instead:
+       the card spans the row, keeping one message per line. */
+    .hero-search-band .search-intro { display: block; }
+    .hero-search-band .search-intro .howto-card { margin-top: 18px; max-width: 520px; }
+  }
   @media(max-width: 640px) {
     .hero-search-band .search-intro { margin-bottom: 18px; }
+    .hero-search-band .search-intro .howto-card { max-width: none; margin-top: 16px; }
     .search-form { padding: 14px; }
     .search-bar { grid-template-columns: 1fr; }
     .search-actions { grid-column: auto; }
@@ -1119,42 +1127,37 @@
   .hero-panel-left .hero-clock { align-self: center; margin-right: 0; }
 }
 
-/* ══ "NEW TO E-TENDER?" BAND — full-bleed strip between the hero and the search ══════
-   Bryan picked the filled treatment and asked for better placement than the panel's foot,
-   where it overflowed the hero at narrower windows. Here it spans the page on the natural
-   scan path, costs the hero nothing, and cannot clip. Burgundy, never red — red stays
-   reserved for the page's one action. */
-.hero-howto-band {
-  display: block; text-decoration: none;
-  background: var(--burgundy); color: var(--burgundy-ink);
-}
-.hero-howto-band-inner {
+/* ══ "NEW TO E-TENDER?" CARD — right of the search heading ═══════════════════════════
+   The heading row carried one line of type and ~600px of dead space; the signal fills it
+   rather than adding a fourth horizontal band, which read as a banner. Bottom-aligned so
+   its base sits on the heading's baseline block — one shared line across the row. */
+.howto-card {
+  flex: 0 1 404px; align-self: end;
   display: flex; align-items: center; gap: 14px;
-  padding-top: 13px; padding-bottom: 13px;
+  padding: 15px 18px 16px; border-radius: 14px;
+  background: var(--burgundy); color: var(--burgundy-ink);
+  text-decoration: none;
+  transition: transform .16s ease, box-shadow .16s ease;
 }
-.hero-howto-band .hero-howto-mark {
-  flex: none; width: 28px; text-align: center;
+.howto-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(87, 28, 46, .22); }
+.howto-card:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 3px; }
+.howto-card-mark {
+  flex: none; width: 26px; text-align: center;
   font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-size: 32px; font-weight: 600; line-height: 1;
-  color: rgba(245, 228, 216, .9); transform: translateY(2px);
+  font-size: 34px; font-weight: 600; line-height: .92;
+  color: rgba(245, 228, 216, .82);
 }
-.hero-howto-band .hero-howto-text {
-  flex: 1 1 auto; min-width: 0;
-  font-size: 14.5px; line-height: 1.4; color: rgba(245, 228, 216, .85);
-}
-.hero-howto-band .hero-howto-text b { color: #fff; font-weight: 700; }
-.hero-howto-band .hero-howto-go {
-  flex: none; display: inline-flex; align-items: center; gap: 8px;
-  font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap;
-}
-.hero-howto-band .hero-howto-go svg {
-  width: 17px; height: 17px; fill: none; stroke: currentColor;
+/* The text block takes the slack so the arrow stays pinned to the card's right edge. */
+.howto-card-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.howto-card-text b { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -.005em; }
+.howto-card-text span { font-size: 13.5px; line-height: 1.35; color: rgba(245, 228, 216, .84); }
+.howto-card-go {
+  flex: none; width: 18px; height: 18px; fill: none; stroke: rgba(245, 228, 216, .8);
   stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
   transition: transform .16s ease;
 }
-.hero-howto-band:hover .hero-howto-go svg { transform: translateX(3px); }
-@media (prefers-reduced-motion: reduce) { .hero-howto-band .hero-howto-go svg { transition: none; } }
-@media (max-width: 640px) {
-  /* The duplicate CTA phrase goes, not the explainer — one message per line on a phone. */
-  .hero-howto-band .hero-howto-go { display: none; }
+.howto-card:hover .howto-card-go { stroke: #fff; transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) {
+  .howto-card, .howto-card-go { transition: none; }
+  .howto-card:hover, .howto-card:hover .howto-card-go { transform: none; }
 }

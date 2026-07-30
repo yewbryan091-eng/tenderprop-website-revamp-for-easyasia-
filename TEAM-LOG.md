@@ -69,6 +69,18 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · "New to e-tender?" moved into the search heading row (FINAL)
+The full-bleed band is **gone** — Bryan: "i dont like it, its ugly placement". It read as a cookie
+bar: a third stacked horizontal band that cut the hero off from the search instead of belonging to
+either. The signal is now a burgundy card sitting in the **right half of the search heading row**,
+which carried one line of type and 279px of dead space. Still the right side his father asked for,
+still on the scan path, but riding existing whitespace instead of manufacturing a new band —
+and now it sits directly above the search bar, the exact moment a first-timer stalls.
+Measured: 404px card, right edge flush with the search form (1392 = 1392), bottom flush with the
+heading (0px offset), description on one line, 22px to the form. Stacks full-width under the
+heading below 1020px; verified at 760px and 606px with zero overflow and a 76px tap target.
+Classes are `.howto-card*` now — `.hero-howto*` is deleted, don't reference it.
+
 ### 31 Jul 2026 — Claude · "New to e-tender?" is now a full-bleed band under the hero (FINAL)
 Bryan picked the filled treatment and asked for better placement. **The variant switch is GONE** —
 `HOW_IT_WORKS_VARIANT`, variant B and the in-panel version are all deleted. The signal is now its

@@ -505,31 +505,27 @@ function TenderListings() {
           </div>
         </section>
 
-        {/* "New to e-tender?" — Bryan picked the filled treatment (C) and asked for a
-            better placement than the panel's foot, where it overflowed the hero at
-            narrower windows. As its own full-bleed band it sits on the natural scan
-            path between the hero and the search heading, spans the page so it cannot
-            be missed, and costs the hero panel nothing. Burgundy, not red: red stays
-            reserved for the page's one action. */}
-        <a className="hero-howto hero-howto-band" href="/how-e-tender-works" aria-label="New to e-tender? See how it works">
-          <span className="wrap hero-howto-band-inner">
-            <span className="hero-howto-mark" aria-hidden="true">?</span>
-            <span className="hero-howto-text">
-              <b>New to e-tender?</b> See how the sealed-offer process works, step by step
-            </span>
-            <span className="hero-howto-go">
-              See how it works
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-            </span>
-          </span>
-        </a>
-
-
         {/* SEARCH BAND — sits directly below the hero date */}
         <section className="hero-search-band" aria-labelledby="property-search-title">
           <div className="wrap">
+            {/* The search heading row carried one line of type and ~600px of dead space.
+                "New to e-tender?" lives in that space: right side as Bryan's father asked,
+                on the scan path, beside the largest heading on the page and directly above
+                the search bar — the exact moment a first-timer stalls. Riding existing
+                whitespace instead of adding a fourth horizontal band, which read as a
+                banner. Burgundy, never red: red stays reserved for the page's one action. */}
             <div className="search-intro">
               <h2 id="property-search-title">Find a property <span className="hl">open for e-tender</span></h2>
+              <a className="howto-card" href="/how-e-tender-works">
+                <span className="howto-card-mark" aria-hidden="true">?</span>
+                <span className="howto-card-text">
+                  <b>New to e-tender?</b>
+                  <span>See how the sealed-offer process works</span>
+                </span>
+                <svg className="howto-card-go" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h13M13 6l6 6-6 6" />
+                </svg>
+              </a>
             </div>
             <form
               className="search-form"
