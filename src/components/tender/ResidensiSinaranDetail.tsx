@@ -51,12 +51,12 @@ const PROPERTY_DETAILS: { label: string; value: string }[] = [
   { label: "Title type",              value: "Strata" },
   { label: "Unit position",           value: "Intermediate lot" },
   { label: "Land area",               value: "22\u2032 \u00d7 78\u2032 (1,716 sqft)" }, // (iNP), unit corrected
-  { label: "Category of land use",    value: "Building" },
-  { label: "Restriction in interest", value: "Nil" },
+  { label: "Land use",                value: "Building" },
+  { label: "Restrictions",            value: "Nil" },
   { label: "Encumbrance",             value: "Free of encumbrances" },
   { label: "Bumi lot",                value: "No" },
-  { label: "Parcel rent (annual)",    value: "RM480" },
-  { label: "Assessment tax (annual)", value: "RM620" },
+  { label: "Parcel rent",             value: "RM480 / year" },
+  { label: "Assessment tax",          value: "RM620 / year" },
   { label: "Renovation",              value: "Original developer condition" },
   { label: "Gated & guarded",         value: "Yes \u00b7 single controlled access" },
   { label: "Year completed",          value: "2025" },                            // (iNP)
@@ -67,9 +67,21 @@ const PROPERTY_DETAILS: { label: string; value: string }[] = [
   { label: "Listing reference",       value: "TP-SNR-0417" },
 ];
 
-/* Fields the seller has not supplied. Data too, so the block disappears on its own once
-   the list empties rather than needing the markup removed. */
-const NOT_DISCLOSED = ["Occupancy", "Furnishing", "Maintenance fee", "Facing"];
+/* Bryan's reframe, 30 Jul: this box is "still got questions?", not "here is what we do
+   not know". Three reasons his framing is better than mine:
+     1. It speaks to the buyer's need instead of apologising for our data gap.
+     2. It never goes stale — no listing is ever complete, so the box stays true as the
+        agency fills fields in, where a "not disclosed" list has to be maintained.
+     3. It is a lead engine, which is what both platforms exist to be.
+   What survives from the old version is the SPECIFICITY: "ask the agent" converts far
+   worse than a concrete question. So the undisclosed fields become the questions a buyer
+   would actually ask, each with the one-line reason it changes their number. */
+const QUESTIONS: { q: string; why: string }[] = [
+  { q: "Is it vacant or tenanted?",            why: "Decides if you can move in" },
+  { q: "What furnishing is included?",         why: "Sets what you replace after handover" },
+  { q: "What is the monthly maintenance fee?", why: "An ongoing cost while you own it" },
+  { q: "Which direction does it face?",        why: "Afternoon sun, privacy and resale" },
+];
 
 /* The icon band reads STRAIGHT OFF the tender record — the same source the listing cards
    use — so it can never drift from the data, and it no longer needs those five facts
@@ -369,28 +381,41 @@ export function ResidensiSinaranDetail() {
                 ))}
               </dl>
 
-              {NOT_DISCLOSED.length > 0 && (
-                <div className="pd-ask">
+              {QUESTIONS.length > 0 && (
+                <section className="pd-ask" aria-labelledby="pd-ask-title">
                   <div className="pd-ask-main">
-                    <p className="pd-ask-head">
-                      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 8v5" /><circle cx="12" cy="16.4" r="1" fill="currentColor" stroke="none" /></svg>
-                      Not disclosed by the seller
+                    <h3 className="pd-ask-title" id="pd-ask-title">
+                      Still have questions about this property?
+                    </h3>
+                    <p className="pd-ask-lede">
+                      Not everything fits on a listing. These come up most often &mdash; and a sealed
+                      tender gives you one offer, so it is worth asking before you commit.
                     </p>
-                    <ul className="pd-ask-list">
-                      {NOT_DISCLOSED.map((f) => <li key={f}>{f}</li>)}
+                    <ul className="pd-ask-items">
+                      {QUESTIONS.map((item) => (
+                        <li className="pd-ask-item" key={item.q}>
+                          <span className="pd-ask-q">{item.q}</span>
+                          <span className="pd-ask-why">{item.why}</span>
+                        </li>
+                      ))}
                     </ul>
-                    <p className="pd-ask-body">
-                      A sealed tender gives you one offer, so there is no negotiation stage to
-                      uncover these in. Each one changes what the property is worth to you.
-                    </p>
                   </div>
-                  {/* Straight to the Listing Agent section (Bryan) rather than off-site to
-                      WhatsApp — the agent block already holds every way to reach them. */}
-                  <a className="pd-ask-cta" href="#agent">
-                    Ask the listing agent
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
-                  </a>
-                </div>
+
+                  {/* Naming the person converts better than "the agent", and a REN number is a
+                      credential a buyer can verify. Jumps to #agent (Bryan) rather than off-site. */}
+                  <aside className="pd-ask-side">
+                    <img className="pd-ask-avatar" src={AGENT_PHOTO} alt="" loading="lazy" />
+                    <p className="pd-ask-agent">
+                      <b>Stephen Yew</b>
+                      <span>REN 123456</span>
+                      <span>Listing agent for this tender</span>
+                    </p>
+                    <a className="pd-ask-cta" href="#agent">
+                      Ask the agent
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
+                    </a>
+                  </aside>
+                </section>
               )}
 
             </div>

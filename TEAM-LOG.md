@@ -68,6 +68,32 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §5 ask-box reframed on Bryan's idea (his framing beat mine)
+**"Not disclosed by the seller" → "Still have questions about this property?"** Bryan's call, and
+it is better for three reasons worth remembering:
+1. It speaks to the buyer's need instead of apologising for our data gap.
+2. **It never goes stale.** No listing is ever complete, so it stays true as the agency fills
+   fields in — a "not disclosed" list has to be maintained and shrinks to nothing.
+3. It is a **lead engine**, which is what both platforms exist to be.
+What survived from my version is the SPECIFICITY: "ask the agent" converts far worse than a
+concrete question. So the undisclosed fields became the questions a buyer would actually ask, each
+with a one-line reason it changes their number. `QUESTIONS` replaces `NOT_DISCLOSED`.
+
+**Consistency work (Bryan's emphasis), measured not asserted:**
+- Four spec labels were wrapping to two lines, making those rows ~90px against 46px and breaking
+  step between the left and right columns. Labels shortened ("Category of land use" → "Land use",
+  "Restriction in interest" → "Restrictions") with the unit moved into the value
+  ("RM480 / year"), label column widened to 10.5rem, `white-space: nowrap` to enforce it.
+  **All spec rows now 46px.**
+- The ask rows then had the same fault at 61 vs 43px — one reason wrapped in its 15rem column.
+  Reasons trimmed to fit one line, plus `min-height: 44px`. **All ask rows now 44px.**
+- The ask block reuses the table's rhythm (same hairline, same two-part row, same type scale) so
+  it reads as a continuation of Property Details, not a card dropped under it.
+- **Amber dropped.** It framed an invitation as a hazard and implied something was wrong with the
+  property. Paper + burgundy, like the rest of the page.
+- Agent is now named with REN in the box; CTA "Ask the agent" → `#agent`.
+Verified: spec rows 46px uniform, ask rows 44px uniform, box 315px, no overflow.
+
 ### 30 Jul 2026 — Bryan · NEW STANDING RULE: THE DESIGN SOP (AGENTS.md)
 *"when i say improve the design, you make use your critical thinking… beautify it by taking in all
 the consideration on how to make tenderprop look really nice, not just the font, size, placement,
