@@ -689,7 +689,15 @@
   /* Desktop: sticky rail constrained to the viewport, with one deliberate
      internal scroll area so the long state list never runs off-screen. */
   /* Standalone state navigator: heading sits outside the panel, no inner scroll. */
+  /* The rail is a sibling of the results COLUMN, so by default it starts level with
+     the results TOOLBAR — which put "Tender by State" alongside the sort controls and
+     collided the card with the toolbar row. Drop it by the toolbar's own height
+     (--head-band + its 20px margin) so the rail starts level with the property cards.
+     Scoped to the two-column layout only; below 1400px the rail becomes a sheet. */
   .sidebar-filters { display: flex; flex-direction: column; min-width: 0; }
+  @media(min-width: 1400px) {
+    .sidebar-filters { margin-top: calc(var(--head-band) + 20px); }
+  }
   .filters-scroll { min-height: 0; display: flex; flex-direction: column; }
   /* The rail's header band, mirroring .results-header in the results column: same
      --head-band min-height, same 12px padding, same rule, so both columns' rules land
