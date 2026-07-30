@@ -68,6 +68,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · band value derived; §4 card de-filled; §6 About rebuilt
+**1. `--band-alt: #F6EEE7` is a DERIVED value — do not nudge it.** `--paper` measured 1.083 vs
+white (Bryan: invisible) and `--paper-deep` 1.211 (Bryan: too deep). #F6EEE7 is the exact luminance
+midpoint, **1.147**.
+
+**2. 🐛 A full-width white card defeats the band.** Bryan spotted that Tender Information read
+white. `.v1` was `--card` and covered **58%** of `#tender`, so that section read white while
+`#details` (white band, no card) also read white — two whites in a row with the bands alternating
+correctly underneath. Fixed: **sections sit on their band; cards are outlines (border + radius, no
+fill).** `.v1` is now transparent and `.v1-rail` inverted to white so the notice still reads raised.
+⚠️ My own audit had reported "no collisions" because the card is 0.69 of the section width and my
+threshold was 0.7. **Audit by AREA coverage, not width, and measure what a section READS as.**
+
+**3. §6 About rebuilt.** Was four paragraphs at 98 chars/line with three hidden behind "View more".
+Audit: P1/P2/P4 restated Property Details, the header and §7 What's Nearby. The only unique
+paragraph — completed, no construction risk, inspect the actual unit — was buried third behind the
+fold. Now: lead → **pull-quote carrying that argument** → two supporting paragraphs, 62ch measure,
+clamp removed. The quote is the only place the property's condition is tied to the tender mechanic.
+All three points are now in `DESIGN-SYSTEM.md`. Verified: 10 sections, zero visual collisions.
+
 ### 30 Jul 2026 — Claude · alternate section band deepened to `--paper-deep`
 Bryan disliked the About background. Measured, it was not the hue — it was the **strength**:
 `--paper` vs `--card` is a **1.083** luminance ratio. Below ~1.1 the eye cannot reliably resolve an

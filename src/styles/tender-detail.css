@@ -39,12 +39,17 @@
 
 
 /* ===== Tender Information — compact tender dossier ===== */
+/* No fill: §4 now sits on its alternating band like every other section. A white card
+   here covered 58% of the section, so #tender READ white while #details (white band, no
+   card) also read white — two whites in a row, which is what broke the alternation
+   visually even though the bands were alternating correctly. Border and radius stay, so
+   the dossier shape and its paperclip survive as an outlined card on the tint. */
 .v1 {
   position: relative;
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  background: var(--card);
+  background: transparent;
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: clamp(22px, 3vw, 30px);
@@ -155,7 +160,10 @@
   margin-top: -48px;
   padding: 24px 20px 17px;
   border-radius: 10px;
-  background: var(--paper-deep);
+  /* Inverted: the notice was a tinted panel on a white card. With the card now on the
+     tinted band, WHITE is what makes it read as a clipped slip sitting on top. */
+  background: var(--card);
+  border: 1px solid var(--line);
 }
 .v1-rail .tp-clip {
   position: absolute;
@@ -296,6 +304,10 @@
     --red: #C8281C; --burgundy: #571C2E; --burgundy-ink: #F5E4D8;
     --muted: #75695E; --line: #DED2C4; --card: #FFFFFF;
     --good: #2E6B3F; --warn: #9A6A00;
+    /* The alternating band. Derived, not chosen: --paper vs white measures 1.083 (Bryan:
+       invisible) and --paper-deep 1.211 (Bryan: too deep). #F6EEE7 is the exact luminance
+       midpoint at 1.147 — a band you can see without it reading as a slab. */
+    --band-alt: #F6EEE7;
     --sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     /* One display serif across the whole site. Playfair was never loaded in
        __root.tsx, so this page had been silently rendering Georgia while the
@@ -464,7 +476,7 @@
      is 1.211 — about 2.5x the differentiation above parity — and it is a deliberate tint
      already in the palette. --band-bg travels with it, so the About fade gradient and any
      other band-matched element follow automatically. */
-  main > section.blk:nth-of-type(even) { background: var(--paper-deep); --band-bg: var(--paper-deep); }
+  main > section.blk:nth-of-type(even) { background: var(--band-alt); --band-bg: var(--band-alt); }
   main > section.blk:nth-of-type(odd)  { background: var(--card);      --band-bg: var(--card); }
 section.blk.band-card { background: var(--card); --band-bg: var(--card); }section.blk.band-deep { background: var(--paper-deep); --band-bg: var(--paper-deep); }section.blk.band-paper { background: var(--paper); --band-bg: var(--paper); }
   .blkcard { background: transparent; border: none; border-radius: 0; padding: 0; }
@@ -948,4 +960,30 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   .pd-row, .pd-ask-item { grid-template-columns: minmax(0, 1fr); gap: 4px; min-height: 0; }
   .pd-row dt { white-space: normal; }
   .pd-ask-cta { width: 100%; justify-content: center; }
+}
+
+/* ══ ABOUT — an argument, set to be read ═════════════════════════════════════════
+   Measured before: 98 characters per line. Anything past ~75ch forces the eye to
+   re-find the line start, which is why four short paragraphs still felt like work.
+   Capped at 68ch, with a lead paragraph as the entry point and one pull-quote to give
+   the section a scannable anchor and somewhere for the eye to land. */
+/* 62ch, not 68: the `ch` unit is the advance of "0", which in Inter is wider than the
+   average lowercase glyph — so a 68ch box actually fits ~78 characters, over the ~75
+   readable ceiling. 62ch measures out at ~71. */
+.aboutbody { max-width: 62ch; }
+.aboutbody p { margin: 0 0 16px; color: var(--ink); font-size: 16px; line-height: 1.72; }
+.aboutbody p:last-child { margin-bottom: 0; }
+.aboutbody .about-lead { font-size: 17.5px; line-height: 1.66; }
+
+/* The one argument nothing else on the page makes. Left rule rather than a box: it is
+   the same emphasis language as .v1-reassure, so it belongs to the existing system. */
+.about-quote {
+  margin: 24px 0; padding: 2px 0 2px 20px;
+  border-left: 2px solid var(--burgundy);
+  font-family: var(--serif); font-optical-sizing: auto;
+  font-size: clamp(18px, 1.9vw, 20.5px); font-weight: 500;
+  line-height: 1.5; letter-spacing: -.008em; color: var(--ink);
+}
+@media (max-width: 700px) {
+  .about-quote { margin: 20px 0; padding-left: 15px; }
 }

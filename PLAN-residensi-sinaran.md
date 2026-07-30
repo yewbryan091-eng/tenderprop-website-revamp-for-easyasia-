@@ -108,7 +108,22 @@ occupancy/furnishing/maintenance data from the agency; the derived psf works tod
   type, bumi lot, land area) into a "Before you bid" group per the design-direction study.
 - Rule: labelled rows, never invented values, missing ≠ inapplicable.
 
-### 6. About + Selling Points
+### 6a. About — ✅ REBUILT 30 Jul 2026
+Old version: four equal paragraphs at **98 characters per line**, three of the four hidden behind
+"View more". A content audit found most of it restated the page — P1 the unit count and type
+(Property Details + header), P2 the storeys, P4 the schools/markets/highways (§7 What's Nearby).
+**The only paragraph saying something nothing else said was P3 — completed, no construction risk,
+you can inspect the actual unit — and it was buried third, behind the fold.**
+
+About now carries the **argument**, not the facts, and that argument is the pull-quote: *on a
+sealed tender you commit one number with no second attempt, so a property you can physically walk
+through first is worth more than one you cannot.* That is the only place on the page where the
+property's condition is tied to the tender mechanic.
+Structure: lead paragraph (17.5px entry point) → pull-quote (burgundy left rule, serif) → two
+supporting paragraphs. Measure capped at 62ch ≈ 71 characters. Clamp and fade removed — with the
+repetition gone it is short enough to read whole.
+
+### 6b. Selling Points
 - Job: the narrative case. About copy is good (real, specific).
 - Known issues: Selling Points previously repeated About/Details facts — needs distinct content
   or merge. NO invented amenities (the fake facilities list was removed — do not resurrect).

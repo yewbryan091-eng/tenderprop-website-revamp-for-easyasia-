@@ -406,17 +406,51 @@ export function ResidensiSinaranDetail() {
         </section>
 
 
+        {/* ── ABOUT ─────────────────────────────────────────────────────────
+            Rebuilt 30 Jul. The old version was four equal paragraphs at 98 characters
+            per line (vs a ~68ch readable measure) with three of the four hidden behind
+            "View more". A content audit found most of it restated the page:
+              P1 "62 three-storey stratified townhouses"  → Property Details + header
+              P2 "three practical storeys, shared vs private" → Storeys 3
+              P4 schools / markets / KESAS / Federal Highway → §7 What's Nearby
+              P3 completed, no construction risk, inspect the actual unit → UNIQUE
+            So the only paragraph saying something nothing else on the page said was
+            buried third, behind a fold. About now carries the ARGUMENT rather than
+            re-describing the facts, and that argument is promoted to a pull-quote: on a
+            sealed tender you commit one number with no second attempt, so a property you
+            can physically walk through first is worth more than one you cannot. Nothing
+            here duplicates Details or What's Nearby. Clamp removed — with the repetition
+            gone it is short enough to read whole, which also drops the fade gradient's
+            dependency on --band-bg. */}
         <section className="blk band-paper" id="about">
           <div className="wrap">
             <div className="blkcard about">
               <h2 className="sec-title">About <span>Residensi Sinaran</span></h2>
               <div className="aboutbody" id="about-body">
-                <p>Residensi Sinaran is a completed, low-density residential development located within the established township of Taman Sri Muda, Shah Alam — one of the most mature and well-connected residential enclaves in the Klang Valley. Comprising just 62 three-storey stratified townhouses, the development is designed for families seeking the space and privacy of multi-level living within a smaller, more manageable community.</p>
-                <p>Each home is laid out over three practical storeys that clearly separate shared living areas from private family spaces, with room to accommodate a growing household, a home office, or extended family. The development sits within a fully gated and guarded environment with a single controlled access point, giving residents added privacy, security and peace of mind. Two dedicated parking bays are provided for every home.</p>
-                <p>Because the development is already completed and handed over, prospective buyers enjoy a significant advantage over new launches — there is no construction risk and no waiting period. You can physically inspect the actual unit, walk the layout, check the finishes and assess the surrounding neighbourhood before deciding to submit a tender, rather than relying on an artist's impression or a show unit.</p>
-                <p>Taman Sri Muda is served by a comprehensive range of everyday amenities within a short drive, including national schools, wet and modern markets, neighbourhood shops, banks, clinics and hospitals. The area enjoys strong connectivity to the wider Klang Valley via the Federal Highway, KESAS and the Shah Alam Expressway, with public transport options through nearby KTM and bus links. Together, these make Residensi Sinaran a compelling proposition for both owner-occupiers and long-term investors.</p>
+                <p className="about-lead">
+                  Residensi Sinaran sits inside Taman Sri Muda, one of the older established
+                  townships in Shah Alam &mdash; the kind of neighbourhood that finished growing a
+                  decade ago. Sixty-two homes behind a single controlled entrance, which is small
+                  enough that the place stays quiet.
+                </p>
+                <blockquote className="about-quote">
+                  The development is complete and handed over, so you can walk the actual unit,
+                  check the finishes and see the neighbours before deciding what to offer. That
+                  matters more here than in a normal sale: a sealed tender gives you one number
+                  and no second attempt.
+                </blockquote>
+                <p>
+                  Each home runs over three storeys, which puts the shared living areas downstairs
+                  and the private rooms above &mdash; the practical reason a family chooses a
+                  townhouse over an apartment of the same size, and the reason the layout still
+                  works as a household grows.
+                </p>
+                <p>
+                  That the township is older is the point. Everything around it already exists,
+                  and nothing about living here depends on a masterplan being finished or a
+                  neighbouring phase being sold.
+                </p>
               </div>
-              <button type="button" className="viewmore" id="about-toggle" aria-expanded="false">View more <span aria-hidden="true">▾</span></button>
             </div>
           </div>
         </section>

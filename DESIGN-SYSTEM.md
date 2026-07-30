@@ -15,7 +15,8 @@ Defined in `src/styles/tender-detail.css` `:root` and mirrored by `tender-listin
 |---|---|---|
 | `--paper` | `#FAF5F0` | page ground only — **not** a section band (see §3) |
 | `--card` | `#FFFFFF` | cards; every **odd** section band |
-| `--paper-deep` | `#F1E8DE` | every **even** section band; also inset panels *inside white cards* |
+| `--band-alt` | `#F6EEE7` | every **even** section band — see §3 for why this exact value |
+| `--paper-deep` | `#F1E8DE` | inset panels inside white cards |
 | `--ink` | `#17130F` | body + all primary values |
 | `--muted` | `#75695E` | labels, secondary copy, captions |
 | `--line` | `#DED2C4` | borders. Hairlines inside a component use `color-mix(in srgb, var(--line) 62%, transparent)` |
@@ -52,13 +53,18 @@ one block, one of them is wrong.
 - **Backgrounds alternate positionally:** `nth-of-type(even)` = `--paper-deep`, `(odd)` = `--card`.
   `--band-bg` travels with it. Inserting or removing a section re-solves the chain.
   `.band-card` / `.band-paper` exist only as deliberate opt-outs.
-- ⛔ **The alternate band is `--paper-deep`, never `--paper`.** Measured: paper vs white is a
-  **1.083** luminance ratio — below roughly 1.1 the eye cannot reliably see an edge, so the
-  alternation read as accidental rather than as rhythm. And `--paper` *is* the page ground, so a
-  paper band was not a band at all: half the sections were untreated by definition. paper-deep is
-  **1.211**, about 2.5x the differentiation above parity.
-- When a band is `--paper-deep`, inset panels on that band must be `--card`. Panels that already
-  sit inside a white card (e.g. `.v1-rail` inside `.v1`) are unaffected.
+- ⛔ **`--band-alt` (#F6EEE7) is a derived value — do not nudge it by eye.** Measured against
+  white: `--paper` = **1.083** (Bryan: invisible — below ~1.1 the eye cannot resolve an edge, and
+  `--paper` *is* the page ground so it was never a band at all), `--paper-deep` = **1.211**
+  (Bryan: too deep). `#F6EEE7` is the exact luminance midpoint at **1.147**.
+- ⛔ **A full-width white card defeats the band.** `.v1` was white and covered 58% of `#tender`,
+  so that section READ white while `#details` (white band, no card) also read white — two whites
+  in a row, with the bands alternating correctly underneath. **Sections sit on their band; cards
+  are outlines (border + radius, no fill).** Inset panels then invert to `--card` so they read as
+  raised, e.g. `.v1-rail`.
+- When auditing this, measure what a section **reads as**, not what its `background` is — and use
+  area coverage, not width. A 0.69-width card slipped under a 0.7 width threshold and produced a
+  false "no collisions" result.
 - One title treatment, shared by `.sec-title` and `.v1-top h3`.
 
 ## 4. Established patterns — reuse before inventing
@@ -74,6 +80,9 @@ one block, one of them is wrong.
   promoted facts do not repeat in the specification list below.
 - **Facts strip** (`.v1-facts`): three cells, vertical rules between, label / value / sub-line.
 - **Slim invitation band** (`.pd-ask`): 44px serif glyph + title + one line + red CTA. ~98px tall.
+- **Body prose**: `max-width: 62ch` (≈71 real characters — the `ch` unit over-counts in Inter),
+  `line-height: 1.72`, with a slightly larger lead paragraph as the entry point and at most one
+  pull-quote (`border-left: 2px solid var(--burgundy)`) as the anchor.
 - **Disclosure** (`<details>`): summary carries a `<b>` label and a `<small>` summary of what is
   inside, plus a chevron that rotates on `[open]`.
 - **Pills / chips**: `999px` radius, `--card` background, 1px border, 13px/700.
