@@ -13,7 +13,7 @@ const SINARAN_TENDER = TENDERS.find((tender) => tender.name === "Residensi Sinar
 if (!SINARAN_TENDER) throw new Error("Residensi Sinaran tender data is missing");
 
 /* Single source of truth for this listing's reserve, deposit and tender close. */
-const TENDER_CLOSE_ISO = `${SINARAN_TENDER.closingDate}T17:00:00+08:00`;
+const TENDER_CLOSE_ISO = `${SINARAN_TENDER.closingDate}T23:59:59+08:00`;
 const TENDER_CLOSE_LABEL = fmtDate(SINARAN_TENDER.closingDate);
 
 /* The payment ladder is derived, never typed. Founder-confirmed 30 Jul 2026: the 3%
@@ -68,7 +68,7 @@ export function ResidensiSinaranDetail() {
                     open/closed and the deadline sat below the whole gallery. */}
                 <p className="ovstatus">
                   <span className="status"><span className="dot" aria-hidden="true" />Open for tender</span>
-                  <span className="ovcloses">Closes {TENDER_CLOSE_LABEL}, 5:00 PM{daysLabel ? " · " + daysLabel : ""}</span>
+                  <span className="ovcloses">Closes {TENDER_CLOSE_LABEL}{daysLabel ? " · " + daysLabel : ""}</span>
                 </p>
                 <h1>Residensi Sinaran</h1>
                 <p className="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0114 0c0 5.4-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>Taman Sri Muda, Shah Alam, Selangor · 3-Storey Townhouse</p>
@@ -144,7 +144,7 @@ export function ResidensiSinaranDetail() {
                   </div>
                   <p className="v1-reassure">
                     <b>Not an extra charge.</b> Your 3% deposit counts toward the standard 10%
-                    down payment and is refunded in full if no sale proceeds.
+                    down payment, and is returned in full immediately if no sale proceeds.
                   </p>
 
                   <div className="v1-steps">
@@ -165,7 +165,8 @@ export function ResidensiSinaranDetail() {
                     </ol>
                     <p className="v1-negotiate">
                       <b>Three possible outcomes.</b> The seller may accept, decline or counter through
-                      the appointed agent. If no sale proceeds, the deposit is refunded in full.
+                      the appointed agent. The moment it is clear no sale will proceed, your deposit is
+                      returned in full — immediately, not after a processing period.
                     </p>
                   </div>
                 </div>
@@ -206,7 +207,7 @@ export function ResidensiSinaranDetail() {
                         <span className="u"><b>{daysLabel ?? "\u2014"}</b></span>
                       )}
                     </div>
-                    <span className="v1-cd">Offers close 5:00 PM (MYT)</span>
+                    <span className="v1-cd">Offers close at the end of this date</span>
                   </div>
                   <a className="btn-red" href="#">Apply for Tender</a>
                   <a className="btn-wa" href="https://wa.me/60123938255" target="_blank" rel="noopener">
@@ -230,7 +231,7 @@ export function ResidensiSinaranDetail() {
                   <ol>
                     <li>
                       <span className="pct">3%</span>
-                      <div><b>{DEPOSIT}</b><span>Tender deposit. Refunded in full if no sale proceeds.</span></div>
+                      <div><b>{DEPOSIT}</b><span>Tender deposit. Returned in full immediately if no sale proceeds.</span></div>
                     </li>
                     <li>
                       <span className="pct">+7%</span>
@@ -398,7 +399,7 @@ export function ResidensiSinaranDetail() {
               </div>
               <div className="faq-item">
                 <button type="button" className="faq-trigger" aria-expanded="false">Is my deposit refundable?<svg className="chev" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
-                <div className="faq-body"><p>Yes — deposits are held by the registered estate agency as stakeholder, and unsuccessful bidders are refunded in full after the result is announced.</p></div>
+                <div className="faq-body"><p>Yes. Deposits are held by the registered estate agency as stakeholder. If the seller does not accept your offer — including after any negotiation — the agent tells you and returns your deposit in full immediately. There is no waiting period: once all three parties know the sale will not proceed, there is nothing left to wait for.</p></div>
               </div>
             </div>
           </div>

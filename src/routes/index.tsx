@@ -30,7 +30,7 @@ function HomePage() {
             style={{ paddingTop: 0, paddingBottom: 18 }}
           >
             <p className="cycle-line">
-              Next tender cycle: <b>{fmtDate(NEXT_CYCLE)}</b> · {IN_CYCLE} properties · offers close 5:00 PM
+              Next tender cycle: <b>{fmtDate(NEXT_CYCLE)}</b> · {IN_CYCLE} properties
             </p>
           </div>
           <div className="doors">

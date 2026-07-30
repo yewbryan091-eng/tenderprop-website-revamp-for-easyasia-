@@ -115,12 +115,13 @@ function inSizeRange(value: string, selected: string, options: SizeRange[]) {
 }
 
 /* Null until mount so SSR and first paint never show a flash of zeros.
-   Tenders close at 5:00 PM Malaysian time on the closing date. */
+   FOUNDER-CONFIRMED 30 Jul: there is no intra-day cutoff. A tender runs to the end
+   of its closing date and the listing simply leaves the site — 23:59:59 MYT, not 17:00. */
 type Remaining = { days: number; hours: number; minutes: number; seconds: number };
 function useCountdown(iso: string): Remaining | null {
   const [left, setLeft] = useState<Remaining | null>(null);
   useEffect(() => {
-    const target = new Date(iso + "T17:00:00+08:00").getTime();
+    const target = new Date(iso + "T23:59:59+08:00").getTime();
     const compute = (): Remaining => {
       const diff = Math.max(0, target - Date.now());
       const seconds = Math.floor(diff / 1000);
@@ -436,7 +437,7 @@ function TenderListings() {
               <a className="btn red hero-cta" href="#listings">
                 View Tender Properties
               </a>
-              <p className="hero-foot">Offer submissions close at 5:00 PM (MYT)</p>
+              <p className="hero-foot">Offers close at the end of the closing date</p>
             </div>
           </div>
           <div className="hero-panel hero-panel-right">
@@ -472,7 +473,7 @@ function TenderListings() {
                           <span className="hero-outcome-status-icon" aria-hidden="true"><ReturnIcon /></span>
                           Not accepted
                         </span>
-                        <span>Refundable deposit returned in full within 3 working days.</span>
+                        <span>Your deposit is returned in full, immediately.</span>
                       </div>
                     </div>
                   </div>

@@ -191,7 +191,7 @@
   .hero-panel-left .hero-eyebrow,
   .hero-panel-left .hero-date,
   .hero-panel-left .hero-cycle-count { max-width: 30ch; }
-  .hero-panel-left .hero-foot { max-width: 46ch; }   /* one line for "…5:00 PM (MYT)" */
+  .hero-panel-left .hero-foot { max-width: 46ch; }   /* keep the closing-date line to one row */
   .hero-panel-left .hero-cta {
     align-self: center; margin-top: 14px; min-width: 240px;
     padding: 11px 23px; font-size: 14.5px;

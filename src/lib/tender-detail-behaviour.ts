@@ -27,7 +27,7 @@ export function initDetailPage(): () => void {
     var daysWrap = section.querySelector(".t2-days-wrap");
     var daysValue = document.getElementById("tender-days-left");
     if (daysWrap && daysValue) {
-      var closeAt = new Date("2028-12-31T17:00:00+08:00").getTime();
+      var closeAt = new Date("2028-12-31T23:59:59+08:00").getTime();
       var remaining = Math.max(0, Math.ceil((closeAt - Date.now()) / 86400000));
       daysValue.textContent = remaining.toLocaleString("en-MY") + (remaining === 1 ? " day left" : " days left");
       daysWrap.hidden = false;
@@ -41,7 +41,7 @@ export function initDetailPage(): () => void {
 
   // ── Countdown (closing 31 Dec 2028, 5pm) ──
   (function () {
-    var close = new Date("2028-12-31T17:00:00").getTime();
+    var close = new Date("2028-12-31T23:59:59").getTime();
     function tick() {
       var diff = close - Date.now();
       var days = Math.floor(diff / 86400000);
