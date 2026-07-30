@@ -69,6 +69,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · Colons: visible, scaling correctly, and one added at the head
+Bryan, twice: *"the : is not visible enough"*, then *"there should be a : in between 134 and 22,
+or im tripping"*. He wasn't — the rule was `.hero-tick-cell + .hero-tick-cell::before`, which by
+definition only punctuates joins BETWEEN cells, so the sequence started "134 22ʜ" unseparated.
+`.hero-tick::before` now supplies the head colon. Reads **134 : 22ʜ : 10ᴍ : 37ˢ**.
+
+Visibility: **.82em/500/45% → .72em/600/78%**.
+
+🐛 Fixed while in there: the colons were `em`-relative to an **inherited 16px**, not to the
+digits — so they stayed ~15px while the digits scaled 17→22px across their clamp, and the ratio
+drifted at every width except the one I happened to be looking at. The digit scale now lives on
+`.hero-tick` and both the value (`1em`) and the colons (`.72em`) derive from it.
+**When you size a pseudo-element in `em`, check WHICH font-size it inherits — it is the element
+the pseudo hangs off, not the sibling it visually pairs with.**
+
+Spacing: strip `margin-left` 18 → 12px, and the head colon takes `margin-right: 6px` like the
+others; with the flex gap it sits 12px clear on both sides while inner colons sit at 6px. The
+extra air is deliberate — a 112px numeral beside 22px digits needs it to read as one sequence.
+Block now 577px in a 720px panel, axis spread still 0.
+
 ### 31 Jul 2026 — Claude · H/M/S strip enlarged + colon separators
 Bryan: *"make the larger abit, and perhaps add a :"*. Value **18 → 22px**, unit **10.5 → 12px**,
 colons back between cells as `.hero-tick-cell + .hero-tick-cell::before` at `.82em` / 45% cream —

@@ -1088,19 +1088,32 @@
    numeral saying the same thing. */
 .hero-tick {
   grid-column: 3; grid-row: 1; justify-self: start; align-self: baseline;
-  margin-left: clamp(12px, 1.2vw, 18px);
+  margin-left: clamp(9px, .85vw, 12px);
   display: inline-flex; align-items: baseline; gap: 6px;
+  /* The digits' scale lives HERE so the colons can be em-relative to it. Set on the cells,
+     `.95em` resolved against an inherited 16px — so the colon stayed ~15px while the digits
+     scaled 17→22px across the clamp, and the ratio drifted at every width but this one. */
+  font-size: clamp(17px, 1.5vw, 22px);
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .hero-tick-cell { display: inline-flex; align-items: baseline; gap: 2px; }
 /* Colon separators, as on the pill this replaced. 6px each side of the glyph matches the
-   flex gap, so the strip reads as evenly spaced rather than as three clumps. */
+   flex gap, so the strip reads as evenly spaced rather than as three clumps.
+   The strip's OWN ::before is the colon between the day count and the hours — without it
+   the sequence started "134 22ʜ" and only the later joins were punctuated. It carries no
+   margin-right because the flex gap already supplies the 6px on that side. */
+.hero-tick::before,
 .hero-tick-cell + .hero-tick-cell::before {
-  content: ":"; margin-right: 6px; font-size: .82em; font-weight: 500; line-height: 1;
-  color: rgba(245, 228, 216, .45);
+  content: ":"; font-size: .72em; font-weight: 600; line-height: 1;
+  color: rgba(245, 228, 216, .78);
 }
+/* 6px after every colon. The leading one also picks up the flex gap, so it sits 12px clear
+   on both sides — a touch more air than the inner colons, which is what a 112px numeral
+   beside 22px digits needs to read as one sequence rather than two. */
+.hero-tick::before,
+.hero-tick-cell + .hero-tick-cell::before { margin-right: 6px; }
 .hero-tick-value {
-  font-size: clamp(17px, 1.5vw, 22px); font-weight: 700; letter-spacing: -.01em;
+  font-size: 1em; font-weight: 700; letter-spacing: -.01em;
   color: rgba(245, 228, 216, .92);
 }
 .hero-tick-unit {
