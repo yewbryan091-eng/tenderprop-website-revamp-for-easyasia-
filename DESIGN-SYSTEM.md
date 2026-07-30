@@ -61,6 +61,10 @@ one block, one of them is wrong.
 - **Icon band** (`.band .stat`): scannable summary, always **derived** from the same source as the
   table beside it — never a second hand-written copy.
 - **Money box**: label 11px muted over a serif figure; refundable deposit in `--good`.
+- **Property pricing hierarchy** (`.pd-pricing`): every detail page starts with the same three
+  positions, in order — reserve price per sq ft with its area basis stated, tenure, then title
+  and land use. The correct area basis changes by property form; the position does not. These
+  promoted facts do not repeat in the specification list below.
 - **Facts strip** (`.v1-facts`): three cells, vertical rules between, label / value / sub-line.
 - **Slim invitation band** (`.pd-ask`): 44px serif glyph + title + one line + red CTA. ~98px tall.
 - **Disclosure** (`<details>`): summary carries a `<b>` label and a `<small>` summary of what is

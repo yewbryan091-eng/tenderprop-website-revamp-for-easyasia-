@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 30 Jul 2026 | Standardising the three Property Details pricing fields |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Three-field Property Details pricing hierarchy shipped |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -67,6 +67,16 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 30 Jul 2026 — Codex · three-field Property Details hierarchy standardised
+Locked the first three positions across future detail pages: reserve price per sq ft with the
+calculation basis stated, tenure, then title and land use. Sinaran now reads `RM369 psf / Based
+on 1,400 sq ft built-up area`, `Leasehold 99 years / Expires Nov 2115 · 89 years remaining`,
+and `Strata title / Residential use`. Title type and land use were removed from the lower
+specification list so the summary does not repeat. Rendered review at 1440, 820 and 375px:
+desktop columns are equal at 366.7px, tablet/mobile stack in the same order, no promoted-field
+duplicates, no console errors and zero horizontal overflow. Production build and targeted ESLint
+pass. The decision is now recorded in `DESIGN-SYSTEM.md`.
 
 ### 30 Jul 2026 — Claude · `DESIGN-SYSTEM.md` created (single source for values + patterns)
 Bryan asked whether a "frontend design skill" should exist so design rules stop being repeated.
