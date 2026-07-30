@@ -23,6 +23,11 @@ const TENDER_CLOSE_LABEL = fmtDate(SINARAN_TENDER.closingDate);
 const RESERVE = SINARAN_TENDER.reservePrice;
 const DEPOSIT = depositOf(SINARAN_TENDER);
 const rm = (n: number) => "RM" + Math.round(n).toLocaleString("en-MY");
+/* Reserve price per square foot — DERIVED, never typed. This is the number a buyer
+   actually compares properties on and decides an offer with, and no Malaysian portal
+   leads with it. Parsed from the built-up string so it stays true if either changes. */
+const BUILT_UP_SQFT = Number((SINARAN_TENDER.builtUp || "").replace(/[^0-9.]/g, "")) || 0;
+const PSF = BUILT_UP_SQFT ? Math.round(RESERVE / BUILT_UP_SQFT) : 0;
 
 export function ResidensiSinaranDetail() {
   useEffect(() => initDetailPage(), []);
@@ -259,11 +264,102 @@ export function ResidensiSinaranDetail() {
 
 
 
+        {/* ── PROPERTY DETAILS ──────────────────────────────────────────────
+            Rebuilt 30 Jul. Three faults in the old sheet: (1) 19 rows of which 10 were
+            empty, so it read as an unfilled form; (2) the icon band and the Layout/Size
+            groups listed the SAME five facts twice; (3) two competing empty states
+            ("Not stated" vs an em dash) whose meanings had inverted in places.
+
+            The reframe: a sealed-tender buyer prices the property ONCE, with no
+            iterative negotiation to discover things in. So this section's job is not
+            "describe the home" — it is "give me what I need to put a number on it".
+            Hence four zones in decreasing pricing impact:
+              1. What you're pricing — psf (DERIVED), tenure, land title
+              2. Measurements — the comparison set, icon band, no duplication below
+              3. Not disclosed — the gaps, turned into a checklist to ask the agent
+              4. Full specification — collapsed, only rows that actually have values
+            Zone 3 is the important one: on a portal you'd uncover these during
+            negotiation. Here you cannot, so naming them is a service, not an apology. */}
         <section className="blk band-card" id="details">
           <div className="wrap">
             <div className="blkcard dcard">
               <h2 className="sec-title">Property <span>Details</span></h2>
-              <div className="pd"><div className="band"><div className="stat" data-field="bedrooms"><svg className="ic" viewBox="0 0 24 24"><path d="M3 18v-6h18v6M3 12V7M21 12v-1a3 3 0 0 0-3-3h-4v4M3 18v2M21 18v2"/><circle cx="7.5" cy="9.5" r="1.6"/></svg><div className="txt"><span className="v">3</span><span className="k">Bedrooms</span></div></div><div className="stat" data-field="bathrooms"><svg className="ic" viewBox="0 0 24 24"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM6 12V6a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/></svg><div className="txt"><span className="v">2</span><span className="k">Bathrooms</span></div></div><div className="stat" data-field="built_up"><svg className="ic" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h5M15 20v-5M9 4v5M15 4v5M4 15h5M15 15h5"/></svg><div className="txt"><span className="v">1,400 sqft</span><span className="k">Built-up area</span></div></div><div className="stat" data-field="land_area"><svg className="ic" viewBox="0 0 24 24"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3ZM9 4v13M15 7v13"/></svg><div className="txt"><span className="v unstated">Not stated</span><span className="k">Land area</span></div></div><div className="stat" data-field="car_parks"><svg className="ic" viewBox="0 0 24 24"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2M18 17v2h2v-2"/></svg><div className="txt"><span className="v">2</span><span className="k">Car parks</span></div></div></div><div className="groups"><div className="grp"><p className="kick">Layout</p><div className="row" data-field="bedrooms"><span>Bedrooms</span><b>3</b></div><div className="row" data-field="bathrooms"><span>Bathrooms</span><b>2</b></div><div className="row" data-field="car_parks"><span>Car parks</span><b>2</b></div><div className="row" data-field="storeys"><span>Storeys</span><b>3</b></div><div className="row" data-field="floor_level"><span>Floor level</span><b className="na">&mdash;</b></div></div><div className="grp"><p className="kick">Size</p><div className="row" data-field="built_up"><span>Built-up area</span><b>1,400 sqft</b></div><div className="row" data-field="land_area"><span>Land area</span><b className="unstated">Not stated</b></div></div><div className="grp"><p className="kick">Ownership &amp; title</p><div className="row" data-field="tenure"><span>Tenure</span><b>Leasehold 99 yrs</b></div><div className="row" data-field="title_type"><span>Title type</span><b className="unstated">Not stated</b></div><div className="row" data-field="land_title"><span>Land title</span><b>Residential</b></div><div className="row" data-field="bumi_lot"><span>Bumi lot</span><b className="unstated">Not stated</b></div><div className="row" data-field="zoning"><span>Zoning</span><b className="na">&mdash;</b></div></div><div className="grp"><p className="kick">Building</p><div className="row" data-field="property_type"><span>Property type</span><b>Townhouse</b></div><div className="row" data-field="year_completed"><span>Year completed</span><b>2025</b></div><div className="row" data-field="facing"><span>Facing</span><b className="unstated">Not stated</b></div><div className="row" data-field="power_supply"><span>Power supply</span><b className="na">&mdash;</b></div></div><div className="grp"><p className="kick">Condition &amp; terms</p><div className="row" data-field="occupancy"><span>Occupancy</span><b className="unstated">Not stated</b></div><div className="row" data-field="furnishing"><span>Furnishing</span><b className="unstated">Not stated</b></div><div className="row" data-field="maintenance_fee"><span>Maintenance fee</span><b className="na">&mdash;</b></div></div></div></div>
+
+              <div className="pd-pricing">
+                <div>
+                  <span className="lbl">Reserve price per sq ft</span>
+                  <b className="pd-psf">{PSF ? `RM${PSF.toLocaleString("en-MY")}` : "\u2014"}<i>psf</i></b>
+                  <span className="sub">On the reserve. Your offer sets the final figure.</span>
+                </div>
+                <div>
+                  <span className="lbl">Tenure</span>
+                  <b>Leasehold 99 yrs</b>
+                  <span className="sub">Expiring 2124 &middot; 98 years remaining</span>
+                </div>
+                <div>
+                  <span className="lbl">Land title</span>
+                  <b>Residential</b>
+                  <span className="sub">Standard residential financing applies</span>
+                </div>
+              </div>
+
+              <div className="pd">
+                <div className="band">
+                  <div className="stat" data-field="bedrooms"><svg className="ic" viewBox="0 0 24 24"><path d="M3 18v-6h18v6M3 12V7M21 12v-1a3 3 0 0 0-3-3h-4v4M3 18v2M21 18v2"/><circle cx="7.5" cy="9.5" r="1.6"/></svg><div className="txt"><span className="v">3</span><span className="k">Bedrooms</span></div></div>
+                  <div className="stat" data-field="bathrooms"><svg className="ic" viewBox="0 0 24 24"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM6 12V6a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/></svg><div className="txt"><span className="v">2</span><span className="k">Bathrooms</span></div></div>
+                  <div className="stat" data-field="built_up"><svg className="ic" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h5M15 20v-5M9 4v5M15 4v5M4 15h5M15 15h5"/></svg><div className="txt"><span className="v">1,400 sqft</span><span className="k">Built-up area</span></div></div>
+                  <div className="stat" data-field="storeys"><svg className="ic" viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5"/></svg><div className="txt"><span className="v">3</span><span className="k">Storeys</span></div></div>
+                  <div className="stat" data-field="car_parks"><svg className="ic" viewBox="0 0 24 24"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2M18 17v2h2v-2"/></svg><div className="txt"><span className="v">2</span><span className="k">Car parks</span></div></div>
+                </div>
+                {/* Land area is omitted, not dashed: a stratified townhouse has no
+                    individual land title, so the field does not apply. Only genuinely
+                    unknown-but-applicable fields belong in the "not disclosed" list. */}
+              </div>
+
+              <div className="pd-ask">
+                <p className="pd-ask-head">Not disclosed by the seller</p>
+                <p className="pd-ask-body">
+                  <b>Occupancy &middot; Furnishing &middot; Maintenance fee &middot; Facing</b>
+                  <span>
+                    A sealed tender gives you one offer, so there is no negotiation stage to
+                    uncover these in. Ask the agent before you submit &mdash; each one changes what
+                    the property is worth to you.
+                  </span>
+                </p>
+                <a className="pd-ask-cta" href="https://wa.me/60123938255" target="_blank" rel="noopener">
+                  Ask the agent on WhatsApp &rarr;
+                </a>
+              </div>
+
+              <details className="pd-full">
+                <summary>
+                  <span>
+                    <b>Full specification</b>
+                    <small>Title, building and terms</small>
+                  </span>
+                  <svg className="chev" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5.5 7 9.5l4-4" /></svg>
+                </summary>
+                <div className="pd-groups">
+                  <div className="grp">
+                    <p className="kick">Ownership &amp; title</p>
+                    <div className="row" data-field="tenure"><span>Tenure</span><b>Leasehold 99 yrs</b></div>
+                    <div className="row" data-field="land_title"><span>Land title</span><b>Residential</b></div>
+                    <div className="row" data-field="strata"><span>Strata title</span><b>Yes &middot; stratified townhouse</b></div>
+                  </div>
+                  <div className="grp">
+                    <p className="kick">Building</p>
+                    <div className="row" data-field="property_type"><span>Property type</span><b>3-Storey Townhouse</b></div>
+                    <div className="row" data-field="year_completed"><span>Year completed</span><b>2025</b></div>
+                    <div className="row" data-field="development"><span>Development size</span><b>62 units</b></div>
+                  </div>
+                  <div className="grp">
+                    <p className="kick">Layout</p>
+                    <div className="row" data-field="bedrooms"><span>Bedrooms</span><b>3</b></div>
+                    <div className="row" data-field="bathrooms"><span>Bathrooms</span><b>2</b></div>
+                    <div className="row" data-field="car_parks"><span>Car parks</span><b>2</b></div>
+                  </div>
+                </div>
+              </details>
             </div>
           </div>
         </section>

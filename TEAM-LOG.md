@@ -68,6 +68,25 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §5 Property Details rebuilt (structure first)
+Old sheet: 19 rows, **10 empty**; icon band and Layout/Size groups duplicated the same five facts;
+two empty states with inverted meanings. Rebuilt into four zones ordered by pricing impact —
+see `PLAN-residensi-sinaran.md` §5 for the full rationale.
+
+Key decisions Codex should know:
+- **`PSF` is derived** in ResidensiSinaranDetail (`RESERVE / parsed builtUp`) — RM369 psf. Never
+  hardcode it. It is the number buyers compare on and no MY portal leads with it.
+- **New empty-value rule:** unknown-but-applicable → the "Not disclosed" zone. Not-applicable →
+  **omit the row**. No dashes as data, no "Not stated" in the spec table. Land area is now absent
+  from a strata townhouse rather than dashed.
+- **Zone 3 ("Not disclosed by the seller") is the point of the section**, not filler. A sealed
+  tender has no negotiation stage in which to uncover occupancy/furnishing/maintenance, so the
+  page names them and hands the buyer a WhatsApp CTA. Do not delete it when real data arrives —
+  re-point it at whatever is still missing.
+- Full spec is a collapsed `<details>` reusing the summary/chev pattern from Codex's
+  "How payments work". Only populated rows go in it.
+Verified: 0 "Not stated", no duplicated facts, 3 groups / 9 rows, section 638px, no overflow.
+
 ### 30 Jul 2026 — Claude · §4 PARKED (last unblocked item closed); moving to §5 Details
 Countdown now shows the segmented D:H:M:S clock **only inside the final 90 days**
 (`CLOCK_FROM_DAYS` in ResidensiSinaranDetail). Beyond that it renders the day count alone —

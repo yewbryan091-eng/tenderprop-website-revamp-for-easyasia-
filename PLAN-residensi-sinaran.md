@@ -69,7 +69,35 @@ and apply. Work top of page downward, because that is how Bryan reviews.
   Still open in this section: the assumed registration date, and the rail's 5:00 PM claim.
 - Rule: terms are facts in labelled rows; the how-it-works is a numbered sequence; one red CTA.
 
-### 5. Property Details (19 labelled rows, 5 groups)
+### 5. Property Details — ✅ REBUILT 30 Jul 2026
+**Diagnosis of the old sheet:** 19 rows of which **10 were empty** (6 "Not stated", 3 em dashes),
+so it read as an unfilled form; the icon band and the Layout/Size groups listed the **same five
+facts twice**; and two competing empty states whose meanings had inverted (land area showed "Not
+stated" on a strata townhouse where it does not apply, while zoning showed "—" where it does).
+
+**The reframe that drove the redesign:** a sealed-tender buyer prices the property ONCE, with no
+iterative negotiation to discover things in. So the section's job is not "describe the home" — it
+is **"give me what I need to put a number on it."** Zones therefore run in decreasing pricing
+impact, not in arbitrary categories:
+
+1. **What you're pricing** — `RM369 psf` (**DERIVED** from reserve ÷ built-up, never typed),
+   tenure with remaining term, land title. The psf is the metric buyers actually compare on and
+   **no Malaysian portal leads with it**.
+2. **Measurements** — the icon band, and *only* here. Nothing below repeats it.
+3. **Not disclosed by the seller** — the gaps, named as a checklist with a WhatsApp CTA. This is
+   the most useful element in the section: on a portal you would uncover occupancy, furnishing and
+   maintenance fee during negotiation, and in a sealed tender you cannot. Naming them is a
+   service, not an apology — it turns the page's biggest weakness into its best feature.
+4. **Full specification** — collapsed (`<details>`, the Zillow pattern), and only rows that carry
+   a value, so the sheet can never look unfilled again.
+
+**New empty-value rule, replacing the two-dash confusion:** *unknown but applicable* → goes in
+zone 3. *Not applicable to this property type* → **row omitted entirely**. No dashes as data.
+
+Result: 0 "Not stated" (was 6), no duplicated facts, section 638px. ⛔ Still needs real
+occupancy/furnishing/maintenance data from the agency; the derived psf works today.
+
+### 5b. Old notes (superseded)
 - Job: the comparison spec sheet — our biggest advantage over OwnerAuction (they have 5 fields).
 - Known issues: 10 of 19 rows are "Not stated". Keep the honest convention ("Not stated" vs "—")
   but consider promoting the six deal-breakers (occupancy, furnishing, maintenance fee, title

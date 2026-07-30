@@ -804,3 +804,96 @@
 /* Day-count fallback outside the 90-day clock window: same weight as the segmented
    clock so the rail keeps its rhythm, without the ticking seconds. */
 .v1-timer .v1-timer-days b { font-size: 21px; letter-spacing: -.01em; }
+
+/* ══ PROPERTY DETAILS — four zones in decreasing pricing impact ══════════════
+   Zone 1 pricing bar · Zone 2 measurement band · Zone 3 not-disclosed · Zone 4 full spec */
+
+/* Zone 1 — what a buyer actually prices on. Sits highest because psf and tenure move
+   the number more than any other fact on the page. */
+.pd-pricing {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 0 24px; padding: 20px 0;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+}
+.pd-pricing > div { min-width: 0; padding: 0 20px; border-left: 1px solid var(--line); }
+.pd-pricing > div:first-child { padding-left: 0; border-left: 0; }
+.pd-pricing > div:last-child { padding-right: 0; }
+.pd-pricing .lbl {
+  display: block; color: var(--muted); font-size: 11px; font-weight: 800;
+  letter-spacing: .08em; text-transform: uppercase;
+}
+.pd-pricing b {
+  display: block; margin: 7px 0 5px; color: var(--ink);
+  font-size: 21px; font-weight: 700; line-height: 1.2; letter-spacing: -.015em;
+}
+.pd-pricing .pd-psf {
+  font-family: var(--serif); font-optical-sizing: auto;
+  font-size: clamp(28px, 3vw, 34px); font-weight: 600; letter-spacing: -.02em;
+  color: var(--burgundy); font-variant-numeric: tabular-nums;
+}
+.pd-pricing .pd-psf i {
+  font-style: normal; margin-left: 5px; font-family: var(--sans);
+  font-size: 12.5px; font-weight: 800; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--muted);
+}
+.pd-pricing .sub { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.45; }
+
+/* Zone 3 — the gaps, stated as a checklist. This is the section's most useful element:
+   in a sealed tender there is no negotiation stage to uncover them in. */
+.pd-ask {
+  margin: 24px 0 0; padding: 17px 19px; border-radius: 11px;
+  background: color-mix(in srgb, var(--warn, #9A6A00) 6%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--warn, #9A6A00) 24%, transparent);
+}
+.pd-ask-head {
+  margin: 0 0 8px; color: var(--warn, #9A6A00);
+  font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+}
+.pd-ask-body { margin: 0; }
+.pd-ask-body b { display: block; margin-bottom: 5px; color: var(--ink); font-size: 15px; font-weight: 700; }
+.pd-ask-body span { display: block; color: var(--muted); font-size: 13.5px; line-height: 1.55; max-width: 68ch; }
+.pd-ask-cta {
+  display: inline-block; margin-top: 12px;
+  color: var(--burgundy); font-size: 13.5px; font-weight: 700; text-decoration: none;
+}
+.pd-ask-cta:hover { text-decoration: underline; }
+
+/* Zone 4 — collapsed by default (the Zillow pattern): only rows that carry a value,
+   so the sheet can never look like an unfilled form again. */
+.pd-full { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+.pd-full summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  cursor: pointer; list-style: none;
+}
+.pd-full summary::-webkit-details-marker { display: none; }
+.pd-full summary b { display: block; color: var(--ink); font-size: 15.5px; font-weight: 700; }
+.pd-full summary small { color: var(--muted); font-size: 12.5px; }
+.pd-full summary .chev {
+  flex: none; width: 16px; height: 16px; fill: none;
+  stroke: var(--burgundy); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .18s ease;
+}
+.pd-full[open] summary .chev { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .pd-full summary .chev { transition: none; } }
+.pd-groups {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 38px); margin-top: 20px;
+}
+.pd-groups .kick {
+  margin: 0 0 10px; color: var(--muted);
+  font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+}
+.pd-groups .row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding: 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  font-size: 13.5px;
+}
+.pd-groups .row span { color: var(--muted); }
+.pd-groups .row b { color: var(--ink); font-weight: 700; text-align: right; }
+
+@media (max-width: 860px) {
+  .pd-pricing { grid-template-columns: 1fr; gap: 16px; }
+  .pd-pricing > div { padding: 0; border-left: 0; }
+  .pd-pricing > div + div { padding-top: 16px; border-top: 1px solid var(--line); }
+  .pd-groups { grid-template-columns: 1fr; }
+}
