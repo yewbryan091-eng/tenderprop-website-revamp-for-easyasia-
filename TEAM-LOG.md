@@ -69,6 +69,20 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · The line is now CENTRED on the rule, not baseline-aligned
+Bryan: *"move it to the middle man"*. He was reading the 17px line as hanging at the foot of the
+33px rule — because it was baseline-aligned to the heading, which is typographically correct and
+optically wrong at this size gap. **Against 46px type, a 17px line sitting on the shared baseline
+sinks.** `.howto-link` is now `align-items: center`.
+
+The rule still ends exactly on the heading's baseline and rises to its cap (538→571 against a
+536→586 heading box) — only the type moved. Rule centre and text centre both 554.9, arrow still
+0 off the text.
+
+**Rule worth keeping: baseline alignment stops being the right answer past roughly a 2:1 size
+ratio.** Below that, share the baseline. Above it, optically centre the small element on the
+large one's cap band, or it reads as sinking.
+
 ### 31 Jul 2026 — Claude · Fixed the floating arrow I introduced with the rule
 Bryan caught it: the arrow was hovering up near the heading's cap line, detached from "See how it
 works". **My own regression from the previous commit.** `align-self: center` centres against the
