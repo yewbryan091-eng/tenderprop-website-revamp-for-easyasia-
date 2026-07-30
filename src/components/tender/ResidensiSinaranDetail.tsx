@@ -386,14 +386,14 @@ export function ResidensiSinaranDetail() {
                     property itself.
                   </p>
                 </div>
-                {/* "Get an answer" completes the heading's question — Q then A — and promises an
+                {/* "Get your answer" completes the heading's question — Q then A — and promises an
                     outcome rather than an activity. No "agent": the VOICE RULE keeps agency
                     identity in the agent block and the footer, not in front-of-house CTAs. It
                     also avoids echoing the word "question" from the heading directly above it.
                     Alternates considered: "Ask before you offer" (carries the sealed-tender logic
                     but repeats the lede), "Get in touch" (safe, forgettable), "Ask a question"
                     (redundant with the heading). */}
-                <a className="pd-ask-cta" href="#agent">Get an answer</a>
+                <a className="pd-ask-cta" href="#agent">Get your answer</a>
               </section>
 
             </div>
