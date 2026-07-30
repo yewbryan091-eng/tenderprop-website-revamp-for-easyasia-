@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { PropertyCard } from "@/components/tender/PropertyCard";
 import { SiteFooter } from "@/components/tender/SiteFooter";
@@ -16,7 +16,7 @@ import {
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
-  TYPE_BY_VALUE, fmtDate, fmtRM, inPriceRange, matchesTaxonomy, tenderId,
+  TYPE_BY_VALUE, fmtDate, fmtRM, matchesTaxonomy, tenderId,
 } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 
@@ -67,19 +67,52 @@ const HERO_DATE = (() => {
   return { day, suffix, month: MONTH_NAMES[month - 1], year };
 })();
 
-const PRICE_ROWS = [
-  { value: "500k-below", label: "Under RM500k" },
-  { value: "501k-1mil", label: "RM500k – RM1m" },
-  { value: "1mil-2mil", label: "RM1m – RM2m" },
-  { value: "2mil-above", label: "RM2m+" },
+const PRICE_MIN_OPTIONS = [
+  100000, 200000, 300000, 400000, 500000, 750000, 1000000, 1500000,
+  2000000, 3000000, 5000000, 10000000, 20000000, 50000000,
 ];
-const MIN_OPTIONS = [100000, 200000, 300000, 400000, 500000, 750000, 1000000, 1500000, 2000000, 3000000];
-const MAX_OPTIONS = [300000, 500000, 750000, 1000000, 1500000, 2000000, 3000000, 5000000];
+const PRICE_MAX_OPTIONS = [
+  300000, 500000, 750000, 1000000, 1500000, 2000000, 3000000, 5000000,
+  10000000, 20000000, 50000000, 70000000,
+];
+type SizeRange = { value: string; label: string; min?: number; max?: number };
+const BUILT_UP_RANGES: SizeRange[] = [
+  { value: "up-to-1000", label: "Up to 1,000 sqft", max: 1000 },
+  { value: "1001-1500", label: "1,001–1,500 sqft", min: 1001, max: 1500 },
+  { value: "1501-2500", label: "1,501–2,500 sqft", min: 1501, max: 2500 },
+  { value: "2501-5000", label: "2,501–5,000 sqft", min: 2501, max: 5000 },
+  { value: "5001-10000", label: "5,001–10,000 sqft", min: 5001, max: 10000 },
+  { value: "10001-plus", label: "10,001+ sqft", min: 10001 },
+];
+const LAND_AREA_RANGES: SizeRange[] = [
+  { value: "up-to-2000", label: "Up to 2,000 sqft", max: 2000 },
+  { value: "2001-5000", label: "2,001–5,000 sqft", min: 2001, max: 5000 },
+  { value: "5001-10000", label: "5,001–10,000 sqft", min: 5001, max: 10000 },
+  { value: "10001-43559", label: "10,001 sqft–under 1 acre", min: 10001, max: 43559 },
+  { value: "1-acre-plus", label: "1 acre and above", min: 43560 },
+];
 const CAT_CHIP: Record<string, string> = {
   residential: "Residential", commercial: "Commercial", industrial: "Industrial", land: "Land",
 };
 
 const INDEXED = TENDERS.map((x, i) => ({ ...x, _i: i })) as (Tender & { _i: number })[];
+
+function areaInSqft(value: string): number | null {
+  const normalised = value.toLowerCase().replace(/,/g, "").trim();
+  if (!normalised) return null;
+  const amount = Number.parseFloat(normalised);
+  if (!Number.isFinite(amount)) return null;
+  return normalised.includes("acre") ? amount * 43560 : amount;
+}
+
+function inSizeRange(value: string, selected: string, options: SizeRange[]) {
+  if (selected === "all") return true;
+  const sqft = areaInSqft(value);
+  const range = options.find((option) => option.value === selected);
+  if (sqft === null || !range) return false;
+  return (range.min === undefined || sqft >= range.min) &&
+    (range.max === undefined || sqft <= range.max);
+}
 
 /* Null until mount so SSR and first paint never show a flash of zeros.
    Tenders close at 5:00 PM Malaysian time on the closing date. */
@@ -121,27 +154,24 @@ function TenderListings() {
   const [query, setQuery] = useState("");
   const [typeValue, setTypeValue] = useState("all");
   const [category, setCategory] = useState("all");
-  const [ranges, setRanges] = useState<string[]>([]);
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
+  const [closingCycle, setClosingCycle] = useState("all");
+  const [builtUpRange, setBuiltUpRange] = useState("all");
+  const [landAreaRange, setLandAreaRange] = useState("all");
+  const [tenure, setTenure] = useState("all");
+  const [propertyFiltersOpen, setPropertyFiltersOpen] = useState(false);
   const [state, setState] = useState("all");
   const [area, setArea] = useState("");
   const [areaLabel, setAreaLabel] = useState("");
   const [sortMode, setSortMode] = useState("closing");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [page, setPage] = useState(1);
-  const [priceOpen, setPriceOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [taOpen, setTaOpen] = useState(false);
   const [taActive, setTaActive] = useState(-1);
   const resultsTop = useRef<HTMLDivElement>(null);
-  /* Price popover keeps a draft copy so nothing filters until Apply. */
-  const priceWrapRef = useRef<HTMLDivElement>(null);
-  const priceBtnRef = useRef<HTMLButtonElement>(null);
-  const [draftMin, setDraftMin] = useState("");
-  const [draftMax, setDraftMax] = useState("");
-  const [draftRanges, setDraftRanges] = useState<string[]>([]);
 
   useEffect(() => {
     try {
@@ -157,22 +187,15 @@ function TenderListings() {
     return () => window.removeEventListener("keydown", onKey);
   }, [sheetOpen]);
 
-  /* Price popover: outside click and Escape close it, focus returns to the button. */
+  /* Escape closes the inline property filters without changing selections. */
   useEffect(() => {
-    if (!priceOpen) return;
-    const onDown = (e: MouseEvent) => {
-      if (!priceWrapRef.current?.contains(e.target as Node)) setPriceOpen(false);
-    };
+    if (!propertyFiltersOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { setPriceOpen(false); priceBtnRef.current?.focus(); }
+      if (e.key === "Escape") setPropertyFiltersOpen(false);
     };
-    document.addEventListener("mousedown", onDown);
     window.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDown);
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [priceOpen]);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [propertyFiltersOpen]);
 
   function toggleSave(id: string) {
     setSaved((prev) => {
@@ -188,7 +211,7 @@ function TenderListings() {
     const q = query.toLowerCase().trim();
     const mn = priceMin ? parseInt(priceMin) : null;
     const mx = priceMax ? parseInt(priceMax) : null;
-    const priceActive = ranges.length > 0 || mn !== null || mx !== null;
+    const priceActive = mn !== null || mx !== null;
     return {
       text: (x: Tender) =>
         !q ||
@@ -199,20 +222,29 @@ function TenderListings() {
       price: (x: Tender) => {
         if (!priceActive) return true;
         const p = x.reservePrice;
-        if (ranges.some((r) => inPriceRange(p, r))) return true;
-        return (mn !== null || mx !== null) && p > 0 && (mn === null || p >= mn) && (mx === null || p <= mx);
+        return p > 0 && (mn === null || p >= mn) && (mx === null || p <= mx);
       },
+      closing: (x: Tender) => closingCycle === "all" || x.closingDate === closingCycle,
+      builtUp: (x: Tender) => inSizeRange(x.builtUp, builtUpRange, BUILT_UP_RANGES),
+      landArea: (x: Tender) => inSizeRange(x.landArea, landAreaRange, LAND_AREA_RANGES),
+      tenure: (x: Tender) => tenure === "all" || x.tenure.toLowerCase() === tenure,
       location: (x: Tender) =>
         (state === "all" || x.stateKey === state) && (area === "" || x.area.toLowerCase() === area),
     };
-  }, [query, category, typeValue, ranges, priceMin, priceMax, state, area]);
+  }, [
+    query, category, typeValue, priceMin, priceMax, closingCycle, builtUpRange,
+    landAreaRange, tenure, state, area,
+  ]);
 
-  const passesExcept = (x: Tender, skip: string | null) =>
-    (Object.keys(groups) as (keyof typeof groups)[]).every((g) => g === skip || groups[g](x));
+  const passesExcept = useCallback(
+    (x: Tender, skip: string | null) =>
+      (Object.keys(groups) as (keyof typeof groups)[]).every((g) => g === skip || groups[g](x)),
+    [groups],
+  );
 
   const matched = useMemo(
     () => INDEXED.filter((x) => passesExcept(x, null)),
-    [groups],
+    [passesExcept],
   );
 
   const sorted = useMemo(() => {
@@ -228,11 +260,16 @@ function TenderListings() {
   const currentPage = Math.min(page, totalPages);
   const slice = sorted.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
 
-  const locationPool = useMemo(() => INDEXED.filter((x) => passesExcept(x, "location")), [groups]);
+  const locationPool = useMemo(
+    () => INDEXED.filter((x) => passesExcept(x, "location")),
+    [passesExcept],
+  );
   const catCount = (c: string) =>
     INDEXED.filter((x) => passesExcept(x, "category") && (c === "all" || x.propertyCategory === c)).length;
-  const priceCount = (r: string) =>
-    INDEXED.filter((x) => passesExcept(x, "price") && inPriceRange(x.reservePrice, r)).length;
+  const closingCount = (date: string) =>
+    INDEXED.filter((x) => passesExcept(x, "closing") && x.closingDate === date).length;
+  const tenureCount = (value: string) =>
+    INDEXED.filter((x) => passesExcept(x, "tenure") && x.tenure.toLowerCase() === value).length;
 
   /* Type dropdown: full live taxonomy always renders; counts scope to the active
      category tab and empty options are disabled so they can't dead-end. */
@@ -245,37 +282,26 @@ function TenderListings() {
   }, [category]);
 
   function reset() {
-    setQuery(""); setTypeValue("all"); setCategory("all"); setRanges([]);
-    setPriceMin(""); setPriceMax(""); setState("all"); setArea(""); setAreaLabel("");
-    setPriceOpen(false); setPage(1);
+    setQuery(""); setTypeValue("all"); setCategory("all");
+    setPriceMin(""); setPriceMax(""); setClosingCycle("all");
+    setBuiltUpRange("all"); setLandAreaRange("all"); setTenure("all");
+    setState("all"); setArea(""); setAreaLabel("");
+    setPropertyFiltersOpen(false); setPage(1);
   }
 
-  const activePriceCount = ranges.length + (priceMin ? 1 : 0) + (priceMax ? 1 : 0);
+  function clearPropertyFilters() {
+    setPriceMin(""); setPriceMax(""); setClosingCycle("all");
+    setBuiltUpRange("all"); setLandAreaRange("all"); setTenure("all");
+    setPage(1);
+  }
 
-  /* Compact, human-readable summary of the applied price filter. */
-  const priceSummary = (() => {
-    const mn = priceMin ? parseInt(priceMin) : null;
-    const mx = priceMax ? parseInt(priceMax) : null;
-    if (mn !== null && mx !== null) return `${fmtRM(mn)}–${fmtRM(mx)}`;
-    if (mn !== null) return `${fmtRM(mn)}+`;
-    if (mx !== null) return `Up to ${fmtRM(mx)}`;
-    if (ranges.length === 1) return PRICE_ROWS.find((p) => p.value === ranges[0])?.label ?? null;
-    if (ranges.length > 1) return `${ranges.length} price bands`;
-    return null;
-  })();
-
-  function openPrice() {
-    setDraftMin(priceMin); setDraftMax(priceMax); setDraftRanges(ranges);
-    setPriceOpen(true);
-  }
-  function applyPrice() {
-    setPriceMin(draftMin); setPriceMax(draftMax); setRanges(draftRanges);
-    setPage(1); setPriceOpen(false); priceBtnRef.current?.focus();
-  }
-  function clearPrice() {
-    setDraftMin(""); setDraftMax(""); setDraftRanges([]);
-    setPriceMin(""); setPriceMax(""); setRanges([]); setPage(1);
-  }
+  const activePropertyFilterCount = [
+    priceMin || priceMax,
+    closingCycle !== "all",
+    builtUpRange !== "all",
+    landAreaRange !== "all",
+    tenure !== "all",
+  ].filter(Boolean).length;
 
   /* ---- Active filter chips ---- */
   const chips: { label: string; clear: () => void }[] = [];
@@ -292,10 +318,6 @@ function TenderListings() {
       clear: () => { setTypeValue("all"); setPage(1); },
     });
   }
-  ranges.forEach((r) => {
-    const row = PRICE_ROWS.find((p) => p.value === r);
-    chips.push({ label: row?.label || r, clear: () => { setRanges((v) => v.filter((y) => y !== r)); setPage(1); } });
-  });
   if (priceMin || priceMax) {
     const mn = priceMin ? parseInt(priceMin) : null;
     const mx = priceMax ? parseInt(priceMax) : null;
@@ -304,6 +326,32 @@ function TenderListings() {
         : mn !== null ? `From ${fmtRM(mn)}`
         : mx !== null ? `Up to ${fmtRM(mx)}` : "Custom";
     chips.push({ label, clear: () => { setPriceMin(""); setPriceMax(""); setPage(1); } });
+  }
+  if (closingCycle !== "all") {
+    chips.push({
+      label: `Closes ${fmtDate(closingCycle)}`,
+      clear: () => { setClosingCycle("all"); setPage(1); },
+    });
+  }
+  if (builtUpRange !== "all") {
+    const selected = BUILT_UP_RANGES.find((option) => option.value === builtUpRange);
+    chips.push({
+      label: `Built-up: ${selected?.label || builtUpRange}`,
+      clear: () => { setBuiltUpRange("all"); setPage(1); },
+    });
+  }
+  if (landAreaRange !== "all") {
+    const selected = LAND_AREA_RANGES.find((option) => option.value === landAreaRange);
+    chips.push({
+      label: `Land area: ${selected?.label || landAreaRange}`,
+      clear: () => { setLandAreaRange("all"); setPage(1); },
+    });
+  }
+  if (tenure !== "all") {
+    chips.push({
+      label: tenure === "freehold" ? "Freehold" : "Leasehold",
+      clear: () => { setTenure("all"); setPage(1); },
+    });
   }
   if (query.trim()) chips.push({ label: `“${query.trim()}”`, clear: () => { setQuery(""); setPage(1); } });
 
@@ -444,6 +492,7 @@ function TenderListings() {
                 e.preventDefault();
                 setPage(1);
                 setTaOpen(false);
+                setPropertyFiltersOpen(false);
                 resultsTop.current?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
             >
@@ -500,7 +549,167 @@ function TenderListings() {
                     ))}
                   </select>
                 </div>
-                <button type="submit" className="btn red btn-search">Search</button>
+                <div className="search-actions">
+                  <button type="submit" className="btn red btn-search">Search</button>
+                  <button
+                    type="button"
+                    className={"btn-property-filters" + (activePropertyFilterCount ? " is-active" : "")}
+                    aria-expanded={propertyFiltersOpen}
+                    aria-controls="property-filters"
+                    onClick={() => setPropertyFiltersOpen((open) => !open)}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6" />
+                    </svg>
+                    <span>Filters</span>
+                    {activePropertyFilterCount > 0 && (
+                      <span className="property-filter-badge">{activePropertyFilterCount}</span>
+                    )}
+                    <svg className="property-filter-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div
+                className="property-filter-panel"
+                id="property-filters"
+                role="region"
+                aria-label="Property filters"
+                hidden={!propertyFiltersOpen}
+              >
+                <div className="property-filter-head">
+                  <div>
+                    <p className="property-filter-kicker">Refine tender properties</p>
+                    <p className="property-filter-help">
+                      Filter by the closing cycle, reserve price and property size.
+                    </p>
+                  </div>
+                  <div className="property-filter-status">
+                    <span aria-live="polite">
+                      <strong>{sorted.length}</strong> {sorted.length === 1 ? "match" : "matches"}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={clearPropertyFilters}
+                      disabled={activePropertyFilterCount === 0}
+                    >
+                      Clear filters
+                    </button>
+                  </div>
+                </div>
+
+                <div className="property-filter-grid">
+                  <label className="property-filter-field is-closing">
+                    <span>Tender closing cycle</span>
+                    <select
+                      value={closingCycle}
+                      onChange={(e) => { setClosingCycle(e.target.value); setPage(1); }}
+                    >
+                      <option value="all">Any closing date</option>
+                      {BATCHES.map((batch) => {
+                        const count = closingCount(batch.date);
+                        return (
+                          <option
+                            key={batch.date}
+                            value={batch.date}
+                            disabled={count === 0 && closingCycle !== batch.date}
+                          >
+                            {fmtDate(batch.date)} · {count} {count === 1 ? "property" : "properties"}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </label>
+
+                  <div className="property-filter-field is-price">
+                    <span>Reserve price (RM)</span>
+                    <div className="property-filter-pair">
+                      <label>
+                        <span className="sr-only">Minimum reserve price</span>
+                        <select
+                          aria-label="Minimum reserve price"
+                          value={priceMin}
+                          onChange={(e) => { setPriceMin(e.target.value); setPage(1); }}
+                        >
+                          <option value="">No minimum</option>
+                          {PRICE_MIN_OPTIONS.map((value) => (
+                            <option
+                              key={value}
+                              value={value}
+                              disabled={Boolean(priceMax) && value > parseInt(priceMax)}
+                            >
+                              {fmtRM(value)}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <span aria-hidden="true">to</span>
+                      <label>
+                        <span className="sr-only">Maximum reserve price</span>
+                        <select
+                          aria-label="Maximum reserve price"
+                          value={priceMax}
+                          onChange={(e) => { setPriceMax(e.target.value); setPage(1); }}
+                        >
+                          <option value="">No maximum</option>
+                          {PRICE_MAX_OPTIONS.map((value) => (
+                            <option
+                              key={value}
+                              value={value}
+                              disabled={Boolean(priceMin) && value < parseInt(priceMin)}
+                            >
+                              {fmtRM(value)}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+
+                  <label className="property-filter-field is-tenure">
+                    <span>Tenure</span>
+                    <select
+                      value={tenure}
+                      onChange={(e) => { setTenure(e.target.value); setPage(1); }}
+                    >
+                      <option value="all">Any tenure</option>
+                      <option value="freehold" disabled={tenureCount("freehold") === 0}>
+                        Freehold ({tenureCount("freehold")})
+                      </option>
+                      <option value="leasehold" disabled={tenureCount("leasehold") === 0}>
+                        Leasehold ({tenureCount("leasehold")})
+                      </option>
+                    </select>
+                  </label>
+
+                  <label className="property-filter-field is-built-up">
+                    <span>Built-up area</span>
+                    <select
+                      value={builtUpRange}
+                      onChange={(e) => { setBuiltUpRange(e.target.value); setPage(1); }}
+                    >
+                      <option value="all">Any built-up size</option>
+                      {BUILT_UP_RANGES.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="property-filter-field is-land-area">
+                    <span>Land area</span>
+                    <select
+                      value={landAreaRange}
+                      onChange={(e) => { setLandAreaRange(e.target.value); setPage(1); }}
+                    >
+                      <option value="all">Any land size</option>
+                      {LAND_AREA_RANGES.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
               </div>
             </form>
 
@@ -565,68 +774,6 @@ function TenderListings() {
                       <option value="price-asc">Reserve price: low to high</option>
                       <option value="price-desc">Reserve price: high to low</option>
                     </select>
-                  </div>
-                  {/* Price range — the single price control on the page */}
-                  <div className="price-tool" ref={priceWrapRef}>
-                    <button
-                      type="button"
-                      ref={priceBtnRef}
-                      className={"price-tool-btn" + (priceSummary ? " is-active" : "")}
-                      aria-expanded={priceOpen}
-                      aria-controls="price-popover"
-                      aria-haspopup="dialog"
-                      aria-label={priceSummary ? `Price range: ${priceSummary}` : "Price range"}
-                      onClick={() => (priceOpen ? setPriceOpen(false) : openPrice())}
-                    >
-                      <span className="ptb-short" aria-hidden="true">{priceSummary || "Price"}</span>
-                      <span className="ptb-full">{priceSummary || "Price range"}</span>
-                      <svg className="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="m6 9 6 6 6-6" />
-                      </svg>
-                    </button>
-                    {priceOpen && (
-                      <div className="price-popover" id="price-popover" role="dialog" aria-label="Price range">
-                        <div className="price-minmax">
-                          <label className="pp-field">
-                            <span>Minimum (RM)</span>
-                            <select value={draftMin} onChange={(e) => setDraftMin(e.target.value)}>
-                              <option value="">No min</option>
-                              {MIN_OPTIONS.map((v) => <option key={v} value={v}>{fmtRM(v)}</option>)}
-                            </select>
-                          </label>
-                          <span className="mm-sep" aria-hidden="true">to</span>
-                          <label className="pp-field">
-                            <span>Maximum (RM)</span>
-                            <select value={draftMax} onChange={(e) => setDraftMax(e.target.value)}>
-                              <option value="">No max</option>
-                              {MAX_OPTIONS.map((v) => <option key={v} value={v}>{fmtRM(v)}</option>)}
-                            </select>
-                          </label>
-                        </div>
-                        <p className="pp-legend">Or pick a band</p>
-                        <div className="price-pop">
-                          {PRICE_ROWS.map((r) => (
-                            <label className="pop-row" key={r.value}>
-                              <input
-                                type="checkbox"
-                                value={r.value}
-                                checked={draftRanges.includes(r.value)}
-                                onChange={(e) =>
-                                  setDraftRanges((v) => (e.target.checked ? [...v, r.value] : v.filter((y) => y !== r.value)))
-                                }
-                              />
-                              <span className="box" aria-hidden="true" />
-                              <span className="label">{r.label}</span>
-                              <span className="count">{priceCount(r.value)}</span>
-                            </label>
-                          ))}
-                        </div>
-                        <div className="pp-actions">
-                          <button type="button" className="pp-clear" onClick={clearPrice} disabled={activePriceCount === 0 && !draftMin && !draftMax && draftRanges.length === 0}>Clear</button>
-                          <button type="button" className="btn red pp-apply" onClick={applyPrice}>Apply</button>
-                        </div>
-                      </div>
-                    )}
                   </div>
                   <div className="view-toggle" role="group" aria-label="Result layout">
                     <button type="button" className={"toggle-btn" + (view === "grid" ? " active" : "")} title="Grid View" aria-pressed={view === "grid"} onClick={() => setView("grid")}>

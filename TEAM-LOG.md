@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | Codex | 30 Jul 2026 | Researching and building the expanded property filters below Search |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Section queue in the plan file; work it in order |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -45,6 +45,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 28 Jul | `REN 123456` is an approved **placeholder** | Real REN + agency registration required before go-live | Bryan |
 | 29 Jul | Cards show a **Tender start** date computed as closing date − 3 months (`tenderStartOf` in tender-utils) | DELIBERATE demo value, founder's call: "this is just a demo for easyasia, information may not be accurate… who cares". Overrides the invent-nothing rule for THIS field only. Swap for a real per-listing start date when the backend supplies one | Bryan |
 | 28 Jul | `tender-seeker-bot.lovable.app` is a **frozen snapshot**; this repo is the truth | Lovable credits ran out; its copy no longer updates from git | Bryan |
+| 30 Jul | Property filters live in an inline disclosure **directly below Search**: tender closing cycle, reserve-price range, built-up area, land area and tenure. Price moved out of the Sort row; Tender by State remains standalone | Keeps “what qualifies” together in Search and “how results are ordered” in the results toolbar, while retaining TenderProp’s event/cycle framing | Bryan + Codex |
 
 ---
 
@@ -66,6 +67,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 30 Jul 2026 — Codex · Tender listing property filters
+- Studied the current iProperty / PropertyGuru / EdgeProp filtering patterns, then kept only
+  buyer-relevant fields backed by this inventory. Omitted catalogue clutter such as furnishing,
+  amenities, listing age, verification flags, bathrooms and car parks.
+- Added a secondary outlined `Filters` control directly beneath the red Search action. It expands
+  inside the existing search card—no modal or competing CTA—and updates the cards, counts, category
+  facets, chips and active-count badge live.
+- Filters: exact data-derived tender closing cycles; min/max reserve price; built-up presets; land
+  area presets (mixed sqft/acre values are normalised for matching); and Freehold/Leasehold.
+  `Tender by State` stays its own rail/mobile sheet, and Sort/Grid/List remain results controls.
+- Removed the old Price popover from the Sort row so there is one clear property-filtering surface.
+  Search collapses the disclosure and takes the buyer to the results.
+- Rendered review at 1440px and 375px: balanced hierarchy, equal-width Search/Filters actions on
+  mobile, 0px horizontal overflow and no console warnings/errors. Tested the 5-property closing
+  cycle, built-up range and 1-acre+ land filters; build passes and targeted non-format lint is clean.
 
 ### 30 Jul 2026 — Claude · lock spans the copy block; assurance copy = Bryan's wording
 - Assurance line is now Bryan's: *"Every e-tender offer is presented directly to the seller for
