@@ -118,6 +118,11 @@ region reading seconds is hostile to a screen reader. **Keep it in flow with
 `align-self: flex-end`, never absolutely positioned** — the panel's `padding-right` already tracks
 the diagonal, so the content edge clears the seam for free. An absolute version had to re-derive
 the seam from `--hero-top-split` and landed beside the day count instead of in the corner.
+To sit it closer to the seam, pull with a negative margin **derived from the split tokens**:
+`margin-right: calc(-1 * (var(--hero-top-split) - var(--hero-bot-split)) + 2%)`. The panel's
+padding is sized for the diagonal at the BOTTOM edge, so ~14% of width goes spare at the top;
+that expression reclaims it minus a safety gap and keeps working if the angle changes.
+Zero the margin below 860px, where the diagonal collapses.
 
 ## 4. Established patterns — reuse before inventing
 
