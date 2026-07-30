@@ -426,19 +426,23 @@ export function ResidensiSinaranDetail() {
           <div className="wrap">
             <div className="blkcard about">
               <h2 className="sec-title">About <span>Residensi Sinaran</span></h2>
+              {/* The pull-quote sits OUTSIDE the clamp. It is the one argument nothing else
+                  on the page makes, so putting it behind a fold would defeat the reason it
+                  exists — and a standfirst above the prose is where a reader expects the
+                  section's thesis anyway. Everything below it clamps at 5 lines. */}
+              <blockquote className="about-quote">
+                The development is complete and handed over, so you can walk the actual unit,
+                check the finishes and see the neighbours before deciding what to offer. That
+                matters more here than in a normal sale: a sealed tender gives you one number
+                and no second attempt.
+              </blockquote>
               <div className="aboutbody" id="about-body">
-                <p className="about-lead">
+                <p>
                   Residensi Sinaran sits inside Taman Sri Muda, one of the older established
                   townships in Shah Alam &mdash; the kind of neighbourhood that finished growing a
                   decade ago. Sixty-two homes behind a single controlled entrance, which is small
                   enough that the place stays quiet.
                 </p>
-                <blockquote className="about-quote">
-                  The development is complete and handed over, so you can walk the actual unit,
-                  check the finishes and see the neighbours before deciding what to offer. That
-                  matters more here than in a normal sale: a sealed tender gives you one number
-                  and no second attempt.
-                </blockquote>
                 <p>
                   Each home runs over three storeys, which puts the shared living areas downstairs
                   and the private rooms above &mdash; the practical reason a family chooses a
@@ -446,11 +450,29 @@ export function ResidensiSinaranDetail() {
                   works as a household grows.
                 </p>
                 <p>
-                  That the township is older is the point. Everything around it already exists,
-                  and nothing about living here depends on a masterplan being finished or a
-                  neighbouring phase being sold.
+                  Because it is stratified, the things that usually make landed property tiring are
+                  handled collectively: the guardhouse, the shared grounds and the upkeep of common
+                  areas sit with the management body rather than with you. It is landed living with
+                  the administrative load of a strata development, which is an unusual combination
+                  at this size.
+                </p>
+                <p>
+                  Completion also changes what your lender is looking at. A bank valuing a finished
+                  unit is valuing something that exists &mdash; a real floor plate, real finishes,
+                  a real neighbourhood &mdash; rather than a projection off a masterplan. If you
+                  want a valuer to walk it before you decide your number, that is possible here in
+                  a way it is not with a launch.
+                </p>
+                <p>
+                  That the township is older is the point. Everything around it already exists, and
+                  nothing about living here depends on a masterplan being finished or a neighbouring
+                  phase being sold.
                 </p>
               </div>
+              <button type="button" className="viewmore" id="about-toggle" aria-expanded="false" aria-controls="about-body">
+                <span>View more</span>
+                <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5.5 7 9.5l4-4" /></svg>
+              </button>
             </div>
           </div>
         </section>

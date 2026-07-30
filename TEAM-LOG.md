@@ -68,6 +68,25 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · About: View more restored, clamped at 5 lines, and a cascade bug fixed
+Bryan wants progressive disclosure kept: **"5 line onwards… there must be a view more button."**
+- Clamp is **5 lines** (`8.6em` = 5 x the 1.72 line-height). Verified 5.0 lines closed.
+- **The pull-quote sits OUTSIDE the clamp**, above the body. It is the one argument nothing else on
+  the page makes, so putting it behind a fold defeats the reason it exists — and a standfirst above
+  the prose is where a reader expects a section's thesis.
+- A button implies depth worth hiding, so About went back up to **5 paragraphs / 237 words** with
+  two genuinely new ones (strata handling the upkeep of landed living; completion meaning a lender
+  values a real unit rather than a projection, and a valuer can walk it before you set your number).
+  Still nothing duplicating Details or What's Nearby.
+- 🐛 **Cascade bug worth knowing:** `.aboutbody { max-height: 8.6em }` with
+  `.aboutbody.open { max-height: 220em }` — correct by specificity — **did not work.** The button
+  flipped its label and `aria-expanded` while the text stayed clipped at 137.6px, so it looked
+  functional. Fixed by scoping the clamp to `:not(.open)` so there is nothing to override.
+  **Two lessons in DESIGN-SYSTEM §5.10–11: a toggle test must assert HEIGHT (the label lies), and
+  `getComputedStyle` on a transitioning property returns the interpolated value, not the target.**
+Verified: closed 138px / 5.0 lines / clipped, open 642px / not clipped, re-closed 138px, label and
+aria both cycling, no overflow.
+
 ### 30 Jul 2026 — Claude · BUG I SHIPPED: About was clipped with no way to open it
 Bryan asked where "View more" went. I had removed the button but **left `max-height: 8.4em` on
 `.aboutbody`** — so the last paragraph and a half were clipped and unreachable. Verified before

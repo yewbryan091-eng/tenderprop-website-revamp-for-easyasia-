@@ -168,9 +168,7 @@ export function initDetailPage(): () => void {
     sections.forEach(function (s) { io.observe(s); });
   })();
 
-  // ── About view more — INERT since 30 Jul: the clamp and its button were removed once
-  //    About was cut to 164 words. Left in place (it self-disables on the null check) so
-  //    the pattern is here if a longer About ever needs it again. ──
+  // ── About view more (clamped at 5 lines; label lives in a <span>) ──
   (function () {
     var body = document.getElementById("about-body");
     var btn = document.getElementById("about-toggle");
@@ -178,7 +176,8 @@ export function initDetailPage(): () => void {
     btn.addEventListener("click", function () {
       var open = body.classList.toggle("open");
       btn.setAttribute("aria-expanded", String(open));
-      btn.firstChild.textContent = open ? "View less " : "View more ";
+      var label = btn.querySelector("span");
+      if (label) label.textContent = open ? "View less" : "View more";
     });
   })();
 

@@ -110,6 +110,14 @@ one block, one of them is wrong.
    more" button while leaving `max-height: 8.4em` clipped the text with no way to open it, and it
    threw nothing: the toggle script guards with `if (!btn) return` and silently disabled itself.
    After removing any progressive-disclosure control, assert `scrollHeight <= clientHeight`.
+10. **Put a clamp on `:not(.open)`, never on the base class with `.open` overriding it.**
+   `.aboutbody { max-height: 8.6em }` + `.aboutbody.open { max-height: 220em }` looks correct and
+   is correct by specificity, but the open rule did not take effect — the button flipped its label
+   and `aria-expanded` while the text stayed clipped at 137.6px. Scoping the clamp to the closed
+   state removes the fight entirely: the rule stops matching instead of being overridden.
+   **A toggle test must assert HEIGHT, not just the label** — the label lies.
+11. **`getComputedStyle` on a transitioning property returns the interpolated value**, so reading
+   it right after a class change measures the animation's start frame, not its target.
 
 ## 6. Brand — non-negotiable
 

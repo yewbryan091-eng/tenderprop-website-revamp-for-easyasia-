@@ -567,11 +567,37 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
 
   /* About */
   .about p { margin: 0 0 14px; color: var(--muted); max-width: 78ch; }
-  /* Clamp REMOVED 30 Jul. Cutting the duplicated paragraphs took About from four long
-     paragraphs to a lead, a pull-quote and two short ones — 164 words, which is shorter
-     than the fold itself. A "View more" on that hides a sentence and a half behind a
-     click. NOTE: removing the button while leaving `max-height: 8.4em` here left the
-     text clipped with no way to open it — both must go together, or neither. */
+  /* Clamp at 5 lines (Bryan): 5 x the 1.72 line-height = 8.6em. The clamp and the button
+     are ONE feature — never ship one without the other (see DESIGN-SYSTEM §5.9). The
+     pull-quote deliberately sits OUTSIDE this container so the section's argument is never
+     behind the fold. Fade uses --band-bg so it re-matches whichever band the section is on. */
+  /* The clamp lives on :not(.open) rather than being overridden by .open. Two rules both
+     setting max-height on the same element is a fight waiting to be lost — and it was:
+     `.aboutbody.open { max-height: 220em }` never took effect, so the button flipped its
+     label and aria-expanded while the text stayed clipped at 137.6px. With the clamp
+     scoped to the closed state there is nothing to override; the rule simply stops
+     matching. No transition, because max-height cannot animate to `none`. */
+  .aboutbody { position: relative; }
+  .aboutbody:not(.open) { max-height: 8.6em; overflow: hidden; }
+  .aboutbody:not(.open)::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3.2em;
+    background: linear-gradient(180deg, transparent, var(--band-bg));
+    pointer-events: none;
+  }
+  .viewmore {
+    display: inline-flex; align-items: center; gap: 7px;
+    margin-top: 16px; padding: 0; background: none; border: 0;
+    font: inherit; font-size: 14px; font-weight: 700; color: var(--burgundy);
+    cursor: pointer;
+  }
+  .viewmore:hover { text-decoration: underline; }
+  .viewmore svg {
+    width: 14px; height: 14px; fill: none; stroke: currentColor;
+    stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+    transition: transform .2s ease;
+  }
+  .viewmore[aria-expanded="true"] svg { transform: rotate(180deg); }
+  @media (prefers-reduced-motion: reduce) { .viewmore svg { transition: none; } }
 
   /* Price history */
   .tabbar { display: flex; gap: 8px; margin-bottom: 16px; }
