@@ -129,6 +129,20 @@ Bryan's father before treating as final, but the agency already states these pub
   account gate, as the live site already promises.
 - **Buyers may inspect and view before bidding** — a trust asset absent from the rebuilt page.
 
+## Founder answers — 30 Jul 2026, later (two GO-LIVE BLOCKERS closed)
+**No 5:00 PM cutoff exists.** A tender runs to the end of its closing date; the listing simply
+leaves the site. There is no intra-day deadline to communicate. All countdowns now target
+23:59:59 MYT on the closing date. ❓ One detail still to confirm: whether offers can be submitted
+*during* the closing day (assumed yes) or whether the listing goes at midnight *entering* it.
+
+**Deposits are returned IMMEDIATELY, not "within 3 working days."** The agent negotiates between
+buyer and seller; if the seller will not proceed — including after negotiation, and regardless of
+whether the buyer would have accepted the seller's counter — the agent tells the buyer and
+transfers the deposit back immediately. Bryan's reasoning, which is now the copy's reasoning:
+once all three parties know the sale cannot proceed, a waiting period only manufactures
+suspicion. *"It must be immediately... taking 3 business days seems kinda stupid, making the
+buyer paranoid and suspicious for no reason."*
+
 ## Founder answers — 30 Jul 2026 (Bryan, direct)
 0. ✅ **A tender outcome is NOT binary.** *"it's not about win or lose... there's always a
    chance/room for negotiation done by the agent, the agent can also pursue the buyer or the

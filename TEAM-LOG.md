@@ -68,6 +68,19 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · two go-live blockers closed by the founder
+**Codex: both of these were on the unverified list. They are now answered — do not reintroduce.**
+1. **There is no 5:00 PM cutoff.** A tender runs to the end of its closing date and the listing
+   leaves the site. Countdowns target `T23:59:59+08:00`, not `T17:00`. Every "5:00 PM (MYT)" line
+   is removed (hero foot, homepage cycle line, detail header, tender rail). Open sub-question:
+   whether offers can be submitted *during* the closing day (assumed yes) or the listing goes at
+   midnight entering it.
+2. **Deposits are returned IMMEDIATELY, not "within 3 working days."** The agent negotiates; if
+   the seller will not proceed — including after negotiation, and regardless of whether the buyer
+   would have accepted the counter — the agent tells the buyer and refunds at once. The reasoning
+   is now in the FAQ copy: once all three parties know the sale cannot proceed, a waiting period
+   only manufactures suspicion. Never write a refund window again.
+
 ### 30 Jul 2026 — Codex · compact Tender Information dossier
 Removed the glossy red pin and kept the paperclip as the section's sole tender-notice signature.
 Rebuilt the section as a compact three-fact summary, clipped closing/action notice and three-step
