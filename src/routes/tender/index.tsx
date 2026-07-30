@@ -20,15 +20,6 @@ import {
 } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 
-/* TEMPORARY (30 Jul): Bryan is choosing between two treatments for the "how it works"
-   signal his father asked for. Flip this one constant to switch; the loser gets deleted
-   once he picks, so this must not survive the decision.
-     "B" — a quiet strip under the assurances, burgundy on the panel's own ground
-     "C" — a filled burgundy block that deliberately breaks the light-panel pattern,
-           with a 1·2·3 preview so it teaches the method even if nobody clicks
-   Both point at the framed /how-e-tender-works route, so neither is a dead control. */
-const HOW_IT_WORKS_VARIANT: "B" | "C" = "C";
-
 export const Route = createFileRoute("/tender/")({
   head: () => ({
     meta: [
@@ -510,37 +501,28 @@ function TenderListings() {
                   </div>
                 </li>
               </ul>
-
-              {HOW_IT_WORKS_VARIANT === "B" ? (
-                <a className="hero-howto hero-howto-strip" href="/how-e-tender-works">
-                  <span className="hero-howto-mark" aria-hidden="true">?</span>
-                  <span className="hero-howto-text">
-                    <b>New to e-tender?</b> See how it works
-                  </span>
-                  <svg className="hero-howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M5 12h13M13 6l6 6-6 6" />
-                  </svg>
-                </a>
-              ) : (
-                /* C compacted to B's footprint. The first pass carried a 1·2·3 preview and
-                   overflowed the hero — it clipped its own CTA and cut the top assurance's
-                   heading. Growing the hero to fit is the thing Bryan rejected before, so C
-                   is now the same height as B and differs only in weight: filled burgundy
-                   instead of a quiet strip. That makes the choice a clean one — loud vs
-                   restrained at equal cost — rather than a trade against panel height. */
-                <a className="hero-howto hero-howto-block" href="/how-e-tender-works">
-                  <span className="hero-howto-mark" aria-hidden="true">?</span>
-                  <span className="hero-howto-text">
-                    <b>New to e-tender?</b> See how it works
-                  </span>
-                  <svg className="hero-howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M5 12h13M13 6l6 6-6 6" />
-                  </svg>
-                </a>
-              )}
             </div>
           </div>
         </section>
+
+        {/* "New to e-tender?" — Bryan picked the filled treatment (C) and asked for a
+            better placement than the panel's foot, where it overflowed the hero at
+            narrower windows. As its own full-bleed band it sits on the natural scan
+            path between the hero and the search heading, spans the page so it cannot
+            be missed, and costs the hero panel nothing. Burgundy, not red: red stays
+            reserved for the page's one action. */}
+        <a className="hero-howto hero-howto-band" href="/how-e-tender-works" aria-label="New to e-tender? See how it works">
+          <span className="wrap hero-howto-band-inner">
+            <span className="hero-howto-mark" aria-hidden="true">?</span>
+            <span className="hero-howto-text">
+              <b>New to e-tender?</b> See how the sealed-offer process works, step by step
+            </span>
+            <span className="hero-howto-go">
+              See how it works
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+            </span>
+          </span>
+        </a>
 
 
         {/* SEARCH BAND — sits directly below the hero date */}

@@ -1119,61 +1119,42 @@
   .hero-panel-left .hero-clock { align-self: center; margin-right: 0; }
 }
 
-/* ══ "HOW E-TENDER WORKS" SIGNAL — two variants, Bryan picks one ══════════════════════
-   His father wants this impossible to miss on /tender. It sits at the foot of the right
-   panel because that panel already answers "why should I trust this?" — and "how does it
-   work?" is the next question a first-timer asks. Deliberately NOT red: red means the one
-   action on this site, and diverting a visitor to a guide before they have seen a single
-   property would be the wrong win. Prominent, subordinate to "View E-Tender Properties". */
-/* Compressed to make room rather than growing the hero: the panel was at 415px inside a
-   412px band with zero gap at either edge. Bryan rejected an unasked panel-height increase
-   once before, and the right instinct then was the same as now — fit the content to the
-   panel, do not grow the panel to the content. */
-.hero-panel-right .hero-assurance { padding-block: clamp(8px, .8vw, 11px); }
-.hero-howto { display: block; text-decoration: none; margin-top: 12px; }
-
-/* ── B: quiet strip on the panel's own ground ── */
-.hero-howto-strip {
-  display: flex; align-items: center; gap: 12px;
-  padding-top: 15px; border-top: 1px solid var(--line);
-  color: var(--burgundy);
-}
-.hero-howto-strip .hero-howto-mark {
-  flex: none; width: 30px; text-align: center;
-  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-size: 34px; font-weight: 600; line-height: 1;
-  color: var(--burgundy); transform: translateY(2px);
-}
-.hero-howto-strip .hero-howto-text { flex: 1 1 auto; min-width: 0; font-size: 14.5px; line-height: 1.4; color: var(--ink); }
-.hero-howto-strip .hero-howto-text b { color: var(--burgundy); font-weight: 700; }
-.hero-howto-strip .hero-howto-arrow {
-  flex: none; width: 18px; height: 18px; fill: none; stroke: var(--burgundy);
-  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
-  transition: transform .16s ease;
-}
-.hero-howto-strip:hover .hero-howto-arrow { transform: translateX(3px); }
-
-/* ── C: same footprint as B, filled — loud vs restrained at equal height ── */
-.hero-howto-block {
-  display: flex; align-items: center; gap: 12px;
-  margin-top: 14px; padding: 11px 14px; border-radius: 11px;
+/* ══ "NEW TO E-TENDER?" BAND — full-bleed strip between the hero and the search ══════
+   Bryan picked the filled treatment and asked for better placement than the panel's foot,
+   where it overflowed the hero at narrower windows. Here it spans the page on the natural
+   scan path, costs the hero nothing, and cannot clip. Burgundy, never red — red stays
+   reserved for the page's one action. */
+.hero-howto-band {
+  display: block; text-decoration: none;
   background: var(--burgundy); color: var(--burgundy-ink);
 }
-.hero-howto-block .hero-howto-mark {
-  flex: none; width: 26px; text-align: center;
+.hero-howto-band-inner {
+  display: flex; align-items: center; gap: 14px;
+  padding-top: 13px; padding-bottom: 13px;
+}
+.hero-howto-band .hero-howto-mark {
+  flex: none; width: 28px; text-align: center;
   font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-size: 30px; font-weight: 600; line-height: 1;
+  font-size: 32px; font-weight: 600; line-height: 1;
   color: rgba(245, 228, 216, .9); transform: translateY(2px);
 }
-.hero-howto-block .hero-howto-text { flex: 1 1 auto; min-width: 0; font-size: 14px; line-height: 1.4; color: rgba(245, 228, 216, .88); }
-.hero-howto-block .hero-howto-text b { color: #fff; font-weight: 700; }
-.hero-howto-block .hero-howto-arrow {
-  flex: none; width: 17px; height: 17px; fill: none; stroke: #fff;
+.hero-howto-band .hero-howto-text {
+  flex: 1 1 auto; min-width: 0;
+  font-size: 14.5px; line-height: 1.4; color: rgba(245, 228, 216, .85);
+}
+.hero-howto-band .hero-howto-text b { color: #fff; font-weight: 700; }
+.hero-howto-band .hero-howto-go {
+  flex: none; display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap;
+}
+.hero-howto-band .hero-howto-go svg {
+  width: 17px; height: 17px; fill: none; stroke: currentColor;
   stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
   transition: transform .16s ease;
 }
-.hero-howto-block:hover .hero-howto-arrow { transform: translateX(3px); }
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-howto-strip .hero-howto-arrow, .hero-howto-block .hero-howto-cta svg { transition: none; }
+.hero-howto-band:hover .hero-howto-go svg { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) { .hero-howto-band .hero-howto-go svg { transition: none; } }
+@media (max-width: 640px) {
+  /* The duplicate CTA phrase goes, not the explainer — one message per line on a phone. */
+  .hero-howto-band .hero-howto-go { display: none; }
 }

@@ -69,6 +69,21 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · "New to e-tender?" is now a full-bleed band under the hero (FINAL)
+Bryan picked the filled treatment and asked for better placement. **The variant switch is GONE** —
+`HOW_IT_WORKS_VARIANT`, variant B and the in-panel version are all deleted. The signal is now its
+own full-bleed burgundy band between the hero and the search band: on the natural scan path,
+spans the page, cannot clip, and costs the hero panel nothing. The panel's original padding and
+assurance spacing are restored, since the thing that squeezed them has left the panel.
+Band: serif `?` · "New to e-tender? See how the sealed-offer process works, step by step" ·
+"See how it works →" right-aligned (hidden under 640px so a phone gets one message per line).
+Links to `/how-e-tender-works` — verified 200 with the right H1. 58px tall, no overflow.
+
+🐛 Mid-change the page went down with `CssSyntaxError: Missing opening {` — my CSS splice left an
+orphan `}` at line 1161, the SAME failure as the earlier hero-CSS incident. Found via
+`preview_logs`, fixed, brace depth re-verified 0. **The rule from DESIGN-SYSTEM applies to CSS as
+much as JSX: splice by line boundaries and re-verify balance after every cut.**
+
 ### 31 Jul 2026 — Claude · "How E-Tender works" signal — TWO VARIANTS LIVE, Bryan is picking
 Founder wants the how-to link impossible to miss on `/tender`. Placed at the foot of the RIGHT
 panel — that panel already answers "why should I trust this?", and "how does it work?" is the next
