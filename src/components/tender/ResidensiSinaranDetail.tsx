@@ -63,6 +63,25 @@ const PROPERTY_DETAILS: { label: string; value: string }[] = [
    own once the list is empty rather than needing the markup removed. */
 const NOT_DISCLOSED = ["Occupancy", "Furnishing", "Maintenance fee", "Facing"];
 
+/* The icon band is a SUMMARY of PROPERTY_DETAILS, not a second hand-written copy. It
+   looks its values up by label, so editing a row updates both places and they can never
+   disagree; a slot whose label is absent simply does not render, so dropping "Storeys"
+   for a condo needs no change here. */
+const BAND_ICONS: Record<string, string> = {
+  "Bedrooms":      "M3 18v-6h18v6M3 12V7M21 12v-1a3 3 0 0 0-3-3h-4v4M3 18v2M21 18v2",
+  "Bathrooms":     "M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM6 12V6a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2",
+  "Built-up area": "M4 4h16v16H4zM4 9h5M15 20v-5M9 4v5M15 4v5M4 15h5M15 15h5",
+  "Storeys":       "M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5",
+  "Car parks":     "M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2M18 17v2h2v-2",
+};
+type BandItem = { label: string; value: string; path: string };
+const BAND: BandItem[] = Object.keys(BAND_ICONS)
+  .map((label) => {
+    const row = PROPERTY_DETAILS.find((r) => r.label === label);
+    return row ? { label, value: row.value, path: BAND_ICONS[label] } : null;
+  })
+  .filter((x): x is BandItem => x !== null);
+
 export function ResidensiSinaranDetail() {
   useEffect(() => initDetailPage(), []);
 
@@ -328,6 +347,16 @@ export function ResidensiSinaranDetail() {
                 </div>
               </div>
 
+              <div className="pd">
+                <div className="band">
+                  {BAND.map((b) => (
+                    <div className="stat" key={b.label}>
+                      <svg className="ic" viewBox="0 0 24 24"><path d={b.path} /></svg>
+                      <div className="txt"><span className="v">{b.value}</span><span className="k">{b.label}</span></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <dl className="pd-list">
                 {PROPERTY_DETAILS.map((row) => (
                   <div className="pd-row" key={row.label}>
@@ -361,15 +390,6 @@ export function ResidensiSinaranDetail() {
                 </div>
               )}
 
-              <div className="pd">
-                <div className="band">
-                  <div className="stat" data-field="bedrooms"><svg className="ic" viewBox="0 0 24 24"><path d="M3 18v-6h18v6M3 12V7M21 12v-1a3 3 0 0 0-3-3h-4v4M3 18v2M21 18v2"/><circle cx="7.5" cy="9.5" r="1.6"/></svg><div className="txt"><span className="v">3</span><span className="k">Bedrooms</span></div></div>
-                  <div className="stat" data-field="bathrooms"><svg className="ic" viewBox="0 0 24 24"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM6 12V6a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/></svg><div className="txt"><span className="v">2</span><span className="k">Bathrooms</span></div></div>
-                  <div className="stat" data-field="built_up"><svg className="ic" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h5M15 20v-5M9 4v5M15 4v5M4 15h5M15 15h5"/></svg><div className="txt"><span className="v">1,400 sqft</span><span className="k">Built-up area</span></div></div>
-                  <div className="stat" data-field="storeys"><svg className="ic" viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5"/></svg><div className="txt"><span className="v">3</span><span className="k">Storeys</span></div></div>
-                  <div className="stat" data-field="car_parks"><svg className="ic" viewBox="0 0 24 24"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2M18 17v2h2v-2"/></svg><div className="txt"><span className="v">2</span><span className="k">Car parks</span></div></div>
-                </div>
-              </div>
             </div>
           </div>
         </section>

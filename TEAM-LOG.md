@@ -68,6 +68,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §5 design pass (architecture kept, presentation redone)
+Bryan: architecture right, "this is ugly." It was — measured, not guessed:
+- **Rows ran ~124px to carry ~18 characters.** Label stacked over value in a 900px column left
+  the right two-thirds of every row empty, and 17 rows became a ~1,100px wall of air.
+  Label and value now share a line → rows **46px**, list **409px**, section 1223→965px.
+- **Values align on a common x within each column** (measured: exactly two positions, 401 and
+  989). That single alignment is what makes a spec sheet read as engineered rather than typed.
+- Value weight dropped 700→600. Bold on all seventeen values reads as shouting; 600 holds the
+  hierarchy against an 11px uppercase label without competing. Tabular numerals so digits line up.
+- Hairlines at 62% of `--line`, plus a top rule on the first row so the block is bounded.
+
+**Band moved above the list** (Bryan) and is now **derived** — `BAND` reads its values out of
+`PROPERTY_DETAILS` by label via `BAND_ICONS`. One source shown two ways; editing a row updates
+both, and a slot whose label is absent just does not render, so dropping "Storeys" for a condo
+needs no code change. Zone order is now pricing → band → list → not-disclosed.
+
+⚠️ Process note: my first attempt at this cut the band block by string index and mangled the JSX
+(TS17002). Reverted with `git checkout --` and redid it by **line index**, since each `.stat` is
+one whole line. For multi-line JSX blocks, cut by lines, not by `str.index`.
+
 ### 30 Jul 2026 — Claude · §5 rebuilt AGAIN on Bryan's iNewProject reference
 Hardcoded groups are gone. §5 is now:
 1. **Heading strip** — psf (derived) / tenure / land title. Bryan's call: these three are the

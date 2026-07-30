@@ -838,25 +838,35 @@
 }
 .pd-pricing .sub { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.45; }
 
-/* Zone 2 — the editable label/value list, two-up. iNewProject's Project Details shape:
-   label above value, a rule under every row, nothing styled per-field so the backend
-   can add rows without a stylesheet change. Column-flow so a 17-row list fills the
-   left column first and reads top-to-bottom, not left-to-right. */
+/* Zone 2 — the editable label/value list, two-up.
+   REDESIGNED: the stacked label-over-value version ran ~124px per row to carry ~18
+   characters, so 17 rows became a 2,100px wall of air with the right two-thirds of every
+   row empty. Label and value now share a line, values aligned on a common x within each
+   column — the precision that makes a spec sheet read as a spec sheet rather than a form.
+   Rows drop to ~46px and the whole list fits in roughly a third of the height. */
 .pd-list {
-  margin: 0; padding: 0;
+  margin: 26px 0 0; padding: 0;
   display: grid; grid-auto-flow: column;
   grid-template-rows: repeat(9, auto);   /* ceil(rows / 2) — bump if the list grows a lot */
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: clamp(28px, 4vw, 64px);
+  column-gap: clamp(30px, 5vw, 76px);
 }
-.pd-row { min-width: 0; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.pd-row {
+  display: grid; grid-template-columns: minmax(0, 8.75rem) minmax(0, 1fr);
+  align-items: baseline; gap: 16px;
+  min-width: 0; padding: 12px 2px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 62%, transparent);
+}
+.pd-row:first-child { border-top: 1px solid color-mix(in srgb, var(--line) 62%, transparent); }
 .pd-row dt {
-  color: var(--muted); font-size: 11px; font-weight: 800;
-  letter-spacing: .09em; text-transform: uppercase;
+  color: var(--muted); font-size: 11px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; line-height: 1.4;
 }
+/* 600 not 700: across seventeen rows, bold on every value reads as shouting. */
 .pd-row dd {
-  margin: 5px 0 0; color: var(--ink);
-  font-size: 16px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em;
+  margin: 0; min-width: 0; color: var(--ink);
+  font-size: 14.5px; font-weight: 600; line-height: 1.4; letter-spacing: -.005em;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Zone 3 — the gaps, as a service. In a sealed tender there is no negotiation stage in
@@ -894,7 +904,9 @@
 .pd-ask-cta:hover { background: #411322; }
 .pd-ask-cta svg { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-.pd { margin-top: 26px; }
+/* Band sits between the pricing heading and the list; .pd-pricing's margin-bottom
+   supplies the gap above it. */
+.pd { margin-top: 0; }
 
 @media (max-width: 860px) {
   .pd-pricing { grid-template-columns: 1fr; gap: 16px; }
