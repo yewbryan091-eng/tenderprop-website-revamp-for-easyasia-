@@ -67,21 +67,6 @@ const PROPERTY_DETAILS: { label: string; value: string }[] = [
   { label: "Listing reference",       value: "TP-SNR-0417" },
 ];
 
-/* Bryan's reframe, 30 Jul: this box is "still got questions?", not "here is what we do
-   not know". Three reasons his framing is better than mine:
-     1. It speaks to the buyer's need instead of apologising for our data gap.
-     2. It never goes stale — no listing is ever complete, so the box stays true as the
-        agency fills fields in, where a "not disclosed" list has to be maintained.
-     3. It is a lead engine, which is what both platforms exist to be.
-   What survives from the old version is the SPECIFICITY: "ask the agent" converts far
-   worse than a concrete question. So the undisclosed fields become the questions a buyer
-   would actually ask, each with the one-line reason it changes their number. */
-const QUESTIONS: { q: string; why: string }[] = [
-  { q: "Is it vacant or tenanted?",            why: "Decides if you can move in" },
-  { q: "What furnishing is included?",         why: "Sets what you replace after handover" },
-  { q: "What is the monthly maintenance fee?", why: "An ongoing cost while you own it" },
-  { q: "Which direction does it face?",        why: "Afternoon sun, privacy and resale" },
-];
 
 /* The icon band reads STRAIGHT OFF the tender record — the same source the listing cards
    use — so it can never drift from the data, and it no longer needs those five facts
@@ -381,36 +366,27 @@ export function ResidensiSinaranDetail() {
                 ))}
               </dl>
 
-              {QUESTIONS.length > 0 && (
-                <section className="pd-ask" aria-labelledby="pd-ask-title">
-                  {/* Avatar and REN removed (Bryan): the agent block further down the page
-                      already carries the photo and credential in full, so repeating them
-                      here only added bulk. With the button alone on the right there is no
-                      longer a second column to justify — the CTA sits on the title's row. */}
-                  <div className="pd-ask-top">
-                    <div>
-                      <h3 className="pd-ask-title" id="pd-ask-title">
-                        Still have questions about this property?
-                      </h3>
-                      <p className="pd-ask-lede">
-                        Not everything fits on a listing, and a sealed tender gives you one offer.
-                      </p>
-                    </div>
-                    <a className="pd-ask-cta" href="#agent">
-                      Ask the agent
-                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
-                    </a>
-                  </div>
-                  <ul className="pd-ask-items">
-                    {QUESTIONS.map((item) => (
-                      <li className="pd-ask-item" key={item.q}>
-                        <span className="pd-ask-q">{item.q}</span>
-                        <span className="pd-ask-why">{item.why}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              )}
+              {/* Bryan, 30 Jul: the box lists nothing. Enumerating four specific unknowns
+                  only shrank as the agency filled them in, and it invited the buyer to
+                  read the gaps as our omission. A listing can never be complete, so the
+                  honest and permanent version is simply: whatever the details above do not
+                  answer, the agent will. Slimmest possible form — invitation plus button. */}
+              <section className="pd-ask">
+                <span className="pd-ask-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .9-1 1.6v.3" /><circle cx="12" cy="17" r=".9" fill="currentColor" stroke="none" /></svg>
+                </span>
+                <div className="pd-ask-main">
+                  <h3 className="pd-ask-title">Still have questions about this property?</h3>
+                  <p className="pd-ask-lede">
+                    Anything the details above don&rsquo;t cover, the listing agent can answer &mdash;
+                    and a sealed tender gives you one offer, so ask before you submit.
+                  </p>
+                </div>
+                <a className="pd-ask-cta" href="#agent">
+                  Ask the agent
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
+                </a>
+              </section>
 
             </div>
           </div>

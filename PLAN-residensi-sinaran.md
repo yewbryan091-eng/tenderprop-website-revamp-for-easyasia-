@@ -84,10 +84,14 @@ impact, not in arbitrary categories:
    tenure with remaining term, land title. The psf is the metric buyers actually compare on and
    **no Malaysian portal leads with it**.
 2. **Measurements** — the icon band, and *only* here. Nothing below repeats it.
-3. **Not disclosed by the seller** — the gaps, named as a checklist with a WhatsApp CTA. This is
-   the most useful element in the section: on a portal you would uncover occupancy, furnishing and
-   maintenance fee during negotiation, and in a sealed tender you cannot. Naming them is a
-   service, not an apology — it turns the page's biggest weakness into its best feature.
+3. **"Still have questions about this property?"** — one line and a button to `#agent`.
+   ⚠️ This went through three versions; the reasoning matters so it does not get "improved" back.
+   v1 listed the four undisclosed fields ("Not disclosed by the seller") — but that **apologises
+   for our data gap** and **shrinks to nothing as the agency fills fields in**. v2 turned them
+   into questions a buyer would ask — better, still needed maintaining. v3 (Bryan, final) lists
+   **nothing**: a listing can never be complete, so the honest and permanent form is *whatever the
+   details above don't answer, the agent will*. It is also the lead engine both platforms exist to
+   be. Box went 315px → 98px across those versions.
 4. **Full specification** — collapsed (`<details>`, the Zillow pattern), and only rows that carry
    a value, so the sheet can never look unfilled again.
 

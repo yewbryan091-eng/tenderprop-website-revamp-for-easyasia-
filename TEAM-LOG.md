@@ -68,6 +68,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §5 ask box final form: one line + button (315px → 98px)
+**Codex: do NOT re-add a list here.** It went through three versions and the third is deliberate:
+- v1 "Not disclosed by the seller" + 4 chips — apologises for our data gap, and the list shrinks
+  to nothing as the agency supplies values.
+- v2 the same fields as questions with reasons — better framing, still needs maintaining, still
+  enumerates our omissions.
+- v3 (Bryan, final) **lists nothing.** A listing can never be complete, so the permanent form is
+  *anything the details above don't cover, the listing agent can answer.* Slim icon-led band,
+  invitation + `#agent` button, vertically centred. **98px, down from 315px.**
+Avatar and REN also dropped earlier — the agent section further down already carries both in full.
+Consequence to know: occupancy / furnishing / maintenance fee / facing are now **absent from the
+page entirely** rather than shown as gaps. That is intended. When the agency supplies them, add
+them to `PROPERTY_DETAILS` as normal rows.
+Also removed `.pd-pricing`'s top border — it sat under the section heading and read as a second
+underline. Section total 894px.
+
 ### 30 Jul 2026 — Claude · §5 ask-box reframed on Bryan's idea (his framing beat mine)
 **"Not disclosed by the seller" → "Still have questions about this property?"** Bryan's call, and
 it is better for three reasons worth remembering:

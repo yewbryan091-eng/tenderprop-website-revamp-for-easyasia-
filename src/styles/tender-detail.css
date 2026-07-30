@@ -874,34 +874,26 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Zone 3 — "still have questions?" (Bryan's reframe). One column, not two: with the
-   avatar and REN gone the button alone never justified a 228px sidebar, so the CTA sits
-   on the title's row and the questions run full width. Reuses the spec table's hairline
-   and two-part row so it reads as a continuation of Property Details, not a card dropped
-   under it. No amber — this is an invitation, not a hazard. */
+/* Zone 3 — "still have questions?" (Bryan). Lists nothing: enumerating specific unknowns
+   shrank as the agency filled them in, and read as our omission rather than an invitation.
+   A listing is never complete, so the permanent version is one line and a button. Slim
+   band, icon-led, so it reads as a footnote to Property Details rather than a new section. */
 .pd-ask {
-  margin: 28px 0 0; padding: 20px 22px; border-radius: 12px;
+  display: flex; align-items: center; gap: clamp(14px, 2vw, 20px); flex-wrap: wrap;
+  margin: 26px 0 0; padding: 16px 20px; border-radius: 11px;
   background: var(--paper); border: 1px solid var(--line);
 }
-.pd-ask-top {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 20px; flex-wrap: wrap; margin-bottom: 4px;
+.pd-ask-icon { flex: none; display: grid; place-items: center; width: 34px; height: 34px; }
+.pd-ask-icon svg {
+  width: 26px; height: 26px; fill: none; stroke: var(--burgundy);
+  stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
 }
+.pd-ask-main { flex: 1 1 320px; min-width: 0; }
 .pd-ask-title {
-  margin: 0 0 3px; font-family: var(--serif); font-optical-sizing: auto;
-  font-size: clamp(18px, 1.9vw, 21px); font-weight: 600;
-  letter-spacing: -.015em; line-height: 1.25; color: var(--ink);
+  margin: 0 0 2px; font-family: var(--serif); font-optical-sizing: auto;
+  font-size: 17.5px; font-weight: 600; letter-spacing: -.012em; line-height: 1.3; color: var(--ink);
 }
-.pd-ask-lede { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 60ch; }
-.pd-ask-items { list-style: none; margin: 10px 0 0; padding: 0; }
-/* Same two-part shape as .pd-row, so the eye keeps the rhythm it learned above. */
-.pd-ask-item {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 17rem);
-  align-items: baseline; gap: 16px; min-height: 40px;
-  padding: 9px 2px; border-top: 1px solid color-mix(in srgb, var(--line) 62%, transparent);
-}
-.pd-ask-q { min-width: 0; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 1.4; }
-.pd-ask-why { min-width: 0; color: var(--muted); font-size: 12.5px; line-height: 1.45; }
+.pd-ask-lede { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 74ch; }
 .pd-ask-cta {
   flex: none; display: inline-flex; align-items: center; gap: 8px;
   padding: 11px 20px; border-radius: 9px;
