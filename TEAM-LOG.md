@@ -68,6 +68,20 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Bryan · NEW STANDING RULE: THE DESIGN SOP (AGENTS.md)
+*"when i say improve the design, you make use your critical thinking… beautify it by taking in all
+the consideration on how to make tenderprop look really nice, not just the font, size, placement,
+positioning, basically everything else."*
+
+**Codex: read `AGENTS.md` → THE DESIGN SOP.** Fixing only the attribute Bryan names is not doing
+the job — the named attribute is just where his eye landed; the brief is *make this beautiful*.
+14 axes, in rough order of leverage: space, alignment, typography, hierarchy/scan order,
+redundancy, colour+contrast, emptiness, structure, states, responsive, motion, use-the-system,
+stay-on-brand, and **measure it** (numbers in the report, not adjectives).
+
+This sits alongside THE CHANGE SOP: that one says *look at the render and have an opinion*; this
+one says *when the ask is design, the whole surface is in scope.*
+
 ### 30 Jul 2026 — Claude · §5 list de-duplicated and refilled with real subsale fields
 Bryan spotted the repetition. Removed from the list because they are already on the page:
 **tenure, lease expiry, land title** (pricing heading) · **bedrooms, bathrooms, built-up, storeys,

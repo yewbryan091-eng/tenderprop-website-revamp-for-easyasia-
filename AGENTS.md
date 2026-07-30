@@ -86,6 +86,59 @@ until you have looked at it and judged whether it actually works there.
 
 **The point:** one careful pass instead of five sloppy ones.
 
+## 🎨 THE DESIGN SOP — "improve the design" means ALL of it (Bryan, 30 Jul 2026)
+
+His words: *"when i say improve the design, you make use your critical thinking on how to improve
+the designs… you have to beautify it by taking in all the consideration on how to make tenderprop
+look really nice, not just the font, size, placement, positioning, basically everything else."*
+
+**Fixing only the attribute he named is not doing the job.** If he says "the font is small", the
+brief is *make this section beautiful* — the font is just where his eye landed. Work every axis
+below, then report what you judged, not only what you changed.
+
+**1. Space before anything else.** It is the biggest lever and the most common fault. Is a row
+124px tall to carry 18 characters? Do related items sit *closer* to each other than to unrelated
+ones? Density is a decision — make it deliberately.
+
+**2. Alignment.** Do values share a common x? Do columns agree across a gap? A single consistent
+alignment is what makes a table read as engineered rather than typed.
+
+**3. Typography.** Size, weight, family, letter-spacing, line-height, case, optical sizing. Three
+levels of hierarchy, not six. **If everything is bold, nothing is emphasised** — 600 usually beats
+700 across a long list.
+
+**4. Hierarchy & scan order.** Name what the eye hits 1st, 2nd, 3rd. Does that order match what
+actually matters to a buyer? If not, re-order — don't restyle.
+
+**5. Redundancy.** Is anything shown twice on the same screen? Bryan catches this every time. Cut
+it or derive one from the other so they cannot drift.
+
+**6. Colour.** One accent per zone. Does the accent earn its place? Check contrast (AA); the brand
+red fails on dark scrims — use a lightened tint there.
+
+**7. Emptiness.** What does this look like with missing data? Never ship something that reads as
+an unfilled form. Omit inapplicable rows; collect unknown-but-relevant ones into a stated block.
+
+**8. Structure.** Question the container itself. Table, list, chips, cards, one column or two —
+the right shape often removes the styling problem entirely.
+
+**9. States.** hover, focus-visible, active, empty, loading, closed/expired. Focus rings are not
+optional.
+
+**10. Responsive.** 375px, tablet, and very wide. Does it degrade, or does it transform properly?
+Zero horizontal overflow, always.
+
+**11. Motion.** Only where it clarifies. Always honour `prefers-reduced-motion`.
+
+**12. Use the system.** Reuse existing tokens and components before inventing. New card styles
+fragment the page.
+
+**13. Stay on brand.** Cream / burgundy / red, Newsreader + Inter, restrained and **flat** — no
+gradients, no glossy 3D, no imported iNewProject palette. Adopt patterns, never palettes.
+
+**14. Measure it.** Do not claim it is better — measure it. Row heights, alignment positions,
+contrast, overflow, before/after. Numbers in the report.
+
 ## Git protocol (prevents agents clobbering each other)
 1. `git pull` before you touch anything.
 2. Leave the working tree CLEAN when you stop: commit + push, or discard. Never leave uncommitted edits for the next agent to trip over.
