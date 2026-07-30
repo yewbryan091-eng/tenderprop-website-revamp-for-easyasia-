@@ -89,8 +89,9 @@ one block, one of them is wrong.
 - **Progressive disclosure over columns: render FEWER ITEMS, never clip with `max-height`.**
   Clipping across two columns cuts column 1 mid-sentence and starts column 2 on a new thought, so
   the reading order breaks; a fade over a column boundary reads as a rendering fault. Hold the
-  prose as data and slice it (`ABOUT_PARAS.slice(0, N)`), and put the remaining count in the
-  button label ("View more (6 more)") so the control declares its own payload.
+  prose as data and slice it (`ABOUT_PARAS.slice(0, N)`),. Keep the label plain — "View more",
+  not "View more (6 more)": Bryan's call, and a bare label reads as an invitation while a count
+  reads as a warning about how much is left.
 - **Disclosure** (`<details>`): summary carries a `<b>` label and a `<small>` summary of what is
   inside, plus a chevron that rotates on `[open]`.
 - **Pills / chips**: `999px` radius, `--card` background, 1px border, 13px/700.

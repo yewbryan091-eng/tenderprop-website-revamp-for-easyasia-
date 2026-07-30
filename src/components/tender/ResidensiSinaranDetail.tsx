@@ -480,7 +480,7 @@ export function ResidensiSinaranDetail() {
                 aria-controls="about-body"
                 onClick={() => setAboutOpen((v) => !v)}
               >
-                <span>{aboutOpen ? "View less" : `View more (${ABOUT_PARAS.length - ABOUT_CLOSED_COUNT} more)`}</span>
+                <span>{aboutOpen ? "View less" : "View more"}</span>
                 <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5.5 7 9.5l4-4" /></svg>
               </button>
             </div>
