@@ -456,9 +456,11 @@ function TenderListings() {
                   {HERO_DATE.day}<sup>{HERO_DATE.suffix}</sup> {HERO_DATE.month} {HERO_DATE.year}
                 </time>
               </p>
-              <a className="btn red hero-cta" href="#listings">
-                View E-Tender Properties
-              </a>
+              {/* No CTA here by design (Bryan, 31 Jul). A button whose destination is the
+                  next thing on the page is not an action — the visitor was already going to
+                  scroll, and it competed with the search bar immediately below, which is the
+                  real entry point. The left panel is now purely the deadline; the closing-date
+                  line is its footnote, not a caption under a button. */}
               <p className="hero-foot">Offers close at the end of the closing date</p>
             </div>
           </div>

@@ -69,6 +69,23 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · Hero CTA removed; the left panel is now purely the deadline
+Bryan: *"should i remove the view etender properties button, its kinda redundant no? the
+properties is literally right below... i kinda want to make the left side as like a proper
+showcase of time only"*. Agreed and done.
+
+**A CTA whose destination is the next thing on the page is not an action.** The visitor was
+already going to scroll, and the button competed with the search bar directly below it — which
+is the real entry point. `.hero-cta` and its mobile override are deleted; the closing-date line
+is now the deadline's footnote (16px off the date, was 8px, which was spacing sized for a button).
+
+Side effect worth having: **red now appears only on Register, Search and "Show 36 properties"** —
+three real actions. The hero holds no action colour at all, which is correct for an
+informational panel. Panel re-centred at 56px top and bottom, 111px of slack, no hole left.
+
+⚠️ `id="listings"` is now unreferenced from this page. Left in place deliberately — it is still
+a valid deep-link target. Don't "clean it up" without checking inbound links.
+
 ### 31 Jul 2026 — Claude · Only the link is a link now + link affordance settled (no blue)
 Bryan: *"why can i click on the link when i click on new to e-tender? thats so weird"* — correct,
 that was a real bug. The whole line was one `<a>`, so clicking apparently-inert text navigated.

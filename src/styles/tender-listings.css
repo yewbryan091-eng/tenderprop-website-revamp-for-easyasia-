@@ -191,11 +191,9 @@
   .hero-panel-left .hero-eyebrow,
   .hero-panel-left .hero-date,
   .hero-panel-left .hero-cycle-count { max-width: 30ch; }
-  .hero-panel-left .hero-foot { max-width: 46ch; }   /* keep the closing-date line to one row */
-  .hero-panel-left .hero-cta {
-    align-self: center; margin-top: 14px; min-width: 240px;
-    padding: 11px 23px; font-size: 14.5px;
-  }
+  /* The footnote now hangs off the date directly — 8px was spacing for a button, and
+     reads as cramped under 46px type. */
+  .hero-panel-left .hero-foot { max-width: 46ch; margin-top: 16px; }
   /* Light-text modifier for the future background photograph */
   .hero-panel-left.is-dark .hero-eyebrow { color: var(--burgundy-ink); }
   .hero-panel-left.is-dark .hero-date { color: var(--card); }
@@ -356,7 +354,6 @@
     .hero-date { font-size: clamp(32px, 9.2vw, 42px); }
     .hero-timer { align-self: center; margin-bottom: 16px; }
     .hero-cycle-count { margin-top: 10px; }
-    .hero-panel-left .hero-cta { width: min(100%, 280px); min-width: 0; }
     .hero-seal-title { font-size: 19px; }
     .hero-assurance-primary { --hero-lock-box: 44px; --hero-lock: 48px; gap: 14px; }
   }
