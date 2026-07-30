@@ -60,8 +60,8 @@ one block, one of them is wrong.
 - ⛔ **An uninterrupted full-width white card defeats the band.** The old all-white `.v1` covered
   58% of `#tender`, so that section read white while `#details` also read white. Sections normally
   sit directly on their band. The standard Tender Information dossier is the deliberate exception:
-  its left 40% is a dark editorial image, so only the right 60% reads white and the surrounding
-  alternate band remains visually dominant.
+  it is itself a full-bleed, two-tone band — dark editorial image for the left 40%, white decision
+  plane for the right 60% — with no capped outer card or surrounding paper gutter.
 - When auditing this, measure what a section **reads as**, not what its `background` is — and use
   area coverage, not width. A 0.69-width card slipped under a 0.7 width threshold and produced a
   false "no collisions" result.
@@ -79,13 +79,14 @@ one block, one of them is wrong.
   and land use. The correct area basis changes by property form; the position does not. These
   promoted facts do not repeat in the specification list below.
 - **Facts strip** (`.v1-facts`): three cells, vertical rules between, label / value / sub-line.
-- **Tender Information dossier** (`.v1`): one standard 40/60 split on every real listing. The left
+- **Tender Information dossier** (`.v1`): one full-bleed, shallow 40/60 split on every real listing;
+  desktop height should stay close to the `/tender` hero rather than becoming a tall card. The left
   is the same platform-level monochrome KL panorama under a **flat** burgundy wash and owns all
   timing information: live D/H/M/S, closing date and registration date. The right owns reserve
-  price, computed 3% deposit, sealed method, three-step process, one red CTA, agent enquiry and the
-  payment disclosure. Never use a property photo here; never duplicate deadline information on the
-  right; never restore the pin or paperclip. The diagonal collapses to a clean vertical stack at
-  700px, with the timing panel first.
+  price, computed 3% deposit, sealed method, a full-width three-step process, then action and payment
+  disclosure in one compact footer row. Never use a property photo here; never duplicate deadline
+  information on the right; never restore the pin or paperclip. The diagonal collapses to a clean
+  vertical stack at 700px, with the timing panel first.
 - **Slim invitation band** (`.pd-ask`): 44px serif glyph + title + one line + red CTA. ~98px tall.
 - **Body prose**: **two columns at full width**, `line-height: 1.72`, with at most one pull-quote
   (`border-left: 2px solid var(--burgundy)`) as the anchor, placed *outside* any disclosure.

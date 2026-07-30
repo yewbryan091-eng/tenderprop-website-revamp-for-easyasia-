@@ -198,7 +198,7 @@ export function ResidensiSinaranDetail() {
         </nav>
 
 
-        <section className="blk" id="tender">
+        <section className="blk tender-band" id="tender">
           <div className="wrap">
             <div className="v1">
               <div className="v1-grid">
@@ -281,8 +281,8 @@ export function ResidensiSinaranDetail() {
                     </div>
                   </div>
                   <p className="v1-reassure">
-                    <b>Your deposit is not an extra charge.</b> It forms the first 3% of the
-                    standard 10% down payment and is returned in full immediately if no sale proceeds.
+                    <b>Your 3% deposit is not an extra charge.</b> It forms part of the standard
+                    10% down payment and is returned in full immediately if no sale proceeds.
                   </p>
 
                   <div className="v1-steps">
@@ -290,15 +290,15 @@ export function ResidensiSinaranDetail() {
                     <ol>
                       <li>
                         <span className="n">1</span>
-                        <div><b>Register and verify</b><p>Complete your account before the registration deadline.</p></div>
+                        <div><b>Register and verify</b><p>Complete account verification before registration closes.</p></div>
                       </li>
                       <li>
                         <span className="n">2</span>
-                        <div><b>Submit your tender</b><p>Send one confidential offer and review the deposit terms.</p></div>
+                        <div><b>Submit your tender</b><p>Send one confidential offer after reviewing the deposit terms.</p></div>
                       </li>
                       <li>
                         <span className="n">3</span>
-                        <div><b>The seller responds</b><p>Expect an acceptance, decline or counter within 5 working days.</p></div>
+                        <div><b>The seller responds</b><p>Acceptance, decline or counter within 5 working days.</p></div>
                       </li>
                     </ol>
                   </div>

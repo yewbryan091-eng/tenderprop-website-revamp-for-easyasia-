@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 30 Jul 2026 | Making Tender Information full-bleed and hero-height compact |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Tender Information now full-bleed and hero-height compact |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -46,7 +46,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 29 Jul | Cards show a **Tender start** date computed as closing date − 3 months (`tenderStartOf` in tender-utils) | DELIBERATE demo value, founder's call: "this is just a demo for easyasia, information may not be accurate… who cares". Overrides the invent-nothing rule for THIS field only. Swap for a real per-listing start date when the backend supplies one | Bryan |
 | 28 Jul | `tender-seeker-bot.lovable.app` is a **frozen snapshot**; this repo is the truth | Lovable credits ran out; its copy no longer updates from git | Bryan |
 | 30 Jul | Property filters live in an inline disclosure **directly below Search**: tender closing cycle, reserve-price range, built-up area, land area and tenure. Price moved out of the Sort row; Tender by State remains standalone | Keeps “what qualifies” together in Search and “how results are ordered” in the results toolbar, while retaining TenderProp’s event/cycle framing | Bryan + Codex |
-| 30 Jul | Tender Information is one **standard 40/60 split dossier** across every real listing: universal monochrome KL deadline panel left; listing facts, process and action right. No pin or paperclip | Bryan explicitly chose the Pexels panorama and made this a shared listing-page system, not a Residensi Sinaran image treatment | Bryan + Codex |
+| 30 Jul | Tender Information is one **full-bleed, shallow 40/60 split dossier** across every real listing: universal monochrome KL deadline panel left; listing facts, process and action right. No capped card, pin or paperclip | Bryan explicitly chose the Pexels panorama, then asked that this shared listing-page system span the viewport and match the `/tender` hero's compact height | Bryan + Codex |
 
 ---
 
@@ -68,6 +68,19 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 30 Jul 2026 — Codex · Tender Information made full-bleed and hero-height
+Removed the capped 1100px card/gutters so the standard 40/60 dossier now spans the viewport like
+the `/tender` hero. Reflowed the right side so the three-step process gets the full information
+plane, with Apply/WhatsApp and the collapsed payment disclosure sharing the footer; this removes
+the narrow, tall process columns without shrinking the decision facts. The tablet reserve figure
+and process reflow were tuned separately to prevent collisions.
+
+Rendered collapsed heights: **412px at 1440, 443px at 1024, 550px at 768 and 1,065px stacked at
+375**; horizontal overflow is 0px at every check. The live seconds ticked 39 → 38, and the payment
+disclosure expands without clipping at 375px. Production build passes; ESLint passes with the
+repository's existing whole-file Prettier rule disabled (the unchanged component has 144 baseline
+formatting findings).
 
 ### 30 Jul 2026 — Codex · Standard Tender Information split dossier
 Replaced the long paperclip notice with the approved reusable listing-page system: **40% deadline
