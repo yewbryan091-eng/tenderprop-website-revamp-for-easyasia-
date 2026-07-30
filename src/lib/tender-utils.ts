@@ -117,3 +117,91 @@ export function areaSlot(x: Tender) {
     ? { label: "Floor area", value: x.builtUp || "\u2014" }
     : { label: "Land area", value: x.landArea || "\u2014" };
 }
+
+/* ── Property Details: applicability, not just presence ────────────────────────
+   A spec sheet has three states per field, and conflating them is what makes the
+   section untrustworthy:
+     value      — we know it
+     "Not stated" — it APPLIES to this property but the agency has not supplied it
+     "—"        — it does not apply to this property form at all
+   The live page had these backwards in places: "Maintenance fee —" on a strata
+   townhouse (every Malaysian strata property has one, so that is Not stated), and
+   "Land area: Not stated" on the same townhouse (strata owners buy floor, not land,
+   so that is genuinely not applicable). Deriving applicability from the property's
+   FORM removes the hand-judgement that got it wrong. */
+
+export type DetailRow = { label: string; value: string; state: "value" | "unstated" | "na" };
+export type DetailGroup = { kick: string; rows: DetailRow[] };
+
+const STRATA_FORMS = new Set([
+  "Apartment", "Condominium", "Serviced Residence", "Serviced Apartment",
+  "Flat", "SOHO", "SOVO", "SOFO", "Townhouse",
+]);
+
+export function formOf(x: Tender): "strata" | "landed" | "land" {
+  if (x.propertyCategory === "land") return "land";
+  return STRATA_FORMS.has((x.propertyType || "").trim()) ? "strata" : "landed";
+}
+
+/* Which fields even make sense for each form. Anything not listed renders as "—". */
+const APPLIES: Record<string, Array<"strata" | "landed" | "land">> = {
+  bedrooms: ["strata", "landed"], bathrooms: ["strata", "landed"],
+  carParks: ["strata", "landed"],
+  /* storeys is the one field that does not split cleanly on form: a townhouse is
+     strata title but is genuinely multi-storey, which is the whole point of the
+     type. Handled as an exception in cell() rather than fudging the form model. */
+  storeys: ["landed"],
+  floorLevel: ["strata"],
+  builtUp: ["strata", "landed"], landArea: ["landed", "land"],
+  tenure: ["strata", "landed", "land"], titleType: ["strata", "landed", "land"],
+  landTitle: ["landed", "land"], bumiLot: ["strata", "landed", "land"],
+  zoning: ["land"],
+  propertyType: ["strata", "landed", "land"], yearCompleted: ["strata", "landed"],
+  facing: ["strata", "landed"], powerSupply: ["land"],
+  occupancy: ["strata", "landed"], furnishing: ["strata", "landed"],
+  maintenanceFee: ["strata"],
+};
+
+function cell(x: Tender, key: string, raw: unknown): DetailRow["state"] {
+  const townhouseStoreys = key === "storeys" && (x.propertyType || "").trim() === "Townhouse";
+  if (!townhouseStoreys && !(APPLIES[key] || []).includes(formOf(x))) return "na";
+  return raw === null || raw === undefined || raw === "" ? "unstated" : "value";
+}
+
+export function detailGroups(x: Tender): DetailGroup[] {
+  const d = x.details || {};
+  const mk = (label: string, key: string, raw: unknown): DetailRow => {
+    const state = cell(x, key, raw);
+    return {
+      label,
+      value: state === "value" ? String(raw) : state === "unstated" ? "Not stated" : "—",
+      state,
+    };
+  };
+  return [
+    { kick: "Layout", rows: [
+      mk("Bedrooms", "bedrooms", x.bedrooms), mk("Bathrooms", "bathrooms", x.bathrooms),
+      mk("Car parks", "carParks", x.carParks), mk("Storeys", "storeys", x.storeys),
+      mk("Floor level", "floorLevel", d.floorLevel)] },
+    { kick: "Size", rows: [
+      mk("Built-up area", "builtUp", x.builtUp), mk("Land area", "landArea", x.landArea)] },
+    { kick: "Ownership & title", rows: [
+      mk("Tenure", "tenure", x.tenure), mk("Title type", "titleType", x.titleType),
+      mk("Land title", "landTitle", d.landTitle), mk("Bumi lot", "bumiLot", d.bumiLot),
+      mk("Zoning", "zoning", d.zoning)] },
+    { kick: "Building", rows: [
+      mk("Property type", "propertyType", displayType(x)),
+      mk("Year completed", "yearCompleted", d.yearCompleted),
+      mk("Facing", "facing", d.facing), mk("Power supply", "powerSupply", d.powerSupply)] },
+    { kick: "Condition & terms", rows: [
+      mk("Occupancy", "occupancy", d.occupancy), mk("Furnishing", "furnishing", d.furnishing),
+      mk("Maintenance fee", "maintenanceFee", d.maintenanceFee)] },
+  ];
+}
+
+/* Honest completeness signal: only counts fields that actually apply, so a landed
+   house is never marked down for lacking a floor level. */
+export function detailCompleteness(x: Tender) {
+  const rows = detailGroups(x).flatMap((g) => g.rows).filter((r) => r.state !== "na");
+  return { known: rows.filter((r) => r.state === "value").length, applicable: rows.length };
+}
