@@ -23,17 +23,17 @@ import "@/styles/tender-listings.css";
 export const Route = createFileRoute("/tender/")({
   head: () => ({
     meta: [
-      { title: "Properties Open for Tender in Malaysia | TenderProp" },
+      { title: "Properties Open for E-Tender in Malaysia | TenderProp" },
       {
         name: "description",
         content:
           "Browse Malaysian subsale properties open for sealed e-tender. Reserve prices, refundable deposits and closing dates, all in one cycle.",
       },
-      { property: "og:title", content: "Properties Open for Tender in Malaysia | TenderProp" },
+      { property: "og:title", content: "Properties Open for E-Tender in Malaysia | TenderProp" },
       {
         property: "og:description",
         content:
-          "Sealed-bid property tenders across Malaysia — register, submit your best offer before the closing date.",
+          "Sealed-bid property e-tenders across Malaysia — register, submit your best offer before the closing date.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -411,7 +411,7 @@ function TenderListings() {
       <main>
         {/* HERO — full-bleed diagonal split.
             Left panel: tender-cycle announcement. Right panel: buyer assurances. */}
-        <section className="hero-tender" aria-label="Tender overview">
+        <section className="hero-tender" aria-label="E-Tender overview">
           <div className="hero-panel hero-panel-left is-dark">
             <div className="hero-panel-inner">
               <div className="hero-timer" aria-live="off" aria-label={countdownLabel}>
@@ -428,14 +428,14 @@ function TenderListings() {
                   ))}
                 </span>
               </div>
-              <p className="hero-eyebrow">Next tender cycle</p>
+              <p className="hero-eyebrow">Next e-tender cycle</p>
               <p className="hero-date">
                 <time dateTime={NEXT_BATCH.date}>
                   {HERO_DATE.day}<sup>{HERO_DATE.suffix}</sup> {HERO_DATE.month} {HERO_DATE.year}
                 </time>
               </p>
               <a className="btn red hero-cta" href="#listings">
-                View Tender Properties
+                View E-Tender Properties
               </a>
               <p className="hero-foot">Offers close at the end of the closing date</p>
             </div>
@@ -448,7 +448,7 @@ function TenderListings() {
                   <span className="hero-assurance-icon" aria-hidden="true"><LockIcon /></span>
                   <div>
                     <h2 className="hero-seal-title">Your offer stays <em>private</em></h2>
-                    <p>Nobody else ever sees your offer — not other buyers, not the public. Every offer is handled confidentially throughout the tender process.</p>
+                    <p>Nobody else ever sees your offer — not other buyers, not the public. Every offer is handled confidentially throughout the e-tender process.</p>
                   </div>
                 </li>
                 <li className="hero-assurance hero-assurance-agent">
@@ -548,7 +548,7 @@ function TenderListings() {
                         offer the way out. */}
                     {Boolean(query.trim()) && taMatches.length === 0 && (
                       <p className="ta-empty">
-                        No tenders match &ldquo;{query.trim()}&rdquo;.{" "}
+                        No e-tenders match &ldquo;{query.trim()}&rdquo;.{" "}
                         <button type="button" onMouseDown={(e) => { e.preventDefault(); setQuery(""); setPage(1); }}>
                           Browse all {TENDERS.length}
                         </button>
@@ -607,12 +607,12 @@ function TenderListings() {
                 id="property-filters"
                 role="dialog"
                 aria-modal="true"
-                aria-label="Filter tender properties"
+                aria-label="Filter e-tender properties"
                 hidden={!propertyFiltersOpen}
               >
                 <div className="property-filter-head">
                   <div>
-                    <p className="property-filter-kicker">Refine tender properties</p>
+                    <p className="property-filter-kicker">Refine e-tender properties</p>
                     <p className="property-filter-help">
                       Filter by the closing cycle, reserve price and property size.
                     </p>
@@ -635,7 +635,7 @@ function TenderListings() {
 
                 <div className="property-filter-grid">
                   <label className="property-filter-field is-closing">
-                    <span>Tender closing cycle</span>
+                    <span>E-Tender closing cycle</span>
                     <select
                       value={closingCycle}
                       onChange={(e) => { setClosingCycle(e.target.value); setPage(1); }}
@@ -802,7 +802,7 @@ function TenderListings() {
               <div className="results-header" ref={resultsTop}>
                 <span className="results-count">
                   {sorted.length
-                    ? `${sorted.length} ${sorted.length === 1 ? "property" : "properties"} open for tender · showing ${from}–${to}`
+                    ? `${sorted.length} ${sorted.length === 1 ? "property" : "properties"} open for e-tender · showing ${from}–${to}`
                     : "No properties match your filters"}
                 </span>
                 <div className="results-tools">
@@ -815,7 +815,7 @@ function TenderListings() {
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" />
                     </svg>
-                    <span>Tender by State</span>
+                    <span>E-Tender by State</span>
                     {state !== "all" && (
                       <span className="tool-badge">{area ? 2 : 1}</span>
                     )}
@@ -873,7 +873,7 @@ function TenderListings() {
                 ) : (
                   <div className="no-results">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" /></svg>
-                    <b>No tenders match your filters</b>
+                    <b>No e-tenders match your filters</b>
                     <span>Try widening your search &mdash; remove a filter or pick another state.</span>
                     <button type="button" className="btn red" onClick={reset}>Clear all filters</button>
                   </div>
@@ -905,14 +905,14 @@ function TenderListings() {
             <div className={"filters-backdrop" + (sheetOpen ? " show" : "")} onClick={() => setSheetOpen(false)} />
             <aside
               className={"sidebar-filters" + (sheetOpen ? " open" : "")}
-              aria-label="Tender by state"
+              aria-label="E-Tender by state"
             >
               <div className="rail-head">
-                <h2 className="rail-title">Tender <span>by State</span></h2>
+                <h2 className="rail-title">E-Tender <span>by State</span></h2>
                 <button
                   type="button"
                   className="sheet-close"
-                  aria-label="Close tender by state"
+                  aria-label="Close e-tender by state"
                   onClick={() => setSheetOpen(false)}
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">

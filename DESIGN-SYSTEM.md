@@ -81,6 +81,20 @@ control that does not span the width of what it filters reads as broken.**
 When auditing this, measure the **card**, not the field row inside it: `.search-bar` sits 19px
 inside `.search-form` as the card's own padding, which looks like a misalignment and is not one.
 
+## 3c. Vocabulary — the product is **E-Tender**, always
+
+Bryan, 30 Jul: *"all the word tender, must be e-tender."* Every user-facing reference to the method
+reads **E-Tender** (title case in headings, labels and CTAs) or **e-tender** (mid-sentence). There
+is no bare "tender" in rendered copy anywhere: verified 0 across all 8 pages.
+
+**Never touched by this rule** — these are code, not copy, and prefixing them breaks the build:
+`TenderProp` (the brand), the `Tender` type, `TENDERS`, `tenderMethod` / `tenderFormat`,
+`tenderStartOf` / `tenderId`, the `/tender` routes, `#tender` ids, `.hero-tender` and other class
+names, and `tender-detail.css` / `tender-utils.ts` filenames.
+
+Watch for two failure modes a blind find-replace creates: **`E-TenderProp`** and **`E-E-Tender`**.
+Assert both are zero after any sweep.
+
 ## 4. Established patterns — reuse before inventing
 
 - **Label/value list** (`.pd-row`): label column `10.5rem`, `white-space: nowrap`, value 14.5/600,

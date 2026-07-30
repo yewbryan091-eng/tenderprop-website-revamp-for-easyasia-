@@ -20,7 +20,7 @@ export function PropertyCard({
   const d = daysLeft(x.closingDate);
   const soon = d > 0 && d <= 14;
   const dlTxt =
-    d <= 0 ? "Tender closed" : `Closes ${fmtDate(x.closingDate)} · ${d} ${d === 1 ? "day" : "days"} left`;
+    d <= 0 ? "E-Tender closed" : `Closes ${fmtDate(x.closingDate)} · ${d} ${d === 1 ? "day" : "days"} left`;
   /* Split so the countdown can carry the accent on its own. The date stays neutral;
      only the time pressure is coloured — two accents in one pill would compete. */
   const closeParts =
@@ -32,7 +32,7 @@ export function PropertyCard({
      changes card to card there is nothing to compare across a batch. Missing values
      render as an em dash rather than collapsing the row. */
   const rows = [
-    { label: "Tender start", value: tenderStartOf(x) },
+    { label: "E-Tender start", value: tenderStartOf(x) },
     areaSlot(x),
     { label: "Tenure", value: x.tenure || "\u2014" },
   ];
@@ -110,7 +110,7 @@ export function PropertyCard({
             <span className="pc-agent"><b>Stephen Yew</b><span>REN 123456</span></span>
             <a className="pc-tel" href="tel:+60123938255"><PhoneIcon /><span>012-393 8255</span></a>
           </div>
-          <span className="pc-cta" aria-hidden="true">View tender details</span>
+          <span className="pc-cta" aria-hidden="true">View e-tender details</span>
         </div>
       </div>
     </article>

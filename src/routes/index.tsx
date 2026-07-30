@@ -14,11 +14,11 @@ function HomePage() {
   return (
     <PageShell
       eyebrow="A new way to buy property in Malaysia"
-      title={<>Property, sold by <em>sealed tender</em></>}
+      title={<>Property, sold by <em>sealed e-tender</em></>}
       lede="TenderProp runs batched E-Tenders and Owner Private Auctions for Malaysian property. Sealed offers, one closing date, and the whole transaction handled end to end — no drawn-out negotiation."
       frames={[
-        { title: "How E-Tender works", what: "Sealed / batched / your deposit counts toward the 10% — the three-panel explainer, lifted from the tender grid hero." },
-        { title: "Featured tender properties", what: "Cards from the built grid component, tender stock only. The cycle is the shelf." },
+        { title: "How E-Tender works", what: "Sealed / batched / your deposit counts toward the 10% — the three-panel explainer, lifted from the e-tender grid hero." },
+        { title: "Featured e-tender properties", what: "Cards from the built grid component, e-tender stock only. The cycle is the shelf." },
         { title: "Why your deposit is safe", what: "Stakeholder-held, refunded in full, counts toward your 10% — the licensing detail is disclosed here and in the footer, never in the headline." },
         { title: "Sell with us strip", what: "Free valuation + free inspection CTA into /sell.", blocked: "real package pricing" },
       ]}
@@ -30,7 +30,7 @@ function HomePage() {
             style={{ paddingTop: 0, paddingBottom: 18 }}
           >
             <p className="cycle-line">
-              Next tender cycle: <b>{fmtDate(NEXT_CYCLE)}</b> · {IN_CYCLE} properties
+              Next e-tender cycle: <b>{fmtDate(NEXT_CYCLE)}</b> · {IN_CYCLE} properties
             </p>
           </div>
           <div className="doors">

@@ -18,7 +18,7 @@ export function SiteFooter() {
             licensed real estate agency in Malaysia.
           </p>
           <p className="disc">
-            Next tender cycle: <b>{fmtDate(NEXT_CYCLE)}</b>
+            Next e-tender cycle: <b>{fmtDate(NEXT_CYCLE)}</b>
           </p>
         </div>
         <div>

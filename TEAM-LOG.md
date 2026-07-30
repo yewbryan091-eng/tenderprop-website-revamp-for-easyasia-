@@ -69,6 +69,27 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · VOCABULARY SWEEP: every user-facing "tender" → "E-Tender"
+Bryan: *"all the word tender, must be e-tender."* **62 replacements across 13 files.** Verified
+across all 8 pages: **0 bare "tender" in rendered text, 130 E-Tender/e-tender, 0 "E-E-Tender",
+0 "E-TenderProp", brand intact 29×.**
+
+Case rule: **E-Tender** in headings, labels and CTAs; **e-tender** mid-sentence.
+Notable renames: page titles and og:titles, "Next e-tender cycle", "View E-Tender Properties",
+"E-Tender by State", "E-Tender Information", "E-Tender deposit", "E-Tender method",
+"Apply for E-Tender" (×3 — Codex's rebuild added a third), "E-Tender Info" subnav,
+"E-Tender closes in", "How the e-tender works", "Submit your e-tender", "E-Tender FAQ",
+"Similar E-Tenders", "E-Tender start" and "View e-tender details" on the card, "How To E-Tender".
+
+⛔ **Deliberately NOT prefixed — code, not copy:** `TenderProp`, the `Tender` type, `TENDERS`,
+`tenderMethod`/`tenderFormat`, `tenderStartOf`/`tenderId`, `/tender` routes, `#tender` ids,
+`.hero-tender` classes, `tender-detail.css`/`tender-utils.ts`. A blind find-replace here produces
+**`E-TenderProp`** and **`E-E-Tender`** and breaks the build — assert both are zero after a sweep.
+Rule recorded as DESIGN-SYSTEM §3c.
+Two phrasings needed rewording rather than prefixing: *"before you can tender or bid"* → *"before
+you can submit an e-tender or bid"* (verb, not noun), and *"Reuses the tender card component"* →
+*"the listing card component"* (naming code in visible copy).
+
 ### 30 Jul 2026 — Claude · listings page: one content width (search band vs results were 133px apart)
 Bryan spotted the results toolbar not lining up with the search box above it. Measured: both blocks
 were **centred**, but at different widths — search card **1062px**, results+rail **1328px** — so the

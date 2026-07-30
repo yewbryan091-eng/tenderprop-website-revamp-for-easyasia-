@@ -7,17 +7,17 @@ import { SiteHeader } from "@/components/tender/SiteHeader";
 export const Route = createFileRoute("/tender/residensi-sinaran")({
   head: () => ({
     meta: [
-      { title: "Residensi Sinaran, Shah Alam — Open for Tender | TenderProp" },
+      { title: "Residensi Sinaran, Shah Alam — Open for E-Tender | TenderProp" },
       {
         name: "description",
         content:
-          "Residensi Sinaran, Taman Sri Muda, Shah Alam. 3-storey townhouse open for sealed e-tender at a RM517,000 reserve price with a refundable RM15,510 tender deposit.",
+          "Residensi Sinaran, Taman Sri Muda, Shah Alam. 3-storey townhouse open for sealed e-tender at a RM517,000 reserve price with a refundable RM15,510 e-tender deposit.",
       },
-      { property: "og:title", content: "Residensi Sinaran, Shah Alam — Open for Tender" },
+      { property: "og:title", content: "Residensi Sinaran, Shah Alam — Open for E-Tender" },
       {
         property: "og:description",
         content:
-          "Sealed e-tender: RM517,000 reserve, RM15,510 refundable deposit, sealed until the tender closes.",
+          "Sealed e-tender: RM517,000 reserve, RM15,510 refundable deposit, sealed until the e-tender closes.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

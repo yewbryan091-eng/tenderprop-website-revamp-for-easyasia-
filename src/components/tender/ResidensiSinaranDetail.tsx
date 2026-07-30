@@ -142,14 +142,14 @@ export function ResidensiSinaranDetail() {
             caption floating away from its own photos. */}
         <section className="overview" id="overview">
           <div className="wrap wrap-wide">
-            <div className="crumbs"><a href="#">Home</a> / <a href="/tender">Tender</a> / Residensi Sinaran</div>
+            <div className="crumbs"><a href="#">Home</a> / <a href="/tender">E-Tender</a> / Residensi Sinaran</div>
             <div className="ovhead">
               <div className="ovtitle">
                 {/* Tender state above the fold. Without this the detail page told the
                     buyer LESS about the tender than the card they clicked to get here —
                     open/closed and the deadline sat below the whole gallery. */}
                 <p className="ovstatus">
-                  <span className="status"><span className="dot" aria-hidden="true" />Open for tender</span>
+                  <span className="status"><span className="dot" aria-hidden="true" />Open for e-tender</span>
                   <span className="ovcloses">Closes {TENDER_CLOSE_LABEL}{daysLabel ? " · " + daysLabel : ""}</span>
                 </p>
                 <h1>Residensi Sinaran</h1>
@@ -163,7 +163,7 @@ export function ResidensiSinaranDetail() {
                 <div className="actions">
                   <button type="button" className="icobtn" id="save-btn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 20.5l-1.4-1.3C5.4 14.5 2 11.4 2 7.6 2 4.9 4.1 3 6.7 3c1.5 0 2.9.7 3.8 1.8L12 6.2l1.5-1.4C14.4 3.7 15.8 3 17.3 3 19.9 3 22 4.9 22 7.6c0 3.8-3.4 6.9-8.6 11.6L12 20.5z" /></svg><span>Save</span></button>
                   <button type="button" className="icobtn" id="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" /></svg><span>Share</span></button>
-                  <a className="btn red" href="#">Apply for Tender</a>
+                  <a className="btn red" href="#">Apply for E-Tender</a>
                 </div>
               </div>
             </div>
@@ -193,7 +193,7 @@ export function ResidensiSinaranDetail() {
 
         <nav className="subnav" id="subnav" aria-label="Section navigation">
           <div className="wrap">
-            <div className="row"><a href="#tender">Tender Info</a> <a href="#details">Details</a> <a href="#about">About</a> <a href="#selling">Selling Points</a> <a href="#area">What's Nearby</a> <a href="#location">Location</a> <a href="#agent">Agent</a> <a href="#mortgage">Mortgage</a> <a href="#faq">FAQ</a></div>
+            <div className="row"><a href="#tender">E-Tender Info</a> <a href="#details">Details</a> <a href="#about">About</a> <a href="#selling">Selling Points</a> <a href="#area">What's Nearby</a> <a href="#location">Location</a> <a href="#agent">Agent</a> <a href="#mortgage">Mortgage</a> <a href="#faq">FAQ</a></div>
           </div>
         </nav>
 
@@ -216,7 +216,7 @@ export function ResidensiSinaranDetail() {
                   <div className="v1-deadline-content">
                     <div>
                       <span className="v1-deadline-kicker">Sealed E-Tender</span>
-                      <h3 id="tender-deadline-heading">Tender closes in</h3>
+                      <h3 id="tender-deadline-heading">E-Tender closes in</h3>
                     </div>
 
                     <div
@@ -225,7 +225,7 @@ export function ResidensiSinaranDetail() {
                       aria-label={
                         cd
                           ? `${cd.d} days, ${cd.h} hours, ${cd.m} minutes and ${cd.s} seconds remaining`
-                          : "Time remaining until the tender closes"
+                          : "Time remaining until the e-tender closes"
                       }
                       aria-live="off"
                     >
@@ -259,8 +259,8 @@ export function ResidensiSinaranDetail() {
 
                 <div className="v1-main" id="tender-action-panel">
                   <div className="v1-top">
-                    <span className="v1-kicker">Property tender notice</span>
-                    <h3>Tender Information</h3>
+                    <span className="v1-kicker">Property e-tender notice</span>
+                    <h3>E-Tender Information</h3>
                   </div>
 
                   <div className="v1-facts">
@@ -270,12 +270,12 @@ export function ResidensiSinaranDetail() {
                       <span className="sub">Minimum offer considered</span>
                     </div>
                     <div>
-                      <span className="lbl">Tender deposit</span>
+                      <span className="lbl">E-Tender deposit</span>
                       <b className="dep-amt">{DEPOSIT}</b>
                       <span className="sub">Refundable &middot; part of your 10%</span>
                     </div>
                     <div>
-                      <span className="lbl">Tender method</span>
+                      <span className="lbl">E-Tender method</span>
                       <b>Sealed E-Tender</b>
                       <span className="sub">Your offer stays confidential</span>
                     </div>
@@ -286,7 +286,7 @@ export function ResidensiSinaranDetail() {
                   </p>
 
                   <div className="v1-steps">
-                    <div className="stepshead">How the tender works</div>
+                    <div className="stepshead">How the e-tender works</div>
                     <ol>
                       <li>
                         <span className="n">1</span>
@@ -294,7 +294,7 @@ export function ResidensiSinaranDetail() {
                       </li>
                       <li>
                         <span className="n">2</span>
-                        <div><b>Submit your tender</b><p>Send one confidential offer after reviewing the deposit terms.</p></div>
+                        <div><b>Submit your e-tender</b><p>Send one confidential offer after reviewing the deposit terms.</p></div>
                       </li>
                       <li>
                         <span className="n">3</span>
@@ -304,7 +304,7 @@ export function ResidensiSinaranDetail() {
                   </div>
 
                   <div className="v1-actions">
-                    <a className="btn-red" href="#">Apply for Tender</a>
+                    <a className="btn-red" href="#">Apply for E-Tender</a>
                     <a className="btn-wa" href="https://wa.me/60123938255" target="_blank" rel="noopener">
                       Ask the agent on WhatsApp &rarr;
                     </a>
@@ -325,7 +325,7 @@ export function ResidensiSinaranDetail() {
                       <ol>
                         <li>
                           <span className="pct">3%</span>
-                          <div><b>{DEPOSIT}</b><span>Tender deposit. Returned in full immediately if no sale proceeds.</span></div>
+                          <div><b>{DEPOSIT}</b><span>E-Tender deposit. Returned in full immediately if no sale proceeds.</span></div>
                         </li>
                         <li>
                           <span className="pct">+7%</span>
@@ -337,8 +337,8 @@ export function ResidensiSinaranDetail() {
                         </li>
                       </ol>
                       <p className="laddernote">
-                        <b>Your tender deposit is the first part of the standard 10% down payment.</b>{" "}
-                        Read the full process and terms on the <a href="#">How To Tender</a> page.
+                        <b>Your e-tender deposit is the first part of the standard 10% down payment.</b>{" "}
+                        Read the full process and terms on the <a href="#">How To E-Tender</a> page.
                       </p>
                     </div>
                   </details>
@@ -419,7 +419,7 @@ export function ResidensiSinaranDetail() {
                   <h3 className="pd-ask-title">Still have questions about this property?</h3>
                   <p className="pd-ask-lede">
                     If the details above don&rsquo;t answer everything, feel free to ask the appointed
-                    agent anything &mdash; from how the tender process works to questions about the
+                    agent anything &mdash; from how the e-tender process works to questions about the
                     property itself.
                   </p>
                 </div>
@@ -465,7 +465,7 @@ export function ResidensiSinaranDetail() {
               <blockquote className="about-quote">
                 The development is complete and handed over, so you can walk the actual unit,
                 check the finishes and see the neighbours before deciding what to offer. That
-                matters more here than in a normal sale: a sealed tender gives you one number
+                matters more here than in a normal sale: a sealed e-tender gives you one number
                 and no second attempt.
               </blockquote>
               <div className="aboutbody">
@@ -556,7 +556,7 @@ export function ResidensiSinaranDetail() {
           <div className="wrap">
             <div className="blkcard">
               <h2 className="sec-title">Listing <span>Agent</span></h2>
-              <div className="agentcard"><div className="ag-top"><img className="face" src={AGENT_PHOTO} alt="Stephen Yew" /><div className="meta"><b>Stephen Yew</b><div className="co">The One Property Global &middot; Licensed REA</div></div></div><dl className="ag-creds"><div><dt>REA registration</dt><dd className="na">Not stated</dd></div><div><dt>Agency registration</dt><dd className="na">Not stated</dd></div><div><dt>Role on this tender</dt><dd>Appointed agent</dd></div><div><dt>Direct line</dt><dd className="num">012-393 8255</dd></div></dl><div className="ag-foot"><a className="btn wa" href="https://wa.me/60123938255" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>WhatsApp</a><a className="btn burg" href="#">Send Enquiry</a></div></div></div></div></section>
+              <div className="agentcard"><div className="ag-top"><img className="face" src={AGENT_PHOTO} alt="Stephen Yew" /><div className="meta"><b>Stephen Yew</b><div className="co">The One Property Global &middot; Licensed REA</div></div></div><dl className="ag-creds"><div><dt>REA registration</dt><dd className="na">Not stated</dd></div><div><dt>Agency registration</dt><dd className="na">Not stated</dd></div><div><dt>Role on this e-tender</dt><dd>Appointed agent</dd></div><div><dt>Direct line</dt><dd className="num">012-393 8255</dd></div></dl><div className="ag-foot"><a className="btn wa" href="https://wa.me/60123938255" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>WhatsApp</a><a className="btn burg" href="#">Send Enquiry</a></div></div></div></div></section>
 
 
 
@@ -590,7 +590,7 @@ export function ResidensiSinaranDetail() {
 
         <section className="blk band-card" id="faq">
           <div className="wrap">
-            <h2 className="sec-title">Tender <span>FAQ</span></h2>
+            <h2 className="sec-title">E-Tender <span>FAQ</span></h2>
             <div className="faqcard">
               <div className="faq-item">
                 <button type="button" className="faq-trigger" aria-expanded="false">What is the reserve price?<svg className="chev" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
@@ -598,11 +598,11 @@ export function ResidensiSinaranDetail() {
               </div>
               <div className="faq-item">
                 <button type="button" className="faq-trigger" aria-expanded="false">How many bidders are there now?<svg className="chev" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
-                <div className="faq-body"><p>E-Tender is a sealed-bid exercise — the number of bidders and their offers stay confidential until the tender closes, so every buyer submits their honest best offer.</p></div>
+                <div className="faq-body"><p>E-Tender is a sealed-bid exercise — the number of bidders and their offers stay confidential until the e-tender closes, so every buyer submits their honest best offer.</p></div>
               </div>
               <div className="faq-item">
                 <button type="button" className="faq-trigger" aria-expanded="false">When is the closing date?<svg className="chev" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
-                <div className="faq-body"><p>This tender closes on <b>31 Dec 2028</b>. Submit your sealed bid and place the deposit before then via your member account.</p></div>
+                <div className="faq-body"><p>This e-tender closes on <b>31 Dec 2028</b>. Submit your sealed bid and place the deposit before then via your member account.</p></div>
               </div>
               <div className="faq-item">
                 <button type="button" className="faq-trigger" aria-expanded="false">Is my deposit refundable?<svg className="chev" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
@@ -615,7 +615,7 @@ export function ResidensiSinaranDetail() {
 
         <section className="blk band-paper" id="similar">
           <div className="wrap">
-            <h2 className="sec-title">Similar <span>Tenders</span></h2>
+            <h2 className="sec-title">Similar <span>E-Tenders</span></h2>
             <div className="simgrid">
               <a className="sim" href="/tender">
                 <div className="im"><img src={PROJECT_IMG("ara-damansara-height.jpg")} alt="Ara Damansara Height" loading="lazy" /></div>
@@ -637,9 +637,9 @@ export function ResidensiSinaranDetail() {
 
       <div className="bidbar" id="bidbar" aria-hidden="true">
         <div className="wrap in">
-          <div className="identity"><span className="nm">Residensi Sinaran</span><span className="meta">Tender closes {TENDER_CLOSE_LABEL}</span></div>
+          <div className="identity"><span className="nm">Residensi Sinaran</span><span className="meta">E-Tender closes {TENDER_CLOSE_LABEL}</span></div>
           <div className="pr"><div className="k">Reserve price</div><div className="v num">RM517,000</div><span className="closes">Closes {TENDER_CLOSE_LABEL}</span></div>
-          <a className="btn red" href="#">Apply for Tender</a>
+          <a className="btn red" href="#">Apply for E-Tender</a>
         </div>
       </div>
 
