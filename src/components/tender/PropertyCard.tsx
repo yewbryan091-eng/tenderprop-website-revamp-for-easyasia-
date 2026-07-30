@@ -1,29 +1,10 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
 import { ClockIcon, HeartIcon, PhoneIcon, PinIcon } from "./icons";
-import { daysLeft, depositOf, displayType, fmtDate, fmtPrice, hrefFor, tenderId, tenderStartOf } from "@/lib/tender-utils";
+import { areaSlot, daysLeft, depositOf, displayType, fmtDate, fmtPrice, hrefFor, tenderId, tenderStartOf } from "@/lib/tender-utils";
 
 /* The photo pill is the card's ONLY date. It carries the year because listings
    span 2026-2028, so "12 Dec" alone would be ambiguous. Never hardcoded. */
-
-/* Which two physical facts actually mean something for this property type.
-   Land area is not "unknown" for a condo — it does not exist — so it is omitted
-   rather than shown as a dash. Tenure fills the slot; it matters in Malaysia. */
-const STRATA = ["Condominium", "Apartment", "Serviced Residence", "Flat", "SOHO"];
-function detailRows(x: Tender) {
-  const order: [string, string][] =
-    x.propertyCategory === "land"
-      ? [["Land area", x.landArea], ["Tenure", x.tenure], ["Built-up", x.builtUp]]
-      : STRATA.includes(x.propertyType)
-        ? [["Built-up", x.builtUp], ["Tenure", x.tenure], ["Land area", x.landArea]]
-        : [["Land area", x.landArea], ["Built-up", x.builtUp], ["Tenure", x.tenure]];
-  /* Take the first two REGARDLESS of emptiness. Filtering by presence was what made
-     cards inconsistent: one showed "Tender start / Built-up", the next "Tender start /
-     Land area / Built-up" — three different schemas in one list. Every card now has the
-     same three aligned slots, with an em dash where a value is missing, which is what
-     the .pc-details comment in the stylesheet has always promised. */
-  return order.slice(0, 2).map(([label, value]) => ({ label, value: value || "\u2014" }));
-}
 
 /* One semantic tender-notice card. Grid mode stacks it; list mode splits it into
    media / identity / decision details — same render path, driven by the
@@ -39,11 +20,22 @@ export function PropertyCard({
   const d = daysLeft(x.closingDate);
   const soon = d > 0 && d <= 14;
   const dlTxt =
-    d <= 0 ? "Tender closed" : `Closes ${fmtDate(x.closingDate)} · ${d} ${d === 1 ? "day" : "days"}`;
+    d <= 0 ? "Tender closed" : `Closes ${fmtDate(x.closingDate)} · ${d} ${d === 1 ? "day" : "days"} left`;
+  /* Split so the countdown can carry the accent on its own. The date stays neutral;
+     only the time pressure is coloured — two accents in one pill would compete. */
+  const closeParts =
+    d <= 0 ? null : { date: `Closes ${fmtDate(x.closingDate)}`, left: `${d} ${d === 1 ? "day" : "days"} left` };
   const href = hrefFor(x);
   /* Start date leads the row: with the closing date in the photo pill, "Tender
      start" answers the other half of the window without duplicating the close. */
-  const rows = [{ label: "Tender start", value: tenderStartOf(x) }, ...detailRows(x)];
+  /* Three fixed slots on every card, in this order, no exceptions: when the shape
+     changes card to card there is nothing to compare across a batch. Missing values
+     render as an em dash rather than collapsing the row. */
+  const rows = [
+    { label: "Tender start", value: tenderStartOf(x) },
+    areaSlot(x),
+    { label: "Tenure", value: x.tenure || "\u2014" },
+  ];
   const typeLabel = displayType(x);
   const hasPropertyType = Boolean(typeLabel);
   const propertyType = hasPropertyType ? typeLabel : "Not specified";
@@ -71,7 +63,11 @@ export function PropertyCard({
         </button>
         <span className={"pc-deadline" + (soon ? " is-soon" : "") + (d <= 0 ? " is-closed" : "")}>
           <ClockIcon />
-          <span>{dlTxt}</span>
+          {closeParts ? (
+            <span>{closeParts.date} · <b className="pc-left">{closeParts.left}</b></span>
+          ) : (
+            <span>{dlTxt}</span>
+          )}
         </span>
       </div>
 

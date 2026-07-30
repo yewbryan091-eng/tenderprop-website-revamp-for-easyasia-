@@ -96,3 +96,20 @@ export function displayType(x: Tender) {
     : t;
   return n ? `${n}-Storey ${base}` : base;
 }
+
+/* Slot 2 of the card's three fixed facts. Which area matters depends on the form of
+   the property, not on which field happens to be populated: a bungalow buyer is
+   buying land, a condo buyer is buying floor. **Townhouse is floor area** — it is
+   stacked strata, not land (Bryan, 30 Jul). Same membership as NO_STOREY_PREFIX
+   today but kept separate on purpose: one set is about naming, this one is about
+   what a buyer is actually purchasing, and they can diverge later. */
+const FLOOR_AREA_TYPES = new Set([
+  "Apartment", "Condominium", "Serviced Residence", "Serviced Apartment",
+  "Flat", "SOHO", "SOVO", "SOFO", "Townhouse",
+]);
+
+export function areaSlot(x: Tender) {
+  return FLOOR_AREA_TYPES.has((x.propertyType || "").trim())
+    ? { label: "Floor area", value: x.builtUp || "\u2014" }
+    : { label: "Land area", value: x.landArea || "\u2014" };
+}

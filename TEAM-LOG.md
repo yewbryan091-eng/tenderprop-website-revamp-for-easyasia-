@@ -68,6 +68,30 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · card facts standardised; my own CSS collision fixed
+1. **THREE FIXED SLOTS, no exceptions: Tender start / Land area|Floor area / Tenure.**
+   New `areaSlot(x)` in tender-utils picks slot 2 by the property's FORM, not by which field
+   happens to be populated — a bungalow buyer buys land, a condo buyer buys floor.
+   **Townhouse = Floor area** (Bryan: "townhouse is not land area ya bro"): stacked strata.
+   `FLOOR_AREA_TYPES` is deliberately a separate set from `NO_STOREY_PREFIX` even though the
+   membership matches today — one is about naming, the other about what is being bought.
+   `detailRows()` and `STRATA` deleted.
+2. **DEMO FILL (extends exception #3):** the scraped baseline left 13 records with no tenure and
+   8 landed records with no land area, so half the cards showed an em dash in a slot that is now
+   permanent. Filled with plausible values (tenure alternating Freehold / Leasehold 99 yrs; land
+   areas cycled per type). Replace with real data when the agency supplies it. Now 0 of 12 cards
+   show a dash.
+3. **BUG I CAUSED — read this one.** I had written `.props-grid.list-mode .pc-details` TWICE at
+   identical specificity: `margin-top: auto` at line 624 and `margin-top: 16px` at 634. The later
+   rule silently won, so the facts stayed pinned to the top and the void Bryan kept seeing never
+   went away — which is why my "fixed" claim did not match his screenshot. Merged into one rule.
+   `margin-top` now computes to ~96px and the facts row bottom aligns **exactly** with the CTA
+   opposite (measured 0px delta). **Lesson: grep the selector before adding a rule for it.**
+4. Pill reads "N days left"; the countdown is split into its own `<b class="pc-left">` so only
+   the time pressure is coloured. On-dark uses `#FF8578`, not `--red` — the brand red manages
+   only ~3.4:1 on the pill's near-black scrim, under AA.
+5. PROPERTY TYPE label underlined, offset 3px so it reads as a rule, not a strikethrough.
+
 ### 30 Jul 2026 — Claude · property type standardised to label-above-value
 My own `flex-wrap: wrap` fix created a hybrid: short types ("Condominium") stayed on the label's
 line, long ones ("2-Storey Semi-Detached House") dropped below — so no two cards agreed. Now
