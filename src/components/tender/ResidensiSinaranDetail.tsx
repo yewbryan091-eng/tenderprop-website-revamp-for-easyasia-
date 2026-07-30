@@ -381,11 +381,18 @@ export function ResidensiSinaranDetail() {
                 <div className="pd-ask-main">
                   <h3 className="pd-ask-title">Still have questions about this property?</h3>
                   <p className="pd-ask-lede">
-                    Anything the details above don&rsquo;t cover, the listing agent can answer &mdash;
-                    and a sealed tender gives you one offer, so ask before you submit.
+                    Anything the details above don&rsquo;t cover, just ask &mdash; a sealed tender
+                    gives you one offer, so it is worth knowing before you submit.
                   </p>
                 </div>
-                <a className="pd-ask-cta" href="#agent">Ask the agent</a>
+                {/* "Get an answer" completes the heading's question — Q then A — and promises an
+                    outcome rather than an activity. No "agent": the VOICE RULE keeps agency
+                    identity in the agent block and the footer, not in front-of-house CTAs. It
+                    also avoids echoing the word "question" from the heading directly above it.
+                    Alternates considered: "Ask before you offer" (carries the sealed-tender logic
+                    but repeats the lede), "Get in touch" (safe, forgettable), "Ask a question"
+                    (redundant with the heading). */}
+                <a className="pd-ask-cta" href="#agent">Get an answer</a>
               </section>
 
             </div>

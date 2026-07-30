@@ -68,6 +68,21 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §5 CTA copy: "Get an answer" (no "agent" front-of-house)
+Bryan did not want "agent" on the button — that is the **VOICE RULE** biting: agency identity
+belongs in the agent block, About, FAQ and footer, not in front-of-house CTAs.
+- Button: **"Get an answer."** It completes the heading's question (Q → A), promises an outcome
+  rather than an activity, and avoids echoing the word "question" from the heading directly above.
+  Alternates considered and rejected: *"Ask before you offer"* (good sealed-tender logic but
+  repeats the lede), *"Get in touch"* (safe, forgettable), *"Ask a question"* (redundant).
+- **The lede had to change too.** It said "the listing agent can answer" one line above the
+  button, which would have made the button's avoidance pointless. Now "…just ask — a sealed tender
+  gives you one offer, so it is worth knowing before you submit." Platform voice, no over-claim.
+- `href` stays `#agent` — the destination is still the agent block, which is where the REN and
+  agency disclosure legitimately live. Only the front-of-house wording changed.
+- ✅ Left alone deliberately: **"Ask the agent on WhatsApp" in the §4 tender rail.** That sits at
+  the apply point, which canon lists as an approved place for agent language.
+
 ### 30 Jul 2026 — Codex · Property Details enquiry copy proposed only
 Bryan asked for wording only, so no page code was changed. Suggested replacing the current
 one-offer warning with a broader invitation to ask the appointed agent about the tender process
