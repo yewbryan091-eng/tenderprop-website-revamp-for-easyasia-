@@ -383,38 +383,32 @@ export function ResidensiSinaranDetail() {
 
               {QUESTIONS.length > 0 && (
                 <section className="pd-ask" aria-labelledby="pd-ask-title">
-                  <div className="pd-ask-main">
-                    <h3 className="pd-ask-title" id="pd-ask-title">
-                      Still have questions about this property?
-                    </h3>
-                    <p className="pd-ask-lede">
-                      Not everything fits on a listing. These come up most often &mdash; and a sealed
-                      tender gives you one offer, so it is worth asking before you commit.
-                    </p>
-                    <ul className="pd-ask-items">
-                      {QUESTIONS.map((item) => (
-                        <li className="pd-ask-item" key={item.q}>
-                          <span className="pd-ask-q">{item.q}</span>
-                          <span className="pd-ask-why">{item.why}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Naming the person converts better than "the agent", and a REN number is a
-                      credential a buyer can verify. Jumps to #agent (Bryan) rather than off-site. */}
-                  <aside className="pd-ask-side">
-                    <img className="pd-ask-avatar" src={AGENT_PHOTO} alt="" loading="lazy" />
-                    <p className="pd-ask-agent">
-                      <b>Stephen Yew</b>
-                      <span>REN 123456</span>
-                      <span>Listing agent for this tender</span>
-                    </p>
+                  {/* Avatar and REN removed (Bryan): the agent block further down the page
+                      already carries the photo and credential in full, so repeating them
+                      here only added bulk. With the button alone on the right there is no
+                      longer a second column to justify — the CTA sits on the title's row. */}
+                  <div className="pd-ask-top">
+                    <div>
+                      <h3 className="pd-ask-title" id="pd-ask-title">
+                        Still have questions about this property?
+                      </h3>
+                      <p className="pd-ask-lede">
+                        Not everything fits on a listing, and a sealed tender gives you one offer.
+                      </p>
+                    </div>
                     <a className="pd-ask-cta" href="#agent">
                       Ask the agent
                       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
                     </a>
-                  </aside>
+                  </div>
+                  <ul className="pd-ask-items">
+                    {QUESTIONS.map((item) => (
+                      <li className="pd-ask-item" key={item.q}>
+                        <span className="pd-ask-q">{item.q}</span>
+                        <span className="pd-ask-why">{item.why}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </section>
               )}
 
