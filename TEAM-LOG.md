@@ -69,6 +69,25 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · "New to e-tender?" is now TYPE, not a card — 3 treatments live
+Bryan diagnosed it and he was right: **the solid maroon fill was the fault, not the position.**
+This page is flat cream and restrained type, so a saturated block reads as an ad wherever it
+sits — moving it just moved the ad. His idea: hang the line off the search heading as type.
+
+`.howto-card` is deleted. New `.howto-link`, switched by `HOWTO_TREATMENT` in
+`src/routes/tender/index.tsx` (a one-character change) → `data-howto` on `.search-intro`:
+- **1 (live, Bryan's idea, my recommendation)** — sub-line under the heading. Reads as the
+  heading's own second line. Zero chrome; prominent by POSITION, not colour.
+- **2** — right of the heading behind a 2px burgundy rule.
+- **3** — tinted pill (burgundy at 7% on the band, not a fill) at the right of the row.
+
+Two of these get deleted once he picks. Below 1020px all three collapse to treatment 1,
+since a side-by-side would wrap the heading to two lines.
+
+**Design note worth keeping:** the fix for "this element is ugly" was to remove weight, not to
+relocate it. Prominence on a restrained page comes from position and whitespace — a saturated
+block is the loudest thing on the page and always reads as advertising.
+
 ### 31 Jul 2026 — Claude · "New to e-tender?" moved into the search heading row (FINAL)
 The full-bleed band is **gone** — Bryan: "i dont like it, its ugly placement". It read as a cookie
 bar: a third stacked horizontal band that cut the hero off from the search instead of belonging to

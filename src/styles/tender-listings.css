@@ -363,8 +363,7 @@
 
   /* Search band — sits directly below the hero date */
   .hero-search-band { background: var(--paper-deep); border-bottom: 1px solid var(--line); padding: clamp(34px, 5vw, 52px) 0 22px; }
-  /* Heading left, "New to e-tender?" card right, bottoms on one line. */
-  .hero-search-band .search-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 22px; }
+  .hero-search-band .search-intro { margin-bottom: 22px; }
   .hero-search-band .search-intro h2 { max-width: 760px; margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-weight: 600; font-size: clamp(30px, 4vw, 46px); line-height: 1.08; letter-spacing: -.015em; color: var(--ink); }
   .hero-search-band .search-intro h2 .hl { color: var(--burgundy); font-style: italic; }
   .search-form { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--burgundy); border-radius: 12px; padding: 18px 18px 20px; box-shadow: 0 1px 2px rgba(23,19,15,.03); }
@@ -444,14 +443,14 @@
     .property-filter-field.is-land-area { grid-column: span 1; }
   }
   @media(max-width: 1020px) {
-    /* Below this the heading would wrap to two lines to make room. Stack instead:
-       the card spans the row, keeping one message per line. */
+    /* Below this the heading would wrap to two lines to make room for a side-by-side
+       treatment. Every variant collapses to the sub-line — which is treatment 1. */
     .hero-search-band .search-intro { display: block; }
-    .hero-search-band .search-intro .howto-card { margin-top: 18px; max-width: 520px; }
+    .hero-search-band .search-intro .howto-link { margin-top: 12px; }
   }
   @media(max-width: 640px) {
     .hero-search-band .search-intro { margin-bottom: 18px; }
-    .hero-search-band .search-intro .howto-card { max-width: none; margin-top: 16px; }
+    .hero-search-band .search-intro .howto-link { font-size: 15px; }
     .search-form { padding: 14px; }
     .search-bar { grid-template-columns: 1fr; }
     .search-actions { grid-column: auto; }
@@ -1127,37 +1126,66 @@
   .hero-panel-left .hero-clock { align-self: center; margin-right: 0; }
 }
 
-/* ══ "NEW TO E-TENDER?" CARD — right of the search heading ═══════════════════════════
-   The heading row carried one line of type and ~600px of dead space; the signal fills it
-   rather than adding a fourth horizontal band, which read as a banner. Bottom-aligned so
-   its base sits on the heading's baseline block — one shared line across the row. */
-.howto-card {
-  flex: 0 1 404px; align-self: end;
-  display: flex; align-items: center; gap: 14px;
-  padding: 15px 18px 16px; border-radius: 14px;
-  background: var(--burgundy); color: var(--burgundy-ink);
-  text-decoration: none;
-  transition: transform .16s ease, box-shadow .16s ease;
+/* ══ "NEW TO E-TENDER?" — three typographic treatments ═══════════════════════════════
+   The solid maroon card was the fault, not its position: this page is flat cream and
+   restrained type, so a saturated block reads as an ad wherever it sits. All three
+   treatments below are type first. Delete the two Bryan doesn't pick. */
+.howto-link {
+  display: inline-flex; align-items: baseline; gap: 7px;
+  text-decoration: none; font-size: 16px; line-height: 1.3;
 }
-.howto-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(87, 28, 46, .22); }
-.howto-card:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 3px; }
-.howto-card-mark {
-  flex: none; width: 26px; text-align: center;
-  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-size: 34px; font-weight: 600; line-height: .92;
-  color: rgba(245, 228, 216, .82);
+.howto-link b { font-weight: 600; color: var(--ink); }
+.howto-rest {
+  color: var(--burgundy);
+  text-decoration: underline;
+  text-underline-offset: 4px; text-decoration-thickness: 1.5px;
+  text-decoration-color: color-mix(in srgb, var(--burgundy) 38%, transparent);
+  transition: text-decoration-color .16s ease;
 }
-/* The text block takes the slack so the arrow stays pinned to the card's right edge. */
-.howto-card-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-.howto-card-text b { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -.005em; }
-.howto-card-text span { font-size: 13.5px; line-height: 1.35; color: rgba(245, 228, 216, .84); }
-.howto-card-go {
-  flex: none; width: 18px; height: 18px; fill: none; stroke: rgba(245, 228, 216, .8);
+.howto-link:hover .howto-rest { text-decoration-color: var(--burgundy); }
+.howto-arrow {
+  align-self: center; flex: none; width: 16px; height: 16px;
+  fill: none; stroke: var(--burgundy);
   stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
   transition: transform .16s ease;
 }
-.howto-card:hover .howto-card-go { stroke: #fff; transform: translateX(3px); }
-@media (prefers-reduced-motion: reduce) {
-  .howto-card, .howto-card-go { transition: none; }
-  .howto-card:hover, .howto-card:hover .howto-card-go { transform: none; }
+.howto-link:hover .howto-arrow { transform: translateX(3px); }
+.howto-link:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 4px; border-radius: 3px; }
+.howto-mark { display: none; }
+
+/* ── 1 · Sub-line under the heading (Bryan's idea) ──────────────────────────────────
+   Reads as the heading's own second line, so it inherits the largest type on the page
+   without competing with it. Zero chrome. */
+.search-intro[data-howto="1"] { display: block; }
+.search-intro[data-howto="1"] .howto-link { margin-top: 11px; }
+
+/* ── 2 · Right of the heading, burgundy rule ────────────────────────────────────────
+   Same type, moved into the row's dead space. The 2px rule gives it an edge to sit
+   against so it reads as a deliberate object, not a stray link. */
+.search-intro[data-howto="2"] { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+.search-intro[data-howto="2"] .howto-link {
+  flex: none; padding: 3px 0 3px 16px;
+  border-left: 2px solid color-mix(in srgb, var(--burgundy) 55%, transparent);
 }
+
+/* ── 3 · Tinted pill, right of the heading ─────────────────────────────────────────
+   Keeps the "object" quality of the old card at a fraction of its weight: burgundy at
+   7% on the cream band instead of a solid fill. */
+.search-intro[data-howto="3"] { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+.search-intro[data-howto="3"] .howto-link {
+  flex: none; align-items: center; gap: 9px; padding: 11px 20px 12px; border-radius: 999px;
+  background: color-mix(in srgb, var(--burgundy) 7%, var(--paper-deep));
+  border: 1px solid color-mix(in srgb, var(--burgundy) 20%, transparent);
+  transition: background .16s ease, border-color .16s ease;
+}
+.search-intro[data-howto="3"] .howto-link:hover {
+  background: color-mix(in srgb, var(--burgundy) 12%, var(--paper-deep));
+  border-color: color-mix(in srgb, var(--burgundy) 34%, transparent);
+}
+.search-intro[data-howto="3"] .howto-mark {
+  display: block; margin-right: -1px;
+  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-size: 26px; font-weight: 600; line-height: .8;
+  color: color-mix(in srgb, var(--burgundy) 72%, transparent);
+}
+@media (prefers-reduced-motion: reduce) { .howto-link *, .howto-link { transition: none; } }

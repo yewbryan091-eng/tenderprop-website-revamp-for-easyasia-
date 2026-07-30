@@ -42,6 +42,11 @@ export const Route = createFileRoute("/tender/")({
   component: TenderListings,
 });
 
+/* TEMPORARY — three treatments of the "New to e-tender?" line while Bryan picks.
+   "1" = sub-line under the heading (his idea) · "2" = right of the heading, ruled ·
+   "3" = tinted pill, right of the heading. Delete the losers once he chooses. */
+const HOWTO_TREATMENT = "1";
+
 const PER_PAGE = 12;
 const SAVE_KEY = "tp_shortlist";
 
@@ -508,21 +513,18 @@ function TenderListings() {
         {/* SEARCH BAND — sits directly below the hero date */}
         <section className="hero-search-band" aria-labelledby="property-search-title">
           <div className="wrap">
-            {/* The search heading row carried one line of type and ~600px of dead space.
-                "New to e-tender?" lives in that space: right side as Bryan's father asked,
-                on the scan path, beside the largest heading on the page and directly above
-                the search bar — the exact moment a first-timer stalls. Riding existing
-                whitespace instead of adding a fourth horizontal band, which read as a
-                banner. Burgundy, never red: red stays reserved for the page's one action. */}
-            <div className="search-intro">
+            {/* "New to e-tender?" — Bryan's read: the filled maroon block was the problem,
+                not the position. Everything else on this page is flat cream and restrained
+                type, so a saturated box reads as an ad wherever it sits. His idea: hang the
+                line off the search heading as type, not chrome. data-howto switches the
+                three treatments while he picks; the losers get deleted. */}
+            <div className="search-intro" data-howto={HOWTO_TREATMENT}>
               <h2 id="property-search-title">Find a property <span className="hl">open for e-tender</span></h2>
-              <a className="howto-card" href="/how-e-tender-works">
-                <span className="howto-card-mark" aria-hidden="true">?</span>
-                <span className="howto-card-text">
-                  <b>New to e-tender?</b>
-                  <span>See how the sealed-offer process works</span>
-                </span>
-                <svg className="howto-card-go" viewBox="0 0 24 24" aria-hidden="true">
+              <a className="howto-link" href="/how-e-tender-works">
+                <span className="howto-mark" aria-hidden="true">?</span>
+                <b>New to e-tender?</b>
+                <span className="howto-rest">See how it works</span>
+                <svg className="howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M5 12h13M13 6l6 6-6 6" />
                 </svg>
               </a>
