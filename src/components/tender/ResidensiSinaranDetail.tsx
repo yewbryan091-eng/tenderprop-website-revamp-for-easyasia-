@@ -33,6 +33,10 @@ export function ResidensiSinaranDetail() {
   /* Live countdown for the tender rail — same segmented D:H:M:S language as the
      grid hero, so both pages tell time the same way. Null until mount (SSR-safe). */
   const [cd, setCd] = useState<{ d: number; h: number; m: number; s: number } | null>(null);
+  /* Below this many days the segmented D:H:M:S clock earns its place; above it the
+     seconds are noise and the plain day count reads as confidence, not theatre. */
+  const CLOCK_FROM_DAYS = 90;
+  const showClock = cd !== null && cd.d < CLOCK_FROM_DAYS;
   useEffect(() => {
     const calc = () => {
       const diff = new Date(TENDER_CLOSE_ISO).getTime() - Date.now();
@@ -46,7 +50,7 @@ export function ResidensiSinaranDetail() {
       setCd({ d, h, m, s: sec });
     };
     calc();
-    const id = window.setInterval(calc, 1000);
+    const id = window.setInterval(calc, 1000); /* 1s: only meaningful inside CLOCK_FROM_DAYS, harmless outside */
     return () => window.clearInterval(id);
   }, []);
 
@@ -193,7 +197,7 @@ export function ResidensiSinaranDetail() {
                       aria-label="Time remaining until tender closes"
                       aria-live="off"
                     >
-                      {cd ? (
+                      {showClock && cd ? (
                         <>
                           <span className="u"><b>{cd.d}</b><i>d</i></span>
                           <span className="sep">:</span>
@@ -204,7 +208,7 @@ export function ResidensiSinaranDetail() {
                           <span className="u"><b>{String(cd.s).padStart(2, "0")}</b><i>s</i></span>
                         </>
                       ) : (
-                        <span className="u"><b>{daysLabel ?? "\u2014"}</b></span>
+                        <span className="u v1-timer-days"><b>{daysLabel ?? "\u2014"}</b></span>
                       )}
                     </div>
                     <span className="v1-cd">Offers close at the end of this date</span>

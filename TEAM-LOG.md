@@ -68,6 +68,24 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · §4 PARKED (last unblocked item closed); moving to §5 Details
+Countdown now shows the segmented D:H:M:S clock **only inside the final 90 days**
+(`CLOCK_FROM_DAYS` in ResidensiSinaranDetail). Beyond that it renders the day count alone —
+"886 days left" instead of "885D:01H:22M:41S". A ticking seconds column beside a three-digit day
+count advertises that nothing is happening; both Codex and I flagged it independently.
+Verified: 1 unit, no seconds, rail 366px, no overflow.
+
+**§4 is now parked, not abandoned. Two items remain and BOTH are founder-blocked:**
+- `REGISTER BY 17 Dec 2028` — still the assumed close-minus-14-days value.
+- Whether offers can be submitted *during* the closing day, or the listing goes at midnight
+  entering it (see the 5PM entry above).
+Everything else in §4 is done. **Next: §5 Property Details.**
+
+Process note for whoever picks this up: we are going breadth-first — every section to "good",
+then ONE consistency pass across all 12 with full context. Do not sink the remaining sections'
+budget into perfecting one, because sections are judged against each other and §5–§12 will change
+what "right" looks like for §4.
+
 ### 30 Jul 2026 — Claude · two go-live blockers closed by the founder
 **Codex: both of these were on the unverified list. They are now answered — do not reintroduce.**
 1. **There is no 5:00 PM cutoff.** A tender runs to the end of its closing date and the listing

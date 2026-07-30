@@ -800,3 +800,7 @@
 @media (prefers-reduced-motion: reduce) {
   .v1-ladder-toggle { transition: none; }
 }
+
+/* Day-count fallback outside the 90-day clock window: same weight as the segmented
+   clock so the rail keeps its rhythm, without the ticking seconds. */
+.v1-timer .v1-timer-days b { font-size: 21px; letter-spacing: -.01em; }
