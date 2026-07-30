@@ -208,3 +208,38 @@ Zero the margin below 860px, where the diagonal collapses.
 - Zero horizontal overflow at 375px, always. Measure it.
 - Focus rings are not optional: `outline: 2px solid var(--red)` / `var(--burgundy)`, offset.
 - `prefers-reduced-motion` honoured on every transition.
+
+---
+
+## 7. Taste log — verdicts, not rules
+
+Rules did not prevent the failures below; every one of them passed the rules. What prevents them
+is remembering the **verdict**. Append a line every time Bryan rejects something on looks, in his
+words where possible. Read this before designing anything new.
+
+| Verdict | The real fault | The rule it hides |
+|---|---|---|
+| *"i dont like it, its ugly placement"* — full-bleed maroon band between hero and search | **Weight, not placement.** A saturated block on a flat cream page reads as an ad wherever it goes; moving it just moved the ad | On a restrained page, prominence comes from **position and whitespace**, never from saturation. A filled block is the loudest object on the page — spend that on the primary action only |
+| *"the deep/white alternating, its too deep"* | Band contrast set by taste, not by measurement | Derive the alternate band from the **luminance midpoint** of its neighbours, then check the ratio |
+| *"btw tender information background is white colour"* | A full-width white card covering 58% of a band defeats the band | Judge what a section **reads as** — area coverage, not element width. A 0.69-width card still reads as the background |
+| *"whats the point of showing the hour only?"* | Removing days from a countdown removes its scale | A countdown answers *how long have I got* before *how precise is it*. **Days lead, always** (§3d) |
+| *"remove the circle and make the ? larger"* | A circled glyph is chrome around a mark that can carry itself | Prefer the mark to the container. If the container can go, it should go |
+| Glossy red map pin, removed | Gloss and 3D on a flat brand | The brand is **flat**. Any gradient/gloss is a defect, not a flourish |
+
+**The pattern across all of them:** the fault was almost never the attribute Bryan named. He names
+where his eye landed. Diagnose the axis before fixing — see the `design-critic` agent, step 3.
+
+## 8. Before you show Bryan anything visual
+
+1. **Render it and look at it.** Not the diff, the picture. Numbers verify correctness; they do
+   not detect ugliness — everything in §7 measured perfectly.
+2. **Build three, ship one.** A single attempt has nothing to be judged against, and you will
+   defend the only thing you made. Three treatments make the right one obvious in one glance —
+   that is exactly how the "New to e-tender?" line got solved after two failed rebuilds.
+   Put them behind a one-character switch (`data-*` attribute + a constant), screenshot each
+   cleanly, and delete the losers the moment he picks.
+3. **Run the `design-critic` agent on the screenshot.** It did not build the thing and will not
+   defend it. If it names a different fault axis than you did, it is probably right — you have
+   already committed to a story about your own work.
+4. **State an opinion.** Bryan asks for options but wants a recommendation. Give the number you
+   would ship and why.

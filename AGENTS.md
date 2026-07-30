@@ -92,6 +92,26 @@ section-flow tokens, the established component patterns, the traps that have alr
 and the brand non-negotiables. Read it before any visual work; add to it in the same commit as any
 new design decision. This file holds the *behaviour* rules below; that file holds the *system*.
 
+## 👁 THE DESIGN CRITIC — never ship visual work you have only measured
+
+Measuring is not judging. Every visual thing Bryan has rejected passed its measurements: aligned,
+zero overflow, contrast fine, tap targets fine, and still ugly. **Correct and beautiful are
+different tests, and only the second one is done with your eyes.**
+
+Before any visual change reaches Bryan:
+
+1. **Render it and look at the picture.**
+2. **Build three treatments, ship one.** One attempt has nothing to be judged against and you will
+   defend it because you made it. Put the variants behind a one-character switch, screenshot each,
+   recommend one, delete the losers when he picks.
+3. **Run the `design-critic` subagent** (`.claude/agents/design-critic.md`) on the screenshot. It
+   did not build the thing. If it names a different fault axis than you did, it is probably right.
+4. **Diagnose the AXIS before fixing** — place / weight / shape / redundancy. Fixing the wrong axis
+   repeatedly is the most expensive failure in this repo: the "New to e-tender?" signal was rebuilt
+   twice on the *placement* axis when the fault was *weight*, and Bryan had to diagnose it himself.
+5. Log the verdict in `DESIGN-SYSTEM.md` §7 when he rejects something. Verdicts transfer; rules did
+   not prevent any of these.
+
 ## 🎨 THE DESIGN SOP — "improve the design" means ALL of it (Bryan, 30 Jul 2026)
 
 His words: *"when i say improve the design, you make use your critical thinking on how to improve
