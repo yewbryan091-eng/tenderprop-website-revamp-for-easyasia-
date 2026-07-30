@@ -69,6 +69,17 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · Same leading bug, other end: label was 1.7px off the digits
+Bryan: *"something is wrong man"* — the eyebrow was touching the top of "134". My own regression:
+`line-height: .8` makes the glyphs overflow the line box in **both** directions, and I had only
+corrected the bottom. Digits rose 10.6px above their own box, so a 7px box gap rendered as a
+**true 1.7px**. Now `margin: .15em 0 -.076em` on the numeral — **top 18.5px, bottom 15.9px**,
+both measured with canvas TextMetrics, both in the numeral's own em so the pair scales together.
+Panel 30px top and bottom, no overflow.
+
+**Lesson for the next agent:** when you tighten `line-height` on display type, you have created
+TWO spacing faults, not one. Measure above and below before you call it done.
+
 ### 31 Jul 2026 — Claude · Hero time showcase re-cut (positioning, size, hierarchy)
 Bryan: *"make it eye stunning… mostly positioning and font size"*. Measured first: the day count
 was **74px against a 58.8px date — a 1.26:1 ratio**, and the date string is 3.5x wider, so the

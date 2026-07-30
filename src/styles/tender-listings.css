@@ -1080,7 +1080,12 @@
    invisible leading, so a 10px box gap rendered as a 34.5px hole and the unit read as
    orphaned. -.076em cancels the leading and leaves a true 16px optical gap. In the
    numeral's OWN em, so it stays proportional across the whole clamp. */
-.hero-timer-days .hero-timer-value { margin-bottom: -.076em; }
+/* Both sides, because the tight line-height makes the digits overflow their box in BOTH
+   directions: they rise 10.6px above it and leave 24.5px of dead space below it. Measured,
+   the label was landing 1.7px off the digit caps — visually touching — while the unit sat
+   34.5px away. +.15em above, -.076em below gives a true 18px / 16px pair. Both in the
+   numeral's own em so the whole relationship scales with its clamp. */
+.hero-timer-days .hero-timer-value { margin: .15em 0 -.076em; }
 .hero-timer-days .hero-timer-value {
   font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
   /* 112px, up from 74px. At 74 against a 58.8px date the ratio was 1.26:1 and the date

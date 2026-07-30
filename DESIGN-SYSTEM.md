@@ -213,9 +213,12 @@ Zero the margin below 860px, where the diagonal collapses.
   it works" and called it weird, correctly. Either make the whole thing look like a link, or put
   the anchor around only the link text. Bigger tap targets are not worth surprise navigation.
 
-- **Display type hides its gap in the leading — measure glyphs, not boxes.** Under a 112px
-  numeral sat 24.5px of invisible leading, so a 10px `gap` rendered as a **34.5px** hole and the
-  unit read as orphaned. `getBoundingClientRect()` cannot see this; canvas `TextMetrics`
+- **Display type hides its gap in the leading — measure glyphs, not boxes, on BOTH sides.** A
+  tight `line-height` makes glyphs overflow their own line box in both directions at once: under
+  a 112px numeral sat 24.5px of dead leading (a 10px `gap` rendered as a **34.5px** hole, the unit
+  orphaned) while the digits simultaneously rose 10.6px **above** the box, leaving the label
+  **1.7px** off the caps — visually touching. Fixing one side does not fix the other, and both
+  faults are invisible to `getBoundingClientRect`. `getBoundingClientRect()` cannot see this; canvas `TextMetrics`
   (`actualBoundingBoxDescent` / `fontBoundingBoxAscent`) can. Cancel it with a negative margin
   expressed **in the display element's own em** so the correction scales with its clamp.
 - **Centring a unit is not centring its parts.** "134 DAYS LEFT" centred as one flex row put the
