@@ -417,6 +417,16 @@ function TenderListings() {
         <section className="hero-tender" aria-label="E-Tender overview">
           <div className="hero-panel hero-panel-left is-dark">
             <div className="hero-panel-inner">
+              {/* Ambient clock, top-right of the burgundy panel (Bryan). The DAY COUNT stays
+                  the headline per the founder's rule — this is secondary detail for anyone
+                  who wants the finer grain, deliberately small and quiet so it cannot compete.
+                  aria-hidden: the day count's own label already announces the deadline, and a
+                  second live region reading seconds would be hostile to a screen reader. */}
+              {left && (
+                <span className="hero-clock" aria-hidden="true">
+                  {pad2(left.hours)}:{pad2(left.minutes)}:{pad2(left.seconds)}
+                </span>
+              )}
               <div className="hero-timer" aria-live="off" aria-label={countdownLabel}>
                 <span className="hero-timer-heading" aria-hidden="true">
                   <span className="hero-timer-clock"><ClockIcon /></span>

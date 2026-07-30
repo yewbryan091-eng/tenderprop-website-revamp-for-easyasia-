@@ -69,6 +69,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · ambient clock in the hero's top right
+Bryan wanted a timer back, so the hero now carries a small hh:mm:ss clock top-right of the burgundy
+panel. **This does not contradict the founder's rule** — the day count is still the headline at
+clamp(46–74px); the clock is 13px at 62% white, deliberately unable to compete. `aria-hidden`,
+because the day count's label already announces the deadline and a second live region reading
+seconds would be hostile to a screen reader.
+
+⚠️ **Keep it in flow (`align-self: flex-end`), never absolutely positioned.** My first attempt used
+`right: calc(100% - var(--hero-top-split) + 3%)` to clear the diagonal and it landed *beside* the
+"135" instead of in the corner. The panel's own `padding-right` already tracks the diagonal
+(`calc(100% - var(--hero-bot-split) + 2%)`), so aligning to the content box's right edge clears the
+seam for free — and keeps clearing it if the split angle ever changes. Below 860px the diagonal
+collapses, so it centres with the stacked panel.
+Also note: the in-app browser pane collapsed to width 0 again mid-check and returned nonsense
+measurements (it reported the mobile media query as active). Verified in real Chrome instead.
+
 ### 30 Jul 2026 — Claude · countdowns are DAYS-LED (founder guidance) + media buttons restored
 **Bryan's father: buyers care how many DAYS are left, not the timer.** Applied to BOTH surfaces:
 the `/tender` hero and the E-Tender Information dossier now show **one figure — the day count** —
