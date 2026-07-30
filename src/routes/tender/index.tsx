@@ -372,11 +372,27 @@ function TenderListings() {
     });
     return pool;
   }, []);
+  /* On focus with an empty field, a portal shows "popular searches" because it has
+     500,000 listings and the user's problem is narrowing down. TenderProp has ~36
+     across a handful of states, so the buyer's problem is the opposite: they do not
+     know whether anything exists near them. Typing "Cheras", getting nothing and
+     concluding the platform is empty is the worst outcome on this page. So the empty
+     state discloses the real geography — states that actually have tenders, with
+     counts, busiest first — and typing switches to matching. */
+  const taStates = useMemo(() => {
+    const counts: Record<string, number> = {};
+    TENDERS.forEach((t) => { counts[t.stateKey] = (counts[t.stateKey] || 0) + 1; });
+    return STATES
+      .filter((st) => counts[st.key])
+      .map((st) => ({ label: st.name, kind: "State", type: "state", n: counts[st.key] }))
+      .sort((a, b) => b.n - a.n)
+      .slice(0, 8);
+  }, []);
   const taMatches = useMemo(() => {
     const q = query.toLowerCase().trim();
-    if (!q) return [];
+    if (!q) return taStates;
     return taPool.filter((m) => m.label.toLowerCase().includes(q)).slice(0, 8);
-  }, [query, taPool]);
+  }, [query, taPool, taStates]);
 
   function pick(m: { label: string; term?: string }) {
     setQuery(m.term || m.label.split(",")[0]);
@@ -507,6 +523,9 @@ function TenderListings() {
                     aria-controls="ta-list"
                     value={query}
                     onChange={(e) => { setQuery(e.target.value); setPage(1); setTaOpen(true); setTaActive(-1); }}
+                    /* The list only ever opened on keystroke, so clicking the field did
+                       nothing — the whole point of the empty state. */
+                    onFocus={() => { setTaOpen(true); setTaActive(-1); }}
                     onBlur={() => window.setTimeout(() => setTaOpen(false), 120)}
                     onKeyDown={(e) => {
                       if (!taOpen || !taMatches.length) return;
@@ -516,7 +535,12 @@ function TenderListings() {
                       else if (e.key === "Escape") setTaOpen(false);
                     }}
                   />
-                  <div className={"ta-list" + (taOpen && taMatches.length ? " show" : "")} id="ta-list" role="listbox">
+                  <div
+                    className={"ta-list" + (taOpen && (taMatches.length || query.trim()) ? " show" : "")}
+                    id="ta-list"
+                    role="listbox"
+                  >
+                    {!query.trim() && <p className="ta-head">Where tenders are open now</p>}
                     {taMatches.map((m, i) => (
                       <div
                         key={m.type + m.label}
@@ -527,9 +551,21 @@ function TenderListings() {
                       >
                         <span>{m.type === "name" ? <TaHome /> : <TaPin />}</span>
                         <span>{m.label}</span>
-                        <span className="ta-kind">{m.kind}</span>
+                        {"n" in m && (m as { n?: number }).n
+                          ? <span className="ta-n">{(m as { n: number }).n}</span>
+                          : <span className="ta-kind">{m.kind}</span>}
                       </div>
                     ))}
+                    {/* A dead-silent dropdown reads as a broken site. Name the miss and
+                        offer the way out. */}
+                    {Boolean(query.trim()) && taMatches.length === 0 && (
+                      <p className="ta-empty">
+                        No tenders match &ldquo;{query.trim()}&rdquo;.{" "}
+                        <button type="button" onMouseDown={(e) => { e.preventDefault(); setQuery(""); setPage(1); }}>
+                          Browse all {TENDERS.length}
+                        </button>
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="field sb-type">

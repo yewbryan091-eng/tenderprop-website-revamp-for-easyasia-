@@ -68,6 +68,29 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · Serviced Apartment rename + location search empty state
+1. **"Serviced Residence" → "Serviced Apartment"** (Bryan). Data (2 records) + taxonomy label.
+   The taxonomy's `types[]` and both sets in tender-utils **keep the old string as a matcher**, so
+   a record arriving with the old spelling (real inventory, EasyAsia's CMS, a stale import) still
+   resolves to floor area instead of silently falling through to land area. Filter count held at
+   9, which is the proof matching still works.
+2. **Location field now opens on click.** ROOT CAUSE: there was no `onFocus` at all — `setTaOpen`
+   only fired `onChange`, so clicking the field did nothing and the dropdown existed only while
+   typing. Added `onFocus`.
+3. **Empty-focus list = inventory disclosure, not "popular searches".** A portal shows popular
+   searches because it has 500k listings and the user must narrow down. TenderProp has ~36 across
+   a handful of states, so the buyer's problem is the opposite — they do not know if anything
+   exists near them. Typing "Cheras", getting silence, and concluding the platform is empty is
+   the worst outcome on this page. Empty state now shows **"Where tenders are open now"** + states
+   that actually have stock, with counts, busiest first (Selangor 18, KL 4, Johor 1…), capped at 8.
+   Typing switches to the existing State/Area/Property matching.
+4. **No-match state added** — a dead-silent dropdown reads as a broken site. Now:
+   *No tenders match "X". Browse all 36.*
+5. ⚠️ Could not eyeball the open dropdown: the browser pane went unresponsive, and programmatic
+   `.focus()` races the 120ms `onBlur` timeout so the `show` class reads false from a tool call.
+   Handler and data are verified present (`onFocus` on the input's React props, head + 8 rows with
+   counts in the DOM). **Next session: click the field for real and confirm it drops down.**
+
 ### 30 Jul 2026 — Claude · card facts standardised; my own CSS collision fixed
 1. **THREE FIXED SLOTS, no exceptions: Tender start / Land area|Floor area / Tenure.**
    New `areaSlot(x)` in tender-utils picks slot 2 by the property's FORM, not by which field

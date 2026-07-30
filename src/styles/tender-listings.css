@@ -981,3 +981,22 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
+
+/* ── Location typeahead: empty-focus inventory disclosure ── */
+.ta-list .ta-head {
+  margin: 0; padding: 11px 14px 7px;
+  font-size: 10.5px; font-weight: 800; letter-spacing: .11em;
+  text-transform: uppercase; color: var(--muted);
+}
+.ta-list .ta-n {
+  margin-left: auto; flex: none;
+  font-size: 12.5px; font-weight: 700; color: var(--burgundy);
+  font-variant-numeric: tabular-nums;
+}
+.ta-list .ta-empty {
+  margin: 0; padding: 14px; font-size: 13.5px; line-height: 1.5; color: var(--muted);
+}
+.ta-list .ta-empty button {
+  background: none; border: 0; padding: 0; font: inherit;
+  font-weight: 700; color: var(--burgundy); cursor: pointer; text-decoration: underline;
+}
