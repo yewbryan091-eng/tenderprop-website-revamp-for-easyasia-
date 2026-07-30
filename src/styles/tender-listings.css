@@ -1087,18 +1087,93 @@
      figure and this corner strip can never be confused for the same element. */
   --corner: 1;
 }
-/* Bumped 19→28px. Still well clear of the day count's 46–74px, so the ranking holds:
-   the headline is what a buyer reads, this is what they check. */
+/* Contained, not floating: a soft dark pill so it reads as placed rather than as leftover
+   text, and stays legible over the KLCC towers regardless of how the wash falls.
+   ALL FOUR UNITS STAY. Dropping days was proposed and rejected (Bryan): without the day
+   count, "23:45:15" reads as closing tonight — the days are the scale that makes the rest
+   mean anything, not a duplicate of the headline. */
+.hero-panel-left .hero-clock {
+  padding: 7px 14px 8px;
+  border-radius: 999px;
+  background: rgba(23, 19, 15, .34);
+  backdrop-filter: blur(3px);
+  /* Locks digit width so a live seconds counter cannot twitch every tick. The base rule
+     fakes this with min-width per cell, which reserves the box but not the glyphs. */
+  font-variant-numeric: tabular-nums;
+}
 .hero-panel-left .hero-clock .hero-timer-value {
   font-size: clamp(24px, 2vw, 28px); font-weight: 700; letter-spacing: -.015em;
-  color: rgba(255, 255, 255, .95);
+  color: rgba(255, 255, 255, .96);
+  font-variant-numeric: tabular-nums;
 }
 .hero-panel-left .hero-clock .hero-timer-unit {
-  font-size: 12px; font-weight: 700; letter-spacing: .07em;
-  color: rgba(255, 255, 255, .62);
+  font-size: 11.5px; font-weight: 700; letter-spacing: .07em;
+  color: rgba(255, 255, 255, .66);
+}
+.hero-panel-left .hero-clock .hero-timer-cell + .hero-timer-cell::before {
+  color: rgba(255, 255, 255, .42); font-size: 19px; margin-right: 4px;
 }
 .hero-panel-left .hero-clock .hero-timer-cell:first-child .hero-timer-value { min-width: 0; }
 @media (max-width: 860px) {
   /* Diagonal is gone below this; centre it with the rest of the stacked panel. */
   .hero-panel-left .hero-clock { align-self: center; margin-right: 0; }
+}
+
+/* ══ "HOW E-TENDER WORKS" SIGNAL — two variants, Bryan picks one ══════════════════════
+   His father wants this impossible to miss on /tender. It sits at the foot of the right
+   panel because that panel already answers "why should I trust this?" — and "how does it
+   work?" is the next question a first-timer asks. Deliberately NOT red: red means the one
+   action on this site, and diverting a visitor to a guide before they have seen a single
+   property would be the wrong win. Prominent, subordinate to "View E-Tender Properties". */
+/* Compressed to make room rather than growing the hero: the panel was at 415px inside a
+   412px band with zero gap at either edge. Bryan rejected an unasked panel-height increase
+   once before, and the right instinct then was the same as now — fit the content to the
+   panel, do not grow the panel to the content. */
+.hero-panel-right .hero-assurance { padding-block: clamp(8px, .8vw, 11px); }
+.hero-howto { display: block; text-decoration: none; margin-top: 12px; }
+
+/* ── B: quiet strip on the panel's own ground ── */
+.hero-howto-strip {
+  display: flex; align-items: center; gap: 12px;
+  padding-top: 15px; border-top: 1px solid var(--line);
+  color: var(--burgundy);
+}
+.hero-howto-strip .hero-howto-mark {
+  flex: none; width: 30px; text-align: center;
+  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-size: 34px; font-weight: 600; line-height: 1;
+  color: var(--burgundy); transform: translateY(2px);
+}
+.hero-howto-strip .hero-howto-text { flex: 1 1 auto; min-width: 0; font-size: 14.5px; line-height: 1.4; color: var(--ink); }
+.hero-howto-strip .hero-howto-text b { color: var(--burgundy); font-weight: 700; }
+.hero-howto-strip .hero-howto-arrow {
+  flex: none; width: 18px; height: 18px; fill: none; stroke: var(--burgundy);
+  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .16s ease;
+}
+.hero-howto-strip:hover .hero-howto-arrow { transform: translateX(3px); }
+
+/* ── C: same footprint as B, filled — loud vs restrained at equal height ── */
+.hero-howto-block {
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 14px; padding: 11px 14px; border-radius: 11px;
+  background: var(--burgundy); color: var(--burgundy-ink);
+}
+.hero-howto-block .hero-howto-mark {
+  flex: none; width: 26px; text-align: center;
+  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-size: 30px; font-weight: 600; line-height: 1;
+  color: rgba(245, 228, 216, .9); transform: translateY(2px);
+}
+.hero-howto-block .hero-howto-text { flex: 1 1 auto; min-width: 0; font-size: 14px; line-height: 1.4; color: rgba(245, 228, 216, .88); }
+.hero-howto-block .hero-howto-text b { color: #fff; font-weight: 700; }
+.hero-howto-block .hero-howto-arrow {
+  flex: none; width: 17px; height: 17px; fill: none; stroke: #fff;
+  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .16s ease;
+}
+.hero-howto-block:hover .hero-howto-arrow { transform: translateX(3px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-howto-strip .hero-howto-arrow, .hero-howto-block .hero-howto-cta svg { transition: none; }
 }

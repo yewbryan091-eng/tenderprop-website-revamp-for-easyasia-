@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as BuyIndexRouteImport } from './routes/buy/index'
+import { Route as HowETenderWorksIndexRouteImport } from './routes/how-e-tender-works/index'
 import { Route as MemberIndexRouteImport } from './routes/member/index'
 import { Route as OwnerAuctionIndexRouteImport } from './routes/owner-auction/index'
 import { Route as RentIndexRouteImport } from './routes/rent/index'
@@ -33,6 +34,11 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
 const BuyIndexRoute = BuyIndexRouteImport.update({
   id: '/buy/',
   path: '/buy/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowETenderWorksIndexRoute = HowETenderWorksIndexRouteImport.update({
+  id: '/how-e-tender-works/',
+  path: '/how-e-tender-works/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MemberIndexRoute = MemberIndexRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
   '/about/': typeof AboutIndexRoute
   '/buy/': typeof BuyIndexRoute
+  '/how-e-tender-works/': typeof HowETenderWorksIndexRoute
   '/member/': typeof MemberIndexRoute
   '/owner-auction/': typeof OwnerAuctionIndexRoute
   '/rent/': typeof RentIndexRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
   '/about': typeof AboutIndexRoute
   '/buy': typeof BuyIndexRoute
+  '/how-e-tender-works': typeof HowETenderWorksIndexRoute
   '/member': typeof MemberIndexRoute
   '/owner-auction': typeof OwnerAuctionIndexRoute
   '/rent': typeof RentIndexRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
   '/about/': typeof AboutIndexRoute
   '/buy/': typeof BuyIndexRoute
+  '/how-e-tender-works/': typeof HowETenderWorksIndexRoute
   '/member/': typeof MemberIndexRoute
   '/owner-auction/': typeof OwnerAuctionIndexRoute
   '/rent/': typeof RentIndexRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/tender/residensi-sinaran'
     | '/about/'
     | '/buy/'
+    | '/how-e-tender-works/'
     | '/member/'
     | '/owner-auction/'
     | '/rent/'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/tender/residensi-sinaran'
     | '/about'
     | '/buy'
+    | '/how-e-tender-works'
     | '/member'
     | '/owner-auction'
     | '/rent'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/tender/residensi-sinaran'
     | '/about/'
     | '/buy/'
+    | '/how-e-tender-works/'
     | '/member/'
     | '/owner-auction/'
     | '/rent/'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   TenderResidensiSinaranRoute: typeof TenderResidensiSinaranRoute
   AboutIndexRoute: typeof AboutIndexRoute
   BuyIndexRoute: typeof BuyIndexRoute
+  HowETenderWorksIndexRoute: typeof HowETenderWorksIndexRoute
   MemberIndexRoute: typeof MemberIndexRoute
   OwnerAuctionIndexRoute: typeof OwnerAuctionIndexRoute
   RentIndexRoute: typeof RentIndexRoute
@@ -181,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/buy'
       fullPath: '/buy/'
       preLoaderRoute: typeof BuyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-e-tender-works/': {
+      id: '/how-e-tender-works/'
+      path: '/how-e-tender-works'
+      fullPath: '/how-e-tender-works/'
+      preLoaderRoute: typeof HowETenderWorksIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/member/': {
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   TenderResidensiSinaranRoute: TenderResidensiSinaranRoute,
   AboutIndexRoute: AboutIndexRoute,
   BuyIndexRoute: BuyIndexRoute,
+  HowETenderWorksIndexRoute: HowETenderWorksIndexRoute,
   MemberIndexRoute: MemberIndexRoute,
   OwnerAuctionIndexRoute: OwnerAuctionIndexRoute,
   RentIndexRoute: RentIndexRoute,

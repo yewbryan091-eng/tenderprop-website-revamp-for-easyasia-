@@ -20,6 +20,15 @@ import {
 } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 
+/* TEMPORARY (30 Jul): Bryan is choosing between two treatments for the "how it works"
+   signal his father asked for. Flip this one constant to switch; the loser gets deleted
+   once he picks, so this must not survive the decision.
+     "B" — a quiet strip under the assurances, burgundy on the panel's own ground
+     "C" — a filled burgundy block that deliberately breaks the light-panel pattern,
+           with a 1·2·3 preview so it teaches the method even if nobody clicks
+   Both point at the framed /how-e-tender-works route, so neither is a dead control. */
+const HOW_IT_WORKS_VARIANT: "B" | "C" = "C";
+
 export const Route = createFileRoute("/tender/")({
   head: () => ({
     meta: [
@@ -501,6 +510,34 @@ function TenderListings() {
                   </div>
                 </li>
               </ul>
+
+              {HOW_IT_WORKS_VARIANT === "B" ? (
+                <a className="hero-howto hero-howto-strip" href="/how-e-tender-works">
+                  <span className="hero-howto-mark" aria-hidden="true">?</span>
+                  <span className="hero-howto-text">
+                    <b>New to e-tender?</b> See how it works
+                  </span>
+                  <svg className="hero-howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h13M13 6l6 6-6 6" />
+                  </svg>
+                </a>
+              ) : (
+                /* C compacted to B's footprint. The first pass carried a 1·2·3 preview and
+                   overflowed the hero — it clipped its own CTA and cut the top assurance's
+                   heading. Growing the hero to fit is the thing Bryan rejected before, so C
+                   is now the same height as B and differs only in weight: filled burgundy
+                   instead of a quiet strip. That makes the choice a clean one — loud vs
+                   restrained at equal cost — rather than a trade against panel height. */
+                <a className="hero-howto hero-howto-block" href="/how-e-tender-works">
+                  <span className="hero-howto-mark" aria-hidden="true">?</span>
+                  <span className="hero-howto-text">
+                    <b>New to e-tender?</b> See how it works
+                  </span>
+                  <svg className="hero-howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h13M13 6l6 6-6 6" />
+                  </svg>
+                </a>
+              )}
             </div>
           </div>
         </section>

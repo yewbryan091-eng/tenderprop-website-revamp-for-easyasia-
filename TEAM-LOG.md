@@ -69,6 +69,33 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · "How E-Tender works" signal — TWO VARIANTS LIVE, Bryan is picking
+Founder wants the how-to link impossible to miss on `/tender`. Placed at the foot of the RIGHT
+panel — that panel already answers "why should I trust this?", and "how does it work?" is the next
+question a first-timer asks, so it is the correct home rather than a free slot.
+**⚠️ TEMPORARY: `HOW_IT_WORKS_VARIANT` in `src/routes/tender/index.tsx` switches between them.
+Delete the loser and the constant once Bryan picks — this must not survive the decision.**
+- **B** — quiet strip on the panel's own ground, burgundy on light, serif `?` mark.
+- **C** — same footprint, filled burgundy. Loud vs restrained at equal height.
+Both link to the new framed route **`/how-e-tender-works`**, created in the same commit so neither
+is a dead control. Named "How E-Tender works", not "How To E-Tender" — the latter reads badly as a
+verb phrase and the homepage already used this wording. Never red: red is the one action on this
+site, and diverting a first-timer to a guide before they have seen a property is the wrong win.
+
+🐛 **Two fit problems found and fixed, both worth knowing:**
+1. Adding the signal put the right panel at **415px inside a 412px hero** — zero gap at either
+   edge. Compressed `.hero-assurance` padding rather than growing the hero: Bryan rejected an
+   unasked panel-height increase before, and fit-content-to-panel was the right instinct then too.
+2. **C's first design carried a 1·2·3 step preview and overflowed badly** — it clipped its own CTA
+   and cut the top assurance's heading. Compacted to B's footprint so the choice is purely weight,
+   not a trade against hero height. If the step preview is ever wanted, it needs a taller hero.
+
+**Timer (same session):** kept all four D/H/M/S units — dropping days was proposed and **rejected
+by Bryan**, correctly: without the day count "23:45:15" reads as closing tonight. Now in a soft
+dark pill for legibility over the towers, with `font-variant-numeric: tabular-nums` so a live
+seconds counter cannot twitch — the base rule faked it with `min-width` per cell, which reserves
+the box but not the glyphs.
+
 ### 30 Jul 2026 — Claude · ambient clock in the hero's top right
 Bryan wanted a timer back, so the hero now carries the **D/H/M/S strip** top-right of the burgundy
 panel. (I first built an invented hh:mm:ss clock — wrong; he meant *the* timer, the four-cell one
