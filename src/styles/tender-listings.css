@@ -466,11 +466,23 @@
   /* padding-block only — the .wrap shorthand must keep supplying the gutters */
   .main-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 38px; padding-top: 40px; padding-bottom: 80px; align-items: start; }
   .results-column { min-width: 0; }
+  /* ── ONE CONTENT WIDTH ABOVE 1400px ─────────────────────────────────────────────
+     The search band and the results+rail block were both centred but at DIFFERENT
+     widths: the search card measured 1062px while results+rail measured 1328px, so the
+     toolbar started 133px to the left of the search box above it. A filter control that
+     does not span the width of what it filters reads as broken.
+     --content-max is that shared width: 1020 (results) + 28 (gap) + 280 (rail) = 1328. */
   @media(min-width: 1400px) {
+    :root { --content-max: 1328px; }
     .main-layout {
       grid-template-columns: minmax(0, 1020px) clamp(260px, 19vw, 280px);
       gap: 28px;
       justify-content: center;
+    }
+    /* Same inner width as the grid below it, so both share a left and right edge. */
+    .hero-search-band .wrap,
+    .cat-nav-wrap .wrap {
+      max-width: calc(var(--content-max) + 2 * clamp(18px, 4vw, 40px));
     }
   }
   @media(max-width: 1399px) { .main-layout { grid-template-columns: minmax(0, 1fr); } }

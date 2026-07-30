@@ -69,6 +69,24 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · listings page: one content width (search band vs results were 133px apart)
+Bryan spotted the results toolbar not lining up with the search box above it. Measured: both blocks
+were **centred**, but at different widths — search card **1062px**, results+rail **1328px** — so the
+toolbar's left edge sat **133px** left of the search card's. Both being centred is why it survived
+review; centring hides a width mismatch.
+
+Fix: `--content-max: 1328px` above 1400px (1020 results + 28 gap + 280 rail), applied to the search
+band's and cat-nav's wraps. Verified: **all four left edges now land on 129 and the search card's
+right edge meets the rail's at 1457.** Recorded as DESIGN-SYSTEM §3b.
+
+Two notes for whoever audits widths next:
+- Measure the **card**, not the field row inside it. `.search-bar` sits 19px inside `.search-form`
+  as the card's own padding — that reads as a misalignment in a measurement and is not one. My
+  first check reported "leftEdgesMatch: false" for exactly this reason.
+- The 3-up grid uses a **viewport** breakpoint, not a container query, so narrowing `.main-layout`
+  to the standard 1180 wrap would have crammed three cards into 762px. Widening the band to meet
+  the grid was the right direction, not narrowing the grid to meet the band.
+
 ### 30 Jul 2026 — Codex · Tender Information made full-bleed and hero-height
 Removed the capped 1100px card/gutters so the standard 40/60 dossier now spans the viewport like
 the `/tender` hero. Reflowed the right side so the three-step process gets the full information

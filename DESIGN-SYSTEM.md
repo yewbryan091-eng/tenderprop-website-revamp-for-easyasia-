@@ -67,6 +67,20 @@ one block, one of them is wrong.
   false "no collisions" result.
 - One title treatment, shared by `.sec-title` and `.v1-top h3`.
 
+## 3b. Page width — the listings page has ONE content width
+
+Above 1400px, `--content-max: 1328px` is shared by the search card, the category tabs and the
+results+rail block (1020 results + 28 gap + 280 rail = 1328). **All four left edges land on the
+same x, and the search card's right edge meets the rail's.**
+
+⛔ The fault this fixed: the search band and the results+rail block were both *centred* but at
+different widths — search card 1062px, results+rail 1328px — so the toolbar started **133px** left
+of the search box above it. Both were "centred", which is why it survived review. **A filter
+control that does not span the width of what it filters reads as broken.**
+
+When auditing this, measure the **card**, not the field row inside it: `.search-bar` sits 19px
+inside `.search-form` as the card's own padding, which looks like a misalignment and is not one.
+
 ## 4. Established patterns — reuse before inventing
 
 - **Label/value list** (`.pd-row`): label column `10.5rem`, `white-space: nowrap`, value 14.5/600,
