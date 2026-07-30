@@ -95,6 +95,20 @@ names, and `tender-detail.css` / `tender-utils.ts` filenames.
 Watch for two failure modes a blind find-replace creates: **`E-TenderProp`** and **`E-E-Tender`**.
 Assert both are zero after any sweep.
 
+## 3d. Countdowns — DAYS LEAD, always
+
+**FOUNDER GUIDANCE (Bryan's father, 30 Jul):** *what a buyer really cares about is how many days
+are left, not the timer.* Both the `/tender` hero and the E-Tender Information dossier now show
+**one figure — the day count** — with the closing date beneath it.
+
+⛔ Do not restore a D/H/M/S strip. A ticking seconds column beside a three-digit day count is
+theatre: it advertises that nothing is happening. Codex and I flagged it independently before the
+founder settled it.
+
+**The one exception, and it matters:** inside the final 24 hours `cd.d < 1`, so "0 days left" would
+say nothing — there the display switches to `{h}h {mm}m` with the label "left today". Days when
+days remain; hours only when hours are all that remain.
+
 ## 4. Established patterns — reuse before inventing
 
 - **Label/value list** (`.pd-row`): label column `10.5rem`, `white-space: nowrap`, value 14.5/600,

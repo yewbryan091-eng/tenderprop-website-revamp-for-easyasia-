@@ -184,8 +184,45 @@ export function ResidensiSinaranDetail() {
               </div>
             </div>
 
-            {/* Video and Drone buttons removed — no footage exists for this property.
-                Restore the .mediarow buttons once real media is supplied. */}
+            {/* Restored 30 Jul (Bryan), under the gallery. They were removed because no
+                footage existed and a button that does nothing when clicked reads as broken
+                — worse in a demo than absent. So each one is honest about what it can do:
+
+                DRONE works today. The aerial shots are already in SINARAN_PHOTOS, so this
+                jumps the stage to the first of them by clicking the matching thumb, reusing
+                the gallery's existing swap rather than duplicating it.
+
+                VIDEO has no footage, so rather than a dead control it asks the agent for a
+                viewing — which is what a buyer actually wants from a video button on a
+                completed property, and it feeds the lead engine both platforms exist to be.
+                Swap it to a real player the moment footage is supplied. */}
+            <div className="mediarow">
+              <button
+                type="button"
+                className="mediabtn"
+                onClick={() =>
+                  document
+                    .querySelector('#thumbs .thumb[data-res="ph1"]')
+                    ?.dispatchEvent(new MouseEvent("click", { bubbles: true }))
+                }
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M5 5l3 3M19 5l-3 3M5 19l3-3M19 19l-3-3" />
+                  <rect x="9" y="9" width="6" height="6" rx="1.4" />
+                  <circle cx="5" cy="5" r="2" /><circle cx="19" cy="5" r="2" />
+                  <circle cx="5" cy="19" r="2" /><circle cx="19" cy="19" r="2" />
+                </svg>
+                <span>Drone view</span>
+              </button>
+              <a className="mediabtn" href="#agent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="2.5" y="6" width="13" height="12" rx="2.2" />
+                  <path d="M15.5 10.5l6-3.2v9.4l-6-3.2z" />
+                </svg>
+                <span>Video viewing</span>
+                <span className="cnt">on request</span>
+              </a>
+            </div>
 
           </div>
         </section>
@@ -224,22 +261,21 @@ export function ResidensiSinaranDetail() {
                       role="timer"
                       aria-label={
                         cd
-                          ? `${cd.d} days, ${cd.h} hours, ${cd.m} minutes and ${cd.s} seconds remaining`
+                          ? cd.d < 1
+                            ? `${cd.h} hours and ${cd.m} minutes remaining`
+                            : `${cd.d} ${cd.d === 1 ? "day" : "days"} remaining`
                           : "Time remaining until the e-tender closes"
                       }
                       aria-live="off"
                     >
-                      {([
-                        ["Days", cd ? String(cd.d) : "\u00a0"],
-                        ["Hours", cd ? String(cd.h).padStart(2, "0") : "\u00a0"],
-                        ["Minutes", cd ? String(cd.m).padStart(2, "0") : "\u00a0"],
-                        ["Seconds", cd ? String(cd.s).padStart(2, "0") : "\u00a0"],
-                      ] as const).map(([label, value]) => (
-                        <span className="u" key={label} aria-hidden="true">
-                          <b>{value}</b>
-                          <i>{label}</i>
-                        </span>
-                      ))}
+                      {/* FOUNDER GUIDANCE (Bryan's father, 30 Jul): buyers care how many DAYS
+                          are left, not a ticking clock. Days lead; hours and minutes appear
+                          only inside the final 24 hours, where "0 days" would say nothing and
+                          the hours are the whole story. Same rule as the /tender hero. */}
+                      <span className="u" aria-hidden="true">
+                        <b>{!cd ? "\u00a0" : cd.d < 1 ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m` : String(cd.d)}</b>
+                        <i>{!cd ? "" : cd.d < 1 ? "left today" : cd.d === 1 ? "day left" : "days left"}</i>
+                      </span>
                     </div>
 
                     <div className="v1-deadline-meta">

@@ -1053,3 +1053,16 @@
 .prop-card:hover .pc-cta { background: var(--burgundy); border-color: var(--burgundy); color: #fff; }
 .prop-card:focus-within { outline: 2px solid var(--red); outline-offset: 3px; }
 .prop-card .pc-link:focus-visible { outline: none; }
+
+/* Days-led countdown (founder guidance, 30 Jul): one number, not a four-cell clock.
+   Sized to carry the panel on its own now that it is the only figure there. */
+.hero-timer-days { display: flex; align-items: baseline; gap: 10px; justify-content: center; }
+.hero-timer-days .hero-timer-value {
+  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-size: clamp(46px, 6vw, 74px); font-weight: 600; line-height: 1;
+  letter-spacing: -.02em; font-variant-numeric: tabular-nums; color: #fff;
+}
+.hero-timer-days .hero-timer-unit {
+  font-size: clamp(13px, 1.3vw, 15px); font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.82);
+}

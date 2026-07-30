@@ -69,6 +69,25 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · countdowns are DAYS-LED (founder guidance) + media buttons restored
+**Bryan's father: buyers care how many DAYS are left, not the timer.** Applied to BOTH surfaces:
+the `/tender` hero and the E-Tender Information dossier now show **one figure — the day count** —
+with the closing date beneath. The 4-cell D/H/M/S strip is gone from both.
+**Codex: do not restore it.** You and I both flagged the 885-day seconds column independently;
+the founder has now settled it. Rule in DESIGN-SYSTEM §3d.
+⚠️ **One exception is load-bearing:** inside the final 24 hours `cd.d < 1`, so "0 days left" would
+say nothing — the display switches to `{h}h {mm}m` / "left today". Days when days remain, hours
+only when hours are all that remain. Both surfaces share the rule and the aria-label follows it.
+
+**Media buttons restored under the gallery** (Bryan asked where they went — I had removed them
+because no footage exists and a dead button reads as broken). Each is now honest about what it can
+do: **Drone view works today** — the aerial shots are already in `SINARAN_PHOTOS`, so it clicks the
+matching thumb and reuses the gallery's existing swap rather than duplicating it. **Video viewing
+has no footage**, so instead of a dead control it routes to `#agent` labelled "on request", which
+is what a buyer actually wants from a video button on a completed property and feeds the lead
+engine. Swap it to a real player the moment footage exists. `.mediarow` / `.mediabtn` CSS was
+already intact — only the markup had been removed.
+
 ### 30 Jul 2026 — Claude · VOCABULARY SWEEP: every user-facing "tender" → "E-Tender"
 Bryan: *"all the word tender, must be e-tender."* **62 replacements across 13 files.** Verified
 across all 8 pages: **0 bare "tender" in rendered text, 130 E-Tender/e-tender, 0 "E-E-Tender",

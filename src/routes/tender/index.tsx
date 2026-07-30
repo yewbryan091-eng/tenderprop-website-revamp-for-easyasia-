@@ -142,15 +142,18 @@ const pad2 = (n: number) => String(n).padStart(2, "0");
 
 function TenderListings() {
   const left = useCountdown(NEXT_BATCH.date);
-  const countdownUnits = [
-    { label: "d", value: left ? String(left.days) : "" },
-    { label: "h", value: left ? pad2(left.hours) : "" },
-    { label: "m", value: left ? pad2(left.minutes) : "" },
-    { label: "s", value: left ? pad2(left.seconds) : "" },
-  ];
-  const countdownLabel = left
-    ? `Offers close in ${left.days} days, ${left.hours} hours, ${left.minutes} minutes and ${left.seconds} seconds`
-    : "Offers close in";
+  /* FOUNDER GUIDANCE (Bryan's father, 30 Jul): a buyer cares how many DAYS are left, not
+     a ticking clock. So days lead, and hours/minutes only appear inside the final 24 hours
+     — where "0 days left" would be useless and the hours are the only thing that matters.
+     This also settles the 885-day-seconds problem Codex and I both flagged independently. */
+  const FINAL_DAY = Boolean(left) && left!.days < 1;
+  const countdownValue = !left ? "\u00a0" : FINAL_DAY ? `${left.hours}h ${pad2(left.minutes)}m` : String(left.days);
+  const countdownUnit = !left ? "" : FINAL_DAY ? "left today" : left.days === 1 ? "day left" : "days left";
+  const countdownLabel = !left
+    ? "Offers close soon"
+    : FINAL_DAY
+      ? `Offers close in ${left.hours} hours and ${left.minutes} minutes`
+      : `Offers close in ${left.days} ${left.days === 1 ? "day" : "days"}`;
 
   const [query, setQuery] = useState("");
   const [typeValue, setTypeValue] = useState("all");
@@ -419,13 +422,9 @@ function TenderListings() {
                   <span className="hero-timer-clock"><ClockIcon /></span>
                   <span className="hero-timer-label">Offers close in</span>
                 </span>
-                <span className="hero-timer-cells" aria-hidden="true">
-                  {countdownUnits.map((unit) => (
-                    <span className="hero-timer-cell" key={unit.label}>
-                      <span className="hero-timer-value">{unit.value || "\u00a0"}</span>
-                      <span className="hero-timer-unit">{unit.label}</span>
-                    </span>
-                  ))}
+                <span className="hero-timer-days" aria-hidden="true">
+                  <span className="hero-timer-value">{countdownValue}</span>
+                  <span className="hero-timer-unit">{countdownUnit}</span>
                 </span>
               </div>
               <p className="hero-eyebrow">Next e-tender cycle</p>
