@@ -699,9 +699,12 @@
   .rail-head {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
     min-height: var(--head-band); margin: 0 0 20px; padding-bottom: 12px;
-    border-bottom: 1px solid var(--line);
   }
-  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 23px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); }
+  /* Two-tone, accent on the second half — the pattern from the iNewProject rail, in
+     TenderProp's burgundy rather than iNewProject's red (identity rule: adopt the
+     pattern, never the palette). Same shape as .sec-title on the detail page. */
+  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 26px; font-weight: 700; letter-spacing: -.025em; line-height: 1.12; color: var(--ink); }
+  .rail-title span { color: var(--burgundy); }
   .state-panel { border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--paper) 32%, var(--card)); padding: 5px 6px; }
   .sheet-head { display: none; }
   .filters-backdrop { display: none; }
@@ -857,7 +860,7 @@
     .sort-field { flex: 1 1 auto; min-width: 0; }
     .sort-field select { flex: 1; min-width: 0; }
     .view-toggle { flex: 0 0 auto; margin-left: auto; }
-    .rail-title { font-size: 25px; }
+    .rail-title { font-size: 27px; }
   }
 
 /* DEMO badge — fabricated filler records (demo:true in src/data/tenders.ts).

@@ -907,7 +907,7 @@ function TenderListings() {
               aria-label="Tender by state"
             >
               <div className="rail-head">
-                <h2 className="rail-title">Tender by State</h2>
+                <h2 className="rail-title">Tender <span>by State</span></h2>
                 <button
                   type="button"
                   className="sheet-close"
