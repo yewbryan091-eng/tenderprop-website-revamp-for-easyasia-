@@ -50,7 +50,7 @@ and apply. Work top of page downward, because that is how Bryan reviews.
 - Known issues: deposit must read RM15,510 everywhere (3% rule). Days-left is computed now — verify.
 - Rule: four numbers max, tabular, one accent (burgundy panel) — matches grid money box language.
 
-### 4. Tender Information block (the v1 "Calm white" panel)
+### 4. Tender Information block — ✅ REBUILT 30 Jul 2026
 - Job: THE differentiating section — terms + how it works + apply rail.
 - **RESOLVED 30 Jul (Bryan):** the registration step DOES exist and belongs on this page —
   "the listing page is the crucial information of the property, with my dad's sketches." Keep the
@@ -63,11 +63,20 @@ and apply. Work top of page downward, because that is how Bryan reviews.
   This section must say that plainly; today it reads as a standalone RM15,510 risk. Suggested
   ladder for this block: 3% now (refundable) → 7% more at SPA = 10% → 90% on completion. The
   agency fee is customarily deducted from that earnest deposit.
-- ✅ **DONE 30 Jul:** deposit sub-line now "counts toward your 10% down payment"; added the
-  derived payment ladder (3% now / +7% at SPA / 90% on completion, computed from RESERVE, never
-  typed) and the negotiation panel. Step 3 changed "Receive the result" → "The seller responds".
-  Still open in this section: the assumed registration date, and the rail's 5:00 PM claim.
-- Rule: terms are facts in labelled rows; the how-it-works is a numbered sequence; one red CTA.
+- **Standard architecture for every real listing:** one 40/60 deadline dossier. The left uses the
+  same platform-level monochrome Kuala Lumpur panorama with a flat burgundy wash and carries the
+  full live D/H/M/S clock, closing date and registration date. The right carries reserve price,
+  computed deposit, sealed method, three compact process steps, Apply for Tender, agent enquiry
+  and the expandable payment ladder. It is not property imagery and must not vary by listing.
+- The pin and paperclip were removed; they belonged to the old notice-card metaphor. Deadline
+  information appears only on the left, so date/countdown copy is no longer duplicated beside the
+  action.
+- Deposit remains derived through `depositOf()`. The `+7%` and `90%` illustrations derive from
+  `RESERVE`; no money figure is typed. Step 3 remains accept / decline / counter within 5 working
+  days. The old 5:00 PM claim is gone; closing is shown as end of day (MYT).
+- **Still open:** `17 Dec 2028` remains an assumed registration date pending the real backend rule.
+- Rule: time left; decision facts right; one red CTA. At 700px the split becomes a clean vertical
+  stack with the deadline panel first.
 
 ### 5. Property Details — ✅ REBUILT 30 Jul 2026
 **Diagnosis of the old sheet:** 19 rows of which **10 were empty** (6 "Not stated", 3 em dashes),

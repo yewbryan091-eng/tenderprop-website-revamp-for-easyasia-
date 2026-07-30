@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 30 Jul 2026 | Rebuilding Tender Information as the standard split deadline dossier |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Standard Tender Information split dossier shipped |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -46,6 +46,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 29 Jul | Cards show a **Tender start** date computed as closing date − 3 months (`tenderStartOf` in tender-utils) | DELIBERATE demo value, founder's call: "this is just a demo for easyasia, information may not be accurate… who cares". Overrides the invent-nothing rule for THIS field only. Swap for a real per-listing start date when the backend supplies one | Bryan |
 | 28 Jul | `tender-seeker-bot.lovable.app` is a **frozen snapshot**; this repo is the truth | Lovable credits ran out; its copy no longer updates from git | Bryan |
 | 30 Jul | Property filters live in an inline disclosure **directly below Search**: tender closing cycle, reserve-price range, built-up area, land area and tenure. Price moved out of the Sort row; Tender by State remains standalone | Keeps “what qualifies” together in Search and “how results are ordered” in the results toolbar, while retaining TenderProp’s event/cycle framing | Bryan + Codex |
+| 30 Jul | Tender Information is one **standard 40/60 split dossier** across every real listing: universal monochrome KL deadline panel left; listing facts, process and action right. No pin or paperclip | Bryan explicitly chose the Pexels panorama and made this a shared listing-page system, not a Residensi Sinaran image treatment | Bryan + Codex |
 
 ---
 
@@ -67,6 +68,24 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 30 Jul 2026 — Codex · Standard Tender Information split dossier
+Replaced the long paperclip notice with the approved reusable listing-page system: **40% deadline
+image / 60% information and action**. The left uses Bryan's selected monochrome Kuala Lumpur image
+(Yamiko Ling / Pexels photo 21898339) under a flat burgundy wash and exclusively owns the live
+D/H/M/S clock, closing date, end-of-day MYT note and registration date. The right compresses the
+reserve price, `depositOf()` amount, sealed method, three-step process, Apply CTA, WhatsApp enquiry
+and existing computed payment disclosure. Pin, paperclip and duplicate deadline rail are gone.
+
+Rendered review: desktop is exactly **439px / 659px** inside a 1100px card (40/60), the clock
+visibly ticked, and the card measures 617px high. At 1024px it remains split and readable; at 375px
+it stacks deadline-first, keeps the deposit/method side by side, and measures **0px horizontal
+overflow**. Production build and targeted component lint pass.
+
+Coordination note: Claude's concurrent `9897fdf` commit unintentionally swept the in-progress JSX,
+image and first CSS pass into its About commit despite its “Tender Information untouched” message.
+No history was rewritten; this pass completes the responsive corrections and records the actual
+design decision here.
 
 ### 30 Jul 2026 — Claude · About runs full width, two-up; disclosure now slices data
 Bryan: make the prose long horizontally like the section above. The honest constraint is that a
