@@ -68,6 +68,27 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · REVERTED my own duplicate; card = one link; toolbar/rail aligned
+1. **REVERTED the location-search browse list I added an hour earlier.** It listed states with
+   counts — duplicating the "Tender by State" rail on the same screen, item for item, with no
+   extra information. I had even noted the overlap in my own write-up and shipped anyway; Bryan
+   called it. The data also kills the obvious alternative: **29 distinct areas across 36 records,
+   25 holding exactly one property**, so an "areas" list is a column of 1s.
+   **Division of labour, do not blur it again: the rail owns BROWSING by geography; the location
+   field owns SEARCHING for a named project or town.** Empty focus shows nothing.
+   Kept from that pass: `onFocus` (the field genuinely never opened on click — `setTaOpen` only
+   fired `onChange`), the no-match message, and a placeholder that now teaches the field's job.
+2. **Card is one link, not three.** Photo, title and CTA were three separate `<a>` to the same
+   URL — the same destination announced three times to a screen reader, and only three small hit
+   areas. Title is now the single link with `.pc-link::after` stretched over the card; photo is a
+   `<span>`, CTA is a decorative `<span>` with a card-hover state so it doesn't read as disabled.
+   Save button and phone sit at `z-index: 2` and still work.
+3. **Toolbar/rail alignment.** The rail card started at the toolbar's top and its border cut
+   through the toolbar's bottom rule, while the serif rail heading's baseline missed the count
+   text's by ~7px. `.rail-title` is now a header band mirroring `.results-header`, and both
+   min-heights come from **one `--head-band` variable on `.main-layout`** so they cannot drift.
+   Verified at 1600px: tops both 864, rules both 921.
+
 ### 30 Jul 2026 — Codex · Residensi Sinaran baseline inspection
 Read the full project rules, decisions ledger and active detail-page plan, then inspected the
 component, dedicated CSS and mount-time behaviours without changing page code. Reviewed the

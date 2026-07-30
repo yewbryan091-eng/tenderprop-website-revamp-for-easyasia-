@@ -43,9 +43,9 @@ export function PropertyCard({
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
       <div className="pc-media">
-        <a className="pc-media-link" href={href} tabIndex={-1} aria-hidden="true">
+        <span className="pc-media-link">
           <img src={PROJECT_IMG(x.image)} alt={`${x.name} — ${x.area}, ${x.stateName}`} loading="lazy" />
-        </a>
+        </span>
         <div className="pc-tags">
           <span className="pc-status">E-Tender</span>
           {x.demo && (
@@ -73,7 +73,10 @@ export function PropertyCard({
 
       <div className="pc-body">
         <div className="pc-ident">
-          <h3 className="pc-title"><a href={href}>{x.name}</a></h3>
+          {/* The card's single link. `.pc-title a::after` stretches it over the whole
+              card, so the entire surface is clickable while the accessibility tree sees
+              one link instead of the same URL announced three times (photo, title, CTA). */}
+          <h3 className="pc-title"><a className="pc-link" href={href}>{x.name}</a></h3>
           <p className="pc-loc"><PinIcon /><span>{x.area}, {x.stateName}</span></p>
           <div className={"pc-type" + (hasPropertyType ? "" : " is-missing")}>
             <span className="pc-type-label">Property type</span>
@@ -107,7 +110,7 @@ export function PropertyCard({
             <span className="pc-agent"><b>Stephen Yew</b><span>REN 123456</span></span>
             <a className="pc-tel" href="tel:+60123938255"><PhoneIcon /><span>012-393 8255</span></a>
           </div>
-          <a className="pc-cta" href={href}>View tender details</a>
+          <span className="pc-cta" aria-hidden="true">View tender details</span>
         </div>
       </div>
     </article>

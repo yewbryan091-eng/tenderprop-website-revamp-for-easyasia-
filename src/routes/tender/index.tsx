@@ -372,27 +372,17 @@ function TenderListings() {
     });
     return pool;
   }, []);
-  /* On focus with an empty field, a portal shows "popular searches" because it has
-     500,000 listings and the user's problem is narrowing down. TenderProp has ~36
-     across a handful of states, so the buyer's problem is the opposite: they do not
-     know whether anything exists near them. Typing "Cheras", getting nothing and
-     concluding the platform is empty is the worst outcome on this page. So the empty
-     state discloses the real geography — states that actually have tenders, with
-     counts, busiest first — and typing switches to matching. */
-  const taStates = useMemo(() => {
-    const counts: Record<string, number> = {};
-    TENDERS.forEach((t) => { counts[t.stateKey] = (counts[t.stateKey] || 0) + 1; });
-    return STATES
-      .filter((st) => counts[st.key])
-      .map((st) => ({ label: st.name, kind: "State", type: "state", n: counts[st.key] }))
-      .sort((a, b) => b.n - a.n)
-      .slice(0, 8);
-  }, []);
+  /* Empty focus shows NOTHING on purpose. An earlier version listed states with counts
+     here — which duplicated the "Tender by State" rail on this same screen, item for
+     item, with no extra information. The data also kills the obvious alternative: 29
+     distinct areas across 36 records, 25 of them holding exactly one property, so an
+     "areas" list is a column of 1s. Division of labour: the rail owns BROWSING by
+     geography, this field owns SEARCHING for a named project or town. */
   const taMatches = useMemo(() => {
     const q = query.toLowerCase().trim();
-    if (!q) return taStates;
+    if (!q) return [];
     return taPool.filter((m) => m.label.toLowerCase().includes(q)).slice(0, 8);
-  }, [query, taPool, taStates]);
+  }, [query, taPool]);
 
   function pick(m: { label: string; term?: string }) {
     setQuery(m.term || m.label.split(",")[0]);
@@ -515,7 +505,7 @@ function TenderListings() {
                   <input
                     type="text"
                     id="search-location"
-                    placeholder="Search project, township, city or state"
+                    placeholder="Search a project or town — e.g. Residensi Sinaran"
                     autoComplete="off"
                     role="combobox"
                     aria-autocomplete="list"
@@ -540,7 +530,6 @@ function TenderListings() {
                     id="ta-list"
                     role="listbox"
                   >
-                    {!query.trim() && <p className="ta-head">Where tenders are open now</p>}
                     {taMatches.map((m, i) => (
                       <div
                         key={m.type + m.label}
@@ -551,9 +540,7 @@ function TenderListings() {
                       >
                         <span>{m.type === "name" ? <TaHome /> : <TaPin />}</span>
                         <span>{m.label}</span>
-                        {"n" in m && (m as { n?: number }).n
-                          ? <span className="ta-n">{(m as { n: number }).n}</span>
-                          : <span className="ta-kind">{m.kind}</span>}
+                        <span className="ta-kind">{m.kind}</span>
                       </div>
                     ))}
                     {/* A dead-silent dropdown reads as a broken site. Name the miss and

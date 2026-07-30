@@ -483,7 +483,10 @@
   }
 
   /* Results toolbar */
-  .results-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 16px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  /* Both columns' header bands come from this one value: the toolbar's 44px controls
+     + 12px padding + 1px rule. Set it once so the rail can never drift out of step. */
+  .main-layout { --head-band: 57px; }
+  .results-header { min-height: var(--head-band); display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 16px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
   .results-count { min-width: 0; font-size: 14px; font-weight: 600; color: var(--muted); }
 
   /* View toggle */
@@ -689,7 +692,19 @@
   .sidebar-filters { display: flex; flex-direction: column; min-width: 0; }
   .filters-scroll { min-height: 0; display: flex; flex-direction: column; }
   .rail-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 10px; }
-  .rail-title { margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 23px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink); }
+  /* The rail title occupies its own header row that mirrors .results-header exactly —
+     same min-height, same 12px padding, same bottom rule. Previously the rail card
+     started at the toolbar's top and its border cut straight through the toolbar's
+     bottom rule, while the serif heading's baseline missed the count text's by ~7px:
+     two prominent labels on one row, almost aligned. Now both columns share one
+     header band and their content starts on the same line. */
+  .rail-title {
+    margin: 0 0 20px; padding-bottom: 12px;
+    min-height: var(--head-band); display: flex; align-items: center;
+    border-bottom: 1px solid var(--line);
+    font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+    font-size: 23px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; color: var(--ink);
+  }
   .state-panel { border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--paper) 32%, var(--card)); padding: 5px 6px; }
   .sheet-head { display: none; }
   .filters-backdrop { display: none; }
@@ -983,16 +998,6 @@
 }
 
 /* ── Location typeahead: empty-focus inventory disclosure ── */
-.ta-list .ta-head {
-  margin: 0; padding: 11px 14px 7px;
-  font-size: 10.5px; font-weight: 800; letter-spacing: .11em;
-  text-transform: uppercase; color: var(--muted);
-}
-.ta-list .ta-n {
-  margin-left: auto; flex: none;
-  font-size: 12.5px; font-weight: 700; color: var(--burgundy);
-  font-variant-numeric: tabular-nums;
-}
 .ta-list .ta-empty {
   margin: 0; padding: 14px; font-size: 13.5px; line-height: 1.5; color: var(--muted);
 }
@@ -1000,3 +1005,23 @@
   background: none; border: 0; padding: 0; font: inherit;
   font-weight: 700; color: var(--burgundy); cursor: pointer; text-decoration: underline;
 }
+
+/* ── Card as a single link ──
+   The card had three links to the same URL (photo, title, CTA): three identical
+   destinations announced to a screen reader, and only three small hit areas for a
+   mouse. Now the title is the one real link and its ::after stretches over the whole
+   card, so the entire surface is clickable and the accessibility tree sees one link.
+   The save button and the phone number sit above it and keep working. */
+.prop-card { position: relative; }
+.prop-card .pc-link::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  border-radius: inherit;
+}
+.prop-card .save-btn,
+.prop-card .pc-tel { position: relative; z-index: 2; }
+.prop-card .pc-cta { cursor: pointer; }
+/* The CTA is decorative now — the stretched link takes the click — so it must still
+   respond on hover or it reads as disabled. */
+.prop-card:hover .pc-cta { background: var(--burgundy); border-color: var(--burgundy); color: #fff; }
+.prop-card:focus-within { outline: 2px solid var(--red); outline-offset: 3px; }
+.prop-card .pc-link:focus-visible { outline: none; }
