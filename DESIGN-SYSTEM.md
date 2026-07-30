@@ -118,6 +118,12 @@ one block, one of them is wrong.
    **A toggle test must assert HEIGHT, not just the label** — the label lies.
 11. **`getComputedStyle` on a transitioning property returns the interpolated value**, so reading
    it right after a class change measures the animation's start frame, not its target.
+12. **Anything React renders must be driven by React state — never a DOM listener attached in an
+   effect.** About's toggle was bound inside `initDetailPage()`, which runs once on mount, so any
+   hot reload rebuilt the DOM without re-running the effect and the button silently went dead. A
+   fresh load worked; a reloaded page did not. That is the shape of every "works for me" bug in
+   this codebase. `initDetailPage` should only own things React does not render (scroll observers,
+   the gallery's `window.__resources` swap).
 
 ## 6. Brand — non-negotiable
 

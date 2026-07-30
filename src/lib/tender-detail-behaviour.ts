@@ -168,18 +168,10 @@ export function initDetailPage(): () => void {
     sections.forEach(function (s) { io.observe(s); });
   })();
 
-  // ── About view more (clamped at 5 lines; label lives in a <span>) ──
-  (function () {
-    var body = document.getElementById("about-body");
-    var btn = document.getElementById("about-toggle");
-    if (!body || !btn) return;
-    btn.addEventListener("click", function () {
-      var open = body.classList.toggle("open");
-      btn.setAttribute("aria-expanded", String(open));
-      var label = btn.querySelector("span");
-      if (label) label.textContent = open ? "View less" : "View more";
-    });
-  })();
+  // ── About view more: REMOVED 30 Jul. Now React state (`aboutOpen`) in
+  //    ResidensiSinaranDetail. The imperative version only bound on mount, so a hot reload
+  //    rebuilt the DOM without re-running the effect and the button went dead. Anything
+  //    React renders must be driven by React state, not by a listener attached here. ──
 
   /* Price history tabs removed with the Price History section. */
 

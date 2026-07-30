@@ -68,6 +68,28 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · About toggle moved to React state; 8 paragraphs for the demo
+🐛 **Bryan was right that About was broken, and my verification was misleading.** The toggle was
+bound imperatively inside `initDetailPage()`, which runs once on mount — so **any hot reload
+rebuilt the DOM without re-running the effect and the button went dead.** A fresh load worked
+(which is what I tested), a hot-reloaded page did not (which is what Bryan had in front of him).
+Now `aboutOpen` React state; the DOM listener in `tender-detail-behaviour.ts` is removed so the two
+mechanisms can never disagree. **DESIGN-SYSTEM §5.12: anything React renders must be driven by
+React state, never a listener attached in an effect. That is the shape of every "works for me"
+bug here.** `initDetailPage` should own only what React does not render.
+
+Also expanded About to **8 paragraphs / 386 words** so the disclosure is a real demo — **86% of the
+text is hidden when closed** (138px of 1020px). The four new paragraphs are honest rather than
+padding: the intermediate lot's trade-off stated plainly (shared walls and narrower frontage,
+reflected in the price; less external wall and a cooler afternoon), three storeys asking something
+of a household with young children or elderly parents, and two dedicated bays actually working in a
+62-unit development.
+Verified: closed 138px / 5.0 lines / clipped, open 1020px / not clipped, re-closed 138px, label and
+aria cycling both ways, no overflow.
+
+**⛔ NOT TOUCHED: Tender Information (§4).** Bryan has Codex revamping it into the diagonal-split
+command centre. `ResidensiSinaranDetail.tsx` edits above are confined to the About block.
+
 ### 30 Jul 2026 — Claude · About: View more restored, clamped at 5 lines, and a cascade bug fixed
 Bryan wants progressive disclosure kept: **"5 line onwards… there must be a view more button."**
 - Clamp is **5 lines** (`8.6em` = 5 x the 1.72 line-height). Verified 5.0 lines closed.

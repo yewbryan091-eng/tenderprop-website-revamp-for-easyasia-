@@ -93,6 +93,12 @@ export function ResidensiSinaranDetail() {
   /* Live countdown for the tender rail — same segmented D:H:M:S language as the
      grid hero, so both pages tell time the same way. Null until mount (SSR-safe). */
   const [cd, setCd] = useState<{ d: number; h: number; m: number; s: number } | null>(null);
+  /* About's expand is REACT STATE, not a DOM listener. It was wired imperatively inside
+     initDetailPage(), which runs once on mount — so after any hot reload React rebuilt the
+     DOM while the effect did not re-run, leaving the button with no listener. A fresh load
+     worked and a reloaded page was dead, which is exactly the "sometimes broken" Bryan saw.
+     Anything React renders should be driven by React state. */
+  const [aboutOpen, setAboutOpen] = useState(false);
   /* Below this many days the segmented D:H:M:S clock earns its place; above it the
      seconds are noise and the plain day count reads as confidence, not theatre. */
   const CLOCK_FROM_DAYS = 90;
@@ -436,7 +442,7 @@ export function ResidensiSinaranDetail() {
                 matters more here than in a normal sale: a sealed tender gives you one number
                 and no second attempt.
               </blockquote>
-              <div className="aboutbody" id="about-body">
+              <div className={"aboutbody" + (aboutOpen ? " open" : "")} id="about-body">
                 <p>
                   Residensi Sinaran sits inside Taman Sri Muda, one of the older established
                   townships in Shah Alam &mdash; the kind of neighbourhood that finished growing a
@@ -447,7 +453,7 @@ export function ResidensiSinaranDetail() {
                   Each home runs over three storeys, which puts the shared living areas downstairs
                   and the private rooms above &mdash; the practical reason a family chooses a
                   townhouse over an apartment of the same size, and the reason the layout still
-                  works as a household grows.
+                  works as a household grows rather than forcing a move.
                 </p>
                 <p>
                   Because it is stratified, the things that usually make landed property tiring are
@@ -464,13 +470,37 @@ export function ResidensiSinaranDetail() {
                   a way it is not with a launch.
                 </p>
                 <p>
+                  The intermediate position is worth understanding rather than glossing over. It
+                  means one shared wall on each side and a narrower frontage than a corner lot,
+                  which is reflected in the price &mdash; and it also means less external wall to
+                  maintain and a cooler interior through the afternoon than a west-facing corner
+                  typically gets.
+                </p>
+                <p>
+                  Three storeys ask something of a household, and it is fair to say so plainly:
+                  there are stairs every day, and families with very young children or elderly
+                  parents should walk the unit before deciding whether the layout suits them. That
+                  is precisely the kind of judgement a completed property lets you make in advance.
+                </p>
+                <p>
+                  Parking is two dedicated bays rather than a shared allocation, which in a
+                  sixty-two unit development means the arithmetic actually works &mdash; visitors
+                  included. It is a small detail that becomes a daily one.
+                </p>
+                <p>
                   That the township is older is the point. Everything around it already exists, and
                   nothing about living here depends on a masterplan being finished or a neighbouring
                   phase being sold.
                 </p>
               </div>
-              <button type="button" className="viewmore" id="about-toggle" aria-expanded="false" aria-controls="about-body">
-                <span>View more</span>
+              <button
+                type="button"
+                className="viewmore"
+                aria-expanded={aboutOpen}
+                aria-controls="about-body"
+                onClick={() => setAboutOpen((v) => !v)}
+              >
+                <span>{aboutOpen ? "View less" : "View more"}</span>
                 <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5.5 7 9.5l4-4" /></svg>
               </button>
             </div>
