@@ -13,9 +13,9 @@ Defined in `src/styles/tender-detail.css` `:root` and mirrored by `tender-listin
 
 | Token | Value | Use |
 |---|---|---|
-| `--paper` | `#FAF5F0` | page ground; every **even** section band |
+| `--paper` | `#FAF5F0` | page ground only — **not** a section band (see §3) |
 | `--card` | `#FFFFFF` | cards; every **odd** section band |
-| `--paper-deep` | `#F1E8DE` | inset panels (tender notice rail, icon band tiles) |
+| `--paper-deep` | `#F1E8DE` | every **even** section band; also inset panels *inside white cards* |
 | `--ink` | `#17130F` | body + all primary values |
 | `--muted` | `#75695E` | labels, secondary copy, captions |
 | `--line` | `#DED2C4` | borders. Hairlines inside a component use `color-mix(in srgb, var(--line) 62%, transparent)` |
@@ -49,9 +49,16 @@ one block, one of them is wrong.
 | `--sec-title-gap` | `26px` | section heading → its first content |
 
 - Change the page's rhythm by editing a token. **Never** by adding margin to one section.
-- **Backgrounds alternate positionally:** `main > section.blk:nth-of-type(even)` = paper,
-  `(odd)` = card. `--band-bg` travels with it. Inserting or removing a section re-solves the chain.
+- **Backgrounds alternate positionally:** `nth-of-type(even)` = `--paper-deep`, `(odd)` = `--card`.
+  `--band-bg` travels with it. Inserting or removing a section re-solves the chain.
   `.band-card` / `.band-paper` exist only as deliberate opt-outs.
+- ⛔ **The alternate band is `--paper-deep`, never `--paper`.** Measured: paper vs white is a
+  **1.083** luminance ratio — below roughly 1.1 the eye cannot reliably see an edge, so the
+  alternation read as accidental rather than as rhythm. And `--paper` *is* the page ground, so a
+  paper band was not a band at all: half the sections were untreated by definition. paper-deep is
+  **1.211**, about 2.5x the differentiation above parity.
+- When a band is `--paper-deep`, inset panels on that band must be `--card`. Panels that already
+  sit inside a white card (e.g. `.v1-rail` inside `.v1`) are unaffected.
 - One title treatment, shared by `.sec-title` and `.v1-top h3`.
 
 ## 4. Established patterns — reuse before inventing

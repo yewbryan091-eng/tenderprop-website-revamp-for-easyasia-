@@ -68,6 +68,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · alternate section band deepened to `--paper-deep`
+Bryan disliked the About background. Measured, it was not the hue — it was the **strength**:
+`--paper` vs `--card` is a **1.083** luminance ratio. Below ~1.1 the eye cannot reliably resolve an
+edge, so the alternation read as accidental rather than as rhythm. And `--paper` *is* the page
+ground, so a "paper band" was not a band at all — **half the sections were untreated by
+definition**, which is why the flow felt unresolved even after the spacing was standardised.
+
+Alternate band is now `--paper-deep` (#F1E8DE) → **1.211**, roughly 2.5x the differentiation above
+parity, and a deliberate tint already in the palette rather than the page ground.
+`--band-bg` travels with it, so the About "View more" fade gradient re-matched automatically.
+
+Ran a collision sweep for panels that would vanish against the deeper band: one hit, `.v1-rail`,
+which is a false positive — it sits inside `.v1` (white card), verified visible. No real
+collisions. **Rule now in DESIGN-SYSTEM §3: when a band is paper-deep, inset panels on that band
+must be `--card`.** Sequence verified deep/white × 10, no overflow.
+
 ### 30 Jul 2026 — Codex · three-field Property Details hierarchy standardised
 Locked the first three positions across future detail pages: reserve price per sq ft with the
 calculation basis stated, tenure, then title and land use. Sinaran now reads `RM369 psf / Based

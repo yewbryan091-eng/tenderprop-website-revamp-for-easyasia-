@@ -457,8 +457,15 @@
   /* Positional: #tender is section 2 and paper, then it alternates all the way down.
      Inserting or removing a section re-solves the whole chain. --band-bg travels with the
      background so nested cards that match their band stay correct. */
-  main > section.blk:nth-of-type(even) { background: var(--paper); --band-bg: var(--paper); }
-  main > section.blk:nth-of-type(odd)  { background: var(--card);  --band-bg: var(--card); }
+  /* The alternate band is --paper-deep, not --paper. Measured: paper vs white is a 1.083
+     luminance ratio — under ~1.1 the eye cannot reliably see an edge, so the "alternation"
+     read as accidental rather than as rhythm. Worse, --paper IS the page ground, so a paper
+     band was not a band at all: half the sections were untreated by definition. paper-deep
+     is 1.211 — about 2.5x the differentiation above parity — and it is a deliberate tint
+     already in the palette. --band-bg travels with it, so the About fade gradient and any
+     other band-matched element follow automatically. */
+  main > section.blk:nth-of-type(even) { background: var(--paper-deep); --band-bg: var(--paper-deep); }
+  main > section.blk:nth-of-type(odd)  { background: var(--card);      --band-bg: var(--card); }
 section.blk.band-card { background: var(--card); --band-bg: var(--card); }section.blk.band-deep { background: var(--paper-deep); --band-bg: var(--paper-deep); }section.blk.band-paper { background: var(--paper); --band-bg: var(--paper); }
   .blkcard { background: transparent; border: none; border-radius: 0; padding: 0; }
   .sec-title,
