@@ -69,3 +69,27 @@ export function matchesTaxonomy(x: Tender, value: string) {
 export function hrefFor(_x: Tender) {
   return "/tender/residensi-sinaran";
 }
+
+/* Malaysian listing convention: landed and commercial-landed stock is named by its
+   storey count — "2-Storey Terrace House" tells a buyer far more than "Terrace
+   House" — while high-rise strata is not ("Condominium", never "18-Storey
+   Condominium"). Land takes no prefix either. Two naming refinements fall out of
+   the same data: a bungalow is a "Bungalow House", and a shop is a "Shop Lot" at
+   one storey but a "Shop-Office" at two or more, which is how the market names it.
+   Filters still match on the raw `propertyType` — this is display only. */
+const HIGH_RISE = new Set([
+  "Apartment", "Condominium", "Serviced Residence", "Serviced Apartment",
+  "Flat", "SOHO", "SOVO", "SOFO",
+]);
+
+export function displayType(x: Tender) {
+  const t = x.propertyType?.trim();
+  if (!t) return "";
+  if (HIGH_RISE.has(t) || x.propertyCategory === "land") return t;
+  const n = x.storeys ?? null;
+  const base =
+    t === "Bungalow" ? "Bungalow House"
+    : t === "Shop" ? (n && n >= 2 ? "Shop-Office" : "Shop Lot")
+    : t;
+  return n ? `${n}-Storey ${base}` : base;
+}

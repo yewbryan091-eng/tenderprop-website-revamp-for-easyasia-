@@ -68,6 +68,30 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · storey-specific property type labels
+Bryan: landed stock should read "2-Storey Terrace House", not "Terrace House"; high-rise stays
+plain. New `displayType(x)` in `tender-utils.ts` is the single source for the label:
+- **High-rise strata and land take no prefix** — Condominium, Serviced Residence, Apartment,
+  Flat, SOHO/SOVO/SOFO, and every *Land type. Never "18-Storey Condominium".
+- **Landed and commercial-landed take `{n}-Storey `** — terrace, semi-D, townhouse, bungalow,
+  villa, factory, shop.
+- Two refinements fall out of the same field: **Bungalow → "Bungalow House"**, and
+  **Shop → "Shop Lot" at 1 storey, "Shop-Office" at 2+**, which is how the market names them.
+- ⚠️ **Display only — filters still match on the raw `propertyType`.** Do not switch any filter
+  or taxonomy comparison to `displayType()`, or category counts break.
+
+**DEMO EXCEPTION #3 (logged):** `storeys` is a new optional field on `Tender` and the values are
+invented — deterministic cycles of typical Malaysian configurations per type (terrace 2/2/1/2/3,
+semi-D 2/2/3/2/2/3, bungalow 2/3/2/2/3, townhouse 3, factory 1/1/2, shop 2) so labels vary
+realistically instead of every terrace being identical. Replace with real per-listing storey
+counts when the agency supplies them. Same standing as the tender-start-date and route-everything
+-to-Sinaran exceptions.
+
+Verified across all 36 records: 1/2/3-Storey Terrace House, 2/3-Storey Semi-Detached House,
+2/3-Storey Bungalow House, 3-Storey Townhouse, 1/2-Storey Factory, 2-Storey Shop-Office,
+plain Condominium / Serviced Residence / Agricultural+Commercial+Residential Land, and the one
+blank record still falls through to "Not specified". Zero label clipping on any card.
+
 ### 30 Jul 2026 — Claude · filter popup, search-bar alignment, list card, copy
 **Codex — credit where due, your filter LOGIC is kept wholesale and it is good:** closing-cycle
 filter (the tender-native dimension), reserve min/max with cross-disabled bounds, per-option live
