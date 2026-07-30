@@ -69,6 +69,19 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · Fixed the floating arrow I introduced with the rule
+Bryan caught it: the arrow was hovering up near the heading's cap line, detached from "See how it
+works". **My own regression from the previous commit.** `align-self: center` centres against the
+flex LINE — and the moment the 33px rule became a flex item, the line was twice the height of the
+type, so the arrow dutifully centred on the rule.
+
+Fix: `.howto-text` wraps `b + .howto-rest + svg`, so the rule is a sibling of that group rather
+than of the arrow. Arrow centre and text centre now measure **identical (offBy 0)**, gap 4px
+metric / ~7px optical. Also pulled the arrow left 3px — the path starts at x=5 of a 24 viewBox,
+so the glyph carries its own left padding and the optical gap was wider than the metric one.
+
+Recorded in DESIGN-SYSTEM §5 — it will bite anyone who adds a tall element to a text row.
+
 ### 31 Jul 2026 — Claude · Refined the shipped "New to e-tender?" line (Bryan: any improvements?)
 Three fixes after judging the render at zoom:
 1. **The rule was sagging.** As a `border-left` it was sized by the LINK's box: it started 16px

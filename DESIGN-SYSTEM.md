@@ -199,6 +199,14 @@ Zero the margin below 860px, where the diagonal collapses.
    this codebase. `initDetailPage` should only own things React does not render (scroll observers,
    the gallery's `window.__resources` swap).
 
+- **`align-self: center` centres against the flex LINE, not against the text.** Add one tall
+  sibling — a rule, a divider, an icon — and every `align-self: center` item in that row silently
+  re-centres against the new taller line and floats away from the type it belongs to. The arrow in
+  `.howto-link` drifted up to the heading's cap line the moment the 33px rule became a flex item.
+  **Fix: group the things that must align with each other inside their own flex container**, so
+  the tall element is a sibling of the group, not of its members. Verify by measuring both
+  centres — they must be equal, not merely close.
+
 ## 6. Brand — non-negotiable
 
 - Cream / burgundy / red. **Never** import iNewProject's maroon palette. Adopt *patterns* from

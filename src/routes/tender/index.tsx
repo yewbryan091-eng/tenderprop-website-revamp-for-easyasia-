@@ -516,11 +516,15 @@ function TenderListings() {
             <div className="search-intro">
               <h2 id="property-search-title">Find a property <span className="hl">open for e-tender</span></h2>
               <a className="howto-link" href="/how-e-tender-works">
-                <b>New to e-tender?</b>
-                <span className="howto-rest">See how it works</span>
-                <svg className="howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 12h13M13 6l6 6-6 6" />
-                </svg>
+                {/* The rule is a sibling of this span, not of the arrow — otherwise
+                    the arrow centres against the 33px rule instead of the text. */}
+                <span className="howto-text">
+                  <b>New to e-tender?</b>
+                  <span className="howto-rest">See how it works</span>
+                  <svg className="howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h13M13 6l6 6-6 6" />
+                  </svg>
+                </span>
               </a>
             </div>
             <form

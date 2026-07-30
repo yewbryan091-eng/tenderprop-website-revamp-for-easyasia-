@@ -1142,9 +1142,13 @@
    The 2px rule gives it an edge to sit against, so it reads as part of the masthead. */
 .howto-link {
   flex: none;
-  display: inline-flex; align-items: baseline; gap: 7px;
+  display: inline-flex; align-items: baseline;
   text-decoration: none; font-size: 17px; line-height: 1.3;
 }
+/* Text and arrow live in their own row so the arrow centres on the TEXT. As a direct
+   sibling of the rule it centred against the flex line — which the 33px rule had made
+   far taller than the type — and floated up near the cap line. */
+.howto-text { display: inline-flex; align-items: center; gap: 7px; }
 /* The rule is a flex item, not a border. An empty block flex item baseline-aligns on its
    BOTTOM edge, so the rule ends exactly on the shared baseline and rises to the heading's
    cap height — derived from --head-size so it tracks the clamp instead of being a guessed
@@ -1152,7 +1156,7 @@
    short of the baseline, which read as an arbitrary tick rather than a divider. */
 .howto-link::before {
   content: ""; flex: none; width: 2px; height: calc(var(--head-size) * .72);
-  margin-right: 13px;
+  margin-right: 20px;
   background: color-mix(in srgb, var(--burgundy) 55%, transparent);
   transition: background .16s ease;
 }
@@ -1168,7 +1172,9 @@
 }
 .howto-link:hover .howto-rest { text-decoration-color: var(--burgundy); }
 .howto-arrow {
-  align-self: center; flex: none; width: 16px; height: 16px;
+  /* The path starts at x=5 of a 24 viewBox, so the glyph carries ~3px of its own left
+     padding — pulled back so the optical gap matches the 7px metric one. */
+  flex: none; width: 16px; height: 16px; margin-left: -3px;
   fill: none; stroke: var(--burgundy);
   stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
   transition: transform .16s ease;
