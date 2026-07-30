@@ -68,6 +68,21 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 — Claude · `DESIGN-SYSTEM.md` created (single source for values + patterns)
+Bryan asked whether a "frontend design skill" should exist so design rules stop being repeated.
+A generic `frontend-design` skill already exists in his Claude skills, but it knows nothing about
+TenderProp — and **a Claude skill cannot bind Codex**, so putting our system there would create a
+second source of truth. Given how much of this session was spent fixing duplicate-source bugs,
+that was the wrong vehicle. It went in the repo instead, where both agents read it.
+
+`DESIGN-SYSTEM.md` consolidates what was scattered across CSS comments, PLAN files and TEAM-LOG:
+tokens with their intended use, the type rules (incl. Newsreader's 400–700 ceiling and the
+Playfair-was-never-loaded history), the three section-flow tokens, the established component
+patterns, **§5 "traps that have already bitten"**, and the brand non-negotiables.
+§5 is the part worth reading — eight concrete failures from this session with their cost, e.g.
+`grid-template-columns` not overriding `grid-auto-flow`, duplicate selectors winning silently, and
+restating `position` to raise z-index. AGENTS.md now points at it.
+
 ### 30 Jul 2026 — Claude · SECTION FLOW SYSTEM finalised (measured audit of all 11 sections)
 **Codex: never hand-tune a section's padding, title size or background again.** Three `:root`
 tokens in `tender-detail.css` govern the page: `--sec-pad` (clamp 40–56px per side → 80–112px

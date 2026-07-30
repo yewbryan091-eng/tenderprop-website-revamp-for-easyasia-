@@ -86,6 +86,12 @@ until you have looked at it and judged whether it actually works there.
 
 **The point:** one careful pass instead of five sloppy ones.
 
+## 🎨 DESIGN CANON: `DESIGN-SYSTEM.md`
+**Values and patterns live in `DESIGN-SYSTEM.md`** — tokens, the type rules, the three
+section-flow tokens, the established component patterns, the traps that have already cost us time,
+and the brand non-negotiables. Read it before any visual work; add to it in the same commit as any
+new design decision. This file holds the *behaviour* rules below; that file holds the *system*.
+
 ## 🎨 THE DESIGN SOP — "improve the design" means ALL of it (Bryan, 30 Jul 2026)
 
 His words: *"when i say improve the design, you make use your critical thinking on how to improve

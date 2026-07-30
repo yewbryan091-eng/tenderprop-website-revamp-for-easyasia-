@@ -28,6 +28,10 @@ const rm = (n: number) => "RM" + Math.round(n).toLocaleString("en-MY");
    leads with it. Parsed from the built-up string so it stays true if either changes. */
 const BUILT_UP_SQFT = Number((SINARAN_TENDER.builtUp || "").replace(/[^0-9.]/g, "")) || 0;
 const PSF = BUILT_UP_SQFT ? Math.round(RESERVE / BUILT_UP_SQFT) : 0;
+const PRICE_BASIS = SINARAN_TENDER.builtUp.replace(/\s*sqft\b/i, " sq ft");
+const TITLE_TYPE = "Strata title";
+const LAND_USE = SINARAN_TENDER.details?.landTitle;
+if (!LAND_USE) throw new Error("Residensi Sinaran land-use data is missing");
 
 /* PROPERTY DETAILS — one flat label/value list, rendered two-up: exactly the shape an
    admin form produces (type a label, type a value, save). Add, remove or reorder rows
@@ -35,10 +39,10 @@ const PSF = BUILT_UP_SQFT ? Math.round(RESERVE / BUILT_UP_SQFT) : 0;
    CMS, this array is what it replaces.
 
    NOTHING IN HERE IS ALREADY SHOWN ELSEWHERE ON THE PAGE. Removed as duplicates: tenure,
-   lease expiry and land title (the pricing heading above); bedrooms, bathrooms, built-up,
-   storeys and car parks (the icon band, which now reads straight off the tender record);
-   property type (the page header's address line). A spec sheet that repeats the summary
-   above it is just noise.
+   lease expiry, title type and land use (the pricing heading above); bedrooms, bathrooms,
+   built-up, storeys and car parks (the icon band, which now reads straight off the tender
+   record); property type (the page header's address line). A spec sheet that repeats the
+   summary above it is just noise.
 
    Fields are the ones a Malaysian subsale buyer actually gets from a land search and a
    listing sheet — title particulars (category of land use, restriction in interest,
@@ -48,10 +52,8 @@ const PSF = BUILT_UP_SQFT ? Math.round(RESERVE / BUILT_UP_SQFT) : 0;
    moved stratified property onto parcel rent. Anything genuinely unknown is NOT here; it
    belongs in NOT_DISCLOSED so this table never carries a blank. */
 const PROPERTY_DETAILS: { label: string; value: string }[] = [
-  { label: "Title type",              value: "Strata" },
   { label: "Unit position",           value: "Intermediate lot" },
   { label: "Land area",               value: "22\u2032 \u00d7 78\u2032 (1,716 sqft)" }, // (iNP), unit corrected
-  { label: "Land use",                value: "Building" },
   { label: "Restrictions",            value: "Nil" },
   { label: "Encumbrance",             value: "Free of encumbrances" },
   { label: "Bumi lot",                value: "No" },
@@ -329,21 +331,24 @@ export function ResidensiSinaranDetail() {
             <div className="blkcard dcard">
               <h2 className="sec-title">Property <span>Details</span></h2>
 
+              {/* Fixed across every property-detail page: price basis, tenure, then
+                  title and land use. The positions stay stable; only the correct
+                  property-type area basis and listing data change. */}
               <div className="pd-pricing">
                 <div>
                   <span className="lbl">Reserve price per sq ft</span>
                   <b className="pd-psf">{PSF ? `RM${PSF.toLocaleString("en-MY")}` : "\u2014"}<i>psf</i></b>
-                  <span className="sub">On the reserve. Your offer sets the final figure.</span>
+                  <span className="sub">Based on {PRICE_BASIS} built-up area</span>
                 </div>
                 <div>
                   <span className="lbl">Tenure</span>
-                  <b>Leasehold 99 yrs</b>
-                  <span className="sub">Expiring Nov 2115 &middot; 89 years remaining</span>
+                  <b>Leasehold 99 years</b>
+                  <span className="sub">Expires Nov 2115 &middot; 89 years remaining</span>
                 </div>
                 <div>
-                  <span className="lbl">Land title</span>
-                  <b>Residential</b>
-                  <span className="sub">Standard residential financing applies</span>
+                  <span className="lbl">Title &amp; land use</span>
+                  <b>{TITLE_TYPE}</b>
+                  <span className="sub">{LAND_USE} use</span>
                 </div>
               </div>
 
