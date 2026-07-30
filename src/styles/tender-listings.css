@@ -223,8 +223,8 @@
     border-bottom: 1px solid var(--line);
   }
   .hero-assurance-primary {
-    grid-template-columns: var(--hero-lock-box, 66px) minmax(0, 1fr);
-    gap: 14px; align-items: stretch;
+    grid-template-columns: var(--hero-lock-box, 47px) minmax(0, 1fr);
+    gap: 14px; align-items: start;
   }
   .hero-assurance:first-child { padding-top: 5px; }
   .hero-assurance:last-child { padding-bottom: 0; border-bottom: 0; }
@@ -235,7 +235,7 @@
   .hero-assurance-icon svg { display: block; width: 30px; height: 30px; }
   /* The lock is the panel's one visual anchor and was reading smaller than the
      serif headline beside it. Sized to sit level with that headline instead. */
-  .hero-assurance-primary .hero-assurance-icon { width: 100%; height: auto; align-self: stretch; min-height: 0; }
+  .hero-assurance-primary .hero-assurance-icon { width: 100%; height: var(--hero-lock, 52px); align-self: start; }
   .hero-assurance-primary .hero-assurance-icon svg { width: 100%; height: 100%; }
   /* Lock stays RED per Bryan (29 Jul) — the one non-semantic icon allowed off-burgundy. */
   .hero-assurance-primary .hero-assurance-icon { color: var(--red); }
@@ -297,7 +297,7 @@
      card fall below the clipped hero boundary. */
   @media (min-width: 1280px) and (max-width: 1375px) {
     .hero-seal-title { font-size: 18px; }
-    .hero-assurance-primary { --hero-lock-box: 64px; }
+    .hero-assurance-primary { --hero-lock-box: 44px; --hero-lock: 48px; }
     .hero-assurance { padding-top: 8px; padding-bottom: 8px; }
     .hero-assurance:first-child { padding-top: 3px; }
     .hero-assurance:last-child { padding-bottom: 0; }
@@ -318,7 +318,7 @@
   @media (min-width: 821px) and (max-width: 1279px) {
     .hero-panel-right .hero-eyebrow { margin-bottom: 4px; font-size: 10px; }
     .hero-assurance { padding: 7px 0; }
-    .hero-assurance-primary { --hero-lock-box: 58px; gap: 12px; }
+    .hero-assurance-primary { --hero-lock-box: 41px; --hero-lock: 45px; gap: 12px; }
     .hero-assurance:first-child { padding-top: 2px; }
     .hero-assurance:last-child { padding-bottom: 0; }
     .hero-assurance-icon { width: 31px; height: 31px; }
@@ -358,7 +358,7 @@
     .hero-cycle-count { margin-top: 10px; }
     .hero-panel-left .hero-cta { width: min(100%, 280px); min-width: 0; }
     .hero-seal-title { font-size: 19px; }
-    .hero-assurance-primary { --hero-lock-box: 62px; gap: 14px; }
+    .hero-assurance-primary { --hero-lock-box: 44px; --hero-lock: 48px; gap: 14px; }
   }
 
   /* Search band — sits directly below the hero date */

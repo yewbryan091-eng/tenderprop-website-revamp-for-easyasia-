@@ -97,8 +97,11 @@ Short entries. What you did, anything the other agent needs to know.
      against the copy at every breakpoint — no magic per-breakpoint pixel values to maintain.
      `--hero-lock-box` now only sets the column WIDTH (66 base / 64 / 58 / 62 mobile);
      `--hero-lock` is retired.
-  Verified: svg and copy block share top and bottom exactly at 1280 (64x72) and 375 (62x79);
-  lock is 19% of row width on mobile; 0px overflow at both.
+  **Then scaled back** — full copy height was too big (Bryan: "ok maybe its too big haha").
+  Now top-aligned at an explicit height: 52 base / 48 / 45 / 48 mobile, landing at ~61-67% of
+  the copy block (title + first line) and 13% of row width on mobile. The stretch trick is gone,
+  but the viewBox crop is what makes these numbers honest — the value now equals the visible
+  lock height instead of a box that was ~25% padding. 0px overflow at 1280 and 375.
 
 ### 30 Jul 2026 (late) — Claude · voice rule + hero polish
 **VOICE RULE ADDED TO AGENTS.md — read it.** TenderProp speaks as a platform in all marketing
