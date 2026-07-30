@@ -69,6 +69,23 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 31 Jul 2026 — Claude · Refined the shipped "New to e-tender?" line (Bryan: any improvements?)
+Three fixes after judging the render at zoom:
+1. **The rule was sagging.** As a `border-left` it was sized by the LINK's box: it started 16px
+   below the heading's cap and stopped 4px short of the baseline — an arbitrary tick, not a
+   divider. It is now a `::before` **flex item**: an empty block flex item baseline-aligns on its
+   bottom edge, so the rule ends exactly on the shared baseline and rises to the heading's cap
+   height. Height is `calc(var(--head-size) * .72)` off the new `--head-size` token (which also
+   drives the h2), so it tracks the clamp instead of being a guessed pixel value.
+2. **17px, up from 16px** — 16 whispered next to a 46px heading. 2.7:1 ratio now.
+3. **Hover moves the rule too**, so the divider and the link read as one object.
+
+⚠️ **The breakpoint is MEASURED — re-measure it if the copy changes.** The row needs 1080px of
+content box at the heading's 46px cap and the band carries 80px padding, so it stops fitting at a
+1160px viewport; the media query sits at 1200px for 40px of slack. The 17px bump moved this — at
+the old 1020px the line would have wrapped while the rule was still shown (blockquote look).
+`flex-wrap: wrap` remains only as an overflow guard, not as the layout mechanism.
+
 ### 31 Jul 2026 — Claude · "New to e-tender?" SHIPPED — treatment 2, set against the title
 Bryan picked **treatment 2** and asked for it close to the title. Done, and **compare mode is
 fully removed**: `HOWTO_TREATMENT`, the `.map()`, the `"all"` branch, `.howto-compare-row`,
