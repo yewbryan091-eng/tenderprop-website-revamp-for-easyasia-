@@ -20,6 +20,20 @@ Set by Bryan, 28 Jul 2026: *"make sure everyone is editing the same 1 same file 
 - **https://tender-seeker-bot.lovable.app is a FROZEN SNAPSHOT.** It is Lovable's hosted copy from the morning of 28 Jul 2026, before Lovable credits ran out. It does NOT update from this repo. Use it as a visual reference only — never as the current state, and never edit anything based on the assumption it is current.
 - Do NOT edit the old prototype copies elsewhere on Bryan's machine (`tenderprop.os/tenderprop-website-revamp*`, anything in `~/Downloads`). Those are design-reference archives from before this repo existed.
 
+## 🔴 VOICE RULE — TenderProp speaks as a PLATFORM, not as an agency
+Bryan, 30 Jul 2026: *"we cant put our licensed agent man, we cant [have] tenderprop as an agency
+portal, this must be like a startup, similar to inewproject."*
+
+- **Marketing copy — hero, product pages, meta descriptions, cards:** the subject is
+  **TenderProp**. "TenderProp puts your sealed offer in front of the seller." Never "our licensed
+  agent", "our appointed agent", "REA/REN", or "a licensed agency" in the front-of-house voice.
+- **Disclosure zones — footer, About, FAQ, the agent block, and the apply/enquiry point:** the
+  licensed-agency identity, REN/REA numbers and stakeholder-deposit wording MUST appear. This is
+  a BOVAEP/Act 242 obligation, not a style choice. Never strip it from these places.
+- The rule is the same one iNewProject follows: startup front, licensed disclosure where a buyer
+  is about to commit money. Swept across the app 30 Jul — do not reintroduce agency voice
+  upstream of the enquiry point.
+
 ## SITE-WIDE PLAN
 `PLAN-site-architecture.md` — all 18 pages of the live site: what is broken today, the nav
 redesign, the section stack for every page, and the build order. Read before starting any page

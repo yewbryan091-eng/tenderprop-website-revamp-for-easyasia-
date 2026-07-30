@@ -81,13 +81,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "TenderProp runs sealed e-tenders for Malaysian subsale property, handled end to end by licensed real estate agents.",
+          "TenderProp runs sealed e-tenders for Malaysian subsale property — private offers, one closing date, refundable deposits.",
       },
       { name: "author", content: "TenderProp" },
       { property: "og:title", content: "TenderProp — Malaysian Property E-Tender Platform" },
       {
         property: "og:description",
-        content: "Sealed-bid property tenders across Malaysia, run by licensed agents.",
+        content: "Sealed-bid property tenders across Malaysia — private offers, one closing date.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

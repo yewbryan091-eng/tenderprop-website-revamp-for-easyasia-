@@ -8,7 +8,7 @@ function Page() {
     <PageShell
       eyebrow="For property owners — the revenue page"
       title={<>Sell by <em>tender or auction</em></>}
-      lede="One date, sealed offers or open bidding, and a licensed agency running everything: free valuation, free inspection, physical banners on your property, and buyers who have already paid a deposit to make their offer."
+      lede="One date, sealed offers or open bidding, and TenderProp running everything: free valuation, free inspection, physical banners on your property, and buyers who have already paid a deposit to make their offer."
       frames={[
         { title: "E-Tender vs Owner Auction — the comparison", what: "How price is set, timeline, who bids, cost, who runs it, what if it doesn't sell. The highest-value element on the site; the live page has lorem ipsum here." },
         { title: "The banner flywheel", what: "Dual physical banners on every listing — the growth engine no portal can copy. An owner's first question is 'how will you market it?' Show the banner." },

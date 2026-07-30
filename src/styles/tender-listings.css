@@ -117,8 +117,10 @@
     position: absolute;
     inset: 0;
     background: var(--paper);
-    /* Keep the panorama legible while leaving the reassurance copy dominant. */
-    opacity: .93;
+    /* Wash strength, as one knob. Lower = more skyline, higher = flatter paper.
+       Was .93, which flattened the panorama so hard the "one continuous scene"
+       across the seam barely read at all. */
+    opacity: var(--hero-right-wash, .84);
     pointer-events: none;
   }
   .hero-panel-inner { position: relative; z-index: 1; width: 100%; max-width: 560px; min-width: 0; }
@@ -221,8 +223,8 @@
     border-bottom: 1px solid var(--line);
   }
   .hero-assurance-primary {
-    grid-template-columns: 40px minmax(0, 1fr);
-    gap: 13px; align-items: start;
+    grid-template-columns: var(--hero-lock-box, 50px) minmax(0, 1fr);
+    gap: 14px; align-items: start;
   }
   .hero-assurance:first-child { padding-top: 5px; }
   .hero-assurance:last-child { padding-bottom: 0; border-bottom: 0; }
@@ -231,7 +233,10 @@
     color: var(--burgundy);
   }
   .hero-assurance-icon svg { display: block; width: 30px; height: 30px; }
-  .hero-assurance-primary .hero-assurance-icon svg { width: 34px; height: 34px; }
+  /* The lock is the panel's one visual anchor and was reading smaller than the
+     serif headline beside it. Sized to sit level with that headline instead. */
+  .hero-assurance-primary .hero-assurance-icon { width: var(--hero-lock-box, 50px); height: var(--hero-lock-box, 50px); }
+  .hero-assurance-primary .hero-assurance-icon svg { width: var(--hero-lock, 46px); height: var(--hero-lock, 46px); }
   /* Lock stays RED per Bryan (29 Jul) — the one non-semantic icon allowed off-burgundy. */
   .hero-assurance-primary .hero-assurance-icon { color: var(--red); }
   .hero-assurance-outcome .outcome-path-stem { stroke: var(--muted); }
@@ -267,8 +272,8 @@
   .hero-outcome-option.is-refunded .hero-outcome-label { color: var(--red); }
   .hero-outcome-label {
     display: flex; align-items: center; gap: 5px; margin-bottom: 3px; color: var(--ink);
-    font-size: 11.5px; font-weight: 800; letter-spacing: .07em;
-    line-height: 1.25; text-transform: uppercase;
+    font-size: 11.5px; font-weight: 800; letter-spacing: .05em;
+    line-height: 1.25; text-transform: uppercase; white-space: nowrap;
   }
   .hero-outcome-status-icon { display: inline-grid; place-items: center; width: 14px; height: 14px; flex: none; }
   .hero-outcome-status-icon svg { display: block; width: 100%; height: 100%; }
@@ -292,6 +297,7 @@
      card fall below the clipped hero boundary. */
   @media (min-width: 1280px) and (max-width: 1375px) {
     .hero-seal-title { font-size: 18px; }
+    .hero-assurance-primary { --hero-lock-box: 44px; --hero-lock: 40px; }
     .hero-assurance { padding-top: 8px; padding-bottom: 8px; }
     .hero-assurance:first-child { padding-top: 3px; }
     .hero-assurance:last-child { padding-bottom: 0; }
@@ -312,12 +318,12 @@
   @media (min-width: 821px) and (max-width: 1279px) {
     .hero-panel-right .hero-eyebrow { margin-bottom: 4px; font-size: 10px; }
     .hero-assurance { padding: 7px 0; }
-    .hero-assurance-primary { grid-template-columns: 34px minmax(0, 1fr); gap: 9px; }
+    .hero-assurance-primary { --hero-lock-box: 46px; --hero-lock: 42px; gap: 11px; }
     .hero-assurance:first-child { padding-top: 2px; }
     .hero-assurance:last-child { padding-bottom: 0; }
     .hero-assurance-icon { width: 31px; height: 31px; }
     .hero-assurance-icon svg { width: 27px; height: 27px; }
-    .hero-assurance-primary .hero-assurance-icon svg { width: 30px; height: 30px; }
+
     .hero-assurance strong { margin-bottom: 1px; font-size: 13.5px; }
     .hero-assurance p { font-size: 11.25px; line-height: 1.34; }
     .hero-outcome-grid { gap: 10px; margin-top: 5px; }
@@ -352,7 +358,7 @@
     .hero-cycle-count { margin-top: 10px; }
     .hero-panel-left .hero-cta { width: min(100%, 280px); min-width: 0; }
     .hero-seal-title { font-size: 19px; }
-    .hero-assurance-primary { grid-template-columns: 38px minmax(0, 1fr); gap: 11px; }
+    .hero-assurance-primary { --hero-lock-box: 46px; --hero-lock: 42px; gap: 12px; }
   }
 
   /* Search band — sits directly below the hero date */

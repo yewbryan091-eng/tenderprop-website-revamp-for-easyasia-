@@ -27,7 +27,7 @@ export const Route = createFileRoute("/tender/")({
       {
         name: "description",
         content:
-          "Browse Malaysian subsale properties open for sealed e-tender. Reserve prices, refundable deposits and closing dates, handled by licensed REA/REN agents.",
+          "Browse Malaysian subsale properties open for sealed e-tender. Reserve prices, refundable deposits and closing dates, all in one cycle.",
       },
       { property: "og:title", content: "Properties Open for Tender in Malaysia | TenderProp" },
       {
@@ -402,7 +402,7 @@ function TenderListings() {
                 <li className="hero-assurance hero-assurance-agent">
                   <div>
                     <strong>Your offer reaches the seller directly</strong>
-                    <p>Our licensed agent (REA/REN) personally presents your e-tender offer to the seller for consideration.</p>
+                    <p>TenderProp puts your sealed offer in front of the seller for consideration &mdash; exactly as you submitted it, with nothing added or shopped around.</p>
                   </div>
                 </li>
                 <li className="hero-assurance hero-assurance-outcome">

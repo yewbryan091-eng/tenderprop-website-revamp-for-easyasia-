@@ -8,7 +8,7 @@ function Page() {
     <PageShell
       eyebrow="Member services — the whole transaction, handled"
       title={<>Win the keys, <em>then what?</em></>}
-      lede="Membership is step one of tendering — and it carries the deal past the win: financing, conveyancing, renovation and investment guidance from one licensed agency and its panels. A portal lists properties; we carry transactions."
+      lede="Membership is step one of tendering — and it carries the deal past the win: financing, conveyancing, renovation and investment guidance, all through TenderProp's panels. A portal lists properties; we carry transactions."
       frames={[
         { title: "The journey strip", what: "Win the tender → loan → legal → keys → renovation → next investment. One page, one argument — replaces four thin pages." },
         { title: "Loan Center", what: "Mortgage consultants, eligibility checks, pre-approval — including the named CIMB partnership (up to 95% + 5% financing) already published." },

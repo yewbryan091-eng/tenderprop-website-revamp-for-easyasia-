@@ -17,7 +17,7 @@ export const Route = createFileRoute("/tender/residensi-sinaran")({
       {
         property: "og:description",
         content:
-          "Sealed e-tender: RM517,000 reserve, RM15,510 refundable deposit, handled by a licensed agent.",
+          "Sealed e-tender: RM517,000 reserve, RM15,510 refundable deposit, sealed until the tender closes.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

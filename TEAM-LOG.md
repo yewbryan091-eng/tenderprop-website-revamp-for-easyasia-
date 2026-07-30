@@ -67,6 +67,23 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 30 Jul 2026 (late) — Claude · voice rule + hero polish
+**VOICE RULE ADDED TO AGENTS.md — read it.** TenderProp speaks as a platform in all marketing
+copy; the licensed-agency/REN disclosure lives only in the footer, About, FAQ, agent block and
+the apply point. Bryan: *"we cant put our licensed agent man... this must be like a startup."*
+Swept 8 files: grid hero, homepage lede + frame, root + detail meta descriptions, sell, services,
+about eyebrow, and the detail page's negotiation + step-3 copy.
+
+Hero polish, all verified rendered at 1280 and 375:
+- right panel wash .93 → **.84** via `--hero-right-wash`; the skyline now actually continues
+  across the seam instead of being flattened to near-paper.
+- lock icon 34px → **46px** base, now driven by `--hero-lock` / `--hero-lock-box` and scaled per
+  breakpoint (40px at 1280–1375, 42px at 821–1279 and mobile) so it tracks `.hero-seal-title`
+  instead of dwarfing it where the title drops to 18px.
+- **"NOT ACCEPTED" was wrapping to two lines** while "ACCEPTED" stayed on one — pre-existing, not
+  from the lock change, but they are a matched pair. Fixed with `white-space: nowrap` + tracking
+  .07em → .05em. Both labels now 14px tall at 375 and 1280.
+
 ### 30 Jul 2026 (night) — Claude · house framed + §4 timer + forward roadmap
 1. **Site frame shipped**: 5-item nav (E-Tender / Owner Auction / Sell / Services / About,
    router-driven active state), real homepage at `/` (cycle line + two product doors + frames),

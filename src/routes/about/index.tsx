@@ -6,7 +6,7 @@ export const Route = createFileRoute("/about/")({ component: Page });
 function Page() {
   return (
     <PageShell
-      eyebrow="The licensed agency behind the platform"
+      eyebrow="Who runs TenderProp"
       title={<>Why your money is <em>safe here</em></>}
       lede="TenderProp is run by a licensed Malaysian real estate agency. Your tender deposit is held by the agency as stakeholder and refunded in full if no sale proceeds — this page exists to prove that, not to tell a company story."
       frames={[
