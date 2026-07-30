@@ -1076,10 +1076,21 @@
 .hero-panel-left .hero-clock {
   align-self: flex-end;
   margin-bottom: clamp(10px, 1.6vh, 18px);
-  font-size: 13px; font-weight: 700; letter-spacing: .1em;
-  font-variant-numeric: tabular-nums;
-  color: rgba(255, 255, 255, .62);
+  justify-content: flex-end;
+  /* Scaled down from the headline treatment: same D/H/M/S strip the hero used to lead
+     with, now secondary to the day count. Sizes are local so the big .hero-timer-days
+     figure and this corner strip can never be confused for the same element. */
+  --corner: 1;
 }
+.hero-panel-left .hero-clock .hero-timer-value {
+  font-size: 19px; font-weight: 700; letter-spacing: -.01em;
+  color: rgba(255, 255, 255, .92);
+}
+.hero-panel-left .hero-clock .hero-timer-unit {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  color: rgba(255, 255, 255, .58);
+}
+.hero-panel-left .hero-clock .hero-timer-cell:first-child .hero-timer-value { min-width: 0; }
 @media (max-width: 860px) {
   /* Diagonal is gone below this; centre it with the rest of the stacked panel. */
   .hero-panel-left .hero-clock { align-self: center; }

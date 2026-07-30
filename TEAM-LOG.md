@@ -70,8 +70,9 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 Short entries. What you did, anything the other agent needs to know.
 
 ### 30 Jul 2026 — Claude · ambient clock in the hero's top right
-Bryan wanted a timer back, so the hero now carries a small hh:mm:ss clock top-right of the burgundy
-panel. **This does not contradict the founder's rule** — the day count is still the headline at
+Bryan wanted a timer back, so the hero now carries the **D/H/M/S strip** top-right of the burgundy
+panel. (I first built an invented hh:mm:ss clock — wrong; he meant *the* timer, the four-cell one
+the hero used to lead with. Same markup and classes, just demoted to 19px.) **This does not contradict the founder's rule** — the day count is still the headline at
 clamp(46–74px); the clock is 13px at 62% white, deliberately unable to compete. `aria-hidden`,
 because the day count's label already announces the deadline and a second live region reading
 seconds would be hostile to a screen reader.

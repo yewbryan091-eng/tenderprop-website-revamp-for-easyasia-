@@ -109,13 +109,15 @@ founder settled it.
 say nothing — there the display switches to `{h}h {mm}m` with the label "left today". Days when
 days remain; hours only when hours are all that remain.
 
-The `/tender` hero also carries a small **ambient clock** (`.hero-clock`, hh:mm:ss) in the top
-right of the burgundy panel — secondary detail for anyone who wants the finer grain, at 13px and
-62% white so it cannot compete with the day count. It is `aria-hidden`: the day count's label
-already announces the deadline, and a second live region reading seconds is hostile to a screen
-reader. **Keep it in flow with `align-self: flex-end`, never absolutely positioned** — the panel's
-`padding-right` already tracks the diagonal, so the content edge clears the seam for free. An
-absolute version had to re-derive the seam from `--hero-top-split` and landed beside the day count.
+The `/tender` hero carries **both readings of the same deadline, ranked**: the big day count is
+the headline (`.hero-timer-days`, 46–74px), and the familiar **D/H/M/S strip** sits in the top
+right of the burgundy panel at 19px (`.hero-clock` reusing `.hero-timer-cells`). Same markup as
+the strip the hero used to lead with — just demoted, never replaced by something else.
+It is `aria-hidden`: the day count's label already announces the deadline, and a second live
+region reading seconds is hostile to a screen reader. **Keep it in flow with
+`align-self: flex-end`, never absolutely positioned** — the panel's `padding-right` already tracks
+the diagonal, so the content edge clears the seam for free. An absolute version had to re-derive
+the seam from `--hero-top-split` and landed beside the day count instead of in the corner.
 
 ## 4. Established patterns — reuse before inventing
 

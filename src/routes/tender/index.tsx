@@ -146,6 +146,14 @@ function TenderListings() {
      a ticking clock. So days lead, and hours/minutes only appear inside the final 24 hours
      — where "0 days left" would be useless and the hours are the only thing that matters.
      This also settles the 885-day-seconds problem Codex and I both flagged independently. */
+  /* The full D/H/M/S strip lives in the corner (Bryan); the big DAY COUNT stays the
+     headline per the founder's rule. Two readings of the same deadline, ranked. */
+  const timerUnits = [
+    { label: "d", value: left ? String(left.days) : "" },
+    { label: "h", value: left ? pad2(left.hours) : "" },
+    { label: "m", value: left ? pad2(left.minutes) : "" },
+    { label: "s", value: left ? pad2(left.seconds) : "" },
+  ];
   const FINAL_DAY = Boolean(left) && left!.days < 1;
   const countdownValue = !left ? "\u00a0" : FINAL_DAY ? `${left.hours}h ${pad2(left.minutes)}m` : String(left.days);
   const countdownUnit = !left ? "" : FINAL_DAY ? "left today" : left.days === 1 ? "day left" : "days left";
@@ -423,8 +431,13 @@ function TenderListings() {
                   aria-hidden: the day count's own label already announces the deadline, and a
                   second live region reading seconds would be hostile to a screen reader. */}
               {left && (
-                <span className="hero-clock" aria-hidden="true">
-                  {pad2(left.hours)}:{pad2(left.minutes)}:{pad2(left.seconds)}
+                <span className="hero-clock hero-timer-cells" aria-hidden="true">
+                  {timerUnits.map((u) => (
+                    <span className="hero-timer-cell" key={u.label}>
+                      <span className="hero-timer-value">{u.value}</span>
+                      <span className="hero-timer-unit">{u.label}</span>
+                    </span>
+                  ))}
                 </span>
               )}
               <div className="hero-timer" aria-live="off" aria-label={countdownLabel}>
