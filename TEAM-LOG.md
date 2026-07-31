@@ -74,6 +74,55 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · Tender information finished for today + **HANDOFF FOR CODEX**
+Last edits: span **arrow between the two dates** (`E-Tender started → Closing date`) — the dates
+are a span, not a list; `align-items: start` so both dates share a line, arrow measured onto it
+(**0.1px** off). And **"See how e-tender works" moved inside the Method fact**, under
+"Confidential" (Bryan) — it explains the method, so it sits with it instead of stranding at the
+foot of the section — then made prominent: **11.5 → 13px, weight 600, full burgundy, solid
+underline**.
+
+---
+
+## 🚨 CODEX — READ BEFORE YOUR NEXT EDIT
+
+**1. `AGENTS.md` has a new top section: “WHAT TENDERPROP ACTUALLY IS”.** Bryan gave the full
+founder briefing today after saying we were both building as if we did not know the business. It
+is short. Read all of it. The one-line version: **TenderProp is a lead engine for a licensed
+agency — no money moves through the site.** Apply → sign-in → a form taking name / email / phone /
+bid price → a lead reaches the agency; the agent collects the 3% afterwards into the agency's
+client account, per BOVAEP. Anything that implies an on-site transaction is wrong.
+
+**2. Three new rows in the DECISIONS table.** All founder-sourced, all previously guessed wrong by
+one of us:
+- **The reserve price is a GUIDE, not a floor.** Buyers deliberately offer below it. "Minimum
+  offer considered" / "the floor" is now banned copy — it makes the e-tender a fixed-price
+  listing with extra steps.
+- **No money moves through the platform** (above).
+- **No registration deadline exists.** Our "closing − 14 days" was invented; deleted.
+
+**3. On the negotiation line.** You removed *"the appointed agent negotiates on your behalf"*
+twice as an unsupported claim. **Correct instinct, wrong on the facts** — Bryan has now confirmed
+it twice, and it is in the DECISIONS table with his name. Keep it hedged ("where there is room to
+move") and leave it in.
+
+**4. What I changed in your `a840414` and why** — two of yours were better and I kept them
+("3% of the reserve price"; plain-English privacy wording, now `Method / E-Tender / Confidential`).
+The rest is in the entry above: submit block led with a caveat, the outcomes read as a clickable
+control strip, the label layer added two accent colours, and `"ladder ladder"/"howto howto"` left
+the process link stranded with 142px beside it.
+
+**5. Still open, needs Bryan:** whether **"Or talk to the agent first"** deserves equal weight
+beside Apply — his own reasoning is that reaching the agent first turns this back into a
+traditional sale. My view: demote to a quiet link, keep the lead.
+
+**6. Founder-blocked, unchanged:** Sinaran's real closing date (**885 days out** is not a tender),
+the 5-working-day response window, `tenderStartOf`'s closing − 3 months, agency REN numbers,
+seller package pricing. All in `BACKEND-CONTRACT.md` §6.
+
+**Claims: all areas free.** Detail page verified — production build passes, tsc clean, no dead
+selectors, section 414px, zero horizontal overflow.
+
 ### 1 Aug 2026 — Claude · 🚨 FOUNDER BRIEFING RECEIVED — read `AGENTS.md` § WHAT TENDERPROP ACTUALLY IS
 Bryan: *"i feel like you and codex building this like you dont know what tenderprop is."* Fair.
 He then gave the whole model. **It is now canon in `AGENTS.md`, above the backend section. Codex:

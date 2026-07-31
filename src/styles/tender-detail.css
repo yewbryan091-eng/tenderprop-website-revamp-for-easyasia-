@@ -122,8 +122,7 @@ section.blk.tender-band {
     "top top"
     "facts facts"
     "reassure negotiate"
-    "submit submit"
-    "howto howto";
+    "submit submit";
   align-content: center;
   column-gap: clamp(18px, 2vw, 28px);
   row-gap: 9px;
@@ -263,20 +262,21 @@ section.blk.tender-band {
 @media (prefers-reduced-motion: reduce) { .v1 .btn-outline { transition: none; } }
 /* The process link, replacing the 1-2-3 that explained it inline for the third time on this
    site. Quiet by design: it is an exit, not the section's purpose. */
+/* Lives inside the Method fact now, directly under "Confidential" — it explains the method,
+   so it sits with it. On its own grid row it was a stray exit at the foot of the section. */
 .v1-howto {
-  grid-area: howto;
-  display: inline-flex; align-items: center; gap: 6px; justify-self: start; align-self: center;
-  margin-top: 2px;
-  font-size: 12.5px; color: var(--muted); text-decoration: none; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 9px;
+  font-size: 13px; font-weight: 600; color: var(--burgundy); text-decoration: none;
 }
 .v1-howto span {
   color: var(--burgundy); text-decoration: underline;
-  text-underline-offset: 3px; text-decoration-thickness: 1.2px;
-  text-decoration-color: color-mix(in srgb, var(--burgundy) 45%, transparent);
+  text-underline-offset: 3px; text-decoration-thickness: 1.6px;
+  text-decoration-color: var(--burgundy);
 }
 .v1-howto:hover span { text-decoration-color: var(--burgundy); }
 .v1-howto svg {
-  width: 14px; height: 14px; fill: none; stroke: var(--burgundy);
+  width: 15px; height: 15px; fill: none; stroke: var(--burgundy);
   stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
 }
 
@@ -293,8 +293,7 @@ section.blk.tender-band {
       "top top"
       "facts facts"
       "reassure negotiate"
-      "submit submit"
-      "howto howto";
+      "submit submit";
     column-gap: 14px;
     padding: 23px 26px 18px 40px;
   }
@@ -325,8 +324,7 @@ section.blk.tender-band {
       "facts facts"
       "reassure reassure"
       "negotiate negotiate"
-      "submit submit"
-      "howto howto";
+      "submit submit";
   }
 }
 
@@ -364,8 +362,7 @@ section.blk.tender-band {
       "facts"
       "reassure"
       "negotiate"
-      "submit"
-      "howto";
+      "submit";
     row-gap: 12px;
     padding: 28px 24px 20px;
   }
@@ -401,15 +398,15 @@ section.blk.tender-band {
   }
   .v1-submit-actions .btn-red,
   .v1-submit-actions .btn-outline { justify-content: center; text-align: center; }
-  .v1-howto {
-    justify-self: start;
-    min-height: 44px;
-  }
+  /* Inside a fact cell now, so no grid placement — just a comfortable tap target. */
+  .v1-howto { min-height: 44px; align-items: flex-end; padding-bottom: 6px; }
 }
 
 @media(max-width: 460px) {
   .v1-deadline-panel { min-height: 290px; }
-  .v1-dates { grid-template-columns: 1fr; gap: 13px; }
+  /* Stacked: the arrow turns to point down the column it now spans. */
+  .v1-dates { grid-template-columns: 1fr; gap: 10px; }
+  .v1-dates-arrow { justify-self: center; margin-top: 0; transform: rotate(90deg); }
 }
   :root {
   --paper: #FAF5F0; --paper-deep: #F1E8DE; --ink: #17130F;
@@ -1064,11 +1061,22 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
 /* The two dates that bracket the tender. "Register by" moved to the submit block, where it
    is actionable rather than another date to read. */
 .v1-dates {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 14px;
+  /* start, not center: the closing cell carries an extra "End of day, MYT" line, so centring
+     pushed the shorter cell down and the two DATES stopped sharing a line. */
+  align-items: start;
   padding-top: clamp(16px, 2.2vh, 24px);
   border-top: 1px solid rgba(255, 255, 255, .26);
 }
 .v1-dates > div { min-width: 0; }
+/* Nudged up so it sits on the DATE line rather than the cell's centre — the closing cell
+   carries an extra "End of day, MYT" line, which drags the row's midpoint below the dates. */
+.v1-dates-arrow {
+  /* Offset to the date line: label line-box + half the date's, measured, not guessed. */
+  width: 34px; height: 12px; margin-top: 25px;
+  fill: none; stroke: rgba(255, 255, 255, .5);
+  stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round;
+}
 .v1-dates span {
   display: block; font-size: 9.5px; font-weight: 800; letter-spacing: .12em;
   text-transform: uppercase; color: rgba(255, 255, 255, .66);

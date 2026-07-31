@@ -410,6 +410,11 @@ export function ResidensiSinaranDetail() {
                         <span>E-Tender started</span>
                         <b>{TENDER_START_LABEL}</b>
                       </div>
+                      {/* The two dates are a SPAN, not a list — the arrow says so. Decorative,
+                          so aria-hidden; the labels already carry the meaning for a reader. */}
+                      <svg className="v1-dates-arrow" viewBox="0 0 34 12" aria-hidden="true">
+                        <path d="M0 6h31M26.5 1.5 32 6l-5.5 4.5" />
+                      </svg>
                       <div>
                         <span>Closing date</span>
                         <b>{TENDER_CLOSE_LABEL}</b>
@@ -447,6 +452,13 @@ export function ResidensiSinaranDetail() {
                       <span className="lbl">Method</span>
                       <b>E-Tender</b>
                       <span className="sub">Confidential</span>
+                      {/* The link explains the METHOD, so it belongs under the method (Bryan).
+                          On its own row it was a stray exit at the foot of the section; here it
+                          answers the fact immediately above it. */}
+                      <a className="v1-howto" href="/how-e-tender-works">
+                        <span>See how e-tender works</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+                      </a>
                     </div>
                   </div>
 
@@ -512,13 +524,6 @@ export function ResidensiSinaranDetail() {
                       site explaining it. The deposit's own callout above still says the one thing
                       that belongs on a listing — that the 3% is not an extra charge. */}
 
-                  <a className="v1-howto" href="/how-e-tender-works">
-                    {/* No "New to e-tender?" prefix here — that framing belongs on the
-                        listings page, where a visitor may not know the word yet. Anyone this
-                        deep into a listing does. */}
-                    <span>See how e-tender works</span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                  </a>
                 </div>
               </div>
             </div>
