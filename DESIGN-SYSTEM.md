@@ -157,11 +157,13 @@ including today, and the final day reads "1 day left" rather than "0".
 - **Tender Information dossier** (`.v1`): one full-bleed, shallow 40/60 split on every real listing;
   desktop height should stay close to the `/tender` hero rather than becoming a tall card. The left
   is the same platform-level monochrome KL panorama under a **flat** burgundy wash and owns all
-  timing information: live D/H/M/S, closing date and registration date. The right owns reserve
-  price, computed 3% deposit, sealed method, a full-width three-step process, then action and payment
-  disclosure in one compact footer row. Never use a property photo here; never duplicate deadline
-  information on the right; never restore the pin or paperclip. The diagonal collapses to a clean
-  vertical stack at 700px, with the timing panel first.
+  timing information: a day-led live countdown with H/M/S subordinate, tender start and closing
+  date. The right reads in decision order: reserve price → computed 3% deposit → offer privacy →
+  deposit risk → accepted/countered/not accepted outcomes → account requirement → action. Keep one
+  red Apply for E-Tender CTA. Payment terms are a compact native disclosure; the general process
+  link is a separate tertiary row, not a competing utility in the same stretched footer. Never use
+  a property photo here; never duplicate deadline information on the right; never restore the pin
+  or paperclip. The diagonal collapses to a clean vertical stack at 700px, with timing first.
 - **Slim invitation band** (`.pd-ask`): 44px serif glyph + title + one line + red CTA. ~98px tall.
 - **Body prose**: **two columns at full width**, `line-height: 1.72`, with at most one pull-quote
   (`border-left: 2px solid var(--burgundy)`) as the anchor, placed *outside* any disclosure.
@@ -216,6 +218,11 @@ including today, and the final day reads "1 day left" rather than "0".
    fresh load worked; a reloaded page did not. That is the shape of every "works for me" bug in
    this codebase. `initDetailPage` should only own things React does not render (scroll observers,
    the gallery's `window.__resources` swap).
+13. **An expanding disclosure must own the width its contents need.** The closed payment summary
+   can be a compact unit, but its three-column 3% / +7% / 90% illustration cannot remain in that
+   half-width grid area when opened; the money figures collide even though the page itself reports
+   zero overflow. Let the open `<details>` span the full information plane and verify the expanded
+   state visually, not only the closed banner.
 
 - **`align-self: center` centres against the flex LINE, not against the text.** Add one tall
   sibling — a rule, a divider, an icon — and every `align-self: center` item in that row silently

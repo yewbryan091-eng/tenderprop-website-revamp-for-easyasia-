@@ -65,10 +65,11 @@ and apply. Work top of page downward, because that is how Bryan reviews.
   agency fee is customarily deducted from that earnest deposit.
 - **Standard architecture for every real listing:** one full-bleed, shallow 40/60 deadline dossier
   with no capped outer card or paper gutter. The left uses the same platform-level monochrome Kuala
-  Lumpur panorama with a flat burgundy wash and carries the full live D/H/M/S clock, closing date
-  and registration date. The right carries reserve price, computed deposit, sealed method, three
-  compact process steps across the full information plane, then Apply for Tender / agent enquiry
-  beside the expandable payment ladder. It is not property imagery and must not vary by listing.
+  Lumpur panorama with a flat burgundy wash and carries the day-led live countdown plus tender
+  start and closing dates. The right follows one buyer decision path: reserve price, computed
+  deposit and offer privacy; named deposit/outcome assurances; then account-verification copy,
+  Apply for E-Tender and agent enquiry. The payment schedule and full process link are separate,
+  quiet disclosures below the action. It is not property imagery and must not vary by listing.
 - The pin and paperclip were removed; they belonged to the old notice-card metaphor. Deadline
   information appears only on the left, so date/countdown copy is no longer duplicated beside the
   action.
@@ -77,9 +78,11 @@ and apply. Work top of page downward, because that is how Bryan reviews.
   days. The old 5:00 PM claim is gone; closing is shown as end of day (MYT).
 - **Still open:** `17 Dec 2028` remains an assumed registration date pending the real backend rule.
 - Rule: time left; decision facts right; one red CTA. At 700px the split becomes a clean vertical
-  stack with the deadline panel first.
-- **Reviewed collapsed heights:** 412px at 1440, 443px at 1024 and 550px at 768; 375px stacks to
-  1,065px because all information remains visible. All four checks have zero horizontal overflow.
+  stack with the deadline panel first. At 701–740px the reserve price takes a full fact row so the
+  three values never collide inside the narrow information plane.
+- **Reviewed collapsed heights:** 426px at 1440, 485px at 1024, 549px at 768 and 633px at the
+  smallest split width (701px); 375px stacks to 1,061px because all information remains visible.
+  Every check has zero horizontal overflow.
 
 ### 5. Property Details — ✅ REBUILT 30 Jul 2026
 **Diagnosis of the old sheet:** 19 rows of which **10 were empty** (6 "Not stated", 3 em dashes),

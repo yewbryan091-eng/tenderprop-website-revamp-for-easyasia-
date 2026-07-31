@@ -153,18 +153,17 @@ section.blk.tender-band {
 /* ── Right: decision facts, process and action ── */
 .v1-main {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(210px, .75fr);
-  /* The two reassurances sit side by side as peers — both are risk-reducers — which keeps
-     the section compact enough for the submit block to own a full-width zone. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-areas:
     "top top"
     "facts facts"
     "reassure negotiate"
     "submit submit"
-    "ladder howto";
+    "ladder ladder"
+    "howto howto";
   align-content: center;
-  column-gap: clamp(20px, 2.4vw, 34px);
-  row-gap: 8px;
+  column-gap: clamp(18px, 2vw, 28px);
+  row-gap: 9px;
   min-width: 0;
   padding: clamp(18px, 2vw, 27px) clamp(30px, 4vw, 58px) clamp(15px, 1.6vw, 21px) clamp(44px, 5vw, 72px);
 }
@@ -218,7 +217,7 @@ section.blk.tender-band {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  padding: 9px 0;
+  padding: 10px 0;
 }
 .v1-facts > div {
   min-width: 0;
@@ -255,17 +254,44 @@ section.blk.tender-band {
 .v1-reassure {
   grid-area: reassure;
   margin: 0;
-  padding-left: 12px;
+  min-width: 0;
+  padding: 2px 0 2px 12px;
   border-left: 2px solid var(--good);
   color: var(--muted);
-  font-size: 12.5px;
-  line-height: 1.42;
+  font-size: 12px;
+  line-height: 1.4;
 }
-.v1-reassure b { color: var(--ink); }
+.v1-reassure p { margin: 2px 0 0; }
+.v1-reassure b { color: var(--ink); font-weight: 700; }
+.v1-assurance-label {
+  display: block;
+  color: var(--good);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
 
 /* Burgundy rather than green: this one is about the OUTCOME, not the money. Green is the
    "accepted" token elsewhere on the page and should keep that single meaning. */
 .v1-negotiate { grid-area: negotiate; border-left-color: var(--burgundy); }
+.v1-negotiate .v1-assurance-label { color: var(--burgundy); }
+.v1-outcomes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 3px;
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.v1-outcomes span + span::before {
+  margin: 0 7px;
+  color: var(--line);
+  content: "·";
+}
 
 /* THE SUBMIT BLOCK. This section is where a buyer enters the tender, so the action owns a
    zone instead of sharing a row with an accordion. Burgundy top rule on paper — the same
@@ -273,24 +299,30 @@ section.blk.tender-band {
 .v1-submit {
   grid-area: submit;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(185px, .78fr) minmax(0, 1.22fr);
   align-items: center;
-  gap: clamp(14px, 2vw, 28px);
-  margin-top: 4px;
-  padding: 15px 18px 16px;
+  gap: clamp(14px, 1.8vw, 24px);
+  margin-top: 2px;
+  padding: 12px 15px 13px;
   border: 1px solid var(--line);
   border-top: 3px solid var(--burgundy);
   border-radius: 10px;
   background: var(--paper-deep);
 }
 .v1-submit-copy b {
-  display: block; font-size: 15.5px; font-weight: 700; color: var(--ink); letter-spacing: -.008em;
+  display: block; font-size: 14.5px; font-weight: 700; color: var(--ink); letter-spacing: -.008em;
 }
 .v1-submit-copy p {
-  margin: 3px 0 0; font-size: 12.5px; line-height: 1.42; color: var(--muted); max-width: 54ch;
+  margin: 2px 0 0; font-size: 12px; line-height: 1.4; color: var(--muted); max-width: 48ch;
 }
 .v1-submit-actions {
-  display: flex; align-items: center; gap: clamp(10px, 1.4vw, 18px); white-space: nowrap;
+  display: grid; grid-template-columns: minmax(180px, 1fr) auto; align-items: center;
+  gap: clamp(10px, 1.4vw, 18px); white-space: nowrap;
+}
+.v1-submit-actions .btn-wa {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
 }
 /* The process link, replacing the 1-2-3 that explained it inline for the third time on this
    site. Quiet by design: it is an exit, not the section's purpose. */
@@ -318,19 +350,20 @@ section.blk.tender-band {
     padding: 28px 46px 28px 28px;
   }
   .v1-main {
-    grid-template-columns: minmax(0, 1.08fr) minmax(150px, .92fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas:
       "top top"
       "facts facts"
       "reassure negotiate"
       "submit submit"
-      "ladder howto";
+      "ladder ladder"
+      "howto howto";
     column-gap: 14px;
     padding: 23px 26px 18px 40px;
   }
   /* Copy and buttons stack once the row cannot hold both. */
   .v1-submit { grid-template-columns: 1fr; gap: 12px; }
-  .v1-submit-actions { flex-wrap: wrap; white-space: normal; }
+  .v1-submit-actions { grid-template-columns: minmax(180px, 1fr) auto; white-space: normal; }
 }
 
 @media(max-width: 820px) and (min-width: 701px) {
@@ -341,7 +374,11 @@ section.blk.tender-band {
     padding-right: 40px;
     padding-left: 28px;
   }
-  .v1-main { padding-left: 36px; padding-right: 24px; }
+  .v1-main {
+    grid-template-columns: minmax(0, 1.2fr) minmax(150px, .8fr);
+    padding-left: 36px;
+    padding-right: 24px;
+  }
   .v1-facts > div { padding-right: 9px; padding-left: 9px; }
   .v1-price .num { font-size: 24px; }
   /* Two callouts side by side get too narrow to read here. */
@@ -352,7 +389,24 @@ section.blk.tender-band {
       "reassure reassure"
       "negotiate negotiate"
       "submit submit"
-      "ladder howto";
+      "ladder ladder"
+      "howto howto";
+  }
+}
+
+@media(max-width: 740px) and (min-width: 701px) {
+  .v1-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v1-facts > div:first-child {
+    grid-column: 1 / -1;
+    padding: 0 0 9px;
+    border-bottom: 1px solid var(--line);
+  }
+  .v1-facts > div:nth-child(2) {
+    padding: 9px 10px 0 0;
+    border-left: 0;
+  }
+  .v1-facts > div:nth-child(3) {
+    padding: 9px 0 0 10px;
   }
 }
 
@@ -397,9 +451,24 @@ section.blk.tender-band {
     border-left: 1px solid var(--line);
   }
   /* Full-width tap target for the primary action on a phone. */
-  .v1-submit-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+  .v1-submit {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px;
+  }
+  .v1-submit-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    min-width: 0;
+    width: 100%;
+    white-space: normal;
+  }
   .v1-submit-actions .btn-red { justify-content: center; text-align: center; }
-  .v1-howto { justify-self: start; }
+  .v1-submit-actions .btn-wa { justify-content: center; }
+  .v1-howto {
+    justify-self: start;
+    min-height: 44px;
+  }
 }
 
 @media(max-width: 460px) {
@@ -861,14 +930,13 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   grid-area: ladder;
   min-width: 0;
   margin-top: 0;
-  padding-left: 18px;
-  border-left: 1px solid var(--line);
+  justify-self: start;
 }
 .v1-ladder summary {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 18px;
+  justify-content: flex-start;
+  gap: 12px;
   padding: 0;
   cursor: pointer;
   list-style: none;
@@ -885,7 +953,9 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   font-weight: 700;
 }
 .v1-ladder summary small {
-  display: none;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 500;
 }
 .v1-ladder-toggle {
   display: grid;
@@ -900,6 +970,15 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   transition: transform .18s ease;
 }
 .v1-ladder[open] .v1-ladder-toggle { transform: rotate(45deg); }
+/* Once opened, the payment illustration needs the full right panel. Keeping it in the
+   closed row's half-width column crushed three amounts together and made the disclosure
+   harder to understand than the summary it replaced. */
+.v1-main:has(.v1-ladder[open]) { align-content: start; }
+.v1-main:has(.v1-ladder[open]) .v1-ladder {
+  justify-self: stretch;
+  width: 100%;
+}
+.v1-main:has(.v1-ladder[open]) .v1-howto { justify-self: end; }
 .v1-ladder-body {
   margin-top: 12px;
   padding-top: 14px;
@@ -961,6 +1040,7 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
 .v1-ladder .laddernote a { color: var(--burgundy); font-weight: 600; }
 @media(max-width: 900px) {
   .v1-ladder summary > span:first-child { display: block; }
+  .v1-ladder summary small { display: none; }
   .v1-ladder ol { grid-template-columns: 1fr; gap: 14px; }
 }
 @media(max-width: 700px) {
@@ -969,7 +1049,10 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
     border-top: 1px solid var(--line);
     border-left: 0;
   }
-  .v1-ladder summary { padding-top: 9px; }
+  .v1-ladder summary {
+    min-height: 44px;
+    padding-top: 9px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .v1-ladder-toggle { transition: none; }

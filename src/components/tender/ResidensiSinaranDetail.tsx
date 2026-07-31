@@ -442,32 +442,35 @@ export function ResidensiSinaranDetail() {
                     <div>
                       <span className="lbl">E-Tender deposit</span>
                       <b className="dep-amt">{DEPOSIT}</b>
-                      <span className="sub">3% &middot; refundable &middot; part of your 10%</span>
+                      <span className="sub">3% of the reserve price</span>
                     </div>
-                    {/* Was "E-Tender method: Sealed E-Tender" — a label answered by its own
-                        restatement. What a buyer needs to know is what happens to the offer. */}
                     <div>
-                      <span className="lbl">Your offer</span>
-                      <b>Sealed</b>
-                      <span className="sub">One offer, seen only by the seller</span>
+                      <span className="lbl">Offer privacy</span>
+                      <b>Private</b>
+                      <span className="sub">Not shown to other buyers or the public</span>
                     </div>
                   </div>
 
-                  <p className="v1-reassure">
-                    <b>Your 3% deposit is not an extra charge.</b> It forms part of the standard
-                    10% down payment and is returned in full immediately if no sale proceeds.
-                  </p>
+                  <div className="v1-reassure">
+                    <span className="v1-assurance-label">Your deposit</span>
+                    <p>
+                      <b>Not an extra charge.</b> It forms part of the standard 10% down payment
+                      and is returned immediately if no sale proceeds.
+                    </p>
+                  </div>
 
-                  {/* FOUNDER-VERIFIED (Bryan): "it's not about win or lose — there's always a
-                      chance / room for negotiation done by the agent." This was nowhere on the
-                      page, while "sealed, one confidential offer" reads as one shot, all or
-                      nothing. It is the single most reassuring fact about the model. The old
-                      1-2-3 buried it inside step 3 as the word "counter". */}
-                  <p className="v1-reassure v1-negotiate">
-                    <b>Not accepted is not the end.</b> The seller can accept, decline or counter
-                    within 5 working days &mdash; and where there is room to move, the appointed
-                    agent negotiates on your behalf.
-                  </p>
+                  <div className="v1-reassure v1-negotiate">
+                    <span className="v1-assurance-label">After submission</span>
+                    <div className="v1-outcomes" role="group" aria-label="Possible e-tender outcomes">
+                      <span>Accepted</span>
+                      <span>Countered</span>
+                      <span>Not accepted</span>
+                    </div>
+                    <p>
+                      The seller responds within 5 working days. The appointed agent coordinates
+                      any counter privately.
+                    </p>
+                  </div>
 
                   {/* THE SUBMIT BLOCK — this section is where a buyer actually enters the
                       tender, so the action gets its own zone rather than sharing a row with an
@@ -476,11 +479,8 @@ export function ResidensiSinaranDetail() {
                       across the site. */}
                   <div className="v1-submit">
                     <div className="v1-submit-copy">
-                      <b>Submit your e-tender</b>
-                      <p>
-                        One confidential offer at or above the reserve, sent straight to the seller.
-                        You will need a verified account &mdash; register by {REGISTER_BY_LABEL}.
-                      </p>
+                      <b>Before you apply</b>
+                      <p>Have your account verified by {REGISTER_BY_LABEL}.</p>
                     </div>
                     <div className="v1-submit-actions">
                       <a className="btn-red" href="#">Apply for E-Tender</a>
@@ -493,18 +493,10 @@ export function ResidensiSinaranDetail() {
                   {/* The 1-2-3 "How the e-tender works" is gone. It was the THIRD explanation
                       of the process on the site, after the listings-page signal and the page
                       built for it — and this section's job is the terms of THIS tender, not a
-                      tutorial. Nothing was lost: register/verify is now the submit block's
-                      precondition, "one confidential offer" is a term, and the seller's 5-day
-                      response is in the negotiation note. Anyone who wants the process gets a
-                      link to the page that owns it. */}
-                  <a className="v1-howto" href="/how-e-tender-works">
-                    {/* No "New to e-tender?" prefix here — that framing belongs on the
-                        listings page, where a visitor may not know the word yet. Anyone this
-                        deep into a listing does. It also stopped the link fitting its column. */}
-                    <span>See how e-tender works</span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                  </a>
-
+                      tutorial. Nothing was lost: register/verify is the action precondition,
+                      privacy is explicit, and the seller's three outcomes plus 5-day response
+                      sit before the CTA. Anyone who wants the full process gets the page that
+                      owns it. */}
                   <details className="v1-ladder">
                     <summary>
                       <span>
@@ -537,6 +529,14 @@ export function ResidensiSinaranDetail() {
                       </p>
                     </div>
                   </details>
+
+                  <a className="v1-howto" href="/how-e-tender-works">
+                    {/* No "New to e-tender?" prefix here — that framing belongs on the
+                        listings page, where a visitor may not know the word yet. Anyone this
+                        deep into a listing does. */}
+                    <span>See how e-tender works</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+                  </a>
                 </div>
               </div>
             </div>

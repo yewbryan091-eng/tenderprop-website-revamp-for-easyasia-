@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 31 Jul 2026 | Reworking Tender Information right-panel hierarchy |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Tender Information decision hierarchy shipped |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -47,6 +47,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 28 Jul | `tender-seeker-bot.lovable.app` is a **frozen snapshot**; this repo is the truth | Lovable credits ran out; its copy no longer updates from git | Bryan |
 | 30 Jul | Property filters live in an inline disclosure **directly below Search**: tender closing cycle, reserve-price range, built-up area, land area and tenure. Price moved out of the Sort row; Tender by State remains standalone | Keeps “what qualifies” together in Search and “how results are ordered” in the results toolbar, while retaining TenderProp’s event/cycle framing | Bryan + Codex |
 | 30 Jul | Tender Information is one **full-bleed, shallow 40/60 split dossier** across every real listing: universal monochrome KL deadline panel left; listing facts, process and action right. No capped card, pin or paperclip | Bryan explicitly chose the Pexels panorama, then asked that this shared listing-page system span the viewport and match the `/tender` hero's compact height | Bryan + Codex |
+| 31 Jul | Tender Information's right panel follows **price → risk → privacy → outcome → action → optional learning**. Offer privacy means hidden from other buyers/the public; outcomes are accepted/countered/not accepted. Payment schedule and general process are separate utilities | Bryan approved the hierarchy brainstorm; three rendered treatments showed that named confidence blocks and one compact action band scan fastest without rebuilding the dossier as another card stack | Bryan + Codex |
 
 ---
 
@@ -68,6 +69,25 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 31 Jul 2026 — Codex · Tender Information right-panel decision hierarchy
+Reworked only the shared right information plane; the approved deadline panel is unchanged. Facts
+now answer reserve / 3% deposit / privacy, with privacy accurately limited to other buyers and the
+public rather than claiming only the seller can see an offer. The two formerly unlabelled paragraphs
+are now named confidence blocks: **Your deposit** and **After submission**, with the founder-confirmed
+accepted / countered / not accepted paths visible before the CTA.
+
+The action band is shorter and prerequisite-only: verified account by the existing derived date,
+then one red Apply for E-Tender action plus agent enquiry. Payment schedule and process link no
+longer fight inside one stretched footer. The closed payment control is compact; opening it spans the
+full right plane so 3% / +7% / 90% figures do not collide. Mobile's old two-column submit bug is
+fixed — action copy and buttons now stack at full width with 44px secondary targets.
+
+Rendered three one-character-switch treatments and discarded the two weaker structures. Final
+review: 426px @1440, 485px @1024, 549px @768, 633px @701, 1,061px @375; zero horizontal overflow
+at every width. The live timer ticks, collapsed/expanded payment states work, browser console is
+clean, `npm run build`, `npx tsc --noEmit`, and targeted ESLint (Prettier rule disabled because of
+the repo-wide existing formatting backlog) pass. Independent design critique verdict: **Ship.**
 
 ### 1 Aug 2026 — Claude · Eyebrow → "E-Tender closes in" · numeral and unit tightened
 Bryan: eyebrow wording, then *"885 and days left closer to each other"*.
