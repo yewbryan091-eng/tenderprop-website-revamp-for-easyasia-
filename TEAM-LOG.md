@@ -29,6 +29,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 | Date | Decision | Why | Decided by |
 |---|---|---|---|
+| 1 Aug | Buyer copy **may state that the agent negotiates where there is room** | Founder-verified: *"every e-tender submission, it's not about win or lose — there's always a chance / room for negotiation done by the agent."* Codex removed this twice as an unsupported claim — a fair instinct without the founder's word, hence this row. **Keep it hedged** ("where there is room to move"): it promises a route, never an outcome | Bryan (from his father) |
 | 28 Jul | Refundable deposit = **3% of reserve price**, computed in `depositOf()` | Founder-confirmed rule. Sinaran's old published RM10,000 was stale CMS data (3% = RM15,510) | Bryan (from his father) |
 | 28 Jul | Deposit value renders **green** (`--good`) | Bryan's explicit preference. Overrides earlier advice to keep it neutral ink | Bryan |
 | 28 Jul | Card title does **NOT** reserve two lines | The `min-height: 2.4em` reserve pushed the location far below short titles. Removed so location hugs the title. Ragged card heights are accepted | Bryan |
@@ -69,6 +70,32 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 1 Aug 2026 — Claude · Reviewed Codex's `a840414` tender-information pass, fixed 5 things
+Bryan: *"codex work, looks ugly"*. Reviewed the render and the diff. **Two of Codex's changes were
+keepers and I have left them alone:** "3% of the reserve price" (the old sub-line duplicated the
+callout below it), and **Offer privacy / Private / "Not shown to other buyers or the public"** —
+plainer than "Sealed" for someone meeting the word for the first time.
+
+Fixed:
+1. **Submit block led with a caveat.** "Before you apply / Have your account verified by…" — the
+   block whose whole job is to BE the submit point opened by telling you not to yet, and Bryan's
+   brief for this section was explicitly *"a place where people submit their tender"*. Back to
+   **"Submit your e-tender"**, with the precondition as the supporting line and the sentence that
+   says what submitting *is* ("one confidential offer at or above the reserve") restored.
+2. ❗ **The founder-verified negotiation line had been deleted** (second time — see the new
+   DECISIONS row). Restored, hedged. Codex's three outcomes are right and stay, but as a **bold
+   lead sentence** rather than three bold spans with dot separators, which read as a control strip
+   you could click — and which now matches the pattern of the callout beside it.
+3. **Dropped the `.v1-assurance-label` layer.** Uppercase "YOUR DEPOSIT" / "AFTER SUBMISSION" above
+   each callout was a third layer of labelling on top of a bold lead and a coloured left rule —
+   and it introduced **two accent colours** (green + burgundy) for no information.
+4. **The process link was stranded.** Codex split the areas into `"ladder ladder"` / `"howto howto"`,
+   putting the link alone on its own row with **142px of dead space** beside it. Back to one row.
+5. **Ladder summary was wrapping to two lines** in the shared row — its "3% · +7% · 90%" sub-line
+   restated, less precisely, the exact ladder inside the accordion. Removed; summary is one line.
+
+Section is **414px** again (was 428), no overflow.
 
 ### 31 Jul 2026 — Codex · Tender Information right-panel decision hierarchy
 Reworked only the shared right information plane; the approved deadline panel is unchanged. Facts

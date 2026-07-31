@@ -159,8 +159,7 @@ section.blk.tender-band {
     "facts facts"
     "reassure negotiate"
     "submit submit"
-    "ladder ladder"
-    "howto howto";
+    "ladder howto";
   align-content: center;
   column-gap: clamp(18px, 2vw, 28px);
   row-gap: 9px;
@@ -263,35 +262,10 @@ section.blk.tender-band {
 }
 .v1-reassure p { margin: 2px 0 0; }
 .v1-reassure b { color: var(--ink); font-weight: 700; }
-.v1-assurance-label {
-  display: block;
-  color: var(--good);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .1em;
-  line-height: 1.25;
-  text-transform: uppercase;
-}
 
 /* Burgundy rather than green: this one is about the OUTCOME, not the money. Green is the
    "accepted" token elsewhere on the page and should keep that single meaning. */
 .v1-negotiate { grid-area: negotiate; border-left-color: var(--burgundy); }
-.v1-negotiate .v1-assurance-label { color: var(--burgundy); }
-.v1-outcomes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  margin-top: 3px;
-  color: var(--ink);
-  font-size: 12.5px;
-  font-weight: 700;
-  line-height: 1.3;
-}
-.v1-outcomes span + span::before {
-  margin: 0 7px;
-  color: var(--line);
-  content: "·";
-}
 
 /* THE SUBMIT BLOCK. This section is where a buyer enters the tender, so the action owns a
    zone instead of sharing a row with an accordion. Burgundy top rule on paper — the same
@@ -356,8 +330,7 @@ section.blk.tender-band {
       "facts facts"
       "reassure negotiate"
       "submit submit"
-      "ladder ladder"
-      "howto howto";
+      "ladder howto";
     column-gap: 14px;
     padding: 23px 26px 18px 40px;
   }
@@ -389,8 +362,7 @@ section.blk.tender-band {
       "reassure reassure"
       "negotiate negotiate"
       "submit submit"
-      "ladder ladder"
-      "howto howto";
+      "ladder howto";
   }
 }
 

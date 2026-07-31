@@ -452,23 +452,31 @@ export function ResidensiSinaranDetail() {
                   </div>
 
                   <div className="v1-reassure">
-                    <span className="v1-assurance-label">Your deposit</span>
+                    {/* No uppercase label above this. The bold lead sentence already names the
+                        block, and the left rule already separates it — a third layer of labelling
+                        added chrome and a second accent colour for no information. */}
                     <p>
-                      <b>Not an extra charge.</b> It forms part of the standard 10% down payment
-                      and is returned immediately if no sale proceeds.
+                      <b>Your 3% deposit is not an extra charge.</b> It forms part of the standard
+                      10% down payment and is returned in full immediately if no sale proceeds.
                     </p>
                   </div>
 
                   <div className="v1-reassure v1-negotiate">
-                    <span className="v1-assurance-label">After submission</span>
-                    <div className="v1-outcomes" role="group" aria-label="Possible e-tender outcomes">
-                      <span>Accepted</span>
-                      <span>Countered</span>
-                      <span>Not accepted</span>
-                    </div>
+                    {/* Codex's three outcomes are right and stay — they are the complete, honest
+                        set. But as three bold spans separated by dots they read as a control
+                        strip, something to click. As a bold lead sentence they read as a
+                        statement, and they match the pattern of the callout beside them.
+
+                        FOUNDER-VERIFIED (Bryan, 30 Jul): "it's not about win or lose — there's
+                        always a chance / room for negotiation done by the agent." Codex removed
+                        this on 1 Aug as an unsupported claim, which was a fair instinct without
+                        the founder's word; it is now recorded in the DECISIONS table so it does
+                        not get dropped a third time. Hedged deliberately — "where there is room
+                        to move" — so it promises a route, not an outcome. */}
                     <p>
-                      The seller responds within 5 working days. The appointed agent coordinates
-                      any counter privately.
+                      <b>Accepted, countered or not accepted.</b> The seller responds within
+                      5 working days &mdash; and where there is room to move, the appointed agent
+                      negotiates on your behalf.
                     </p>
                   </div>
 
@@ -479,8 +487,15 @@ export function ResidensiSinaranDetail() {
                       across the site. */}
                   <div className="v1-submit">
                     <div className="v1-submit-copy">
-                      <b>Before you apply</b>
-                      <p>Have your account verified by {REGISTER_BY_LABEL}.</p>
+                      {/* Leads with the action again. "Before you apply" made the block whose
+                          whole job is to BE the submit point open with a caveat — and Bryan asked
+                          for "a place where people submit their tender". The precondition stays,
+                          as the supporting line where it belongs. */}
+                      <b>Submit your e-tender</b>
+                      <p>
+                        One confidential offer at or above the reserve, sent straight to the seller.
+                        Have your account verified by {REGISTER_BY_LABEL}.
+                      </p>
                     </div>
                     <div className="v1-submit-actions">
                       <a className="btn-red" href="#">Apply for E-Tender</a>
@@ -500,8 +515,10 @@ export function ResidensiSinaranDetail() {
                   <details className="v1-ladder">
                     <summary>
                       <span>
+                        {/* The 3% / +7% / 90% sub-line is gone: it restated, with less detail,
+                            the exact ladder inside this accordion. It also forced the summary to
+                            wrap to two lines once the row was shared with the process link. */}
                         <b>How payments work</b>
-                        <small>3% deposit &middot; +7% at SPA &middot; 90% on completion</small>
                       </span>
                       <span className="v1-ladder-toggle" aria-hidden="true">+</span>
                     </summary>
