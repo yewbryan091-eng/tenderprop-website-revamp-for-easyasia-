@@ -1143,11 +1143,16 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
      opens a hole beneath the numeral and crowds the eyebrow above it. Both corrections in
      the numeral's OWN em so they scale with the clamp. See DESIGN-SYSTEM §5. */
   font-size: clamp(46px, 5.6vw, 76px); line-height: .8; letter-spacing: -.025em;
-  margin: .15em 0 -.076em;
+  /* MEASURED: at -.076em (the hero's value) the true glyph-to-caps gap here was 32.4px, not
+     the hero's 15.9px — this unit is 12.5px rather than 16px and carried a 10px margin of
+     its own, so both leadings stacked. -.23em lands it at ~11px, which is 15.9 scaled from
+     the hero's 112px numeral to this 76px one. In the numeral's own em, so it holds across
+     the clamp. Box geometry cannot see any of this — see DESIGN-SYSTEM §5. */
+  margin: .15em 0 -.23em;
 }
 .v1-timer .u i {
   grid-column: 2; grid-row: 2; justify-self: center;
-  margin-top: 10px;
+  margin-top: 0;
   font-style: normal; font-size: 12.5px; font-weight: 700;
   letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.82);
 }

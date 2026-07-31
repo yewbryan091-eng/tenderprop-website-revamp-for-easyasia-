@@ -69,6 +69,23 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · Eyebrow → "E-Tender closes in" · numeral and unit tightened
+Bryan: eyebrow wording, then *"885 and days left closer to each other"*.
+
+Measured: the true glyph gap was **32.4px** while box geometry reported **4px**. Two leadings had
+stacked — the numeral's own (uncorrected beyond the hero's `-.076em`) plus a `margin-top: 10px`
+on the unit. The hero sits at 15.9px under a 112px numeral, so the proportional target for this
+76px one is ~11px. Unit margin to 0 and numeral `margin-bottom` to **-.23em** → **10.7px**, with
+16.7px above. Both in the numeral's own em, so the pair holds across the clamp.
+
+**Note for reuse: the hero's `-.076em` is NOT portable.** It was tuned against a 16px unit with no
+margin; this unit is 12.5px and had one. Re-measure with canvas TextMetrics whenever the numeral
+or its unit changes size — box geometry is blind to all of it.
+
+Eyebrow reads **"E-Tender closes in"** (his "close" → "closes"; singular subject). The /tender
+hero still says "Offers close in", which is correct there — that countdown is the next e-tender
+CYCLE across many listings, not one tender.
+
 ### 1 Aug 2026 — Claude · Left panel now mirrors the /tender hero · heading → "Tender information"
 Bryan: *"we can copy exactly from the tender page, offers close in with the timer, and also a
 closing date and a tender start date, thats all for the left side."*

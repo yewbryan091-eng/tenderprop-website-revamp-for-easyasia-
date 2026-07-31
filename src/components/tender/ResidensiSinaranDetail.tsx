@@ -377,7 +377,7 @@ export function ResidensiSinaranDetail() {
                       plain row would centre the BLOCK and push the numeral off-centre. */}
                   <div className="v1-deadline-content">
                     <div className="v1-countdown">
-                      <span className="v1-deadline-kicker">Offers close in</span>
+                      <span className="v1-deadline-kicker">E-Tender closes in</span>
                       <div
                         className="v1-timer"
                         role="timer"
