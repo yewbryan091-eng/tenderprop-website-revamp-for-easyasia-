@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { TENDERS } from "@/data/tenders";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
@@ -112,6 +112,45 @@ export function ResidensiSinaranDetail() {
      worked and a reloaded page was dead, which is exactly the "sometimes broken" Bryan saw.
      Anything React renders should be driven by React state. */
   const [aboutOpen, setAboutOpen] = useState(false);
+  /* GALLERY — React state, like the About toggle. It was imperative DOM code in
+     initDetailPage() and that is what Bryan saw as "broken": clicking the "+1" tile
+     APPENDED a 7th thumb to a grid whose CSS declares `grid-template-rows: repeat(3, 1fr)`.
+     Seven tiles in two columns is four rows with an orphaned last cell, and because
+     `.gallery` is `align-items: stretch` the stage stretched to match — overriding its own
+     `aspect-ratio: 3/2` and going 517px → 683px. One click permanently deformed the section
+     and left a hole in the corner. The grid now holds exactly six tiles, always. */
+  const [active, setActive] = useState(0);
+  /* Index being viewed full-size, or null when closed. */
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  const PHOTO_COUNT = SINARAN_PHOTOS.length;
+  const THUMB_SLOTS = 6;
+  const step = useCallback(
+    (delta: number) => setLightbox((i) => (i === null ? i : (i + delta + PHOTO_COUNT) % PHOTO_COUNT)),
+    [PHOTO_COUNT],
+  );
+  /* Closing hands the stage whatever you ended on, from ALL THREE exits. Escape used to
+     skip the handover — browse to photo 4, press Escape, and the stage was still on 3. */
+  const closeViewer = useCallback((at: number) => { setActive(at); setLightbox(null); }, []);
+  /* Scroll lock keyed on open/closed only. Keyed on `lightbox` it tore down and rebuilt on
+     every arrow press, restoring and re-hiding overflow on each step. */
+  const viewerOpen = lightbox !== null;
+  useEffect(() => {
+    if (!viewerOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [viewerOpen]);
+  /* Keyboard belongs to the viewer, not the document — bound only while it is open. */
+  useEffect(() => {
+    if (lightbox === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeViewer(lightbox);
+      else if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox, step, closeViewer]);
   /* Shown two-up. Closed renders the first two ENTIRE paragraphs rather than clipping at a
      line count: a max-height clamp across columns cuts column 1 mid-sentence and then starts
      column 2 at a new thought, so the reading order breaks. Rendering fewer whole paragraphs
@@ -174,18 +213,52 @@ export function ResidensiSinaranDetail() {
             </div>
 
             <div className="gallery">
-              <div className="stagebox" id="stagebox">
-                <img id="stage-img" src={SINARAN_PHOTOS[0]} alt="Residensi Sinaran — main view" />
-                <span className="stagecount" id="stagecount">1 / 7</span>
-                <span className="zoomhint" id="zoomhint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3M11 8v6M8 11h6" strokeLinecap="round" /></svg><span className="zoomhint-label">View all 7 photos</span></span>
-              </div>
+              {/* A real button: the old `div` could not be reached by keyboard at all, and
+                  the "View all photos" hint inside it was a `span` with `pointer-events:none`
+                  — the affordance was decorative. */}
+              <button
+                type="button"
+                className="stagebox"
+                id="stagebox"
+                onClick={() => setLightbox(active)}
+                aria-label={`View photo ${active + 1} of ${PHOTO_COUNT} full size`}
+              >
+                <img id="stage-img" src={SINARAN_PHOTOS[active]} alt={`Residensi Sinaran — photo ${active + 1}`} />
+                <span className="stagecount" id="stagecount">{active + 1} / {PHOTO_COUNT}</span>
+                <span className="zoomhint" id="zoomhint">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3M11 8v6M8 11h6" strokeLinecap="round" /></svg>
+                  <span className="zoomhint-label">View all {PHOTO_COUNT} photos</span>
+                </span>
+              </button>
+              {/* Exactly six slots, forever — see the note on `active`. The last one carries
+                  the overflow badge and opens the viewer rather than growing the grid, which
+                  is also what its own label has always claimed to do. */}
               <div className="thumbgrid" id="thumbs">
-                <button type="button" className="thumb on" data-res="ph1"><img src={SINARAN_PHOTOS[0]} alt="Residensi Sinaran photo 1" /></button>
-                <button type="button" className="thumb" data-res="ph2"><img src={SINARAN_PHOTOS[1]} alt="Residensi Sinaran photo 2" /></button>
-                <button type="button" className="thumb" data-res="ph3"><img src={SINARAN_PHOTOS[2]} alt="Residensi Sinaran photo 3" /></button>
-                <button type="button" className="thumb" data-res="ph4"><img src={SINARAN_PHOTOS[3]} alt="Residensi Sinaran photo 4" /></button>
-                <button type="button" className="thumb" data-res="ph5"><img src={SINARAN_PHOTOS[4]} alt="Residensi Sinaran photo 5" /></button>
-                <button type="button" className="thumb" data-res="ph6" data-rest="ph7"><img src={SINARAN_PHOTOS[5]} alt="Residensi Sinaran photo 6" /><span className="more">+1<small>View all photos</small></span></button>
+                {SINARAN_PHOTOS.slice(0, THUMB_SLOTS).map((photo, i) => {
+                  const isOverflow = i === THUMB_SLOTS - 1 && PHOTO_COUNT > THUMB_SLOTS;
+                  return (
+                    <button
+                      type="button"
+                      key={photo}
+                      className={`thumb${!isOverflow && i === active ? " on" : ""}`}
+                      aria-current={!isOverflow && i === active ? "true" : undefined}
+                      onClick={() => (isOverflow ? setLightbox(i) : setActive(i))}
+                      aria-label={isOverflow
+                        ? `View all ${PHOTO_COUNT} photos`
+                        : `Show photo ${i + 1} of ${PHOTO_COUNT}`}
+                    >
+                      <img src={photo} alt={isOverflow ? "" : `Residensi Sinaran photo ${i + 1}`} />
+                      {isOverflow && (
+                        <span className="more" aria-hidden="true">
+                          {/* Photos NOT shown. The badge dims photo 6 but does not hide it,
+                              so it is 7 - 6 = 1, not 2. */}
+                          +{PHOTO_COUNT - THUMB_SLOTS}
+                          <small>View all photos</small>
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -205,11 +278,7 @@ export function ResidensiSinaranDetail() {
               <button
                 type="button"
                 className="mediabtn"
-                onClick={() =>
-                  document
-                    .querySelector('#thumbs .thumb[data-res="ph1"]')
-                    ?.dispatchEvent(new MouseEvent("click", { bubbles: true }))
-                }
+                onClick={() => setActive(0)}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 5l3 3M19 5l-3 3M5 19l3-3M19 19l-3-3" />
@@ -685,10 +754,33 @@ export function ResidensiSinaranDetail() {
       </div>
 
 
-      <div className="modal" id="imgmodal" aria-hidden="true" style={{background: "rgba(23,19,15,.92)"}}>
-        <button type="button" id="imgmodal-close" aria-label="Close" style={{position: "absolute", top: "20px", right: "24px", background: "none", border: "none", color: "#fff", fontSize: "34px", lineHeight: "1", cursor: "pointer"}}>×</button>
-        <img id="imgmodal-img" alt="Residensi Sinaran enlarged" style={{maxWidth: "92vw", maxHeight: "88vh", borderRadius: "8px", objectFit: "contain"}} />
-      </div>
+      {/* The old viewer showed ONE photo with no way forward — under a hint that promised
+          "View all 7 photos". Photo 7 was reachable only by first clicking the "+1" tile,
+          which is the click that deformed the grid. Now every photo is reachable from here,
+          and closing hands the stage whatever you ended on. */}
+      {lightbox !== null && (
+        <div
+          className="modal open imgmodal"
+          id="imgmodal"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Photo ${lightbox + 1} of ${PHOTO_COUNT}`}
+          onClick={(e) => { if (e.target === e.currentTarget) closeViewer(lightbox); }}
+        >
+          <button type="button" className="lb-close" aria-label="Close photo viewer"
+            onClick={() => closeViewer(lightbox)}>&times;</button>
+          <button type="button" className="lb-nav lb-prev" aria-label="Previous photo"
+            onClick={() => step(-1)}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+          </button>
+          <img id="imgmodal-img" src={SINARAN_PHOTOS[lightbox]} alt={`Residensi Sinaran photo ${lightbox + 1}`} />
+          <button type="button" className="lb-nav lb-next" aria-label="Next photo"
+            onClick={() => step(1)}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+          </button>
+          <span className="lb-count">{lightbox + 1} / {PHOTO_COUNT}</span>
+        </div>
+      )}
     </div>
   );
 }

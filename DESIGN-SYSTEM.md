@@ -243,6 +243,16 @@ including today, and the final day reads "1 day left" rather than "0".
   numeral 53px off the axis every other element shared. Stack the unit under the numeral, or
   accept that the big element — the one the eye actually tracks — is off-centre.
 
+- **A grid with fixed rows will not absorb an extra child — it deforms the section.** The
+  Sinaran gallery appended a 7th thumb into `grid-template-rows: repeat(3, 1fr)`. Seven tiles in
+  two columns is four rows with an orphaned cell, and because `.gallery` is `align-items: stretch`
+  the *stage* stretched to match and overrode its own `aspect-ratio: 3/2` — 517px → 683px, with a
+  hole in the corner, permanently, from one click. **Overflow belongs in a viewer, not in the
+  grid**: keep the tile count fixed and let "+N" open something.
+- **Anything React renders must be driven by React state.** Third time this has bitten: the About
+  toggle, then hot-reload losing listeners, now the gallery. DOM handlers registered in an effect
+  fight the render they are attached to and break in ways that look intermittent.
+
 ## 6. Brand — non-negotiable
 
 - Cream / burgundy / red. **Never** import iNewProject's maroon palette. Adopt *patterns* from

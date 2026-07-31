@@ -4,16 +4,6 @@
    Behaviour is DOM-driven so the markup stays identical to the handoff HTML. */
 export function initDetailPage(): () => void {
   const timers: number[] = [];
-  /* Gallery resource map — ph1..ph7 resolve to the real Sinaran photos. */
-  window.__resources = Object.assign({}, window.__resources, {
-    ph1: "/assets/project/sinaran/photo-1.jpg",
-    ph2: "/assets/project/sinaran/photo-2.jpg",
-    ph3: "/assets/project/sinaran/photo-3.jpg",
-    ph4: "/assets/project/sinaran/photo-4.jpg",
-    ph5: "/assets/project/sinaran/photo-5.jpg",
-    ph6: "/assets/project/sinaran/photo-6.jpg",
-    ph7: "/assets/project/sinaran/photo-7.jpg",
-  });
   const setInterval = (fn: TimerHandler, ms?: number) => {
     const id = window.setInterval(fn, ms);
     timers.push(id);
@@ -52,64 +42,12 @@ export function initDetailPage(): () => void {
     }, { threshold: 0.05 }).observe(action);
   })();
 
-  // ── Gallery: thumbnails swap the stage image; +3 expands the rest ──
-  (function () {
-    var stage = document.getElementById("stage-img");
-    var thumbs = document.getElementById("thumbs");
-    var zoomhint = document.getElementById("zoomhint");
-    var stagecount = document.getElementById("stagecount");
-
-    function totalPhotoCount() {
-      var restAttr = thumbs.querySelector("[data-rest]");
-      var extra = restAttr ? restAttr.getAttribute("data-rest").split(",").length : 0;
-      return thumbs.querySelectorAll(".thumb").length + extra;
-    }
-    function refreshHint() {
-      var total = totalPhotoCount();
-      var hintLabel = zoomhint.querySelector(".zoomhint-label");
-      if (hintLabel) hintLabel.textContent = "View all " + total + " photos";
-      var current = thumbs.querySelectorAll(".thumb").length ? Array.prototype.indexOf.call(thumbs.querySelectorAll(".thumb"), thumbs.querySelector(".thumb.on")) + 1 : 1;
-      stagecount.textContent = current + " / " + total;
-    }
-    refreshHint();
-
-    thumbs.addEventListener("click", function (e) {
-      var t = e.target.closest(".thumb");
-      if (!t) return;
-      thumbs.querySelectorAll(".thumb").forEach(function (x) { x.classList.remove("on"); });
-      t.classList.add("on");
-      stage.src = window.__resources ? window.__resources[t.getAttribute("data-res")] : t.querySelector("img").src;
-      var rest = t.getAttribute("data-rest");
-      if (rest) {
-        t.removeAttribute("data-rest");
-        var m = t.querySelector(".more"); if (m) m.remove();
-        rest.split(",").forEach(function (rid) {
-          var url = window.__resources ? window.__resources[rid] : rid;
-          var b = document.createElement("button");
-          b.type = "button"; b.className = "thumb"; b.setAttribute("data-res", rid);
-          b.innerHTML = '<img src="' + url + '" alt="Residensi Sinaran photo">';
-          thumbs.appendChild(b);
-        });
-      }
-      refreshHint();
-    });
-  })();
-
-  // ── Image lightbox: click main image to enlarge ──
-  (function () {
-    var box = document.getElementById("stagebox");
-    var stage = document.getElementById("stage-img");
-    var modal = document.getElementById("imgmodal");
-    var full = document.getElementById("imgmodal-img");
-    box.addEventListener("click", function () {
-      full.src = stage.src;
-      modal.classList.add("open"); modal.setAttribute("aria-hidden", "false");
-    });
-    function close() { modal.classList.remove("open"); modal.setAttribute("aria-hidden", "true"); }
-    document.getElementById("imgmodal-close").addEventListener("click", close);
-    modal.addEventListener("click", function (e) { if (e.target === modal) close(); });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
-  })();
+  /* GALLERY + LIGHTBOX REMOVED — both are React state in ResidensiSinaranDetail now.
+     They lived here as DOM code and that is precisely what broke: the thumb handler
+     APPENDED a seventh tile to a three-row grid, deforming the section permanently on
+     one click, and the viewer had no navigation despite a hint promising all 7 photos.
+     Anything React renders must be driven by React state — same rule that fixed the
+     About toggle. Do not re-add DOM handlers for these. */
 
   /* Video / Drone media modal removed — no footage exists for this property. */
 

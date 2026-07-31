@@ -568,7 +568,12 @@ section.blk.tender-band {
   @media(max-width: 820px) { .gallery { grid-template-columns: 1fr; } }
   /* 3/2 is set by the right column, not taste: it makes three thumb rows land at
      roughly 16:9 each instead of letterboxed slivers. */
-  .stagebox { position: relative; border-radius: 8px; overflow: hidden; background: var(--paper-deep); aspect-ratio: 3/2; cursor: zoom-in; }
+  /* A button now, so it is keyboard-reachable. `display:block` + zero padding keeps it
+     visually identical to the div it replaced. min-height:0 stops the flex/grid stretch
+     from beating aspect-ratio the way it did when the grid grew a fourth row. */
+  .stagebox { position: relative; display: block; width: 100%; padding: 0; border: 0; text-align: left;
+    border-radius: 8px; overflow: hidden; background: var(--paper-deep); aspect-ratio: 3/2; min-height: 0; cursor: zoom-in; }
+  .stagebox:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 3px; }
   .stagebox img { width: 100%; height: 100%; object-fit: cover; }
   .stagebox .zoomhint { position: absolute; left: 14px; bottom: 14px; display: flex; align-items: center; gap: 7px; background: rgba(23,19,15,.78); color: #fff; border-radius: 999px; padding: 8px 14px; font-size: 12.5px; font-weight: 600; pointer-events: none; }
   .stagebox .zoomhint svg { width: 15px; height: 15px; }
@@ -583,6 +588,41 @@ section.blk.tender-band {
   .thumb.on { outline: 2px solid var(--burgundy); outline-offset: -2px; }
   .thumb .more { position: absolute; inset: 0; background: rgba(23,19,15,.6); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-weight: 800; font-size: 15px; line-height: 1.3; gap: 2px; }
   .thumb .more small { display: block; font-size: 10px; font-weight: 600; letter-spacing: .01em; }
+  .thumb:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 2px; }
+
+  /* ── Photo viewer ──────────────────────────────────────────────────────────────
+     Browsable: prev / next / counter / Escape / arrow keys. The version this replaces
+     showed a single photo with no way forward, under a hint promising all 7. */
+  .imgmodal { background: rgba(23, 19, 15, .93); gap: clamp(8px, 2vw, 28px); }
+  .imgmodal #imgmodal-img { max-width: min(92vw, 1400px); max-height: 86vh; border-radius: 8px; object-fit: contain; }
+  .imgmodal .lb-close {
+    position: absolute; top: 18px; right: 22px; width: 44px; height: 44px;
+    display: grid; place-items: center; background: none; border: 0;
+    color: #fff; font-size: 34px; line-height: 1; cursor: pointer; opacity: .8;
+  }
+  .imgmodal .lb-nav {
+    flex: none; width: 52px; height: 52px; display: grid; place-items: center;
+    border-radius: 999px; border: 1px solid rgba(255, 255, 255, .28);
+    background: rgba(23, 19, 15, .5); color: #fff; cursor: pointer;
+    transition: background .16s ease, border-color .16s ease;
+  }
+  .imgmodal .lb-nav svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .imgmodal .lb-nav:hover { background: rgba(23, 19, 15, .8); border-color: rgba(255, 255, 255, .5); }
+  .imgmodal .lb-close:hover { opacity: 1; }
+  .imgmodal .lb-close:focus-visible, .imgmodal .lb-nav:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .imgmodal .lb-count {
+    position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%);
+    background: rgba(23, 19, 15, .72); color: #fff; border-radius: 999px;
+    padding: 6px 14px; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 640px) {
+    /* Thumb-reachable at the bottom corners rather than centred on the photo edges. */
+    .imgmodal .lb-nav { position: absolute; bottom: 18px; }
+    .imgmodal .lb-prev { left: 18px; }
+    .imgmodal .lb-next { right: 18px; }
+    .imgmodal #imgmodal-img { max-height: 74vh; }
+  }
+  @media (prefers-reduced-motion: reduce) { .imgmodal .lb-nav { transition: none; } }
   .stagebox .stagecount { display: none; position: absolute; top: 12px; right: 12px; background: rgba(23,19,15,.72); color: #fff; border-radius: 999px; padding: 5px 11px; font-size: 12px; font-weight: 700; }
   @media(max-width: 600px) {
     .stagebox .stagecount { display: block; }

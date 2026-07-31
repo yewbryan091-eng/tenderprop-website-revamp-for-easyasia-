@@ -69,6 +69,38 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · Sinaran gallery rebuilt in React. The "+1" click was deforming the page.
+Bryan: *"the logic and image function, its broken"*. What was actually wrong:
+
+1. **The "+1" tile APPENDED a 7th thumb** into a grid whose CSS declares
+   `grid-template-rows: repeat(3, 1fr)`. Seven tiles in two columns = four rows with an orphaned
+   cell — and since `.gallery` is `align-items: stretch`, the STAGE stretched to match and
+   overrode its own `aspect-ratio: 3/2`. **517px → 683px**, hole in the bottom corner, permanent,
+   from one click. That is the deformed layout in his screenshot.
+2. **The viewer showed one photo with no navigation**, under a hint promising "View all 7 photos".
+3. **Photo 7 was unreachable** except by first making the click in (1).
+4. `#stagebox` was a `div` — **no keyboard access at all** — and the "View all photos" hint inside
+   it was a `span` with `pointer-events: none`, i.e. decoration shaped like a control.
+
+Now: gallery + viewer are **React state**; the imperative versions and `window.__resources` are
+deleted from `tender-detail-behaviour.ts`. Grid holds **exactly six tiles forever**; the sixth
+carries "+N" and **opens the viewer** instead of growing the grid — which is what its own label
+always claimed. Viewer has prev/next, a counter, wrap-around, Escape and arrow keys, backdrop
+close, scroll lock, `role="dialog"`/`aria-modal`. Stage is a `<button>` with a focus ring.
+
+Verified: grid **6 tiles / 517px** before and after the overflow click, stage holds **3:2**;
+open at 3 → arrow to 4 → close returns the stage to 4 from **all three exits**.
+
+🐛 Two of my own, caught in the render: the badge read **"+2"** (I counted the visible sixth photo
+as hidden — it is `PHOTO_COUNT - THUMB_SLOTS`), and **Escape did not hand the stage back** the
+photo you ended on while the close button and backdrop did — three exits, two behaviours. Also
+split the scroll-lock effect off `lightbox`, since keying it there tore down and rebuilt the lock
+on every arrow press.
+
+🔧 Measuring note: `.click()` on a React control does not update the DOM synchronously — read the
+result in a SEPARATE tool call. And `requestAnimationFrame` never fires in a backgrounded tab, so
+an rAF-based `await` hangs the evaluation until it times out.
+
 ### 1 Aug 2026 — Claude · Deadline maths unified. The page was contradicting itself by a day.
 First thing I measured this morning on the Sinaran page: the header pill said **885 days left**
 and the panel below it said **884 DAYS LEFT** — computed from the same `diff`, in the same
