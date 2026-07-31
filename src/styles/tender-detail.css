@@ -94,7 +94,11 @@ section.blk.tender-band {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* Centred as one group, not pushed to the edges. `space-between` was fine when this panel
+     held four stacked blocks; with two it opened a ~230px hole in the middle that read as a
+     missing element rather than as breathing room. */
+  justify-content: center;
+  gap: clamp(22px, 3.4vh, 40px);
   min-height: 100%;
   padding: clamp(24px, 2.5vw, 36px) clamp(52px, 5vw, 76px) clamp(24px, 2.5vw, 34px) clamp(30px, 4vw, 60px);
 }
@@ -120,19 +124,19 @@ section.blk.tender-band {
   line-height: 1.02;
   white-space: nowrap;
 }
+/* Was `repeat(4, 1fr)` — a leftover from the old four-cell D/H/M/S clock. With one cell
+   left the number sat in the first QUARTER of a full-width rule and read as orphaned. */
 .v1-timer {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: block;
   margin: 0;
-  border-top: 1px solid rgba(255,255,255,.34);
-  border-bottom: 1px solid rgba(255,255,255,.34);
+  border-bottom: 1px solid rgba(255,255,255,.28);
   font-variant-numeric: tabular-nums;
 }
 .v1-timer .u {
   min-width: 0;
-  padding: 13px 7px 11px;
-  border-left: 1px solid rgba(255,255,255,.25);
-  text-align: center;
+  padding: 2px 0 14px;
+  border-left: 0;
+  text-align: left;
 }
 .v1-timer .u:first-child { border-left: 0; }
 .v1-timer .u b {
@@ -156,46 +160,51 @@ section.blk.tender-band {
   line-height: 1;
   text-transform: uppercase;
 }
-.v1-deadline-meta {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+.v1-countdown { display: block; }
+/* The calendar fact, subordinate to the day count rather than a second statement of it. */
+.v1-closing-date { margin: 12px 0 0; }
+.v1-closing-date b {
+  display: block; color: #fff; font-family: var(--serif); font-optical-sizing: auto;
+  font-size: clamp(19px, 1.5vw, 23px); font-weight: 600; letter-spacing: -.012em; line-height: 1.1;
 }
-.v1-deadline-meta > div {
-  min-width: 0;
-  padding-left: 13px;
-  border-left: 2px solid rgba(255,255,255,.46);
+.v1-closing-date span {
+  display: block; margin-top: 3px; font-size: 11.5px; line-height: 1.35;
+  color: rgba(255, 255, 255, .62);
 }
-.v1-deadline-meta span,
-.v1-deadline-meta small {
-  display: block;
-  color: rgba(255,255,255,.68);
-  font-size: 9.5px;
-  line-height: 1.35;
+/* A second, EARLIER deadline — a different obligation, not more detail about the first.
+   Boxed so it cannot be misread as part of the closing-date block above it. */
+.v1-register {
+  padding: 12px 14px 13px;
+  border: 1px solid rgba(255, 255, 255, .26);
+  border-left-width: 3px;
+  border-radius: 6px;
+  background: rgba(23, 19, 15, .22);
 }
-.v1-deadline-meta span {
-  font-weight: 800;
-  letter-spacing: .1em;
-  text-transform: uppercase;
+.v1-register-lbl {
+  display: block; font-size: 10px; font-weight: 800; letter-spacing: .15em;
+  text-transform: uppercase; color: rgba(255, 255, 255, .7);
 }
-.v1-deadline-meta b {
-  display: block;
-  margin: 4px 0 2px;
-  font-size: 15.5px;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.25;
+.v1-register b {
+  display: block; margin-top: 3px; color: #fff;
+  font-size: 16.5px; font-weight: 700; letter-spacing: -.01em;
+}
+.v1-register-note {
+  display: block; margin-top: 3px; font-size: 11.5px; line-height: 1.35;
+  color: rgba(255, 255, 255, .66);
 }
 
 /* ── Right: decision facts, process and action ── */
 .v1-main {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(210px, .75fr);
+  /* The two reassurances sit side by side as peers — both are risk-reducers — which keeps
+     the section compact enough for the submit block to own a full-width zone. */
   grid-template-areas:
     "top top"
     "facts facts"
-    "reassure reassure"
-    "steps steps"
-    "actions ladder";
+    "reassure negotiate"
+    "submit submit"
+    "ladder howto";
   align-content: center;
   column-gap: clamp(20px, 2.4vw, 34px);
   row-gap: 8px;
@@ -297,62 +306,51 @@ section.blk.tender-band {
 }
 .v1-reassure b { color: var(--ink); }
 
-.v1-steps {
-  grid-area: steps;
-  min-width: 0;
-  margin: 0;
-  padding: 3px 0 0;
-  border-top: 0;
-}
-.v1-steps .stepshead {
-  margin-bottom: 7px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-}
-.v1-steps ol {
+/* Burgundy rather than green: this one is about the OUTCOME, not the money. Green is the
+   "accepted" token elsewhere on the page and should keep that single meaning. */
+.v1-negotiate { grid-area: negotiate; border-left-color: var(--burgundy); }
+
+/* THE SUBMIT BLOCK. This section is where a buyer enters the tender, so the action owns a
+   zone instead of sharing a row with an accordion. Burgundy top rule on paper — the same
+   treatment as the search form on /tender, so "this is the control" reads the same sitewide. */
+.v1-submit {
+  grid-area: submit;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.v1-steps li {
-  display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
-  gap: 8px;
-}
-.v1-steps .n {
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--paper-deep);
-  color: var(--burgundy);
-  font-size: 12px;
-  font-weight: 800;
-}
-.v1-steps b { font-size: 14px; }
-.v1-steps p {
-  margin: 2px 0 0;
-  color: var(--muted);
-  font-size: 11.5px;
-  line-height: 1.32;
-}
-.v1-actions {
-  grid-area: actions;
-  display: grid;
-  grid-template-columns: minmax(180px, 1fr) minmax(150px, .9fr);
-  align-content: center;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  border-top: 0;
+  gap: clamp(14px, 2vw, 28px);
+  margin-top: 4px;
+  padding: 15px 18px 16px;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--burgundy);
+  border-radius: 10px;
+  background: var(--paper-deep);
+}
+.v1-submit-copy b {
+  display: block; font-size: 15.5px; font-weight: 700; color: var(--ink); letter-spacing: -.008em;
+}
+.v1-submit-copy p {
+  margin: 3px 0 0; font-size: 12.5px; line-height: 1.42; color: var(--muted); max-width: 54ch;
+}
+.v1-submit-actions {
+  display: flex; align-items: center; gap: clamp(10px, 1.4vw, 18px); white-space: nowrap;
+}
+/* The process link, replacing the 1-2-3 that explained it inline for the third time on this
+   site. Quiet by design: it is an exit, not the section's purpose. */
+.v1-howto {
+  grid-area: howto;
+  display: inline-flex; align-items: center; gap: 6px; justify-self: end; align-self: center;
+  font-size: 12.5px; color: var(--muted); text-decoration: none; white-space: nowrap;
+}
+.v1-howto span {
+  color: var(--burgundy); text-decoration: underline;
+  text-underline-offset: 3px; text-decoration-thickness: 1.2px;
+  text-decoration-color: color-mix(in srgb, var(--burgundy) 45%, transparent);
+}
+.v1-howto:hover span { text-decoration-color: var(--burgundy); }
+.v1-howto svg {
+  width: 14px; height: 14px; fill: none; stroke: var(--burgundy);
+  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
 }
 
 @media(min-width: 701px) and (max-width: 1100px) {
@@ -367,16 +365,15 @@ section.blk.tender-band {
     grid-template-areas:
       "top top"
       "facts facts"
-      "reassure reassure"
-      "steps steps"
-      "actions ladder";
+      "reassure negotiate"
+      "submit submit"
+      "ladder howto";
     column-gap: 14px;
     padding: 23px 26px 18px 40px;
   }
-  .v1-actions {
-    grid-template-columns: 1fr;
-    gap: 5px;
-  }
+  /* Copy and buttons stack once the row cannot hold both. */
+  .v1-submit { grid-template-columns: 1fr; gap: 12px; }
+  .v1-submit-actions { flex-wrap: wrap; white-space: normal; }
 }
 
 @media(max-width: 820px) and (min-width: 701px) {
@@ -387,16 +384,18 @@ section.blk.tender-band {
     padding-right: 40px;
     padding-left: 28px;
   }
-  .v1-deadline-panel h3 {
-    white-space: normal;
-  }
-  .v1-deadline-meta { grid-template-columns: 1fr; gap: 11px; }
   .v1-main { padding-left: 36px; padding-right: 24px; }
   .v1-facts > div { padding-right: 9px; padding-left: 9px; }
   .v1-price .num { font-size: 24px; }
-  .v1-steps ol {
-    grid-template-columns: 1fr;
-    gap: 6px;
+  /* Two callouts side by side get too narrow to read here. */
+  .v1-main {
+    grid-template-areas:
+      "top top"
+      "facts facts"
+      "reassure reassure"
+      "negotiate negotiate"
+      "submit submit"
+      "ladder howto";
   }
 }
 
@@ -411,20 +410,16 @@ section.blk.tender-band {
   .v1-deadline-content {
     padding: 25px 24px 23px;
   }
-  .v1-deadline-panel h3 {
-    max-width: none;
-    font-size: 30px;
-  }
-  .v1-deadline-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .v1-main {
     grid-template-columns: 1fr;
     grid-template-areas:
       "top"
       "facts"
       "reassure"
-      "steps"
-      "actions"
-      "ladder";
+      "negotiate"
+      "submit"
+      "ladder"
+      "howto";
     row-gap: 12px;
     padding: 28px 24px 20px;
   }
@@ -444,15 +439,15 @@ section.blk.tender-band {
     padding-left: 12px;
     border-left: 1px solid var(--line);
   }
-  .v1-steps ol { grid-template-columns: 1fr; gap: 10px; }
-  .v1-actions { grid-template-columns: 1fr; padding-top: 2px; }
+  /* Full-width tap target for the primary action on a phone. */
+  .v1-submit-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+  .v1-submit-actions .btn-red { justify-content: center; text-align: center; }
+  .v1-howto { justify-self: start; }
 }
 
 @media(max-width: 460px) {
   .v1-deadline-panel { min-height: 290px; }
-  .v1-deadline-meta { gap: 12px; }
-  .v1-deadline-meta > div { padding-left: 10px; }
-  .v1-actions { gap: 4px; }
+  .v1-register { padding: 10px 12px 11px; }
 }
   :root {
   --paper: #FAF5F0; --paper-deep: #F1E8DE; --ink: #17130F;

@@ -125,8 +125,11 @@ this table. Export it rather than retyping it; the filters on `/tender` depend o
 
 These block real data, not code. Listed so EasyAsia knows they are coming.
 
-- **Registration deadline.** The detail page shows "Register by = closing minus 14 days". Nobody
-  has confirmed 14 days is the real rule. If it varies per listing it needs its own field.
+- **Registration deadline.** The detail page derives "Register by" as **closing minus 14 days**
+  (`REGISTER_LEAD_DAYS`). Nobody has confirmed 14 days is the real rule. If it is fixed, it stays
+  derived and the backend stores nothing; **if it varies per listing it needs its own field.**
+- **Seller response window.** The terms panel states "accept, decline or counter within 5 working
+  days". Same question: fixed platform rule, or per-listing?
 - **Agency identifiers.** REN / E-number / agency registration for the Act 242 disclosure block.
   Currently placeholder text.
 - **Seller package pricing.** Not modelled at all yet.

@@ -69,6 +69,46 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · E-Tender Information rebuilt as **E-Tender terms + submit**
+Bryan approved a full remake. The brief he set: *"ensure this is terms of the tender, and also a
+place where people submit their tender."* That settled the architectural question — the section
+had been trying to be both *"what is an e-tender"* and *"what are the terms of THIS one"*, which
+is why the right panel carried six stacked blocks with no ranking.
+
+**Measured before:** left panel took **40% of the width for 27 words** (~4× less dense than the
+right), the deadline was stated **four** ways, and the heading *"E-Tender closes in"* ran at
+**39.7px against a 54px** day count — a **1.36:1** label-to-value ratio, the same fault the
+listings hero had at 1.26:1 before it went to 2.6:1.
+
+**Left panel** — one deadline. The 39.7px heading is gone; the eyebrow now carries that sentence
+in the listings hero's own words ("Offers close in"), so the ratio is **4.9:1**. The date sits
+under the day count as its subordinate. "Register by" is boxed separately because it is a
+genuinely *different* obligation — you cannot submit without a verified account — and is now
+**derived** from closing − 14 days rather than typed.
+
+**Right panel** — heading is one label (`E-Tender terms`), not an eyebrow stacked on a label.
+Third fact retitled from "E-Tender method: Sealed E-Tender" (a label answered by its restatement)
+to "Your offer / Sealed / One offer, seen only by the seller". The two reassurances sit side by
+side as peers. **New: the negotiation note** — founder-verified, and it was nowhere on the page
+while "sealed, one confidential offer" reads as one shot, all or nothing.
+**New: the submit block** — burgundy top rule on paper, same treatment as the /tender search form,
+so "this is the control" reads the same sitewide.
+
+🗑 **The 1-2-3 "How the e-tender works" is gone** — it was the THIRD explanation of the process on
+this site. Nothing was lost: register/verify became the submit block's precondition, "one
+confidential offer" is a term, the 5-day response is in the negotiation note. A quiet link points
+at the page that owns the process. `.v1-steps`, `.v1-actions` and `.v1-deadline-meta` are deleted.
+
+🐛 Found while reading the CSS: `.v1-timer` was still `grid-template-columns: repeat(4, 1fr)`
+from the old four-cell D/H/M/S clock. With one cell left, **the number was sitting in the first
+QUARTER of a full-width rule.**
+🐛 Caught in the render: `justify-content: space-between` on the deadline panel opened a **~230px
+hole** once it held two blocks instead of four; and the process link wrapped to two lines in its
+column, so it dropped the "New to e-tender?" prefix — that framing belongs on the listings page,
+where a visitor may not know the word yet.
+
+**After: 32 / 137 words, deadline stated once, "sealed" once, section 452px.**
+
 ### 1 Aug 2026 — Claude · Reserve price → ink · data-driven media row · **BACKEND-CONTRACT.md**
 - **Reserve price is `--ink`, not burgundy** — same call Bryan made on the RM369 psf. A price is
   a fact, not an accent; burgundy stays on the tender identity and the one action.

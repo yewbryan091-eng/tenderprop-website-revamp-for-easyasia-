@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { TENDERS } from "@/data/tenders";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
-import { MS_DAY, daysLeft, depositOf, fmtDate, isFinalDay, remainingMs } from "@/lib/tender-utils";
+import { MS_DAY, closeAtMs, daysLeft, depositOf, fmtDate, isFinalDay, remainingMs } from "@/lib/tender-utils";
 import "@/styles/tender-detail.css";
 
 /* Ported 1:1 from residensi-sinaran-detail.html — the design canon.
@@ -19,6 +19,14 @@ const SINARAN_CLOSING = SINARAN_TENDER.closingDate;
 /* Absent keys mean the agency has not supplied that asset — the corresponding button is
    simply not rendered. See the `media` block on the Tender type. */
 const MEDIA = SINARAN_TENDER.media ?? {};
+/* Registration closes ahead of the tender so accounts can be verified in time.
+   ⚠️ FOUNDER-UNCONFIRMED: 14 days is our assumption, not a stated rule — and if it varies
+   per listing it needs its own backend field (see BACKEND-CONTRACT.md §6). Derived either
+   way, so it can never contradict the closing date the way a typed date would. */
+const REGISTER_LEAD_DAYS = 14;
+const REGISTER_BY_LABEL = fmtDate(
+  new Date(closeAtMs(SINARAN_CLOSING) - REGISTER_LEAD_DAYS * MS_DAY).toISOString().slice(0, 10),
+);
 const TENDER_CLOSE_LABEL = fmtDate(SINARAN_CLOSING);
 
 /* The payment ladder is derived, never typed. Founder-confirmed 30 Jul 2026: the 3%
@@ -346,7 +354,7 @@ export function ResidensiSinaranDetail() {
                 {/* Standard across every real listing: this is a platform-level tender
                     deadline image, not a photograph of the property. Source: Yamiko Ling
                     on Pexels, photo 21898339. */}
-                <section className="v1-deadline-panel" aria-labelledby="tender-deadline-heading">
+                <section className="v1-deadline-panel" aria-label="E-tender deadline">
                   <img
                     className="v1-deadline-image"
                     src="/assets/layout/tender-information-kl.jpg"
@@ -354,53 +362,57 @@ export function ResidensiSinaranDetail() {
                     loading="lazy"
                     decoding="async"
                   />
+                  {/* ONE statement of the deadline. It used to make four — a 39.7px heading
+                      "E-Tender closes in", the day count, "Closing date" and the date itself
+                      — which is why 27 words here carried about two facts. The heading was
+                      also 39.7px against a 54px number: a 1.36:1 label-to-value ratio, the
+                      same fault the listings hero had before it went to 2.6:1. The eyebrow
+                      now carries that sentence, in the hero's own words. */}
                   <div className="v1-deadline-content">
-                    <div>
-                      <span className="v1-deadline-kicker">Sealed E-Tender</span>
-                      <h3 id="tender-deadline-heading">E-Tender closes in</h3>
-                    </div>
-
-                    <div
-                      className="v1-timer"
-                      role="timer"
-                      aria-label={
-                        cd
-                          ? cd.finalDay
-                            ? `${cd.h} hours and ${cd.m} minutes remaining`
-                            : `${cd.days} ${cd.days === 1 ? "day" : "days"} remaining`
-                          : "Time remaining until the e-tender closes"
-                      }
-                      aria-live="off"
-                    >
-                      {/* FOUNDER GUIDANCE (Bryan's father, 30 Jul): buyers care how many DAYS
-                          are left, not a ticking clock. Days lead; hours and minutes appear
-                          only inside the final 24 hours, where "0 days" would say nothing and
-                          the hours are the whole story. Same rule as the /tender hero. */}
-                      <span className="u" aria-hidden="true">
-                        <b>{!cd ? "\u00a0" : cd.finalDay ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m` : cd.days.toLocaleString("en-MY")}</b>
-                        <i>{!cd ? "" : cd.finalDay ? "left today" : cd.days === 1 ? "day left" : "days left"}</i>
-                      </span>
-                    </div>
-
-                    <div className="v1-deadline-meta">
-                      <div>
-                        <span>Closing date</span>
+                    <div className="v1-countdown">
+                      <span className="v1-deadline-kicker">Offers close in</span>
+                      <div
+                        className="v1-timer"
+                        role="timer"
+                        aria-label={
+                          cd
+                            ? cd.finalDay
+                              ? `${cd.h} hours and ${cd.m} minutes remaining`
+                              : `${cd.days} ${cd.days === 1 ? "day" : "days"} remaining`
+                            : "Time remaining until the e-tender closes"
+                        }
+                        aria-live="off"
+                      >
+                        {/* FOUNDER RULE (Bryan's father, 30 Jul): days lead. Hours and minutes
+                            appear only inside the final 24 hours, where "0 days" says nothing
+                            and the hours are the whole story. Same as the /tender hero. */}
+                        <span className="u" aria-hidden="true">
+                          <b>{!cd ? "\u00a0" : cd.finalDay ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m` : cd.days.toLocaleString("en-MY")}</b>
+                          <i>{!cd ? "" : cd.finalDay ? "left today" : cd.days === 1 ? "day left" : "days left"}</i>
+                        </span>
+                      </div>
+                      <p className="v1-closing-date">
                         <b>{TENDER_CLOSE_LABEL}</b>
-                        <small>End of day (MYT)</small>
-                      </div>
-                      <div>
-                        <span>Register by</span>
-                        <b>17 Dec 2028</b>
-                        <small>Account verified by this date</small>
-                      </div>
+                        <span>Offers close at the end of this date, MYT</span>
+                      </p>
+                    </div>
+
+                    {/* A genuinely different deadline, not a restatement of the one above —
+                        you cannot submit at all without a verified account. */}
+                    <div className="v1-register">
+                      <span className="v1-register-lbl">Register by</span>
+                      <b>{REGISTER_BY_LABEL}</b>
+                      <span className="v1-register-note">Your account must be verified before you can submit</span>
                     </div>
                   </div>
                 </section>
 
                 <div className="v1-main" id="tender-action-panel">
+                  {/* One label, not two. The eyebrow "Property e-tender notice" above a
+                      heading "E-Tender Information" was a filing label stacked on a filing
+                      label — and at 35px it competed with the day count next to it. */}
                   <div className="v1-top">
-                    <span className="v1-kicker">Property e-tender notice</span>
-                    <h3>E-Tender Information</h3>
+                    <h3>E-Tender terms</h3>
                   </div>
 
                   <div className="v1-facts">
@@ -412,43 +424,68 @@ export function ResidensiSinaranDetail() {
                     <div>
                       <span className="lbl">E-Tender deposit</span>
                       <b className="dep-amt">{DEPOSIT}</b>
-                      <span className="sub">Refundable &middot; part of your 10%</span>
+                      <span className="sub">3% &middot; refundable &middot; part of your 10%</span>
                     </div>
+                    {/* Was "E-Tender method: Sealed E-Tender" — a label answered by its own
+                        restatement. What a buyer needs to know is what happens to the offer. */}
                     <div>
-                      <span className="lbl">E-Tender method</span>
-                      <b>Sealed E-Tender</b>
-                      <span className="sub">Your offer stays confidential</span>
+                      <span className="lbl">Your offer</span>
+                      <b>Sealed</b>
+                      <span className="sub">One offer, seen only by the seller</span>
                     </div>
                   </div>
+
                   <p className="v1-reassure">
                     <b>Your 3% deposit is not an extra charge.</b> It forms part of the standard
                     10% down payment and is returned in full immediately if no sale proceeds.
                   </p>
 
-                  <div className="v1-steps">
-                    <div className="stepshead">How the e-tender works</div>
-                    <ol>
-                      <li>
-                        <span className="n">1</span>
-                        <div><b>Register and verify</b><p>Complete account verification before registration closes.</p></div>
-                      </li>
-                      <li>
-                        <span className="n">2</span>
-                        <div><b>Submit your e-tender</b><p>Send one confidential offer after reviewing the deposit terms.</p></div>
-                      </li>
-                      <li>
-                        <span className="n">3</span>
-                        <div><b>The seller responds</b><p>Acceptance, decline or counter within 5 working days.</p></div>
-                      </li>
-                    </ol>
+                  {/* FOUNDER-VERIFIED (Bryan): "it's not about win or lose — there's always a
+                      chance / room for negotiation done by the agent." This was nowhere on the
+                      page, while "sealed, one confidential offer" reads as one shot, all or
+                      nothing. It is the single most reassuring fact about the model. The old
+                      1-2-3 buried it inside step 3 as the word "counter". */}
+                  <p className="v1-reassure v1-negotiate">
+                    <b>Not accepted is not the end.</b> The seller can accept, decline or counter
+                    within 5 working days &mdash; and where there is room to move, the appointed
+                    agent negotiates on your behalf.
+                  </p>
+
+                  {/* THE SUBMIT BLOCK — this section is where a buyer actually enters the
+                      tender, so the action gets its own zone rather than sharing a row with an
+                      accordion. Burgundy top rule + paper fill, the same treatment as the
+                      search form on /tender, so "this is the thing to use" reads consistently
+                      across the site. */}
+                  <div className="v1-submit">
+                    <div className="v1-submit-copy">
+                      <b>Submit your e-tender</b>
+                      <p>
+                        One confidential offer at or above the reserve, sent straight to the seller.
+                        You will need a verified account &mdash; register by {REGISTER_BY_LABEL}.
+                      </p>
+                    </div>
+                    <div className="v1-submit-actions">
+                      <a className="btn-red" href="#">Apply for E-Tender</a>
+                      <a className="btn-wa" href="https://wa.me/60123938255" target="_blank" rel="noopener">
+                        Ask the agent on WhatsApp &rarr;
+                      </a>
+                    </div>
                   </div>
 
-                  <div className="v1-actions">
-                    <a className="btn-red" href="#">Apply for E-Tender</a>
-                    <a className="btn-wa" href="https://wa.me/60123938255" target="_blank" rel="noopener">
-                      Ask the agent on WhatsApp &rarr;
-                    </a>
-                  </div>
+                  {/* The 1-2-3 "How the e-tender works" is gone. It was the THIRD explanation
+                      of the process on the site, after the listings-page signal and the page
+                      built for it — and this section's job is the terms of THIS tender, not a
+                      tutorial. Nothing was lost: register/verify is now the submit block's
+                      precondition, "one confidential offer" is a term, and the seller's 5-day
+                      response is in the negotiation note. Anyone who wants the process gets a
+                      link to the page that owns it. */}
+                  <a className="v1-howto" href="/how-e-tender-works">
+                    {/* No "New to e-tender?" prefix here — that framing belongs on the
+                        listings page, where a visitor may not know the word yet. Anyone this
+                        deep into a listing does. It also stopped the link fitting its column. */}
+                    <span>See how e-tender works</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+                  </a>
 
                   <details className="v1-ladder">
                     <summary>
