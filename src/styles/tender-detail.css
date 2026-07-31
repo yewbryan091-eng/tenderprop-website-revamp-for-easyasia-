@@ -555,7 +555,9 @@ section.blk.tender-band {
   .ovprice .k { font-size: 10.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
   /* The price is what the buyer came for — it was rendering smaller than the
      property name. Sized to sit just under the H1, not compete with it. */
-  .ovprice .v { font-family: var(--serif); font-optical-sizing: auto; font-size: clamp(27px, 3.1vw, 39px); font-weight: 600; color: var(--burgundy); line-height: 1.04; letter-spacing: -.02em; }
+  /* Ink, not burgundy — same call Bryan made on the RM369 psf figure. A price is a fact,
+     not an accent; burgundy is spent on the tender identity and the one action. */
+  .ovprice .v { font-family: var(--serif); font-optical-sizing: auto; font-size: clamp(27px, 3.1vw, 39px); font-weight: 600; color: var(--ink); line-height: 1.04; letter-spacing: -.02em; }
   .ovprice .s { margin-top: 4px; font-size: 12.5px; line-height: 1.35; color: var(--muted); }
   .icobtn { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--line); color: var(--muted); border-radius: 5px; padding: 8px 13px; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
   .icobtn:hover { border-color: var(--burgundy); color: var(--burgundy); }

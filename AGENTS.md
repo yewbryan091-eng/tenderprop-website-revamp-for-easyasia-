@@ -92,6 +92,30 @@ section-flow tokens, the established component patterns, the traps that have alr
 and the brand non-negotiables. Read it before any visual work; add to it in the same commit as any
 new design decision. This file holds the *behaviour* rules below; that file holds the *system*.
 
+## 🔌 EASYASIA OWNS THE BACKEND — build to the contract (Bryan, 1 Aug 2026)
+
+His words: *"easyasia is our backend, we are not creating/revamping backend, thats their job, we
+give them the frontend, they understand, and rebuild the backend."* Current live admin:
+`https://www.tenderprop.com/admin/project/` — it will be **rebuilt** for this revamp.
+
+**So every field we render must be a field a real admin can fill.** If a value cannot be typed
+into a form or uploaded, it does not belong on the page.
+
+**[`BACKEND-CONTRACT.md`](./BACKEND-CONTRACT.md) is the handoff document.** Two hard rules:
+
+1. **No rendered field without a contract entry, in the same commit.** If you add a key to
+   `src/data/tenders.ts`, add its row to the contract. A drifted contract is worse than none,
+   because EasyAsia will build to it.
+2. **Mark derived values DO-NOT-STORE.** Days-left, psf, the 3% deposit and batch grouping are
+   computed from the listing — if the backend stores them too, an admin can enter a number that
+   contradicts the source. That is exactly the "885 vs 884 days" bug from 1 Aug, except at the
+   data layer where nobody notices.
+
+**Design consequence, which is the useful part:** prefer *data-driven presence* over placeholder
+copy. The media row used to say "Video viewing — on request" because no video existed; it now
+renders a button only when `media.video` is set. **Absence should remove a control, not add an
+apology** — and it gives EasyAsia a plain optional field instead of a special case.
+
 ## 👁 THE DESIGN CRITIC — never ship visual work you have only measured
 
 Measuring is not judging. Every visual thing Bryan has rejected passed its measurements: aligned,

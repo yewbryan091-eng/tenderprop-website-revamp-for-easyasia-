@@ -28,6 +28,24 @@ export type Tender = {
     yearCompleted?: string; facing?: string; powerSupply?: string;
     occupancy?: string; furnishing?: string; maintenanceFee?: string;
   };
+  /* MEDIA — one admin field per key, all optional. The page renders a button ONLY for
+     what is present, so an absent key is not a gap to apologise for, it is simply a
+     button that does not exist. This replaces the old "Video viewing — on request"
+     placeholder, which advertised a feature the site did not have.
+     For EasyAsia: every key here is a straightforward URL/asset field on the listing.
+     `aerialFrom` is an INDEX into the photo array, not a separate upload — subsale
+     aerials arrive in the same photo set. */
+  media?: {
+    /* Agent walkthrough. YouTube/Vimeo/MP4 URL. */
+    video?: string;
+    /* 1-based position of the first aerial shot within the listing's photos. */
+    aerialFrom?: number;
+    /* Floor plan image or PDF. THE most-requested asset for subsale — for a
+       multi-storey home the layout is the one question photos cannot answer. */
+    floorPlan?: string;
+    /* 360 / Matterport tour. Rare in subsale but agents do shoot them on a phone. */
+    tour?: string;
+  };
   tenure: string;
   titleType: string;
   image: string;
@@ -41,7 +59,7 @@ export const TENDERS: Tender[] = [
     { name:"Idaman Sutera", area:"Setapak", stateKey:"kl", stateName:"Kuala Lumpur", reservePrice:350000, tenderMethod:"E-Tender", tenderFormat:"Sealed", deposit:null, closingDate:"2026-12-12", propertyType:"Condominium", propertyCategory:"residential", builtUp:"845 sqft", landArea:"", bedrooms:3, bathrooms:2, tenure:"Freehold", titleType:"", image:"idaman-sutera.jpg", url:"/project/idaman-sutera/", carParks:1 },
     { name:"Single Storey Landed @ OUG", area:"OUG", stateKey:"kl", stateName:"Kuala Lumpur", reservePrice:900000, tenderMethod:"E-Tender", tenderFormat:"Sealed", deposit:null, closingDate:"2026-12-12", propertyType:"Terrace House", storeys:2, propertyCategory:"residential", builtUp:"1,600 sqft", landArea:"1,540 sqft", bedrooms:4, bathrooms:3, tenure:"Freehold", titleType:"", image:"single-storey-landed-oug.jpg", url:"/project/single-storey-landed-oug/" },
     { name:"Dutamas Height", area:"Mont Kiara", stateKey:"kl", stateName:"Kuala Lumpur", reservePrice:1100000, tenderMethod:"E-Tender", tenderFormat:"Sealed", deposit:null, closingDate:"2026-12-30", propertyType:"Condominium", propertyCategory:"residential", builtUp:"1,500 sqft", landArea:"1,858 sqft", bedrooms:3, bathrooms:3, tenure:"Freehold", titleType:"", image:"dutamas-height.jpg", url:"/project/dutamas-height/" },
-    { name:"Residensi Sinaran", details:{ landTitle:"Residential", yearCompleted:"2025" }, area:"Shah Alam", stateKey:"selangor", stateName:"Selangor", reservePrice:517000, tenderMethod:"E-Tender", tenderFormat:"Sealed", deposit:null, closingDate:"2028-12-31", propertyType:"Townhouse", storeys:3, propertyCategory:"residential", builtUp:"1,400 sqft", landArea:"", bedrooms:3, bathrooms:2, tenure:"Freehold", titleType:"", image:"residensi-sinaran-1.jpg", url:"/Residensi%20Sinaran%20(standalone).html", carParks:2 },
+    { name:"Residensi Sinaran", details:{ landTitle:"Residential", yearCompleted:"2025" }, media:{ aerialFrom:1 }, area:"Shah Alam", stateKey:"selangor", stateName:"Selangor", reservePrice:517000, tenderMethod:"E-Tender", tenderFormat:"Sealed", deposit:null, closingDate:"2028-12-31", propertyType:"Townhouse", storeys:3, propertyCategory:"residential", builtUp:"1,400 sqft", landArea:"", bedrooms:3, bathrooms:2, tenure:"Freehold", titleType:"", image:"residensi-sinaran-1.jpg", url:"/Residensi%20Sinaran%20(standalone).html", carParks:2 },
     { name:"Ara Damansara Height", area:"Ara Damansara", stateKey:"selangor", stateName:"Selangor", reservePrice:1000000, tenderMethod:"E-Tender", tenderFormat:"Sealed", deposit:null, closingDate:"2026-12-30", propertyType:"Serviced Apartment", propertyCategory:"residential", builtUp:"1,200 sqft", landArea:"1,858 sqft", bedrooms:3, bathrooms:3, tenure:"Freehold", titleType:"", image:"ara-damansara-height.jpg", url:"/project/ara-damansara-height/" },
     { name:"Meranti Terrace", area:"Kota Kemuning", stateKey:"selangor", stateName:"Selangor", reservePrice:615000, tenderMethod:"E-Tender", tenderFormat:"Sealed", deposit:null, closingDate:"2026-12-12", propertyType:"Townhouse", storeys:3, propertyCategory:"residential", builtUp:"1,506 sqft", landArea:"1,700 sqft", tenure:"Freehold", titleType:"", image:"meranti-terrace.jpg", url:"/project/meranti-terrace/", bedrooms:3, bathrooms:2 },
     { name:"Greenlane Bukit Jelutong", area:"Shah Alam", stateKey:"selangor", stateName:"Selangor", reservePrice:895000, tenderMethod:"E-Tender", tenderFormat:"Sealed", deposit:null, closingDate:"2026-12-12", propertyType:"Terrace House", storeys:2, propertyCategory:"residential", builtUp:"2,600 sqft", landArea:"1,650 sqft", bedrooms:null, bathrooms:null, tenure:"Freehold", titleType:"", image:"greenlane-bukit-jelutong-1.jpg", url:"/project/greenlane-bukit-jelutong-1/" },

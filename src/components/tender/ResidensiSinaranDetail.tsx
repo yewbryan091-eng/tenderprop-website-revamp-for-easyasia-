@@ -16,6 +16,9 @@ if (!SINARAN_TENDER) throw new Error("Residensi Sinaran tender data is missing")
 /* Pulled out at module scope, where the `if (!SINARAN_TENDER) throw` above has already
    narrowed it — TypeScript does not carry that narrowing into the effect's closure. */
 const SINARAN_CLOSING = SINARAN_TENDER.closingDate;
+/* Absent keys mean the agency has not supplied that asset — the corresponding button is
+   simply not rendered. See the `media` block on the Tender type. */
+const MEDIA = SINARAN_TENDER.media ?? {};
 const TENDER_CLOSE_LABEL = fmtDate(SINARAN_CLOSING);
 
 /* The payment ladder is derived, never typed. Founder-confirmed 30 Jul 2026: the 3%
@@ -274,29 +277,56 @@ export function ResidensiSinaranDetail() {
                 viewing — which is what a buyer actually wants from a video button on a
                 completed property, and it feeds the lead engine both platforms exist to be.
                 Swap it to a real player the moment footage is supplied. */}
-            <div className="mediarow">
-              <button
-                type="button"
-                className="mediabtn"
-                onClick={() => setActive(0)}
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 5l3 3M19 5l-3 3M5 19l3-3M19 19l-3-3" />
-                  <rect x="9" y="9" width="6" height="6" rx="1.4" />
-                  <circle cx="5" cy="5" r="2" /><circle cx="19" cy="5" r="2" />
-                  <circle cx="5" cy="19" r="2" /><circle cx="19" cy="19" r="2" />
-                </svg>
-                <span>Drone view</span>
-              </button>
-              <a className="mediabtn" href="#agent">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <rect x="2.5" y="6" width="13" height="12" rx="2.2" />
-                  <path d="M15.5 10.5l6-3.2v9.4l-6-3.2z" />
-                </svg>
-                <span>Video viewing</span>
-                <span className="cnt">on request</span>
-              </a>
-            </div>
+            {/* DATA-DRIVEN. Each button appears only when the listing actually carries that
+                media — see `media` on the Tender type. The row this replaces rendered the same
+                two buttons for every listing, so a missing video had to be papered over with
+                "Video viewing — on request", which advertises a feature the site does not have.
+                A button that cannot do its job should not exist; it should not apologise.
+                FOR EASYASIA: one admin field per key (video URL, floor-plan file, tour URL,
+                aerial start index). Nothing here is computed — it is all listing input. */}
+            {(MEDIA.video || MEDIA.floorPlan || MEDIA.tour || MEDIA.aerialFrom) && (
+              <div className="mediarow">
+                {MEDIA.aerialFrom && (
+                  <button type="button" className="mediabtn" onClick={() => setActive(MEDIA.aerialFrom! - 1)}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M5 5l3 3M19 5l-3 3M5 19l3-3M19 19l-3-3" />
+                      <rect x="9" y="9" width="6" height="6" rx="1.4" />
+                      <circle cx="5" cy="5" r="2" /><circle cx="19" cy="5" r="2" />
+                      <circle cx="5" cy="19" r="2" /><circle cx="19" cy="19" r="2" />
+                    </svg>
+                    <span>Drone view</span>
+                  </button>
+                )}
+                {MEDIA.floorPlan && (
+                  <a className="mediabtn" href={MEDIA.floorPlan} target="_blank" rel="noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="1.6" />
+                      <path d="M3 10h7M10 3v18M10 15h11" />
+                    </svg>
+                    <span>Floor plan</span>
+                  </a>
+                )}
+                {MEDIA.video && (
+                  <a className="mediabtn" href={MEDIA.video} target="_blank" rel="noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="2.5" y="6" width="13" height="12" rx="2.2" />
+                      <path d="M15.5 10.5l6-3.2v9.4l-6-3.2z" />
+                    </svg>
+                    <span>Video</span>
+                  </a>
+                )}
+                {MEDIA.tour && (
+                  <a className="mediabtn" href={MEDIA.tour} target="_blank" rel="noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="9" />
+                      <ellipse cx="12" cy="12" rx="4" ry="9" />
+                      <path d="M3 12h18" />
+                    </svg>
+                    <span>360° tour</span>
+                  </a>
+                )}
+              </div>
+            )}
 
           </div>
         </section>

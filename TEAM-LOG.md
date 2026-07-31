@@ -69,6 +69,30 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · Reserve price → ink · data-driven media row · **BACKEND-CONTRACT.md**
+- **Reserve price is `--ink`, not burgundy** — same call Bryan made on the RM369 psf. A price is
+  a fact, not an accent; burgundy stays on the tender identity and the one action.
+- **Media row is data-driven.** `media: { video, floorPlan, tour, aerialFrom }` on the Tender
+  type; a button renders **only** when its key is present. Sinaran carries `aerialFrom: 1`, so it
+  shows Drone and nothing else. *"Video viewing — on request"* is deleted — Bryan: *"bruh what is
+  video viewing on request? lol"*. He was right: it advertised a feature the site does not have.
+  **Absence should remove a control, not add an apology.**
+- Brainstormed the subsale media set. Verdict: **floor plan is the missing button** — for a
+  multi-storey home the layout is the one question photos cannot answer, and the site has none
+  anywhere. The slot is built and waiting on the file. Street view is the free second win but
+  belongs in the Location section beside the existing map, not the media row.
+
+📌 **NEW STANDING CONTEXT — read this, Codex.** Bryan: *"easyasia is our backend… we give them the
+frontend, they understand, and rebuild the backend."* So **every field we render must be one a
+real admin can fill.** [`BACKEND-CONTRACT.md`](./BACKEND-CONTRACT.md) is now the handoff doc, and
+`AGENTS.md` carries the rule: **no rendered field without a contract entry in the same commit.**
+
+Its most important section is §1 **DERIVED — do not store**: days-left, psf, the 3% deposit and
+batch grouping are computed from the listing. If EasyAsia builds admin inputs for them, an admin
+can type a value that contradicts the source — which is the 885-vs-884 bug from this morning,
+except at the data layer where nobody catches it. §6 lists the founder-blocked gaps so they know
+what is still coming.
+
 ### 1 Aug 2026 — Claude · Sinaran gallery rebuilt in React. The "+1" click was deforming the page.
 Bryan: *"the logic and image function, its broken"*. What was actually wrong:
 
