@@ -445,9 +445,9 @@ export function ResidensiSinaranDetail() {
                       <span className="sub">3% of the reserve price</span>
                     </div>
                     <div>
-                      <span className="lbl">Offer privacy</span>
-                      <b>Private</b>
-                      <span className="sub">Not shown to other buyers or the public</span>
+                      <span className="lbl">Method</span>
+                      <b>E-Tender</b>
+                      <span className="sub">Confidential</span>
                     </div>
                   </div>
 
@@ -487,20 +487,16 @@ export function ResidensiSinaranDetail() {
                       across the site. */}
                   <div className="v1-submit">
                     <div className="v1-submit-copy">
-                      {/* Leads with the action again. "Before you apply" made the block whose
-                          whole job is to BE the submit point open with a caveat — and Bryan asked
-                          for "a place where people submit their tender". The precondition stays,
-                          as the supporting line where it belongs. */}
                       <b>Submit your e-tender</b>
-                      <p>
-                        One confidential offer at or above the reserve, sent straight to the seller.
-                        Have your account verified by {REGISTER_BY_LABEL}.
-                      </p>
                     </div>
+                    {/* TWO BUTTONS, not a button beside a text link. The second route is a real
+                        choice — plenty of buyers want a conversation before they commit a
+                        deposit — and styling it as a link made it look like a footnote to the
+                        thing it is an alternative to. Side by side here, stacked on narrow. */}
                     <div className="v1-submit-actions">
                       <a className="btn-red" href="#">Apply for E-Tender</a>
-                      <a className="btn-wa" href="https://wa.me/60123938255" target="_blank" rel="noopener">
-                        Ask the agent on WhatsApp &rarr;
+                      <a className="btn-outline" href="https://wa.me/60123938255" target="_blank" rel="noopener">
+                        Or talk to the agent first
                       </a>
                     </div>
                   </div>
@@ -512,40 +508,10 @@ export function ResidensiSinaranDetail() {
                       privacy is explicit, and the seller's three outcomes plus 5-day response
                       sit before the CTA. Anyone who wants the full process gets the page that
                       owns it. */}
-                  <details className="v1-ladder">
-                    <summary>
-                      <span>
-                        {/* The 3% / +7% / 90% sub-line is gone: it restated, with less detail,
-                            the exact ladder inside this accordion. It also forced the summary to
-                            wrap to two lines once the row was shared with the process link. */}
-                        <b>How payments work</b>
-                      </span>
-                      <span className="v1-ladder-toggle" aria-hidden="true">+</span>
-                    </summary>
-                    <div className="v1-ladder-body">
-                      <p className="v1-ladder-basis">
-                        Illustration based on the {rm(RESERVE)} reserve price. Final amounts follow the agreed price.
-                      </p>
-                      <ol>
-                        <li>
-                          <span className="pct">3%</span>
-                          <div><b>{DEPOSIT}</b><span>E-Tender deposit. Returned in full immediately if no sale proceeds.</span></div>
-                        </li>
-                        <li>
-                          <span className="pct">+7%</span>
-                          <div><b>{rm(RESERVE * 0.07)}</b><span>Balance of the 10% down payment on signing the SPA.</span></div>
-                        </li>
-                        <li>
-                          <span className="pct">90%</span>
-                          <div><b>{rm(RESERVE * 0.9)}</b><span>On completion, usually through your bank loan.</span></div>
-                        </li>
-                      </ol>
-                      <p className="laddernote">
-                        <b>Your e-tender deposit is the first part of the standard 10% down payment.</b>{" "}
-                        Read the full process and terms on the <a href="#">How To E-Tender</a> page.
-                      </p>
-                    </div>
-                  </details>
+                  {/* The payments ladder is gone (Bryan): /how-e-tender-works owns the
+                      process, and repeating 3% / +7% / 90% here made this the third place on the
+                      site explaining it. The deposit's own callout above still says the one thing
+                      that belongs on a listing — that the 3% is not an extra charge. */}
 
                   <a className="v1-howto" href="/how-e-tender-works">
                     {/* No "New to e-tender?" prefix here — that framing belongs on the

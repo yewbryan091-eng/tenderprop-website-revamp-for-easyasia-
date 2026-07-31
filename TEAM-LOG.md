@@ -71,6 +71,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · Tender information: Bryan's pass (facts, submit block, ladder out)
+- Third fact is **Method / E-Tender / Confidential** (was Offer privacy / Private / long sub).
+  It now says which of the two products this listing is sold under — E-Tender vs Owner Auction —
+  which is real information; "Offer privacy: Private" restated its own label.
+- **Submit block: two real buttons**, `Apply for E-Tender` + `Or talk to the agent first`, side by
+  side on desktop and stacked full-width under 700px. The second was a text link, which made a
+  genuine choice look like a footnote to the thing it is an alternative to — **a buyer who wants
+  to talk before committing a 3% deposit is not a lesser case.** Outlined, not filled: still
+  second, but second among buttons.
+- Body copy removed (Bryan: too lengthy). Heading only.
+- **Payments ladder deleted** — /how-e-tender-works owns the process. Took **27 dead CSS rules**
+  with it plus `.btn-wa`; the section's last row is now the process link alone, aligned left so it
+  does not strand the way it did right-aligned.
+
+⚠️ **The registration deadline now appears NOWHERE on the page.** It left the deadline panel when
+that panel was cut to two dates, and it was in the sentence Bryan just removed. `REGISTER_BY_LABEL`
+is still derived and unused. Flagged to Bryan — needs a home or an explicit decision to drop it.
+
+Section 414px, no overflow, two accent colours gone.
+
 ### 1 Aug 2026 — Claude · Reviewed Codex's `a840414` tender-information pass, fixed 5 things
 Bryan: *"codex work, looks ugly"*. Reviewed the render and the diff. **Two of Codex's changes were
 keepers and I have left them alone:** "3% of the reserve price" (the old sub-line duplicated the
