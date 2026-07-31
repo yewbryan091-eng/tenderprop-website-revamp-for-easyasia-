@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { TENDERS } from "@/data/tenders";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
-import { depositOf, fmtDate } from "@/lib/tender-utils";
+import { MS_DAY, daysLeft, depositOf, fmtDate, isFinalDay, remainingMs } from "@/lib/tender-utils";
 import "@/styles/tender-detail.css";
 
 /* Ported 1:1 from residensi-sinaran-detail.html — the design canon.
@@ -13,8 +13,10 @@ const SINARAN_TENDER = TENDERS.find((tender) => tender.name === "Residensi Sinar
 if (!SINARAN_TENDER) throw new Error("Residensi Sinaran tender data is missing");
 
 /* Single source of truth for this listing's reserve, deposit and tender close. */
-const TENDER_CLOSE_ISO = `${SINARAN_TENDER.closingDate}T23:59:59+08:00`;
-const TENDER_CLOSE_LABEL = fmtDate(SINARAN_TENDER.closingDate);
+/* Pulled out at module scope, where the `if (!SINARAN_TENDER) throw` above has already
+   narrowed it — TypeScript does not carry that narrowing into the effect's closure. */
+const SINARAN_CLOSING = SINARAN_TENDER.closingDate;
+const TENDER_CLOSE_LABEL = fmtDate(SINARAN_CLOSING);
 
 /* The payment ladder is derived, never typed. Founder-confirmed 30 Jul 2026: the 3%
    tender deposit is the Malaysian earnest deposit — the first slice of the standard
@@ -103,7 +105,7 @@ export function ResidensiSinaranDetail() {
   const [daysLabel, setDaysLabel] = useState<string | null>(null);
   /* Live countdown for the standard tender-information deadline panel. It is null
      until mount so the server and browser never disagree during hydration. */
-  const [cd, setCd] = useState<{ d: number; h: number; m: number; s: number } | null>(null);
+  const [cd, setCd] = useState<{ days: number; h: number; m: number; s: number; finalDay: boolean } | null>(null);
   /* About's expand is REACT STATE, not a DOM listener. It was wired imperatively inside
      initDetailPage(), which runs once on mount — so after any hot reload React rebuilt the
      DOM while the effect did not re-run, leaving the button with no listener. A fresh load
@@ -117,15 +119,18 @@ export function ResidensiSinaranDetail() {
   const ABOUT_CLOSED_COUNT = 2;
   useEffect(() => {
     const calc = () => {
-      const diff = new Date(TENDER_CLOSE_ISO).getTime() - Date.now();
-      const days = Math.max(0, Math.ceil(diff / 86400000));
-      setDaysLabel(days <= 0 ? "Closed" : days.toLocaleString("en-MY") + (days === 1 ? " day left" : " days left"));
-      let ms = Math.max(0, diff);
-      const d = Math.floor(ms / 86400000); ms -= d * 86400000;
-      const h = Math.floor(ms / 3600000); ms -= h * 3600000;
-      const m = Math.floor(ms / 60000);
+      /* ONE number feeds both the header pill and the panel below it. They used to be
+         computed here side by side with different rounding — ceil for the pill, floor for
+         the panel — so the page contradicted itself by a day. */
+      const ms = remainingMs(SINARAN_CLOSING);
+      const days = daysLeft(SINARAN_CLOSING);
+      const finalDay = isFinalDay(SINARAN_CLOSING);
+      setDaysLabel(ms <= 0 ? "Closed" : `${days.toLocaleString("en-MY")} ${days === 1 ? "day" : "days"} left`);
+      /* h/m/s describe the final day only, where the day count stops being useful. */
+      const h = Math.floor((ms % MS_DAY) / 3600000);
+      const m = Math.floor((ms % 3600000) / 60000);
       const sec = Math.floor((ms % 60000) / 1000);
-      setCd({ d, h, m, s: sec });
+      setCd({ days, h, m, s: sec, finalDay });
     };
     calc();
     const id = window.setInterval(calc, 1000);
@@ -261,9 +266,9 @@ export function ResidensiSinaranDetail() {
                       role="timer"
                       aria-label={
                         cd
-                          ? cd.d < 1
+                          ? cd.finalDay
                             ? `${cd.h} hours and ${cd.m} minutes remaining`
-                            : `${cd.d} ${cd.d === 1 ? "day" : "days"} remaining`
+                            : `${cd.days} ${cd.days === 1 ? "day" : "days"} remaining`
                           : "Time remaining until the e-tender closes"
                       }
                       aria-live="off"
@@ -273,8 +278,8 @@ export function ResidensiSinaranDetail() {
                           only inside the final 24 hours, where "0 days" would say nothing and
                           the hours are the whole story. Same rule as the /tender hero. */}
                       <span className="u" aria-hidden="true">
-                        <b>{!cd ? "\u00a0" : cd.d < 1 ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m` : String(cd.d)}</b>
-                        <i>{!cd ? "" : cd.d < 1 ? "left today" : cd.d === 1 ? "day left" : "days left"}</i>
+                        <b>{!cd ? "\u00a0" : cd.finalDay ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m` : cd.days.toLocaleString("en-MY")}</b>
+                        <i>{!cd ? "" : cd.finalDay ? "left today" : cd.days === 1 ? "day left" : "days left"}</i>
                       </span>
                     </div>
 

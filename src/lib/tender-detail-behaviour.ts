@@ -21,37 +21,17 @@ export function initDetailPage(): () => void {
   };
   void setInterval;
 
+  /* Deep-link to the e-tender panel. The two countdown blocks that used to live here are
+     GONE: they wrote into #tender-days-left, .t2-days-wrap, #cd-days and #cd-d, none of
+     which survived the panel revamp — so they had been dead for a while, while still
+     carrying a HARDCODED "2028-12-31" that ignored the listing data entirely. Every
+     deadline on this page is React-rendered from SINARAN_TENDER.closingDate now. */
   (function () {
     var section = document.getElementById("tender");
     if (!section) return;
-    var daysWrap = section.querySelector(".t2-days-wrap");
-    var daysValue = document.getElementById("tender-days-left");
-    if (daysWrap && daysValue) {
-      var closeAt = new Date("2028-12-31T23:59:59+08:00").getTime();
-      var remaining = Math.max(0, Math.ceil((closeAt - Date.now()) / 86400000));
-      daysValue.textContent = remaining.toLocaleString("en-MY") + (remaining === 1 ? " day left" : " days left");
-      daysWrap.hidden = false;
-    }
     if (window.location.hash === "#tender") {
       window.requestAnimationFrame(function () { section.scrollIntoView({ block: "start" }); });
     }
-  })();
-
-
-
-  // ── Countdown (closing 31 Dec 2028, 5pm) ──
-  (function () {
-    var close = new Date("2028-12-31T23:59:59").getTime();
-    function tick() {
-      var diff = close - Date.now();
-      var days = Math.floor(diff / 86400000);
-      var txt = days > 0 ? days.toLocaleString("en-MY") + " days" : "Closed";
-      var cdd = document.getElementById("cd-days"); if (cdd) cdd.textContent = txt;
-      var d = document.getElementById("cd-d"); if (!d) return;
-      d.textContent = diff <= 0 ? "0" : Math.max(0, days).toLocaleString("en-MY");
-    }
-    tick();
-    setInterval(tick, 30000);
   })();
 
   // ── Sticky tender bar: reveal only when the primary tender action leaves view ──

@@ -27,8 +27,36 @@ export function tenderStartOf(x: Tender) {
   return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-export function daysLeft(iso: string) {
-  return Math.ceil((new Date(iso + "T23:59:59").getTime() - Date.now()) / 86400000);
+/* ── HOW LONG IS LEFT — one definition, every surface ──────────────────────────────
+   This was computed six separate ways and they disagreed on two axes:
+     · ROUNDING — ceil on the cards and the detail header, floor on both big countdowns,
+       so the same tender read "885 days left" in the page header and "884 DAYS LEFT" in
+       the panel below it, from the same variable in the same function.
+     · TIMEZONE — some call sites parsed "…T23:59:59" with NO offset, which resolves to
+       the HOST's local time. On a UTC server that is the deadline moved 8 hours, so the
+       SSR render and the browser produce different numbers. Malaysian tenders close at
+       the end of the day MYT — the offset is not optional.
+   Everything that displays a deadline now goes through here. */
+export const MS_DAY = 86_400_000;
+
+export function closeAtMs(closingDate: string) {
+  return new Date(`${closingDate}T23:59:59+08:00`).getTime();
+}
+
+export function remainingMs(closingDate: string, now: number = Date.now()) {
+  return Math.max(0, closeAtMs(closingDate) - now);
+}
+
+/* Ceil, deliberately. With 884 days and 22 hours to run a buyer has 885 days INCLUDING
+   today, and the final day reads "1 day left" rather than a meaningless "0". */
+export function daysLeft(closingDate: string, now: number = Date.now()) {
+  return Math.ceil(remainingMs(closingDate, now) / MS_DAY);
+}
+
+/* A property of the time remaining, NOT of the rounded day count — deriving it from
+   `days` silently inverts the moment the rounding convention changes. */
+export function isFinalDay(closingDate: string, now: number = Date.now()) {
+  return remainingMs(closingDate, now) < MS_DAY;
 }
 
 /* Deposit: listings with a published deposit carry `deposit`. Others fall back to

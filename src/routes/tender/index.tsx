@@ -15,7 +15,8 @@ import {
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
-  TYPE_BY_VALUE, fmtDate, fmtRM, matchesTaxonomy, tenderId,
+  MS_DAY, TYPE_BY_VALUE, daysLeft, fmtDate, fmtRM, isFinalDay, matchesTaxonomy,
+  remainingMs, tenderId,
 } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 
@@ -116,19 +117,21 @@ function inSizeRange(value: string, selected: string, options: SizeRange[]) {
 /* Null until mount so SSR and first paint never show a flash of zeros.
    FOUNDER-CONFIRMED 30 Jul: there is no intra-day cutoff. A tender runs to the end
    of its closing date and the listing simply leaves the site — 23:59:59 MYT, not 17:00. */
-type Remaining = { days: number; hours: number; minutes: number; seconds: number };
+type Remaining = { days: number; hours: number; minutes: number; seconds: number; finalDay: boolean };
 function useCountdown(iso: string): Remaining | null {
   const [left, setLeft] = useState<Remaining | null>(null);
   useEffect(() => {
-    const target = new Date(iso + "T23:59:59+08:00").getTime();
     const compute = (): Remaining => {
-      const diff = Math.max(0, target - Date.now());
-      const seconds = Math.floor(diff / 1000);
+      /* Same helpers the cards below use. This hero counted with `floor` while every card
+         counted with `ceil`, so the same closing date read 134 up here and 135 on the card
+         for it — one page, two answers. */
+      const ms = remainingMs(iso);
       return {
-        days: Math.floor(seconds / 86400),
-        hours: Math.floor((seconds % 86400) / 3600),
-        minutes: Math.floor((seconds % 3600) / 60),
-        seconds: seconds % 60,
+        days: daysLeft(iso),
+        hours: Math.floor((ms % MS_DAY) / 3600000),
+        minutes: Math.floor((ms % 3600000) / 60000),
+        seconds: Math.floor((ms % 60000) / 1000),
+        finalDay: isFinalDay(iso),
       };
     };
     setLeft(compute());
@@ -153,8 +156,8 @@ function TenderListings() {
     { label: "m", value: left ? pad2(left.minutes) : "" },
     { label: "s", value: left ? pad2(left.seconds) : "" },
   ];
-  const FINAL_DAY = Boolean(left) && left!.days < 1;
-  const countdownValue = !left ? "\u00a0" : FINAL_DAY ? `${left.hours}h ${pad2(left.minutes)}m` : String(left.days);
+  const FINAL_DAY = Boolean(left) && left!.finalDay;
+  const countdownValue = !left ? "\u00a0" : FINAL_DAY ? `${left.hours}h ${pad2(left.minutes)}m` : left.days.toLocaleString("en-MY");
   /* "days left", not "days" — the founder's framing, and Bryan's. I shortened it once on
      a redundancy argument; it was not mine to change. Leave this wording alone. */
   const countdownUnit = !left ? "" : FINAL_DAY ? "left today" : left.days === 1 ? "day left" : "days left";

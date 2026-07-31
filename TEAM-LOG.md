@@ -69,6 +69,40 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · Deadline maths unified. The page was contradicting itself by a day.
+First thing I measured this morning on the Sinaran page: the header pill said **885 days left**
+and the panel below it said **884 DAYS LEFT** — computed from the same `diff`, in the same
+`calc()`, one with `ceil` and one with `floor`. Pulling that thread found **six** day-count
+computations across four files, disagreeing on two axes:
+
+- **Rounding:** `ceil` in `tender-utils.daysLeft` (→ every card) and the detail header; `floor`
+  in the detail panel and the /tender hero. So the hero read **134** while its own cards read
+  **135** for the same closing date.
+- **Timezone:** `tender-utils.daysLeft` and one legacy block parsed `"…T23:59:59"` with **no
+  offset** → host-local time. Proved it: on a UTC host that shifts the deadline **8 hours**, so
+  SSR and the browser can land on different days. Masked locally only because Bryan's machine
+  is MYT.
+
+Now: `MS_DAY`, `closeAtMs`, `remainingMs`, `daysLeft` (ceil), `isFinalDay` in `tender-utils`, and
+**no component divides by 86400000 any more** — verified by grep. `isFinalDay` reads the
+remaining ms, not `days < 1`, so it cannot invert if the rounding changes.
+Verified: detail header **885 = 885** panel; /tender hero **135 = 135** on all five cards
+sharing its batch date.
+
+🗑 Deleted two dead countdown blocks in `tender-detail-behaviour.ts`. They wrote into
+`#tender-days-left`, `.t2-days-wrap`, `#cd-days`, `#cd-d` — **none of which exist** since the
+panel revamp — while carrying a **hardcoded `2028-12-31`** that ignored the listing data. Dead
+code with a wrong date in it is worse than dead code. The live sticky-bar and gallery code stays.
+
+⚠️ **FOUNDER QUESTION, unresolved:** Sinaran closes **31 Dec 2028 — 885 days out**, while the
+/tender hero's next cycle is **12 Dec 2026**. An 885-day tender is not a tender, and it makes the
+days-led countdown we built for the founder look absurd. This is data, not code: Bryan needs to
+confirm Sinaran's real closing date, and it should be one of the batch dates.
+
+🔧 Note for measuring: this site sets `scroll-behavior: smooth`, which **silently swallows**
+programmatic `scrollTo`/`scrollIntoView` from the console — scrollY stays 0. Use
+`window.scrollTo({top, behavior: 'instant'})` when measuring.
+
 ### 31 Jul 2026 — Claude · Colons: visible, scaling correctly, and one added at the head
 Bryan, twice: *"the : is not visible enough"*, then *"there should be a : in between 134 and 22,
 or im tripping"*. He wasn't — the rule was `.hero-tick-cell + .hero-tick-cell::before`, which by

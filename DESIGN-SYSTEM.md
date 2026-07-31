@@ -124,6 +124,24 @@ padding is sized for the diagonal at the BOTTOM edge, so ~14% of width goes spar
 that expression reclaims it minus a safety gap and keeps working if the angle changes.
 Zero the margin below 860px, where the diagonal collapses.
 
+### 3e. Deadline maths — `tender-utils` owns it, nothing else computes days
+
+Every surface that shows a deadline calls `remainingMs` / `daysLeft` / `isFinalDay` from
+`src/lib/tender-utils.ts`. **Never divide by 86 400 000 in a component.** It was done six ways
+and they disagreed on two axes at once:
+
+- **Rounding.** `ceil` on the cards and the detail header, `floor` on both big countdowns — so
+  Residensi Sinaran read *"885 days left"* in the page header and *"884 DAYS LEFT"* in the panel
+  directly beneath it, off the same variable in the same function.
+- **Timezone.** Some call sites parsed `"…T23:59:59"` with **no offset**, which resolves to the
+  *host's* local time. On a UTC server that is the deadline moved 8 hours — the SSR render and
+  the browser then disagree. **The `+08:00` is not optional**; `closeAtMs()` supplies it.
+
+`daysLeft` is **ceil** on purpose: with 884 days and 22 hours to run a buyer has 885 days
+including today, and the final day reads "1 day left" rather than "0".
+`isFinalDay` is derived from the **remaining milliseconds, never from the rounded day count** —
+`days < 1` inverts silently the moment the rounding convention changes.
+
 ## 4. Established patterns — reuse before inventing
 
 - **Label/value list** (`.pd-row`): label column `10.5rem`, `white-space: nowrap`, value 14.5/600,
