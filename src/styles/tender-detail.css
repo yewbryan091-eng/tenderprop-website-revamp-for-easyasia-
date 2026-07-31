@@ -98,8 +98,9 @@ section.blk.tender-band {
      held four stacked blocks; with two it opened a ~230px hole in the middle that read as a
      missing element rather than as breathing room. */
   justify-content: center;
-  gap: clamp(22px, 3.4vh, 40px);
+  gap: clamp(20px, 3vh, 34px);
   min-height: 100%;
+  text-align: center;
   padding: clamp(24px, 2.5vw, 36px) clamp(52px, 5vw, 76px) clamp(24px, 2.5vw, 34px) clamp(30px, 4vw, 60px);
 }
 .v1-deadline-kicker,
@@ -124,20 +125,7 @@ section.blk.tender-band {
   line-height: 1.02;
   white-space: nowrap;
 }
-/* Was `repeat(4, 1fr)` — a leftover from the old four-cell D/H/M/S clock. With one cell
-   left the number sat in the first QUARTER of a full-width rule and read as orphaned. */
-.v1-timer {
-  display: block;
-  margin: 0;
-  border-bottom: 1px solid rgba(255,255,255,.28);
-  font-variant-numeric: tabular-nums;
-}
-.v1-timer .u {
-  min-width: 0;
-  padding: 2px 0 14px;
-  border-left: 0;
-  text-align: left;
-}
+.v1-timer { margin: 0; font-variant-numeric: tabular-nums; }
 .v1-timer .u:first-child { border-left: 0; }
 .v1-timer .u b {
   display: block;
@@ -161,37 +149,6 @@ section.blk.tender-band {
   text-transform: uppercase;
 }
 .v1-countdown { display: block; }
-/* The calendar fact, subordinate to the day count rather than a second statement of it. */
-.v1-closing-date { margin: 12px 0 0; }
-.v1-closing-date b {
-  display: block; color: #fff; font-family: var(--serif); font-optical-sizing: auto;
-  font-size: clamp(19px, 1.5vw, 23px); font-weight: 600; letter-spacing: -.012em; line-height: 1.1;
-}
-.v1-closing-date span {
-  display: block; margin-top: 3px; font-size: 11.5px; line-height: 1.35;
-  color: rgba(255, 255, 255, .62);
-}
-/* A second, EARLIER deadline — a different obligation, not more detail about the first.
-   Boxed so it cannot be misread as part of the closing-date block above it. */
-.v1-register {
-  padding: 12px 14px 13px;
-  border: 1px solid rgba(255, 255, 255, .26);
-  border-left-width: 3px;
-  border-radius: 6px;
-  background: rgba(23, 19, 15, .22);
-}
-.v1-register-lbl {
-  display: block; font-size: 10px; font-weight: 800; letter-spacing: .15em;
-  text-transform: uppercase; color: rgba(255, 255, 255, .7);
-}
-.v1-register b {
-  display: block; margin-top: 3px; color: #fff;
-  font-size: 16.5px; font-weight: 700; letter-spacing: -.01em;
-}
-.v1-register-note {
-  display: block; margin-top: 3px; font-size: 11.5px; line-height: 1.35;
-  color: rgba(255, 255, 255, .66);
-}
 
 /* ── Right: decision facts, process and action ── */
 .v1-main {
@@ -447,7 +404,7 @@ section.blk.tender-band {
 
 @media(max-width: 460px) {
   .v1-deadline-panel { min-height: 290px; }
-  .v1-register { padding: 10px 12px 11px; }
+  .v1-dates { grid-template-columns: 1fr; gap: 13px; }
 }
   :root {
   --paper: #FAF5F0; --paper-deep: #F1E8DE; --ink: #17130F;
@@ -1167,11 +1124,71 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   .about-quote { margin: 20px 0; padding-left: 15px; }
 }
 
-/* Dossier countdown: one figure, days-led (founder guidance). The four-cell grid is gone,
-   so the single unit gets the width the row used to spread across. */
-.v1-timer { display: flex; align-items: baseline; gap: 10px; }
-.v1-timer .u b { font-size: clamp(38px, 4vw, 54px); line-height: 1; letter-spacing: -.02em; }
+/* ══ Dossier countdown — mirrors the /tender hero (Bryan, 1 Aug) ═══════════════════════
+   1fr · numeral · 1fr. The empty first column mirrors the H/M/S strip in the third, so the
+   numeral holds the panel's centre axis however wide the strip gets. A plain row would
+   centre the BLOCK and push the numeral off-centre — the fault the hero had before it was
+   rebuilt this way. Sized down from the hero's 112px for a 582px panel. */
+.v1-timer .u {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: baseline;
+  padding: 0;
+  border-left: 0;
+  text-align: left;
+}
+.v1-timer .u b {
+  grid-column: 2; grid-row: 1;
+  /* .8 line-height + em-based margins: digits carry no descenders, so the default leading
+     opens a hole beneath the numeral and crowds the eyebrow above it. Both corrections in
+     the numeral's OWN em so they scale with the clamp. See DESIGN-SYSTEM §5. */
+  font-size: clamp(46px, 5.6vw, 76px); line-height: .8; letter-spacing: -.025em;
+  margin: .15em 0 -.076em;
+}
 .v1-timer .u i {
+  grid-column: 2; grid-row: 2; justify-self: center;
+  margin-top: 10px;
   font-style: normal; font-size: 12.5px; font-weight: 700;
-  letter-spacing: .06em; text-transform: uppercase;
+  letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.82);
+}
+/* Live H/M/S, hanging off the day count's baseline — the same instrument as the hero. */
+.v1-tick {
+  grid-column: 3; grid-row: 1; justify-self: start; align-self: baseline;
+  margin-left: clamp(10px, 1vw, 14px);
+  display: inline-flex; align-items: baseline; gap: 5px;
+  font-size: clamp(14px, 1.15vw, 17px);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.v1-tick::before,
+.v1-tick-cell + .v1-tick-cell::before {
+  content: ":"; margin-right: 5px; font-size: .72em; font-weight: 600; line-height: 1;
+  color: rgba(255, 255, 255, .55);
+}
+.v1-tick-cell { display: inline-flex; align-items: baseline; gap: 2px; }
+.v1-tick-value { font-size: 1em; font-weight: 700; letter-spacing: -.01em; color: rgba(255,255,255,.9); }
+.v1-tick-unit {
+  font-size: .58em; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: rgba(255, 255, 255, .58);
+}
+
+/* The two dates that bracket the tender. "Register by" moved to the submit block, where it
+   is actionable rather than another date to read. */
+.v1-dates {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px;
+  padding-top: clamp(16px, 2.2vh, 24px);
+  border-top: 1px solid rgba(255, 255, 255, .26);
+}
+.v1-dates > div { min-width: 0; }
+.v1-dates span {
+  display: block; font-size: 9.5px; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255, 255, 255, .66);
+}
+.v1-dates b {
+  display: block; margin-top: 4px; color: #fff;
+  font-family: var(--serif); font-optical-sizing: auto;
+  font-size: clamp(17px, 1.4vw, 21px); font-weight: 600; letter-spacing: -.012em; line-height: 1.15;
+}
+.v1-dates small {
+  display: block; margin-top: 2px; font-size: 10.5px; line-height: 1.3;
+  color: rgba(255, 255, 255, .58);
 }

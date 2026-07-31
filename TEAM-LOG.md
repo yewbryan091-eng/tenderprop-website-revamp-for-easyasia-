@@ -69,6 +69,33 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · Left panel now mirrors the /tender hero · heading → "Tender information"
+Bryan: *"we can copy exactly from the tender page, offers close in with the timer, and also a
+closing date and a tender start date, thats all for the left side."*
+
+Same composition as the hero, same technique: `.v1-timer .u` is a **`1fr · numeral · 1fr` grid**
+with the H/M/S strip in column 3, so the empty first column mirrors it and the numeral holds the
+panel's centre axis however wide the strip gets — **measured axis spread 0px** across eyebrow,
+numeral and unit. Numeral `clamp(46px, 5.6vw, 76px)` (hero is 112px; this panel is 582px wide),
+with the same `line-height: .8` + `margin: .15em 0 -.076em` leading correction, in the numeral's
+own em. Strip carries the leading colon, as the hero does.
+
+Below a hairline: **E-Tender started** and **Closing date**. "Register by" is gone from this panel
+— it is already stated in the submit block, where it is actionable rather than a third date to
+read. Panel is centred now, like the hero.
+
+Heading is **"Tender information"** (Bryan), not "E-Tender terms".
+
+🐛 Nearly shipped a duplicate-selector bug: there were **two** `.v1-timer` definitions, and the
+later one (`display:flex`) silently beat the earlier — DESIGN-SYSTEM §5's exact trap. Consolidated
+to one. Also removed `.v1-register` / `.v1-closing-date` rules, now dead.
+
+⚠️ `tenderStartOf` is **closing − 3 months** and, like the 14-day registration lead, is a guess.
+Both are flagged in BACKEND-CONTRACT §6 — if tenders do not all run the same length, start date
+is a stored field, not a derivation.
+
+**Next: Bryan wants the right panel worked heavily.**
+
 ### 1 Aug 2026 — Claude · E-Tender Information rebuilt as **E-Tender terms + submit**
 Bryan approved a full remake. The brief he set: *"ensure this is terms of the tender, and also a
 place where people submit their tender."* That settled the architectural question — the section

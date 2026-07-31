@@ -130,6 +130,9 @@ These block real data, not code. Listed so EasyAsia knows they are coming.
   derived and the backend stores nothing; **if it varies per listing it needs its own field.**
 - **Seller response window.** The terms panel states "accept, decline or counter within 5 working
   days". Same question: fixed platform rule, or per-listing?
+- **E-Tender start date.** Shown on the cards and now in the detail panel, derived as
+  **closing − 3 months** (`tenderStartOf`). Also unconfirmed. If tenders do not all run for the
+  same length, this is a stored field, not a derivation.
 - **Agency identifiers.** REN / E-number / agency registration for the Act 242 disclosure block.
   Currently placeholder text.
 - **Seller package pricing.** Not modelled at all yet.

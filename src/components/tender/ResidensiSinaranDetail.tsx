@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { TENDERS } from "@/data/tenders";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
-import { MS_DAY, closeAtMs, daysLeft, depositOf, fmtDate, isFinalDay, remainingMs } from "@/lib/tender-utils";
+import { MS_DAY, closeAtMs, daysLeft, depositOf, fmtDate, isFinalDay, remainingMs, tenderStartOf } from "@/lib/tender-utils";
 import "@/styles/tender-detail.css";
 
 /* Ported 1:1 from residensi-sinaran-detail.html — the design canon.
@@ -24,6 +24,8 @@ const MEDIA = SINARAN_TENDER.media ?? {};
    per listing it needs its own backend field (see BACKEND-CONTRACT.md §6). Derived either
    way, so it can never contradict the closing date the way a typed date would. */
 const REGISTER_LEAD_DAYS = 14;
+/* ⚠️ Also derived and also founder-unconfirmed: closing − 3 months (see tenderStartOf). */
+const TENDER_START_LABEL = tenderStartOf(SINARAN_TENDER);
 const REGISTER_BY_LABEL = fmtDate(
   new Date(closeAtMs(SINARAN_CLOSING) - REGISTER_LEAD_DAYS * MS_DAY).toISOString().slice(0, 10),
 );
@@ -368,6 +370,11 @@ export function ResidensiSinaranDetail() {
                       also 39.7px against a 54px number: a 1.36:1 label-to-value ratio, the
                       same fault the listings hero had before it went to 2.6:1. The eyebrow
                       now carries that sentence, in the hero's own words. */}
+                  {/* Mirrors the /tender hero exactly (Bryan): eyebrow, day count with the
+                      live H/M/S hanging off its baseline, unit beneath — then the two dates
+                      that bracket the tender. Same three-column grid trick as the hero, so the
+                      numeral stays on the panel's centre axis however wide the strip gets; a
+                      plain row would centre the BLOCK and push the numeral off-centre. */}
                   <div className="v1-deadline-content">
                     <div className="v1-countdown">
                       <span className="v1-deadline-kicker">Offers close in</span>
@@ -383,26 +390,37 @@ export function ResidensiSinaranDetail() {
                         }
                         aria-live="off"
                       >
-                        {/* FOUNDER RULE (Bryan's father, 30 Jul): days lead. Hours and minutes
-                            appear only inside the final 24 hours, where "0 days" says nothing
-                            and the hours are the whole story. Same as the /tender hero. */}
+                        {/* FOUNDER RULE: days lead. Hours and minutes take over inside the
+                            final 24 hours, where "0 days" says nothing. */}
                         <span className="u" aria-hidden="true">
                           <b>{!cd ? "\u00a0" : cd.finalDay ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m` : cd.days.toLocaleString("en-MY")}</b>
+                          {cd && !cd.finalDay && (
+                            <span className="v1-tick">
+                              {[["h", cd.h], ["m", cd.m], ["s", cd.s]].map(([label, value]) => (
+                                <span className="v1-tick-cell" key={label as string}>
+                                  <span className="v1-tick-value">{String(value).padStart(2, "0")}</span>
+                                  <span className="v1-tick-unit">{label as string}</span>
+                                </span>
+                              ))}
+                            </span>
+                          )}
                           <i>{!cd ? "" : cd.finalDay ? "left today" : cd.days === 1 ? "day left" : "days left"}</i>
                         </span>
                       </div>
-                      <p className="v1-closing-date">
-                        <b>{TENDER_CLOSE_LABEL}</b>
-                        <span>Offers close at the end of this date, MYT</span>
-                      </p>
                     </div>
 
-                    {/* A genuinely different deadline, not a restatement of the one above —
-                        you cannot submit at all without a verified account. */}
-                    <div className="v1-register">
-                      <span className="v1-register-lbl">Register by</span>
-                      <b>{REGISTER_BY_LABEL}</b>
-                      <span className="v1-register-note">Your account must be verified before you can submit</span>
+                    {/* The two dates that bracket this tender. "Register by" moved out — it is
+                        already stated where it is actionable, in the submit block. */}
+                    <div className="v1-dates">
+                      <div>
+                        <span>E-Tender started</span>
+                        <b>{TENDER_START_LABEL}</b>
+                      </div>
+                      <div>
+                        <span>Closing date</span>
+                        <b>{TENDER_CLOSE_LABEL}</b>
+                        <small>End of day, MYT</small>
+                      </div>
                     </div>
                   </div>
                 </section>
@@ -412,7 +430,7 @@ export function ResidensiSinaranDetail() {
                       heading "E-Tender Information" was a filing label stacked on a filing
                       label — and at 35px it competed with the day count next to it. */}
                   <div className="v1-top">
-                    <h3>E-Tender terms</h3>
+                    <h3>Tender information</h3>
                   </div>
 
                   <div className="v1-facts">
