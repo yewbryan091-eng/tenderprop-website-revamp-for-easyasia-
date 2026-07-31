@@ -125,11 +125,11 @@ this table. Export it rather than retyping it; the filters on `/tender` depend o
 
 These block real data, not code. Listed so EasyAsia knows they are coming.
 
-- **Registration deadline.** The detail page derives "Register by" as **closing minus 14 days**
-  (`REGISTER_LEAD_DAYS`). Nobody has confirmed 14 days is the real rule. If it is fixed, it stays
-  derived and the backend stores nothing; **if it varies per listing it needs its own field.**
+- ~~Registration deadline~~ — **RESOLVED 1 Aug, and it does not exist.** An account is needed only
+  at the moment of applying; Apply raises the sign-in dialog. The 14-day lead was our invention and
+  is deleted. **No field.**
 - **Seller response window.** The terms panel states "accept, decline or counter within 5 working
-  days". Same question: fixed platform rule, or per-listing?
+  days". Fixed platform rule, or per-listing? Still unconfirmed.
 - **E-Tender start date.** Shown on the cards and now in the detail panel, derived as
   **closing − 3 months** (`tenderStartOf`). Also unconfirmed. If tenders do not all run for the
   same length, this is a stored field, not a derivation.
@@ -138,6 +138,29 @@ These block real data, not code. Listed so EasyAsia knows they are coming.
 - **Seller package pricing.** Not modelled at all yet.
 - **Residensi Sinaran's real closing date.** The demo data says `2028-12-31` — **885 days out**,
   which is not a tender. It should be one of the real batch dates.
+
+---
+
+## 6b. The submission — what the backend receives
+
+**No money moves through this site.** Apply → sign-in/sign-up (members only) → **Tender Form
+Application** → a lead lands with the agency. The 3% deposit is collected afterwards by the agent
+into the agency's client account, as BOVAEP requires.
+
+The form is mostly pre-filled listing data. **The buyer supplies exactly four things:**
+
+| Field | Type | Notes |
+|---|---|---|
+| `name` | string | required |
+| `email` | string | required |
+| `phone` | string | required |
+| `bidPrice` | integer (RM) | required — **may be below the reserve.** The reserve is a guide, not a floor |
+
+Pre-filled from the listing: reference no., property type, address, built-up, land area, tenure,
+reserve price, deposit, property code, tender date.
+
+**Also needed:** each submission is a record on the member's dashboard (`/member/` → My Tender), so
+a submission belongs to a member account and must be retrievable per member.
 
 ---
 

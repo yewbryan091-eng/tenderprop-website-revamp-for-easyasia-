@@ -29,6 +29,9 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 | Date | Decision | Why | Decided by |
 |---|---|---|---|
+| 1 Aug | **The reserve price is a GUIDE, not a floor** — buyers may offer below it | Founder: *"try to push their luck by placing an offer below the reserve price, the seller may agree or counter."* Copy saying "minimum offer considered" / "the floor" was factually wrong AND argued against the product: naming your own number **is** the e-tender | Bryan (from his father) |
+| 1 Aug | **No money moves through TenderProp.** Apply → sign-in → tender form → lead | The 3% is collected afterwards by the agent into the agency's **client account**, as BOVAEP mandates. The platform is a lead engine for a licensed agency, exactly like iNewProject | Bryan |
+| 1 Aug | **There is no registration deadline.** Deleted | An account is needed only at the moment of applying. Our "closing − 14 days" rule was invented | Bryan |
 | 1 Aug | Buyer copy **may state that the agent negotiates where there is room** | Founder-verified: *"every e-tender submission, it's not about win or lose — there's always a chance / room for negotiation done by the agent."* Codex removed this twice as an unsupported claim — a fair instinct without the founder's word, hence this row. **Keep it hedged** ("where there is room to move"): it promises a route, never an outcome | Bryan (from his father) |
 | 28 Jul | Refundable deposit = **3% of reserve price**, computed in `depositOf()` | Founder-confirmed rule. Sinaran's old published RM10,000 was stale CMS data (3% = RM15,510) | Bryan (from his father) |
 | 28 Jul | Deposit value renders **green** (`--good`) | Bryan's explicit preference. Overrides earlier advice to keep it neutral ink | Bryan |
@@ -70,6 +73,38 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 1 Aug 2026 — Claude · 🚨 FOUNDER BRIEFING RECEIVED — read `AGENTS.md` § WHAT TENDERPROP ACTUALLY IS
+Bryan: *"i feel like you and codex building this like you dont know what tenderprop is."* Fair.
+He then gave the whole model. **It is now canon in `AGENTS.md`, above the backend section. Codex:
+read it before touching another word of buyer copy.** Headlines:
+
+- **TenderProp is a LEAD ENGINE for a licensed agency, not a transaction platform. No money moves
+  through the site.** Apply → sign-in/sign-up (members only) → Tender Form Application → a lead
+  reaches the agency. The **3% is collected afterwards by the agent into the agency's client
+  account**, which BOVAEP mandates. Same shape as iNewProject.
+- The form takes exactly four things from the buyer: **name, email, phone, bid price.** Everything
+  else is pre-filled listing data. Contract §6b now specifies it.
+- **The agent is the middleman for everything after submission** — takes the bid to the seller,
+  relays accept/decline/counter, negotiates, and a buyer may resubmit.
+- Listings come from the agency's own agents, who then pitch the e-tender concept to sellers.
+  Tenders run **3–6 months**. The moat is **two banners outside every listing** — The One Property's
+  and TenderProp's — so 100 listings advertise the platform from 100 locations for free.
+- **E-Tender vs Owner Auction: a seller picks ONE.** Owner Auction is live bidding with a licensed
+  auctioneer, 3% to enter the room (ref: `ownerauction.my`). **Last to revamp.** Public auction
+  (bank foreclosures) is a future tab.
+
+**Two factual errors on the page, fixed:**
+1. **"The floor — offers start here" / "Minimum offer considered" were wrong.** The reserve is a
+   **guide**; buyers deliberately offer below it and the seller may accept or counter. Now
+   *"The seller's guide — you choose what to offer"* and *"Offer above or below it"*. This one
+   mattered: a floor nobody may cross makes the e-tender a fixed-price listing with extra steps.
+2. **The registration deadline never existed.** `REGISTER_LEAD_DAYS`/`REGISTER_BY_LABEL` deleted —
+   an account is only needed at the moment of applying. My earlier note that it "appears nowhere"
+   was right about the render and wrong about the fix: it should not appear anywhere.
+
+⏭ Open, for Bryan: whether **"Or talk to the agent first"** belongs beside Apply at equal weight —
+his own reasoning is that reaching the agent first turns this back into a traditional sale.
 
 ### 1 Aug 2026 — Claude · Tender information: Bryan's pass (facts, submit block, ladder out)
 - Third fact is **Method / E-Tender / Confidential** (was Offer privacy / Private / long sub).

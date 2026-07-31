@@ -92,6 +92,50 @@ section-flow tokens, the established component patterns, the traps that have alr
 and the brand non-negotiables. Read it before any visual work; add to it in the same commit as any
 new design decision. This file holds the *behaviour* rules below; that file holds the *system*.
 
+## 🏢 WHAT TENDERPROP ACTUALLY IS (founder briefing, Bryan, 1 Aug 2026) — READ THIS FIRST
+
+Bryan: *"i feel like you and codex building this like you dont know what tenderprop is."* He was
+right. This is his account of the model. **Build to this, not to what a proptech platform usually
+looks like.**
+
+**TenderProp is a LEAD ENGINE for a real estate agency. It is not a transaction platform.**
+The One Property Global is a licensed agency with real agents doing normal agency work. TenderProp
+is a new way for those agents to sell their listings — and a new way for buyers to buy. **No money
+moves through this site. Ever.**
+
+**The buyer flow, end to end:**
+1. Buyer clicks **Apply for E-Tender**. Not signed in ⇒ a sign-in / sign-up dialog. **Members only.**
+2. Signed in ⇒ the **Tender Form Application**. It captures **name, email, phone, and their bid
+   price** — same shape as iNewProject's enquiry. Everything else on the form is pre-filled listing
+   data (reference, address, built-up, tenure, reserve, deposit, tender date).
+3. Submit ⇒ **the agency receives a lead** and the agent follows up on those contact details.
+4. **The 3% deposit is collected AFTERWARDS, by the agent, into the agency's client account** —
+   which BOVAEP mandates. It is never paid on TenderProp. The site must never imply otherwise.
+5. The agent takes the bid to the seller. Accept, decline, or counter — **the agent negotiates as
+   the middleman**, and a buyer may end up resubmitting. This is normal agency work, not an
+   automated auction settlement.
+6. The member's dashboard (`/member/`) keeps their submitted e-tender receipts as a record.
+   **Due its own revamp later.**
+
+**The reserve price is a GUIDE, not a floor.** Buyers deliberately offer *below* it to try their
+luck; the seller may accept or counter. Copy that says "minimum offer considered" or "the floor"
+is wrong and argues against the product — naming your own number **is** the e-tender.
+
+**Where the listings come from:** the agency's own agents collect them as usual, then pitch the
+e-tender/owner-auction concept to the seller — sell faster, no extra cost. The seller keeps normal
+selling *and* gets the tender. Tenders run roughly **3–6 months** by agreement.
+
+**The moat is physical.** Every listing gets **two banners** outside the house: The One Property's,
+and TenderProp's beside it. 100 listings = 100 locations advertising the platform for free.
+
+**E-Tender vs Owner Auction — a seller picks ONE, never both:**
+- **E-Tender** — private sealed offer at the buyer's chosen price; seller accepts, declines or
+  counters.
+- **Owner Auction** — live bidding, Zoom or physical, run by a licensed auctioneer the group will
+  hire; 3% deposit to enter the room; price climbs until sold. Reference: `ownerauction.my`.
+  **Last thing to revamp.**
+- **Public auction** (bank foreclosures) is a FUTURE tab. Not now.
+
 ## 🔌 EASYASIA OWNS THE BACKEND — build to the contract (Bryan, 1 Aug 2026)
 
 His words: *"easyasia is our backend, we are not creating/revamping backend, thats their job, we

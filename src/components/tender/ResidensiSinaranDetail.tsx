@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { TENDERS } from "@/data/tenders";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
-import { MS_DAY, closeAtMs, daysLeft, depositOf, fmtDate, isFinalDay, remainingMs, tenderStartOf } from "@/lib/tender-utils";
+import { MS_DAY, daysLeft, depositOf, fmtDate, isFinalDay, remainingMs, tenderStartOf } from "@/lib/tender-utils";
 import "@/styles/tender-detail.css";
 
 /* Ported 1:1 from residensi-sinaran-detail.html — the design canon.
@@ -19,16 +19,8 @@ const SINARAN_CLOSING = SINARAN_TENDER.closingDate;
 /* Absent keys mean the agency has not supplied that asset — the corresponding button is
    simply not rendered. See the `media` block on the Tender type. */
 const MEDIA = SINARAN_TENDER.media ?? {};
-/* Registration closes ahead of the tender so accounts can be verified in time.
-   ⚠️ FOUNDER-UNCONFIRMED: 14 days is our assumption, not a stated rule — and if it varies
-   per listing it needs its own backend field (see BACKEND-CONTRACT.md §6). Derived either
-   way, so it can never contradict the closing date the way a typed date would. */
-const REGISTER_LEAD_DAYS = 14;
-/* ⚠️ Also derived and also founder-unconfirmed: closing − 3 months (see tenderStartOf). */
+/* ⚠️ Derived and founder-unconfirmed: closing − 3 months (see tenderStartOf). */
 const TENDER_START_LABEL = tenderStartOf(SINARAN_TENDER);
-const REGISTER_BY_LABEL = fmtDate(
-  new Date(closeAtMs(SINARAN_CLOSING) - REGISTER_LEAD_DAYS * MS_DAY).toISOString().slice(0, 10),
-);
 const TENDER_CLOSE_LABEL = fmtDate(SINARAN_CLOSING);
 
 /* The payment ladder is derived, never typed. Founder-confirmed 30 Jul 2026: the 3%
@@ -216,7 +208,7 @@ export function ResidensiSinaranDetail() {
                 {/* "Reserve price" is auction vocabulary most subsale buyers have not met.
                     Say what it means right where the number is, or they read it as a fixed
                     asking price and the whole tender mechanic is misunderstood. */}
-                <div className="ovprice"><div className="k">Reserve Price</div><div className="v num">RM517,000</div><div className="s">The floor — offers start here</div></div>
+                <div className="ovprice"><div className="k">Reserve Price</div><div className="v num">RM517,000</div><div className="s">The seller&rsquo;s guide &mdash; you choose what to offer</div></div>
                 <div className="actions">
                   <button type="button" className="icobtn" id="save-btn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 20.5l-1.4-1.3C5.4 14.5 2 11.4 2 7.6 2 4.9 4.1 3 6.7 3c1.5 0 2.9.7 3.8 1.8L12 6.2l1.5-1.4C14.4 3.7 15.8 3 17.3 3 19.9 3 22 4.9 22 7.6c0 3.8-3.4 6.9-8.6 11.6L12 20.5z" /></svg><span>Save</span></button>
                   <button type="button" className="icobtn" id="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" /></svg><span>Share</span></button>
@@ -409,8 +401,10 @@ export function ResidensiSinaranDetail() {
                       </div>
                     </div>
 
-                    {/* The two dates that bracket this tender. "Register by" moved out — it is
-                        already stated where it is actionable, in the submit block. */}
+                    {/* The two dates that bracket this tender. There is NO third "register by"
+                        date: FOUNDER-CORRECTED 1 Aug — an account is only needed at the moment
+                        you apply, when Apply raises the sign-in / sign-up dialog. The 14-day
+                        registration lead we had been showing was our own invention. */}
                     <div className="v1-dates">
                       <div>
                         <span>E-Tender started</span>
@@ -437,7 +431,12 @@ export function ResidensiSinaranDetail() {
                     <div className="v1-price">
                       <span className="lbl">Reserve price</span>
                       <b className="num">{rm(RESERVE)}</b>
-                      <span className="sub">Minimum offer considered</span>
+                      {/* FOUNDER-CORRECTED 1 Aug: this said "Minimum offer considered", which is
+                          wrong and was working against the product. Bryan's father: buyers do
+                          "place an offer below the reserve price, the seller may agree or
+                          counter." Naming your own number IS the e-tender — a floor nobody may
+                          cross makes this a fixed-price listing with extra steps. */}
+                      <span className="sub">Offer above or below it</span>
                     </div>
                     <div>
                       <span className="lbl">E-Tender deposit</span>
