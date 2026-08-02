@@ -74,6 +74,20 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · `TENDERPROP-BRIEF.md` — the A–Z in one self-contained file
+Bryan wants to hand the whole of TenderProp to DeepSeek. The repo is **private** (404 anonymously),
+and even with access, TEAM-LOG is 1,600 lines of build history and the PLAN files are historical in
+places — an outsider would have to navigate around our working notes to find the business.
+
+So: **one file, 274 lines, no external dependencies.** Verified it points outward for nothing
+essential. Covers the business and the moat, the money (off-platform, client account, BOVAEP), the
+9-step buyer journey, the 8 rules that keep getting broken, E-Tender vs Owner Auction, what is
+built vs framed, the data model including derived-do-not-store, design tokens and brand rules, the
+settled decisions, the 6 open questions, and who does what.
+
+`README.md` and `AGENTS.md` both now point at it as step 0. **Keep it in sync when canon changes** —
+a second source of truth that drifts is worse than none.
+
 ### 1 Aug 2026 — Claude · README rewritten as the real entry point; stale reserve claims purged
 Bryan asked whether he could hand the repo link to DeepSeek to digest all of TenderProp. Audited it.
 **Two blockers, one now fixed.**

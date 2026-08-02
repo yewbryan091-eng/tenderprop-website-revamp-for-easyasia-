@@ -92,6 +92,10 @@ section-flow tokens, the established component patterns, the traps that have alr
 and the brand non-negotiables. Read it before any visual work; add to it in the same commit as any
 new design decision. This file holds the *behaviour* rules below; that file holds the *system*.
 
+> 📄 **Handing this to someone outside the build?** [`TENDERPROP-BRIEF.md`](./TENDERPROP-BRIEF.md)
+> is the whole thing A–Z in one self-contained file — safe to paste to another model or send to a
+> partner without them needing the repo. Keep it in sync when canon changes.
+
 ## 🏢 WHAT TENDERPROP ACTUALLY IS (founder briefing, Bryan, 1 Aug 2026) — READ THIS FIRST
 
 Bryan: *"i feel like you and codex building this like you dont know what tenderprop is."* He was
