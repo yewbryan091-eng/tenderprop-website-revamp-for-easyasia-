@@ -74,6 +74,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · README rewritten as the real entry point; stale reserve claims purged
+Bryan asked whether he could hand the repo link to DeepSeek to digest all of TenderProp. Audited it.
+**Two blockers, one now fixed.**
+
+**Fixed — the README was teaching the wrong business model.** It said buyers "submit one sealed
+offer **with** a refundable deposit of 3%", i.e. money moving through the platform, plus an
+unsourced "refunded in full within 3 working days". Both wrong as of today's founder briefing.
+`## What TenderProp is` is now the full model — lead engine, no money on-site, the 7-step buyer
+flow, the four form fields, reserve-is-a-guide, the two-banner moat, and an E-Tender vs Owner
+Auction table — with a line saying **this section wins over anything that contradicts it**, and a
+numbered reading order for newcomers.
+
+**Also purged the last stale "floor" claims**, which would have taught a newcomer the opposite of
+the product: `BACKEND-CONTRACT.md` §2 (`reservePrice` was "The floor, not an asking price") and
+`PLAN-residensi-sinaran.md` (annotated **[SUPERSEDED]** rather than rewritten — it is a historical
+record of what shipped that day).
+
+**Still a blocker, Bryan's call:** the repo is **PRIVATE** (GitHub returns 404 anonymously), so a
+bare link gives an outsider nothing.
+
 ### 1 Aug 2026 — Claude · Tender information finished for today + **HANDOFF FOR CODEX**
 Last edits: span **arrow between the two dates** (`E-Tender started → Closing date`) — the dates
 are a span, not a list; `align-items: start` so both dates share a line, arrow measured onto it

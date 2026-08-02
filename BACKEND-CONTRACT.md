@@ -47,7 +47,7 @@ Every e-tender listing must have all of these or it cannot render.
 | `area` | string | `Shah Alam` | Town/locality |
 | `stateKey` | enum | `selangor` | Lowercase key, drives filtering |
 | `stateName` | string | `Selangor` | Display form of the above |
-| `reservePrice` | integer (RM) | `517000` | **The floor, not an asking price** — offers start here |
+| `reservePrice` | integer (RM) | `517000` | **A guide, NOT a floor.** Buyers may bid below it — see §6b |
 | `closingDate` | date | `2028-12-31` | End of day MYT. See §1 |
 | `tenderMethod` | enum | `E-Tender` | `E-Tender` \| `Owner Auction` |
 | `tenderFormat` | enum | `Sealed` | Sealed is the only format today |

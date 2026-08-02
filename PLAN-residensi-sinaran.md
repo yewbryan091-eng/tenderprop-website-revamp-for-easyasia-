@@ -31,8 +31,9 @@ and apply. Work top of page downward, because that is how Bryan reviews.
   tell a buyer less about the tender than the card they clicked to get here.
 - Shipped: (a) new `.ovstatus` line — green dot + OPEN FOR TENDER + computed "Closes {date},
   5:00 PM · {n} days left", above the H1; (b) reserve price 24px→39px with the clarifier "The
-  floor — offers start here", because "reserve price" is auction vocabulary a subsale buyer
-  misreads as a fixed asking price; (c) **Playfair Display was never loaded in `__root.tsx`** —
+  floor — offers start here" **[SUPERSEDED 1 Aug: founder-corrected — the reserve is a GUIDE and
+  buyers may bid below it. Copy is now "The seller's guide — you choose what to offer"]**, because
+  "reserve price" is auction vocabulary a subsale buyer misreads as a fixed asking price; (c) **Playfair Display was never loaded in `__root.tsx`** —
   the page had been rendering Georgia while the grid used Newsreader; `--serif` switched to
   Newsreader and six serif rules capped 800/900→600 (Newsreader ships 400..700, above that the
   browser fakes the bold); (d) mobile: right column no longer right-aligns once the head stacks,
