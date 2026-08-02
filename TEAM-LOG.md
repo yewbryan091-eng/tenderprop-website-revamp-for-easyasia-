@@ -74,6 +74,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 1 Aug 2026 — Claude · `COLLABORATOR-BRIEF.md` — briefing a human/model joining as a reviewer
+Bryan plans to bring DeepSeek in to review screenshots and give opinions, and asked what else it
+needs beyond TenderProp — the family business, how he works, about him.
+
+**Two files, sent as a pair, no overlap** (verified: 1 duplicated block out of 79, the design
+tokens, deliberate):
+- **`COLLABORATOR-BRIEF.md`** (204 lines) — the person and the context. Who Bryan is and how he
+  communicates; The One Property Global and why an agency-first direction matters; BOVAEP / Act 242
+  as design constraints; iNewProject vs TenderProp and the banned-vocabulary rule; his six standing
+  working rules; **how to give feedback he can use**; the design system; and what is/isn't useful
+  from a reviewer.
+- **`TENDERPROP-BRIEF.md`** (274 lines) — the product.
+
+The section that matters most for a reviewer is *"How to give feedback he can use"*: have a ranked
+opinion, **numbers not adjectives**, **name the fault axis** before proposing a fix, say **what it
+reads as**, and ask rather than guess.
+
+⚠️ **Maintenance:** these are now a second and third source of truth. `AGENTS.md` carries the rule
+— **when canon changes, update the briefs**, and the design tokens live in both on purpose.
+
 ### 1 Aug 2026 — Claude · `TENDERPROP-BRIEF.md` — the A–Z in one self-contained file
 Bryan wants to hand the whole of TenderProp to DeepSeek. The repo is **private** (404 anonymously),
 and even with access, TEAM-LOG is 1,600 lines of build history and the PLAN files are historical in

@@ -71,7 +71,8 @@ for free. That is the growth engine.
 
 | # | File | What it gives you |
 |---|---|---|
-| 0 | **[`TENDERPROP-BRIEF.md`](./TENDERPROP-BRIEF.md)** | **Start here if you are new, or not a coding agent.** The whole thing A–Z in one self-contained file — business, rules, data model, what is built, what is still open. Nothing in it depends on any other file |
+| 0a | **[`COLLABORATOR-BRIEF.md`](./COLLABORATOR-BRIEF.md)** | **Start here if you are a person or a model joining to review or advise.** Who Bryan is, the family agency, the two platforms, the compliance rules, how he works, and how to give feedback he can use |
+| 0b | **[`TENDERPROP-BRIEF.md`](./TENDERPROP-BRIEF.md)** | The product itself, A–Z in one self-contained file — business model, the rules that keep getting broken, data model, what is built, what is still open |
 | 1 | This section, above | The business, in short. Nothing else makes sense without it |
 | 2 | [`AGENTS.md`](./AGENTS.md) | How we work, brand voice rules, the design SOP, and the same founder briefing in full |
 | 3 | [`BACKEND-CONTRACT.md`](./BACKEND-CONTRACT.md) | Every field a listing must carry, what is **derived and must not be stored**, and what the submission sends |

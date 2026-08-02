@@ -92,9 +92,13 @@ section-flow tokens, the established component patterns, the traps that have alr
 and the brand non-negotiables. Read it before any visual work; add to it in the same commit as any
 new design decision. This file holds the *behaviour* rules below; that file holds the *system*.
 
-> 📄 **Handing this to someone outside the build?** [`TENDERPROP-BRIEF.md`](./TENDERPROP-BRIEF.md)
-> is the whole thing A–Z in one self-contained file — safe to paste to another model or send to a
-> partner without them needing the repo. Keep it in sync when canon changes.
+> 📄 **Handing this to someone outside the build?** Send **both**:
+> [`COLLABORATOR-BRIEF.md`](./COLLABORATOR-BRIEF.md) (Bryan, the family agency, the platforms,
+> compliance, how he works, how to give useful feedback) and
+> [`TENDERPROP-BRIEF.md`](./TENDERPROP-BRIEF.md) (the product A–Z). They are a pair and do not
+> repeat each other — except the **design tokens, which appear in both deliberately. If the
+> palette or type changes, change it in both.** Keep both in sync when canon changes: a second
+> source of truth that drifts is worse than none.
 
 ## 🏢 WHAT TENDERPROP ACTUALLY IS (founder briefing, Bryan, 1 Aug 2026) — READ THIS FIRST
 
