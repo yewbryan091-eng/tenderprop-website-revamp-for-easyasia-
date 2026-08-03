@@ -1294,7 +1294,7 @@ export function ResidensiSinaranDetail() {
 
         <section className="blk band-card" id="faq">
           <div className="wrap">
-            <h2 className="sec-title">E-Tender <span>FAQ</span></h2>
+            <h2 className="sec-title">Frequently asked <span>Questions</span></h2>
             <div className="faqcard">
               <div className="faq-item">
                 <button type="button" className="faq-trigger" aria-expanded="false">What is the reserve price?<svg className="chev" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
