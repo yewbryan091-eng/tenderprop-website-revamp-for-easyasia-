@@ -74,6 +74,30 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 3 Aug 2026 — Claude · Tender Information right panel rebuilt as FOUR ZONES
+Bryan: *"i just dont know how to make it nice."* The fault was hierarchy, not styling.
+
+**Before:** three equal columns (reserve / deposit / method) + two notes + a boxed CTA — five
+blocks at roughly one weight, so the eye had nowhere to land. **The reserve price is the number
+this entire page is about** — what a buyer decides against — and it carried the same weight as
+"Method: E-Tender", the least surprising fact in the section.
+
+**Now, descending weight, ending in the action:**
+1. **Price** — `clamp(32px, 3.3vw, 45px)` Newsreader, alone on its row. **2.14:1 over the deposit.**
+2. **Terms of entry** — deposit (green, 21px) + method, paired between hairlines. Same *kind* of
+   fact, neither rivalling the price.
+3. **The two notes** — supporting weight, green rule for money, burgundy for outcome.
+4. **The action** — **the box is gone.** The zone hairline already separates it, so a container
+   only competed with the button inside it. Full-width CTA, whisper link centred beneath.
+
+Hairlines carry the rhythm, so nothing needs a container. Section **546 → 501px** after tightening
+(the hero is 412px; Bryan's 30 Jul decision asks this panel to stay compact — 501 is the honest
+number, flagged to him).
+
+🐛 **Two `.v1-main` definitions again** — an old one at the top of the file declaring
+`grid-template-areas: "facts facts"…`, and mine below. Same duplicate-selector trap as `.v1-timer`.
+Consolidated to one, updated all three responsive tiers, and removed 8 dead `.v1-facts` rules.
+
 ### 3 Aug 2026 — Claude · Section headings were wearing the LISTINGS page's style
 A spec came in saying the detail page's section headings should be Newsreader, not Inter. **It was
 right, and it exposed a real bug rather than a style preference.**

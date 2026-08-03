@@ -424,17 +424,21 @@ export function ResidensiSinaranDetail() {
                 </section>
 
                 <div className="v1-main" id="tender-action-panel">
-                  <div className="v1-facts">
-                    <div className="v1-price">
-                      <span className="lbl">Reserve price</span>
-                      <b className="num">{rm(RESERVE)}</b>
-                      {/* FOUNDER-CORRECTED 1 Aug: this said "Minimum offer considered", which is
-                          wrong and was working against the product. Bryan's father: buyers do
-                          "place an offer below the reserve price, the seller may agree or
-                          counter." Naming your own number IS the e-tender — a floor nobody may
-                          cross makes this a fixed-price listing with extra steps. */}
-                      <span className="sub">Offer above or below it</span>
-                    </div>
+                  {/* FOUR ZONES, descending weight, ending in the action — not three equal
+                      columns. The reserve price is the number this whole page is about: it is
+                      what a buyer decides against. At a third of a shared row it carried the same
+                      weight as "Method: E-Tender", which is the least surprising fact here. */}
+                  <div className="v1-price">
+                    <span className="lbl">Reserve price</span>
+                    <b className="num">{rm(RESERVE)}</b>
+                    {/* FOUNDER-CORRECTED 1 Aug: never "minimum offer considered" or "the floor".
+                        Buyers do offer below it; the seller may accept or counter. */}
+                    <span className="sub">Offer above or below it</span>
+                  </div>
+
+                  {/* What it costs to take part, and under what method. Paired because they are
+                      the same kind of fact — terms of entry — and neither should rival the price. */}
+                  <div className="v1-terms">
                     <div>
                       <span className="lbl">E-Tender deposit</span>
                       <b className="dep-amt">{DEPOSIT}</b>
@@ -444,9 +448,6 @@ export function ResidensiSinaranDetail() {
                       <span className="lbl">Method</span>
                       <b>E-Tender</b>
                       <span className="sub">Confidential</span>
-                      {/* The link explains the METHOD, so it belongs under the method (Bryan).
-                          On its own row it was a stray exit at the foot of the section; here it
-                          answers the fact immediately above it. */}
                       <a className="v1-howto" href="/how-e-tender-works">
                         <span>See how e-tender works</span>
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
@@ -454,40 +455,23 @@ export function ResidensiSinaranDetail() {
                     </div>
                   </div>
 
-                  <div className="v1-reassure">
-                    {/* No uppercase label above this. The bold lead sentence already names the
-                        block, and the left rule already separates it — a third layer of labelling
-                        added chrome and a second accent colour for no information. */}
-                    <p>
+                  <div className="v1-notes">
+                    <p className="v1-reassure">
                       <b>Your 3% deposit is not an extra charge.</b> It forms part of the standard
                       10% down payment and is returned in full immediately if no sale proceeds.
                     </p>
-                  </div>
-
-                  <div className="v1-reassure v1-negotiate">
-                    {/* Codex's three outcomes are right and stay — they are the complete, honest
-                        set. But as three bold spans separated by dots they read as a control
-                        strip, something to click. As a bold lead sentence they read as a
-                        statement, and they match the pattern of the callout beside them.
-
-                        FOUNDER-VERIFIED (Bryan, 30 Jul): "it's not about win or lose — there's
-                        always a chance / room for negotiation done by the agent." Codex removed
-                        this on 1 Aug as an unsupported claim, which was a fair instinct without
-                        the founder's word; it is now recorded in the DECISIONS table so it does
-                        not get dropped a third time. Hedged deliberately — "where there is room
-                        to move" — so it promises a route, not an outcome. */}
-                    <p>
+                    {/* FOUNDER-VERIFIED (Bryan, 30 Jul): "it's not about win or lose — there's
+                        always a chance / room for negotiation done by the agent." Hedged so it
+                        promises a route, never an outcome. See the DECISIONS table. */}
+                    <p className="v1-reassure v1-negotiate">
                       <b>Accepted, countered or not accepted.</b> The seller responds within
                       5 working days &mdash; and where there is room to move, the appointed agent
                       negotiates on your behalf.
                     </p>
                   </div>
 
-                  {/* THE SUBMIT BLOCK — this section is where a buyer actually enters the
-                      tender, so the action gets its own zone rather than sharing a row with an
-                      accordion. Burgundy top rule + paper fill, the same treatment as the
-                      search form on /tender, so "this is the thing to use" reads consistently
-                      across the site. */}
+                  {/* No box around the button. The zone rule above already separates it, and a
+                      container only competed with the thing inside it. */}
                   <div className="v1-submit">
                     {/* No "Submit your e-tender" label above the button — the button says it.
                         The agent route is DEMOTED to a quiet link, not a peer button: reaching

@@ -114,20 +114,7 @@ section.blk.tender-band {
 }
 .v1-countdown { display: block; }
 
-/* ── Right: decision facts, process and action ── */
-.v1-main {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-areas:
-    "facts facts"
-    "reassure negotiate"
-    "submit submit";
-  align-content: center;
-  column-gap: clamp(18px, 2vw, 28px);
-  row-gap: 9px;
-  min-width: 0;
-  padding: clamp(18px, 2vw, 27px) clamp(30px, 4vw, 58px) clamp(15px, 1.6vw, 21px) clamp(44px, 5vw, 72px);
-}
+/* ── Right: the four-zone terms + action panel — see below ── */
 .v1-kicker { color: var(--burgundy); }
 .v1 .lbl {
   display: block;
@@ -158,111 +145,77 @@ section.blk.tender-band {
   outline: 2px solid var(--burgundy);
   outline-offset: 4px;
 }
-.v1-facts {
-  grid-area: facts;
+/* ══ RIGHT PANEL — four zones, descending weight, ending in the action ════════════════
+   Was three equal columns plus two notes plus a boxed CTA, all at similar weight, so the
+   eye had nowhere to land. Now: the price dominates, terms of entry sit under it, the two
+   reassurances support, and the button closes. Hairlines mark the zones — they carry the
+   rhythm, so nothing needs a container. */
+.v1-main {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  padding: 10px 0;
-}
-.v1-facts > div {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "price" "terms" "notes" "submit";
+  align-content: center;
+  row-gap: 0;
   min-width: 0;
-  padding: 0 14px;
-  border-left: 1px solid var(--line);
+  padding: clamp(20px, 2.2vw, 30px) clamp(30px, 4vw, 58px) clamp(20px, 2.2vw, 30px) clamp(44px, 5vw, 72px);
 }
-.v1-facts > div:first-child {
-  padding-left: 0;
-  border-left: 0;
-}
-.v1-facts > div:last-child { padding-right: 0; }
-.v1-facts > div b {
+
+/* ── ZONE 1 · the number the page is about ───────────────────────────────────────── */
+.v1-price { grid-area: price; padding-bottom: clamp(10px, 1.1vw, 14px); }
+.v1-price .num {
   display: block;
   margin: 3px 0 2px;
-  color: var(--ink);
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.25;
+  font-family: var(--serif); font-optical-sizing: auto;
+  font-size: clamp(32px, 3.3vw, 45px); font-weight: 600;
+  line-height: 1; letter-spacing: -.022em; color: var(--ink);
 }
-.v1-price .num {
-  font-family: var(--serif);
-  font-size: clamp(27px, 2.5vw, 34px);
-  font-weight: 600;
-  letter-spacing: -.01em;
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
+
+/* ── ZONE 2 · terms of entry — neither should rival the price ─────────────────────── */
+.v1-terms {
+  grid-area: terms;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 30px);
+  padding: clamp(10px, 1.1vw, 14px) 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
-.v1-facts > div .sub {
-  display: block;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.4;
+.v1-terms > div { min-width: 0; }
+.v1-terms b {
+  display: block; margin: 3px 0 1px;
+  font-size: 21px; font-weight: 700; letter-spacing: -.012em; color: var(--ink);
+}
+.v1-terms .dep-amt { color: var(--good); }
+.v1 .sub { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+
+/* ── ZONE 3 · the two reassurances ───────────────────────────────────────────────── */
+.v1-notes {
+  grid-area: notes;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+  padding: clamp(11px, 1.2vw, 15px) 0;
 }
 .v1-reassure {
-  grid-area: reassure;
-  margin: 0;
-  min-width: 0;
-  padding: 2px 0 2px 12px;
+  margin: 0; padding-left: 13px;
   border-left: 2px solid var(--good);
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.4;
+  color: var(--muted); font-size: 12.5px; line-height: 1.5;
 }
-.v1-reassure p { margin: 2px 0 0; }
 .v1-reassure b { color: var(--ink); font-weight: 700; }
+/* Burgundy, not green: this one is about the OUTCOME, not the money. Green stays the
+   "your deposit is safe" token so it keeps one meaning on this page. */
+.v1-negotiate { border-left-color: var(--burgundy); }
 
-/* The two notes carry different KINDS of information — one money, one process — so they are
-   styled apart rather than as two copies of the same block. The deposit note is filled: it is
-   reassurance about money and reads as a held, settled fact. The process note stays on the
-   card with a burgundy rule: it is a sequence, not a guarantee. */
-.v1-reassure {
-  padding: 12px 14px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--good) 6%, var(--paper-deep));
-  border-left: 3px solid var(--good);
-}
-.v1-negotiate {
-  grid-area: negotiate;
-  padding: 12px 0 12px 14px;
-  border-radius: 0;
-  background: transparent;
-  border-left: 3px solid var(--burgundy);
-}
-
-/* THE SUBMIT BLOCK. This section is where a buyer enters the tender, so the action owns a
-   zone instead of sharing a row with an accordion. Burgundy top rule on paper — the same
-   treatment as the search form on /tender, so "this is the control" reads the same sitewide. */
+/* ── ZONE 4 · the action ─────────────────────────────────────────────────────────── */
 .v1-submit {
   grid-area: submit;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: clamp(14px, 1.8vw, 24px);
-  margin-top: 2px;
-  padding: 12px 15px 13px;
-  border: 1px solid var(--line);
-  border-top: 3px solid var(--burgundy);
-  border-radius: 10px;
-  background: var(--paper-deep);
+  padding-top: clamp(12px, 1.3vw, 16px);
+  border-top: 1px solid var(--line);
 }
-.v1-submit-actions {
-  display: flex; flex-direction: column; align-items: stretch; gap: 4px;
+.v1-submit-actions { display: grid; gap: 8px; justify-items: center; }
+.v1-submit-actions .btn-red {
+  width: 100%; justify-content: center; text-align: center;
+  padding: 13px 24px; font-size: 15.5px; border-radius: 10px;
 }
-.v1-submit-actions .btn-red { justify-content: center; text-align: center; }
-/* DEMOTED on purpose. Reaching the agent first turns this into a traditional sale and the
-   tender never happens, so this route stays available — it is still a lead — but it must not
-   read as a peer of Apply. Smaller, muted, no border, no fill. */
-.v1 .v1-agent-alt {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-height: 44px;
-  color: var(--muted); font-size: 13px; font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 3px; text-decoration-thickness: 1px;
-  text-decoration-color: color-mix(in srgb, var(--muted) 40%, transparent);
-  transition: color .16s ease, text-decoration-color .16s ease;
-}
-.v1 .v1-agent-alt:hover { color: var(--burgundy); text-decoration-color: var(--burgundy); }
-@media (prefers-reduced-motion: reduce) { .v1 .v1-agent-alt { transition: none; } }
+
 /* The process link, replacing the 1-2-3 that explained it inline for the third time on this
    site. Quiet by design: it is an exit, not the section's purpose. */
 /* Lives inside the Method fact now, directly under "Confidential" — it explains the method,
@@ -290,15 +243,7 @@ section.blk.tender-band {
   .v1-deadline-content {
     padding: 28px 46px 28px 28px;
   }
-  .v1-main {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-areas:
-      "facts facts"
-      "reassure negotiate"
-      "submit submit";
-    column-gap: 14px;
-    padding: 23px 26px 18px 40px;
-  }
+  .v1-main { padding: 23px 26px 18px 40px; }
   /* Copy and buttons stack once the row cannot hold both. */
   .v1-submit { grid-template-columns: 1fr; gap: 12px; }
   .v1-submit-actions { white-space: normal; }
@@ -317,32 +262,13 @@ section.blk.tender-band {
     padding-left: 36px;
     padding-right: 24px;
   }
-  .v1-facts > div { padding-right: 9px; padding-left: 9px; }
   .v1-price .num { font-size: 24px; }
-  /* Two callouts side by side get too narrow to read here. */
-  .v1-main {
-    grid-template-areas:
-      "facts facts"
-      "reassure reassure"
-      "negotiate negotiate"
-      "submit submit";
-  }
+  /* Two notes side by side get too narrow to read here — stack them. */
+  .v1-notes { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media(max-width: 740px) and (min-width: 701px) {
-  .v1-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .v1-facts > div:first-child {
-    grid-column: 1 / -1;
-    padding: 0 0 9px;
-    border-bottom: 1px solid var(--line);
-  }
-  .v1-facts > div:nth-child(2) {
-    padding: 9px 10px 0 0;
-    border-left: 0;
-  }
-  .v1-facts > div:nth-child(3) {
-    padding: 9px 0 0 10px;
-  }
+  .v1-terms, .v1-notes { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media(max-width: 700px) {
@@ -357,30 +283,7 @@ section.blk.tender-band {
     padding: 25px 24px 23px;
   }
   .v1-main {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "facts"
-      "reassure"
-      "negotiate"
-      "submit";
-    row-gap: 12px;
     padding: 28px 24px 20px;
-  }
-  .v1-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0; }
-  .v1-facts > div,
-  .v1-facts > div:first-child,
-  .v1-facts > div:last-child {
-    padding: 12px 0;
-    border-left: 0;
-    border-top: 1px solid var(--line);
-  }
-  .v1-facts > div:first-child {
-    grid-column: 1 / -1;
-    border-top: 0;
-  }
-  .v1-facts > div:nth-child(3) {
-    padding-left: 12px;
-    border-left: 1px solid var(--line);
   }
   /* Full-width tap target for the primary action on a phone. */
   .v1-submit {
