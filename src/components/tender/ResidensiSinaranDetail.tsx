@@ -1199,22 +1199,22 @@ export function ResidensiSinaranDetail() {
                 {/* LEFT — who. Given real room: the face anchors the card and the name is set
                     at heading scale, because the single most persuasive thing here is that a
                     named, licensed person is on the other end. */}
+                {/* LEFT — the ink identity panel. Bryan chose this over the maroon: it gives
+                    the section the weight it lacked without introducing a second saturated
+                    colour, and it pairs with the black footer so the page has two dark anchors.
+                    Portrait, name at display scale, then the Act 242 disclosure under a rule. */}
                 <div className="ag-who">
                   <img className="face" src={AGENT_PHOTO} alt={AGENT.name} />
-                  <div className="ag-id">
-                    <b className="ag-name">{AGENT.name}</b>
-                    <span className="ag-title">{AGENT.title}</span>
-                    <span className="ag-firm">{AGENT.firm}{AGENT.ssmNo ? ` (${AGENT.ssmNo})` : ""}</span>
-                    {/* Act 242 disclosure. Present and checkable, ranked below the human. */}
-                    <span className="ag-reg">
-                      {AGENT.reaNo ? `REA ${AGENT.reaNo}` : "REA registration not stated"}
-                      {" \u00b7 "}
-                      {AGENT.eNo ? `Registered estate agency ${AGENT.eNo}` : "agency registration not stated"}
-                    </span>
-                  </div>
+                  <b className="ag-name">{AGENT.name}</b>
+                  <span className="ag-title">Licensed Real Estate Agent</span>
+                  <span className="ag-rule" aria-hidden="true" />
+                  <span className="ag-firm">{AGENT.firm}{AGENT.ssmNo ? ` (${AGENT.ssmNo})` : ""}</span>
+                  <span className="ag-reg">
+                    {AGENT.reaNo ? `REA ${AGENT.reaNo}` : "REA registration not stated"}
+                    {" \u00b7 "}
+                    {AGENT.eNo ? `Registered estate agency ${AGENT.eNo}` : "agency registration not stated"}
+                  </span>
                 </div>
-
-                <div className="ag-div" aria-hidden="true" />
 
                 {/* RIGHT — why, then how. The previous version jumped straight to a WhatsApp
                     button with no reason attached, and left ~500px of dead space beside it.
@@ -1222,11 +1222,20 @@ export function ResidensiSinaranDetail() {
                     a person rather than just submitting? Straight from the founder briefing of
                     3 Aug — the agent follows up, arranges the viewing, and negotiates. */}
                 <div className="ag-cta">
-                  <p className="ag-cta-p">
-                    Ask about the property, the tender, or anything the listing does not answer
-                    &mdash; well before you settle on a number. The agent then stays with you the
-                    whole way: your viewing, your offer, the seller&rsquo;s response, and the SPA
-                    if it is accepted.
+                  {/* Q5 + a greeting, both Bryan's wording (V4 of four rendered variants).
+                      Two things it deliberately does:
+                      "before or after you submit your e-tender offer" leaves the tender as the
+                      default path while making contact legitimate either way — his "both is
+                      still a win", without discouraging the offer the page exists to collect.
+                      "Call me Stephen" makes it a person talking rather than a service being
+                      described, which is the whole argument for having a face on this page.
+                      ⚠️ It is first-person speech attributed to a named licensed agent on a
+                      regulated agency's listing. Bryan's father should sign the line off as
+                      Stephen's words before go-live. */}
+                  <p className="ag-quote">
+                    &ldquo;Call me Stephen. Ask what you like about {LISTING_NAME} &mdash;
+                    before or after you submit your e-tender offer. Either way I&rsquo;m the one
+                    who sees it through.&rdquo;
                   </p>
                   {/* Ranked, not three peers. WhatsApp is THE action and takes the fill;
                       calling is a genuine second route so it gets a real button but an
