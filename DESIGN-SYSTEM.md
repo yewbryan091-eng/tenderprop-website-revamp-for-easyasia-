@@ -260,6 +260,13 @@ including today, and the final day reads "1 day left" rather than "0".
   toggle, then hot-reload losing listeners, now the gallery. DOM handlers registered in an effect
   fight the render they are attached to and break in ways that look intermittent.
 
+- **A property declared twice in one rule silently keeps the LAST value.** Splicing `display` and
+  `text-align` into an existing block left `text-align: center` above and `text-align: left` below
+  inside the same braces — so the numeral aligned left while its eyebrow inherited centre, and the
+  panel read as two columns that were actually one. Neither the browser nor `tsc` warns. **After
+  editing a rule, print the whole rule back and read it**, and sweep for duplicate properties:
+  `re.finditer(r'([^{}]+)\{([^{}]*)\}')` then count property names per block.
+
 ## 6. Brand — non-negotiable
 
 - Cream / burgundy / red. **Never** import iNewProject's maroon palette. Adopt *patterns* from

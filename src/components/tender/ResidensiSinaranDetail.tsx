@@ -386,19 +386,18 @@ export function ResidensiSinaranDetail() {
                             final 24 hours, where "0 days" says nothing. */}
                         <span className="u" aria-hidden="true">
                           <b>{!cd ? "\u00a0" : cd.finalDay ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m` : cd.days.toLocaleString("en-MY")}</b>
-                          {cd && !cd.finalDay && (
-                            <span className="v1-tick">
-                              {[["h", cd.h], ["m", cd.m], ["s", cd.s]].map(([label, value]) => (
-                                <span className="v1-tick-cell" key={label as string}>
-                                  <span className="v1-tick-value">{String(value).padStart(2, "0")}</span>
-                                  <span className="v1-tick-unit">{label as string}</span>
-                                </span>
-                              ))}
-                            </span>
-                          )}
                           <i>{!cd ? "" : cd.finalDay ? "left today" : cd.days === 1 ? "day left" : "days left"}</i>
                         </span>
                       </div>
+                      {/* The live clock, below the day count and in plain HH:MM:SS. It used to
+                          hang off the numeral's right as h/m/s cells; stacked underneath it reads
+                          as one instrument, and the colon format needs no unit letters. Hidden on
+                          the final day, when the day count itself becomes hours and minutes. */}
+                      {cd && !cd.finalDay && (
+                        <p className="v1-clock" aria-hidden="true">
+                          {String(cd.h).padStart(2, "0")}:{String(cd.m).padStart(2, "0")}:{String(cd.s).padStart(2, "0")}
+                        </p>
+                      )}
                     </div>
 
                     {/* The two dates that bracket this tender. There is NO third "register by"
@@ -407,7 +406,7 @@ export function ResidensiSinaranDetail() {
                         registration lead we had been showing was our own invention. */}
                     <div className="v1-dates">
                       <div>
-                        <span>E-Tender started</span>
+                        <span>Tender starts</span>
                         <b>{TENDER_START_LABEL}</b>
                       </div>
                       {/* The two dates are a SPAN, not a list — the arrow says so. Decorative,
@@ -425,13 +424,6 @@ export function ResidensiSinaranDetail() {
                 </section>
 
                 <div className="v1-main" id="tender-action-panel">
-                  {/* One label, not two. The eyebrow "Property e-tender notice" above a
-                      heading "E-Tender Information" was a filing label stacked on a filing
-                      label — and at 35px it competed with the day count next to it. */}
-                  <div className="v1-top">
-                    <h3>Tender information</h3>
-                  </div>
-
                   <div className="v1-facts">
                     <div className="v1-price">
                       <span className="lbl">Reserve price</span>
@@ -497,16 +489,14 @@ export function ResidensiSinaranDetail() {
                       search form on /tender, so "this is the thing to use" reads consistently
                       across the site. */}
                   <div className="v1-submit">
-                    <div className="v1-submit-copy">
-                      <b>Submit your e-tender</b>
-                    </div>
-                    {/* TWO BUTTONS, not a button beside a text link. The second route is a real
-                        choice — plenty of buyers want a conversation before they commit a
-                        deposit — and styling it as a link made it look like a footnote to the
-                        thing it is an alternative to. Side by side here, stacked on narrow. */}
+                    {/* No "Submit your e-tender" label above the button — the button says it.
+                        The agent route is DEMOTED to a quiet link, not a peer button: reaching
+                        the agent first turns this into a traditional sale and the tender never
+                        happens. It stays available (it is still a lead) but it must not read as
+                        an equal choice. */}
                     <div className="v1-submit-actions">
                       <a className="btn-red" href="#">Apply for E-Tender</a>
-                      <a className="btn-outline" href="https://wa.me/60123938255" target="_blank" rel="noopener">
+                      <a className="v1-agent-alt" href="https://wa.me/60123938255" target="_blank" rel="noopener">
                         Or talk to the agent first
                       </a>
                     </div>

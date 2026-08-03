@@ -74,6 +74,34 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 3 Aug 2026 — Claude · Tender Information refactored to Bryan's spec
+Spec delivered point by point; all of it implemented and verified in the render.
+
+**Left panel** — live clock **moved below the day count and reformatted to plain `HH:MM:SS`**
+(was h/m/s cells hanging off the numeral's right). Colons need no unit letters, and stacked it
+reads as one instrument. Hidden on the final day, when the day count itself becomes hours+minutes.
+Date label **"E-Tender started" → "Tender starts"**. Panel is single-column now, so the
+`1fr auto 1fr` mirror grid is gone — **axis spread measured 0px** across eyebrow, numeral, unit
+and clock.
+
+**Right panel** — **the "Tender information" h3 is deleted** (the `top` grid row went with it, plus
+5 orphaned rules). It now opens on the Reserve Price row.
+**The two notes are visually distinct**, as the spec required: the deposit note is **filled** — a
+6% green tint on paper, since it is reassurance about money and should read as a settled fact — and
+the process note stays transparent on the card with a burgundy rule, since it is a sequence, not a
+guarantee.
+**"Submit your e-tender" label deleted**; the button says it.
+**The agent route is DEMOTED** from an outlined peer button to a quiet 13px muted link under the
+CTA — measured 13px/500 muted vs 15px/700 on the button. Bryan's reasoning, now in the code
+comment: reaching the agent first turns this into a traditional sale and the tender never happens,
+so the route stays available (still a lead) but must not read as an equal choice.
+
+🐛 **Caught in the render, and it is a new trap for DESIGN-SYSTEM §5:** my splice left
+`text-align: center` AND `text-align: left` **inside the same rule**. The last one wins, so the
+numeral aligned left while its eyebrow inherited centre — the panel looked like two columns when
+it was one. Neither the browser nor tsc warns. Swept the whole stylesheet for duplicate properties
+per rule; this was the only one.
+
 ### 3 Aug 2026 — 🚨 **DEADLINE SET: complete revamp to Vicky by 31 Aug.** Plan in `PLAN-AUGUST-DELIVERY.md`
 Bryan, today: *"we have to finish everything… all the pages (homepage, services, sell, about us),
 basically a complete website revamp as a whole package and send to vicky before end of this
