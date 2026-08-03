@@ -630,7 +630,7 @@ export function ResidensiSinaranDetail() {
             here duplicates Details or What's Nearby. Clamp removed — with the repetition
             gone it is short enough to read whole, which also drops the fade gradient's
             dependency on --band-bg. */}
-        <section className="blk band-paper" id="about">
+        <section className="blk band-card" id="about">
           <div className="wrap">
             <div className="blkcard about">
               <h2 className="sec-title">About <span>Residensi Sinaran</span></h2>
@@ -688,7 +688,7 @@ export function ResidensiSinaranDetail() {
             condominium content, not this 62-unit townhouse scheme. */}
 
 
-        <section className="blk band-paper" id="area">
+        <section className="blk band-alt" id="area">
           <div className="wrap">
             <div className="blkcard">
 
@@ -723,7 +723,7 @@ export function ResidensiSinaranDetail() {
           </div>
         </section>
 
-        <section className="blk band-card" id="location">
+        <section className="blk band-alt" id="location">
           <div className="wrap">
             <div className="blkcard">
               <h2 className="sec-title">Property <span>Location</span></h2>
@@ -748,7 +748,7 @@ export function ResidensiSinaranDetail() {
 
 
 
-        <section className="blk band-paper" id="mortgage">
+        <section className="blk band-card" id="mortgage">
           <div className="wrap">
             <div className="blkcard calc">
               <h2 className="sec-title">Mortgage <span>Calculator</span></h2>
@@ -800,7 +800,7 @@ export function ResidensiSinaranDetail() {
         </section>
 
 
-        <section className="blk band-paper" id="similar">
+        <section className="blk band-alt" id="similar">
           <div className="wrap">
             <h2 className="sec-title">Similar <span>E-Tenders</span></h2>
             <div className="simgrid">

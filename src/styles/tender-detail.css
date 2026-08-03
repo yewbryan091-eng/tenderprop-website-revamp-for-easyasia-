@@ -172,12 +172,11 @@ section.blk.tender-band {
      text, so 14px above the button crowded it against the section boundary while the same
      14px below the closing line was ample. Optical balance, not metric balance. */
   padding: clamp(14px, 1.5vw, 20px) clamp(30px, 4vw, 58px) clamp(10px, 1.2vw, 15px) clamp(44px, 5vw, 72px);
-  /* The dossier's right panel is white and so is Property Details below it, so the section
-     boundary was invisible: 31px of this panel's padding ran straight into 56px of the next
-     section's, giving 87px of unbroken white under the closing line with no edge in it. That
-     is what read as a gap — not the spacing. This hairline is the panel's EDGE, not a rule
-     under the paragraph: it shows where the box actually ends. */
-  border-bottom: 1px solid var(--line);
+  /* No border-bottom. This panel USED to carry a 1px edge because the section boundary below
+     it was invisible — 87px of unbroken white with no edge in it read as a gap. That is now
+     solved page-wide by `section.blk + section.blk { border-top }`, and keeping both drew a
+     doubled 2px line at this one junction: this panel's bottom at -1317, Property Details'
+     top at -1316. The general rule supersedes the local patch. */
 }
 
 /* ── ZONE 1 · the number the page is about ───────────────────────────────────────── */
@@ -598,9 +597,28 @@ section.blk.tender-band {
      is 1.211 — about 2.5x the differentiation above parity — and it is a deliberate tint
      already in the palette. --band-bg travels with it, so the About fade gradient and any
      other band-matched element follow automatically. */
-  main > section.blk:nth-of-type(even) { background: var(--band-alt); --band-bg: var(--band-alt); }
-  main > section.blk:nth-of-type(odd)  { background: var(--card);      --band-bg: var(--card); }
-section.blk.band-card { background: var(--card); --band-bg: var(--card); }section.blk.band-deep { background: var(--paper-deep); --band-bg: var(--paper-deep); }section.blk.band-paper { background: var(--paper); --band-bg: var(--paper); }
+  /* DECLARE the boundary. The two band surfaces are #F6EEE7 and #FFFFFF — a contrast ratio
+     of 1.147:1, which is below the 3:1 WCAG treats as the minimum for a *visible* boundary
+     between two UI surfaces. That near-invisible step then sits in the MIDDLE of 113px of
+     empty padding, so the eye registers "something changed" without being able to say what
+     or where. Three of those in a row reads as drift, not structure (Bryan, 3 Aug).
+     This is the same fault already fixed inside the tender panel, where 87px of unbroken
+     white with no edge in it read as a gap — the lesson just never got applied page-wide. */
+  main > section.blk + section.blk { border-top: 1px solid var(--line); }
+  /* Bands are DECLARED by the markup, not derived from position.
+     They used to be `main > section.blk:nth-of-type(even/odd)`, which is (0,2,2) specificity
+     and therefore beat `section.blk.band-card` at (0,2,1) — so EVERY band-* class in the
+     markup was dead and the real colour came from a section's INDEX. Proof: #agent carried
+     `band-card` and rendered paper; #mortgage carried `band-paper` and rendered white.
+     Two consequences, both bad. The colour could not mean anything, because it only ever
+     encoded position — ten sections, ten stripes, none of them saying what was inside. And
+     adding, removing or reordering ONE section silently flipped every band after it, which
+     is a landmine for EasyAsia, who lift this markup.
+     `--band-bg` is gone with it: zero consumers in the codebase. */
+section.blk.band-card  { background: var(--card); }
+section.blk.band-alt   { background: var(--band-alt); }
+section.blk.band-paper { background: var(--paper); }
+section.blk.band-deep  { background: var(--paper-deep); }
   .blkcard { background: transparent; border: none; border-radius: 0; padding: 0; }
   
   .kicker { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--burgundy); opacity: .9; margin: 0 0 6px; }
@@ -710,7 +728,7 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   .tabbar button { border: 1.5px solid var(--line); background: var(--card); border-radius: 5px; padding: 8px 18px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; color: var(--muted); }
   .tabbar button.on { background: var(--burgundy); border-color: var(--burgundy); color: var(--burgundy-ink); }
   .sample-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: #FFF3D6; color: #7A5400; border: 1px solid #E8D4A2; border-radius: 4px; padding: 3px 9px; margin-left: 10px; vertical-align: middle; }
-  .histwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }.spgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px 30px; }.fac-list { display: flex; flex-wrap: wrap; gap: 14px 28px; list-style: none; margin: 0; padding: 0; }.fac-chip { display: inline-flex; align-items: center; padding: 0; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; }.fac-chip svg { width: 16px; height: 16px; flex: 0 0 auto; margin-right: 8px; fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }.sp-item { display: grid; grid-template-columns: 30px 1fr; column-gap: 12px; align-items: start; }.sp-num { font-family: var(--serif); font-size: 19px; font-weight: 600; line-height: 1.15; color: var(--burgundy); font-variant-numeric: tabular-nums; }.sp-item h3 { grid-column: 2; margin: 0 0 6px; font-size: 16.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.35; }.sp-item p { grid-column: 2; margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.6; max-width: 34ch; }@media(max-width:900px){ .spgrid { grid-template-columns: repeat(2, 1fr); gap: 30px 26px; } }@media(max-width:620px){ .spgrid { grid-template-columns: 1fr; gap: 26px; } }
+  .histwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }.spgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px 30px; }.fac-list { display: flex; flex-wrap: wrap; gap: 14px 28px; list-style: none; margin: 0; padding: 0; }.fac-chip { display: inline-flex; align-items: center; padding: 0; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; }.fac-chip svg { width: 16px; height: 16px; flex: 0 0 auto; margin-right: 8px; fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }.sp-item { display: grid; grid-template-columns: 30px 1fr; column-gap: 12px; align-items: start; align-content: start; }.sp-num { font-family: var(--serif); font-size: 19px; font-weight: 600; line-height: 1.15; color: var(--burgundy); font-variant-numeric: tabular-nums; }.sp-item h3 { grid-column: 2; margin: 0 0 6px; font-size: 16.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.35; }.sp-item p { grid-column: 2; margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.6; max-width: 34ch; }@media(max-width:900px){ .spgrid { grid-template-columns: repeat(2, 1fr); gap: 30px 26px; } }@media(max-width:620px){ .spgrid { grid-template-columns: 1fr; gap: 26px; } }
   table.hist { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
   table.hist th { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 10px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--paper-deep); }.hist th:last-child, .hist td:last-child { border-right: none; }.hist th.amt, .hist td.amt { text-align: right; font-variant-numeric: tabular-nums; }
   table.hist td { padding: 11px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
