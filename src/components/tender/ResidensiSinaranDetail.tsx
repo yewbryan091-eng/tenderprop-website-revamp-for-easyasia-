@@ -49,6 +49,30 @@ const TITLE_TYPE = "Strata title";
    displayType() means the label cannot drift from the rule again. */
 const TYPE_LABEL = displayType(SINARAN_TENDER);
 const LISTING_NAME = SINARAN_TENDER.name;
+/* The address was previously NOWHERE on this page as text — it existed only as a search
+   string inside the Google Maps iframe URL, which means it was unselectable, invisible to a
+   screen reader, invisible to Google Search, and gone the moment the iframe failed to load.
+   For a property listing the address is a primary fact, not decoration. Founder-supplied by
+   Bryan on 3 Aug, exact unit included. */
+const ADDRESS = SINARAN_TENDER.address ?? "";
+/* The map follows the address instead of a hand-typed search phrase, so the pin and the
+   printed address can never disagree. TWO derivations, because the two Google endpoints do
+   not accept the same string — verified by swapping the live iframe through each:
+
+   EMBED (legacy `?q=…&output=embed`) is fussy. Fully percent-encoding the address rendered a
+   BLANK GREY PANEL. Two causes: it wants `+` for spaces, and a leading unit number ("No. 23A")
+   does not geocode — a unit is not a place. So the embed gets the development name plus the
+   street-level address with the unit stripped, which drops the pin on the property and makes
+   Google's own info card read back the same street, postcode and state we print above it.
+
+   DIRECTIONS (modern `maps/dir/?api=1&destination=`) handles standard encoding and the unit
+   fine, so it keeps the FULL address — that is the one a buyer actually navigates to. */
+const MAP_FALLBACK = `${SINARAN_TENDER.name} ${SINARAN_TENDER.area}`;
+const STREET_ONLY = ADDRESS.replace(/^\s*(?:No\.?|Lot|Unit)\s*[^,]*,\s*/i, "");
+const MAP_EMBED_Q = encodeURIComponent(
+  ADDRESS ? `${SINARAN_TENDER.name}, ${STREET_ONLY}` : MAP_FALLBACK,
+).replace(/%20/g, "+");
+const MAP_DIR_Q = encodeURIComponent(ADDRESS || MAP_FALLBACK);
 const LAND_USE = SINARAN_TENDER.details?.landTitle;
 if (!LAND_USE) throw new Error("Residensi Sinaran land-use data is missing");
 
@@ -160,78 +184,84 @@ const NEARBY_ICON: Record<string, string> = {
    lines 18477-18520). GEOMETRY is exact: 999px capsule, .38rem/.8rem padding, .7rem grid
    gap, .5rem icon gap, .82rem/600/1.4 type, 20px icon at stroke-width 1.8, round caps.
    COLOUR is TenderProp's, per the standing rule that we adopt patterns from references and
-   never their palettes — iNewProject's #F5F5F5 neutral grey and #777 would read cold against
-   this warm page. One token swap if Bryan wants the literal grey.
+   never their palettes - iNewProject's #F5F5F5 grey and #777 read cold on this page.
 
-   The icon vocabulary is the full 18 from the TenderProp Sinaran bundle (viewBox 0 0 20 20,
-   which is why the stroke reads at 1.5 there and 1.8 here), plus two the set had no glyph
-   for. Held as a MAP so any listing can draw on all of them — a name with no entry simply
-   renders no icon rather than breaking, the same graceful failure the iNewProject page shows
-   on "Sky Deck". */
+   ICONS ARE REDRAWN, not inherited. The Breeze Hill set was authored for another context
+   and several glyphs collapsed into nothing at 20px - Bryan on the playground: "what the
+   fuck is children's playground icon?" It was a bare diagonal and a line, which read as a
+   flag. Every glyph here is drawn on the 20-grid for a 1.8 stroke and commits to ONE
+   recognisable object rather than an abstraction.
+
+   Held as a MAP keyed by NAME: a facility with no entry renders its label and no icon
+   rather than breaking - the same graceful failure the iNewProject page shows on "Sky
+   Deck", where the icon span is emitted empty. */
 const FACILITY_ICON: Record<string, string> = {
-  "BBQ Deck":
-    '<path d="M10 17a4 4 0 0 0 4-4c0-3-4-6.5-4-6.5S6 10 6 13a4 4 0 0 0 4 4z"/><path d="M10 17a1.7 1.7 0 0 0 1.7-1.7c0-1.2-1.7-2.6-1.7-2.6s-1.7 1.4-1.7 2.6A1.7 1.7 0 0 0 10 17z"/>',
-  "Cantilever-Viewing Deck":
-    '<circle cx="6" cy="13" r="2.6"/><circle cx="14" cy="13" r="2.6"/><path d="M8.6 13h2.8"/><path d="M5.2 10.6 6.4 5h2.1l.6 5.2"/><path d="M14.8 10.6 13.6 5h-2.1l-.6 5.2"/>',
-  "Children's Playground":
-    '<path d="M4 16h12"/><path d="M15 6v10"/><path d="M15 6c-5 0-8 4-8 10"/><path d="M5 12h4"/>',
-  "Co-working Lounge":
-    '<rect x="3" y="5" width="14" height="9" rx="1.5"/><path d="M10 14v3"/><path d="M8 17h4"/>',
-  "Family Pool":
-    '<path d="M2 12c2 0 2-1.5 4-1.5S8 12 10 12s2-1.5 4-1.5S16 12 18 12"/><path d="M2 16c2 0 2-1.5 4-1.5S8 16 10 16s2-1.5 4-1.5S16 16 18 16"/>',
-  "Flying Fox":
-    '<path d="M3 5h14"/><path d="M12 5 9 9"/><circle cx="9" cy="10.4" r="1.5"/><path d="M9 11.9v3l-2 2M9 14.9l2 2"/>',
-  "Games Room":
-    '<rect x="2.5" y="7" width="15" height="8" rx="4"/><path d="M6.5 9.6v2.8M5.1 11h2.8"/><circle cx="13" cy="10.4" r=".9"/><circle cx="15" cy="12.4" r=".9"/>',
-  Gymnasium:
-    '<path d="M4 7v6M7 5.5v9M13 5.5v9M16 7v6"/><path d="M7 10h6"/>',
-  "Heated-Jacuzzi":
-    '<path d="M2 15c2 0 2-1.5 4-1.5S8 15 10 15s2-1.5 4-1.5S16 15 18 15"/><path d="M7 9c0-1 1-1.2 1-2.2S7 5.6 7 4.6M10 9c0-1 1-1.2 1-2.2S10 5.6 10 4.6M13 9c0-1 1-1.2 1-2.2S13 5.6 13 4.6"/>',
-  "Infinity Pool":
-    '<path d="M6.2 7.6a2.4 2.4 0 1 0 0 4.8c2.4 0 4.2-4.8 6.6-4.8a2.4 2.4 0 1 1 0 4.8c-2.4 0-4.2-4.8-6.6-4.8z"/><path d="M2 16c2 0 2-1.3 4-1.3S8 16 10 16s2-1.3 4-1.3S16 16 18 16"/>',
-  "Jogging Path":
-    '<circle cx="12.4" cy="4.4" r="1.6"/><path d="M11 8 8.5 10l1.5 3-1 4"/><path d="M8.5 10 5.5 11"/><path d="M11 13l3 1 1 3"/>',
-  "Landscape Garden":
-    '<path d="M10 17v-4.2"/><path d="M10 12.8c-3 0-5-2-5-4.4S7 4 10 4s5 2 5 4.4-2 4.4-5 4.4z"/>',
-  Reflexology:
-    '<path d="M8.4 17c-1.5 0-2.5-1-2.5-2.5 0-2 1-3 1-5.5C6.9 6.2 8.4 5 10 5s3 1.6 3 4c0 3-1.5 4-1.5 6 0 1.2-1 2-3.1 2z"/><circle cx="13.9" cy="6.4" r=".85"/>',
-  "Residents' Lounge":
-    '<path d="M4.5 11.5V9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v2.5"/><rect x="2.5" y="11.3" width="15" height="4.5" rx="1.6"/><path d="M6 15.8v1.2M14 15.8v1.2"/>',
-  Surau:
-    '<path d="M4 16v-3.4a6 6 0 0 1 12 0V16"/><path d="M2.5 16h15"/><path d="M10 6.6V4.8"/><circle cx="10" cy="3.6" r=".8"/>',
-  "Swimming Pool":
-    '<path d="M2 13.6c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><path d="M2 17.2c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><path d="M7 12V5.2a1.8 1.8 0 0 1 3.6 0M12.6 12V5.2a1.8 1.8 0 0 1 3.6 0"/><path d="M7 8.4h5.6"/>',
-  "Wading Pool":
-    '<path d="M2 12.6c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><path d="M4 16.4h12"/>',
-  "Yoga Deck":
-    '<circle cx="10" cy="4.8" r="1.6"/><path d="M10 7.4v4"/><path d="M10 11.4c-2.2 0-4 1.1-4 3.2h8c0-2.1-1.8-3.2-4-3.2z"/><path d="M6.6 10.2 4 11.8M13.4 10.2 16 11.8"/>',
   "Gated & Guarded":
-    '<path d="M10 2.5l5.8 2.5v4.2c0 4.2-2.8 6.8-5.8 8.3-3-1.5-5.8-4.1-5.8-8.3V5L10 2.5z"/>',
-  "Guardhouse":
-    '<path d="M10 2.5l5.8 2.5v4.2c0 4.2-2.8 6.8-5.8 8.3-3-1.5-5.8-4.1-5.8-8.3V5L10 2.5z"/><path d="M10 7.2c1.1 0 2 .9 2 2s-.9 2-2 2"/>',
+    '<path d="M10 2.6l5.6 2.4v4.3c0 4-2.7 6.6-5.6 8-2.9-1.4-5.6-4-5.6-8V5L10 2.6z"/><path d="M7.8 9.9l1.6 1.6 3-3.2"/>',
+  "24-Hour Security":
+    '<circle cx="10" cy="10" r="6.9"/><path d="M10 5.9V10l2.8 1.7"/>',
+  "CCTV Surveillance":
+    '<path d="M3 7.9l11.1-3 1.1 4.1L4.1 12z"/><path d="M6 12.5l1 3.4"/><path d="M4.5 15.9h4.4"/><path d="M15.2 9l2-.6"/>',
+  "Children's Playground":
+    '<path d="M3.6 16.8 10 4.4l6.4 12.4"/><path d="M6.1 9.2h7.8"/><path d="M8.2 9.2v4.4M11.8 9.2v4.4"/><path d="M7.4 13.6h5.2"/>',
+  "Landscape Garden":
+    '<path d="M10 17.3v-4.2"/><path d="M10 13.1c-3.1 0-5.2-2-5.2-4.5S7.2 4 10 4s5.2 2.2 5.2 4.6-2.1 4.5-5.2 4.5z"/>',
+  "Jogging Path":
+    '<circle cx="12.6" cy="4.3" r="1.7"/><path d="M11.2 8.2 8.4 10.1l1.6 3-1.1 4.1"/><path d="M8.4 10.1 5.3 11.2"/><path d="M11.2 13.1l3 1.1 1.1 3.1"/>',
+  "Multipurpose Hall":
+    '<path d="M2.8 17h14.4"/><path d="M4.6 17V8.8M15.4 17V8.8"/><path d="M3 8.8 10 4.2l7 4.6"/><path d="M8.3 17v-4.3h3.4V17"/>',
+  "Surau":
+    '<path d="M3.4 17v-5.4a6.6 6.6 0 0 1 13.2 0V17"/><path d="M2.4 17h15.2"/><path d="M8.4 17v-3.2a1.6 1.6 0 0 1 3.2 0V17"/><path d="M10 6.8V5.2"/><circle cx="10" cy="4.3" r=".8"/>',
+  "BBQ Area":
+    '<path d="M10 17a4 4 0 0 0 4-4c0-3-4-6.5-4-6.5S6 10 6 13a4 4 0 0 0 4 4z"/><path d="M10 17a1.7 1.7 0 0 0 1.7-1.7c0-1.2-1.7-2.6-1.7-2.6s-1.7 1.4-1.7 2.6A1.7 1.7 0 0 0 10 17z"/>',
+  "Swimming Pool":
+    '<path d="M2.4 13.5c1.9 0 1.9-1.4 3.8-1.4s1.9 1.4 3.8 1.4 1.9-1.4 3.8-1.4 1.9 1.4 3.8 1.4"/><path d="M2.4 16.9c1.9 0 1.9-1.4 3.8-1.4s1.9 1.4 3.8 1.4 1.9-1.4 3.8-1.4 1.9 1.4 3.8 1.4"/><path d="M7 11.5V5.4a1.7 1.7 0 0 1 3.4 0"/><path d="M12.4 11.5V5.4a1.7 1.7 0 0 1 3.4 0"/><path d="M7 8.5h5.4"/>',
+  "Wading Pool":
+    '<path d="M3.2 9.6h13.6v3.2a3.6 3.6 0 0 1-3.6 3.6H6.8a3.6 3.6 0 0 1-3.6-3.6z"/><path d="M6 12.7c1 0 1-.9 2-.9s1 .9 2 .9 1-.9 2-.9 1 .9 2 .9"/><path d="M6.6 9.6V7.4M13.4 9.6V7.4"/>',
+  "Gymnasium":
+    '<path d="M4 7.4v5.2M6.8 5.6v8.8M13.2 5.6v8.8M16 7.4v5.2"/><path d="M6.8 10h6.4"/>',
+  "Futsal Court":
+    '<circle cx="10" cy="10" r="6.9"/><path d="M10 6.3l2.9 2.1-1.1 3.4H8.2L7.1 8.4z"/><path d="M10 6.3V3.2M12.9 8.4l2.9-.9M11.8 11.8l1.8 2.5M8.2 11.8l-1.8 2.5M7.1 8.4l-2.9-.9"/>',
+  "Badminton Court":
+    '<path d="M11.4 5.1a4.5 4.5 0 1 1-6.3 6.3 4.5 4.5 0 0 1 6.3-6.3z"/><path d="M11 11.3 16.1 16.4"/><path d="M6.5 6.2l4.6 4.6M8.9 5.2l3.6 3.6M5.2 8.9l3.6 3.6"/>',
   "Visitor Parking":
     '<path d="M4 13.6h12"/><path d="M5 13.6V10l1.5-3.2a1.4 1.4 0 0 1 1.3-.8h4.4a1.4 1.4 0 0 1 1.3.8L15 10v3.6"/><path d="M5 13.6v1.7h1.7v-1.7M13.3 13.6v1.7H15v-1.7"/><path d="M6.5 10.2h7"/>',
+  "Perimeter Walkway":
+    '<path d="M2.8 7.6h14.4"/><path d="M5.2 7.6v6.6M14.8 7.6v6.6"/><path d="M3.6 17.2h3.2M9 17.2h2.8M14 17.2h2.6"/>',
 };
 
-/* ⚠️ SINARAN'S OWN LIST, not the 18 in the reference. Those 18 are Tropicana Breeze Hill's —
-   a high-rise condo — and this page is a 62-unit landed townhouse scheme with no infinity
-   pool, flying fox, jacuzzi or games room. That is exactly why the section was deleted on
-   30 Jul: "the 18 amenities listed were borrowed condominium content, not this 62-unit
-   townhouse scheme." Re-adding them would put false facts on a live listing.
+/* WARNING: DEMO CONTENT - NOT RESIDENSI SINARAN'S REAL FACILITY LIST.
+   Bryan, 3 Aug: "ensure there are lots of facilities, for demo sake only." So this is a
+   plausible list for a gated landed scheme, sized to show the section working at density.
 
-   Every entry below is supported by something already on this page:
-     Gated & Guarded      PROPERTY_DETAILS - "Yes · single controlled access", and
-                          About para 3 names the guardhouse directly
-     Landscape Garden     About para 3 - "the shared grounds and the upkeep of common areas"
-     Children's Playground  visible in the gallery photographs
-     Visitor Parking      About para 7 - "the arithmetic actually works - visitors included"
+   It is NOT what the agency told us this development has. Only these are supported by the
+   page's own content: Gated & Guarded (Property Details), Landscape Garden (About para 3),
+   Children's Playground (the gallery photographs), Visitor Parking (About para 7).
+   EVERYTHING ELSE IS INVENTED FOR THE DEMO.
 
-   ⚠️ STILL NEEDS THE AGENCY'S REAL LIST before handoff. See BACKEND-CONTRACT.md §3d. */
+   Deliberately still excluded: infinity pool, flying fox, heated jacuzzi, sky deck, games
+   room, cantilever deck. That is the Tropicana Breeze Hill CONDO set which got this section
+   deleted on 30 Jul, and none of it is credible on a 62-unit landed township.
+
+   STRIP OR REPLACE BEFORE HANDOFF - same treatment as the demo:true tender records.
+   See BACKEND-CONTRACT.md 3d and founder question #9. */
 const FACILITIES: string[] = [
   "Gated & Guarded",
+  "24-Hour Security",
+  "CCTV Surveillance",
   "Children's Playground",
   "Landscape Garden",
+  "Jogging Path",
+  "Multipurpose Hall",
+  "Surau",
+  "BBQ Area",
+  "Swimming Pool",
+  "Wading Pool",
+  "Gymnasium",
+  "Futsal Court",
+  "Badminton Court",
   "Visitor Parking",
+  "Perimeter Walkway",
 ];
 
 const ABOUT_PARAS: string[] = [
@@ -845,7 +875,7 @@ export function ResidensiSinaranDetail() {
                       {/* Labels the right-hand column, which until now carried bare numbers
                           with nothing to say what they were. Sits in the heading row so it
                           reads as a table header, not as a second category. */}
-                      <span className="amenkey">Distance &middot; Drive</span>
+                      <span className="amenkey"><span>Distance</span><span>&middot; Drive</span></span>
                     </h3>
                     {cat.items.map((it) => (
                       <div className="amenrow" key={it.name}>
@@ -890,8 +920,27 @@ export function ResidensiSinaranDetail() {
           <div className="wrap">
             <div className="blkcard">
               <h2 className="sec-title">Property <span>Location</span></h2>
+              {/* ABOVE the map, in OUR type, as selectable text (Bryan). Below it, it would be
+                  a caption to Google's widget; above it, it is the section's own fact and the
+                  map becomes the illustration. Also the only version a crawler or a screen
+                  reader can reach — Google's iframe card is neither. */}
+              <div className="addr-block">
+                <div className="addr-lines">
+                  <span className="lbl">Property address</span>
+                  <p>{ADDRESS || "Not stated"}</p>
+                </div>
+                <a
+                  className="v1-textlink"
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${MAP_DIR_Q}`}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <span>Get directions</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+                </a>
+              </div>
               <div className="mapbox">
-                <iframe title="Map — Taman Sri Muda, Shah Alam" loading="lazy" referrerPolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Residensi+Sinaran+Taman+Sri+Muda+Shah+Alam&amp;output=embed"></iframe>
+                <iframe title="Map — Taman Sri Muda, Shah Alam" loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={`https://www.google.com/maps?q=${MAP_EMBED_Q}&output=embed`}></iframe>
               </div>
             </div>
           </div>

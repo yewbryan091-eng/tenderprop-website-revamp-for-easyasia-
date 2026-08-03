@@ -45,6 +45,7 @@ Every e-tender listing must have all of these or it cannot render.
 |---|---|---|---|
 | `name` | string | `Residensi Sinaran` | Also becomes the page slug |
 | `area` | string | `Shah Alam` | Town/locality |
+| `address` | string \| null | `No. 23A, Jalan Sri Kandi 25/15F, Taman Sri Muda, 40400 Shah Alam, Selangor Darul Ehsan` | **Full postal address, unit included.** See §3e — it drives the map, so it cannot be approximate. `null` prints "Not stated" |
 | `stateKey` | enum | `selangor` | Lowercase key, drives filtering |
 | `stateName` | string | `Selangor` | Display form of the above |
 | `reservePrice` | integer (RM) | `517000` | **A guide, NOT a floor.** Buyers may bid below it — see §6b |
@@ -162,6 +163,38 @@ This section was deleted once already, on 30 Jul, because it carried **18 amenit
 from a Tropicana Breeze Hill condominium** — infinity pool, flying fox, heated jacuzzi, games
 room — on a 62-unit landed townhouse scheme. **Do not restore that list.** The agency's real
 facilities are a founder input, tracked in `PLAN-AUGUST-DELIVERY.md` §5.
+
+---
+
+## 3e. Address and the map — added 3 Aug 2026
+
+Founder-supplied by Bryan on 3 Aug, **exact unit included**, resolving the open question about
+whether TenderProp publishes precise addresses. It does.
+
+**Before this, the address was not on the page at all.** It existed only as a search phrase
+inside the Google Maps iframe URL, which meant it was unselectable, unreadable by a screen
+reader, invisible to Google Search, and gone the instant the iframe failed to load. For a
+property listing that is a primary fact, not decoration.
+
+**The map is DERIVED from `address` — do not store a separate map URL, query or pin.** If both
+existed an admin could edit one and not the other, and the page would print one address while
+pointing at another.
+
+Two derivations, because the two Google endpoints do not accept the same string (verified by
+swapping the live iframe through each):
+
+| Use | Endpoint | String |
+|---|---|---|
+| Embedded map | legacy `?q=…&output=embed` | `{name}, {address with the unit stripped}`, **`+` for spaces** |
+| Get directions | `maps/dir/?api=1&destination=` | the **full** address, standard percent-encoding |
+
+The embed is fussy: fully percent-encoding the address rendered a **blank grey panel**, and a
+leading unit number (`No. 23A`) does not geocode because a unit is not a place. Stripping the
+unit and prefixing the development name drops the pin correctly and makes Google's own info
+card read back the same street, postcode and state the page prints above it.
+
+**If EasyAsia stores coordinates**, prefer them over the text query for the embed — geocoding a
+string is the weakest link here. The printed address must still come from `address`.
 
 ---
 
