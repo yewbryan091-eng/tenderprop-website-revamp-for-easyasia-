@@ -154,7 +154,10 @@ section.blk.tender-band {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: "price" "terms" "submit";
-  align-content: center;
+  /* space-between, not center: the left panel is taller, so centring left ~60px of dead space
+     below the last line. Spreading the zones lets the column fill its own height and the panel
+     ends exactly on the outcome sentence. */
+  align-content: space-between;
   row-gap: 0;
   min-width: 0;
   padding: clamp(20px, 2.2vw, 30px) clamp(30px, 4vw, 58px) clamp(20px, 2.2vw, 30px) clamp(44px, 5vw, 72px);
@@ -223,13 +226,11 @@ section.blk.tender-band {
 .v1 .sub { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
 
 /* ── ZONE 4 · the action ─────────────────────────────────────────────────────────── */
-/* The closing rule sits BELOW the outcome line, not above it (Bryan) — so the line reads as
-   the end of the section rather than a divider introducing one last paragraph. The terms row
-   already carries a bottom border, which separates this from what precedes it. */
+/* No rule and no trailing padding: the panel ENDS on this line (Bryan). The terms row's own
+   bottom border already separates it from what precedes it. */
 .v1-submit {
   grid-area: submit;
-  padding: clamp(11px, 1.2vw, 15px) 0;
-  border-bottom: 1px solid var(--line);
+  padding: clamp(11px, 1.2vw, 15px) 0 0;
 }
 /* Natural width — sized by its label plus padding, not by the column. */
 .v1-act .btn-red {
