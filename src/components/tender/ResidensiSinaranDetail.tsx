@@ -349,7 +349,7 @@ export function ResidensiSinaranDetail() {
         </nav>
 
 
-        <section className="blk tender-band" id="tender">
+        <section className="blk tender-band band-paper" id="tender">
           <div className="wrap">
             <div className="v1">
               <div className="v1-grid">
@@ -679,7 +679,7 @@ export function ResidensiSinaranDetail() {
           <div className="wrap">
             <div className="blkcard">
               <h2 className="sec-title">Selling <span>Points</span></h2>
-              <div className="spgrid"><div className="sp-item"><span className="sp-num">01</span><h3>Completed Homes, Ready to View</h3><p>Inspect the actual home and its surroundings before you commit.</p></div><div className="sp-item"><span className="sp-num">02</span><h3>Low-Density Community of 62 Homes</h3><p>Just 62 three-storey stratified townhouses in total.</p></div><div className="sp-item"><span className="sp-num">03</span><h3>Three-Storey Townhouse Living</h3><p>Multi-level layouts separate shared and private family space.</p></div><div className="sp-item"><span className="sp-num">04</span><h3>Gated and Guarded Environment</h3><p>A controlled environment for greater privacy and peace of mind.</p></div><div className="sp-item"><span className="sp-num">05</span><h3>Two Parking Bays per Home</h3><p>Each residence includes two parking bays.</p></div><div className="sp-item"><span className="sp-num">06</span><h3>Established Taman Sri Muda Location</h3><p>A mature Shah Alam neighbourhood with schools, shops and healthcare nearby.</p></div></div></div>
+              <div className="spgrid"><div className="sp-item"><h3>Completed Homes, Ready to View</h3><p>Inspect the actual home and its surroundings before you commit.</p></div><div className="sp-item"><h3>Low-Density Community of 62 Homes</h3><p>Just 62 three-storey stratified townhouses in total.</p></div><div className="sp-item"><h3>Three-Storey Townhouse Living</h3><p>Multi-level layouts separate shared and private family space.</p></div><div className="sp-item"><h3>Gated and Guarded Environment</h3><p>A controlled environment for greater privacy and peace of mind.</p></div><div className="sp-item"><h3>Two Parking Bays per Home</h3><p>Each residence includes two parking bays.</p></div><div className="sp-item"><h3>Established Taman Sri Muda Location</h3><p>A mature Shah Alam neighbourhood with schools, shops and healthcare nearby.</p></div></div></div>
           </div>
         </section>
 
@@ -688,7 +688,7 @@ export function ResidensiSinaranDetail() {
             condominium content, not this 62-unit townhouse scheme. */}
 
 
-        <section className="blk band-alt" id="area">
+        <section className="blk band-card" id="area">
           <div className="wrap">
             <div className="blkcard">
 
@@ -723,7 +723,7 @@ export function ResidensiSinaranDetail() {
           </div>
         </section>
 
-        <section className="blk band-alt" id="location">
+        <section className="blk band-card" id="location">
           <div className="wrap">
             <div className="blkcard">
               <h2 className="sec-title">Property <span>Location</span></h2>
@@ -800,7 +800,7 @@ export function ResidensiSinaranDetail() {
         </section>
 
 
-        <section className="blk band-alt" id="similar">
+        <section className="blk band-card" id="similar">
           <div className="wrap">
             <h2 className="sec-title">Similar <span>E-Tenders</span></h2>
             <div className="simgrid">
