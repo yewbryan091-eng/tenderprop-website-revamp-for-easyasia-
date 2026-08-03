@@ -105,6 +105,36 @@ it does not have. One plain field per key on the admin form.
 
 ---
 
+## 3c. What's nearby — added 3 Aug 2026
+
+A per-listing list of nearby places, grouped by category. **Category counts are deliberately
+uneven** — Bryan, 3 Aug: *"not all the property has 3 what's nearby all the time, sometimes
+transportation has 2, healthcare has 4."* The admin form must allow **any number of rows per
+category, including zero**, and the frontend packs rather than aligning rows, so nothing breaks.
+
+| Field | Type | Notes |
+|---|---|---|
+| `nearby[].category` | enum | `transportation` \| `education` \| `shopping` \| `healthcare`. Drives the icon; an unknown key renders no icon rather than failing |
+| `nearby[].items[].name` | string | The place, e.g. `Hospital Shah Alam` |
+| `nearby[].items[].kind` | string | One-line description, e.g. `Government hospital · Seksyen 7` |
+| `nearby[].items[].km` | decimal | Road distance, NOT straight-line |
+| `nearby[].items[].min` | integer | Typical drive time |
+
+**A category with zero items is omitted entirely** — the page never prints an empty heading.
+
+### ⚠️ `km` and `min` are the highest-risk fields on the page
+
+Every place currently in `src/` is a real institution, but **the distances and drive times have
+never been verified** against a routing engine or confirmed by the agency. They are the same class
+of content as the Price History table that was deleted for being invented — except worse, because
+a buyer can check a drive time in ten seconds and a wrong one costs the listing its credibility.
+
+**Preferred:** the backend derives both from the listing's coordinates and the place's coordinates
+via a routing API, and they are never typed by hand. **Acceptable:** an admin types them and the
+agency owns their accuracy. **Not acceptable:** shipping the current placeholder figures.
+
+---
+
 ## 4. Photos
 
 Ordered array per listing. Photo 1 is the card thumbnail and the gallery's opening frame.

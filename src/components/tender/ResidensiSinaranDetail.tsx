@@ -102,6 +102,58 @@ const BAND: BandItem[] = ([
   .filter(([, v]) => v !== null && v !== undefined && v !== "")
   .map(([label, v, path]) => ({ label, value: String(v), path }));
 
+/* WHAT'S NEARBY — data-driven, and deliberately UNEVEN.
+   Bryan, 3 Aug: "not all the property has 3 what's nearby all the time, sometimes
+   transportation has 2, healthcare has 4, so its inconsistent." Correct — and the old
+   hard-coded markup quietly assumed exactly three per category. This is one array now, any
+   category may hold any number of entries, and the layout below packs rather than aligning
+   rows (see .amen in the stylesheet).
+
+   ⚠️ DISTANCES AND DRIVE TIMES ARE UNVERIFIED. Every place named here is real, but the km/min
+   figures have never been checked against a routing engine or confirmed by the agency. They
+   are the same class of content as the Price History table that was DELETED for being invented
+   — and worse, a buyer can check these in ten seconds. Before handoff they must either be
+   confirmed, or derived from the listing's coordinates by the backend. See BACKEND-CONTRACT.md
+   §3c: this belongs to EasyAsia as a stored per-listing field, not to our JSX. */
+type NearbyItem = { name: string; kind: string; km: string; min: string };
+const NEARBY: { key: string; label: string; items: NearbyItem[] }[] = [
+  { key: "transportation", label: "Transportation", items: [
+    { name: "Hab Taman Sri Muda", kind: "Rapid KL bus hub \u00b7 Route 751",   km: "1.2 km", min: "4 min" },
+    { name: "KESAS Highway",      kind: "Shah Alam Expressway \u00b7 Sri Muda", km: "1.9 km", min: "5 min" },
+    { name: "KTM Shah Alam",      kind: "KTM Komuter station",                  km: "3.8 km", min: "8 min" },
+    { name: "Federal Highway",    kind: "Klang \u2013 Kuala Lumpur trunk road", km: "5.1 km", min: "9 min" },
+    { name: "LRT Alam Megah",     kind: "Park-and-ride station",                km: "6.5 km", min: "11 min" },
+  ]},
+  { key: "education", label: "Education", items: [
+    { name: "SK Taman Sri Muda 2", kind: "National primary school",   km: "1.8 km", min: "5 min" },
+    { name: "SMK Taman Sri Muda",  kind: "National secondary school", km: "2.3 km", min: "6 min" },
+    { name: "UiTM Shah Alam",      kind: "Public university",         km: "7.0 km", min: "14 min" },
+  ]},
+  { key: "shopping", label: "Shopping", items: [
+    { name: "Pasar Moden Sri Muda", kind: "Fresh market & daily groceries",   km: "1.4 km", min: "4 min" },
+    { name: "Lotus\u2019s Shah Alam", kind: "Hypermarket & retail",            km: "6.6 km", min: "12 min" },
+    { name: "AEON Mall Shah Alam",  kind: "Shopping, dining & entertainment", km: "7.8 km", min: "14 min" },
+  ]},
+  { key: "healthcare", label: "Healthcare", items: [
+    { name: "Watsons Sri Muda",          kind: "Pharmacy & personal care",   km: "1.3 km", min: "4 min" },
+    { name: "Klinik Kesihatan Sri Muda", kind: "Government health clinic",   km: "2.1 km", min: "6 min" },
+    { name: "Hospital Shah Alam",        kind: "Government hospital \u00b7 Seksyen 7", km: "4.2 km", min: "9 min" },
+    { name: "KPJ Selangor Specialist",   kind: "Private specialist hospital", km: "4.8 km", min: "9 min" },
+    { name: "Columbia Asia Bukit Rimau", kind: "24-hour emergency dept.",     km: "5.4 km", min: "10 min" },
+  ]},
+];
+
+const NEARBY_ICON: Record<string, string> = {
+  transportation:
+    "<path d=\"M12 2.5c-3.6 0-6 2.3-6 5.6V16a2.5 2.5 0 0 0 2.5 2.5h7A2.5 2.5 0 0 0 18 16V8.1c0-3.3-2.4-5.6-6-5.6z\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M7.4 10.6c1.4-1 3-1.5 4.6-1.5s3.2.5 4.6 1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M9.3 14.5h.01M14.7 14.5h.01\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M9.2 18.6 7.2 22M14.8 18.6 16.8 22\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />",
+  education:
+    "<path d=\"M3 8l9-4 9 4-9 4-9-4z\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M7 10v5c0 1.5 2.5 3 5 3s5-1.5 5-3v-5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />",
+  shopping:
+    "<path d=\"M2.6 8.6h18.8l-1.8 9.5a2 2 0 0 1-2 1.6H6.4a2 2 0 0 1-2-1.6L2.6 8.6z\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M8.6 8.6 10.6 3.2M15.4 8.6 13.4 3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M9 12.4v3.6M12 12.4v3.6M15 12.4v3.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />",
+  healthcare:
+    "<rect x=\"2.5\" y=\"7\" width=\"19\" height=\"13\" rx=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M9 7V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6V7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M12 11.2v5M9.5 13.7h5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />",
+};
+
 const ABOUT_PARAS: string[] = [
   `Residensi Sinaran sits inside Taman Sri Muda, one of the older established          townships in Shah Alam &mdash; the kind of neighbourhood that finished growing a          decade ago. Sixty-two homes behind a single controlled entrance, which is small          enough that the place stays quiet.`,
   `Each home runs over three storeys, which puts the shared living areas downstairs          and the private rooms above &mdash; the practical reason a family chooses a          townhouse over an apartment of the same size, and the reason the layout still          works as a household grows rather than forcing a move.`,
@@ -694,30 +746,21 @@ export function ResidensiSinaranDetail() {
 
               <h2 className="sec-title">What's <span>Nearby?</span></h2>
               <div className="amen">
-                <div className="amencol">
-                  <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2.5c-3.6 0-6 2.3-6 5.6V16a2.5 2.5 0 0 0 2.5 2.5h7A2.5 2.5 0 0 0 18 16V8.1c0-3.3-2.4-5.6-6-5.6z" strokeLinecap="round" strokeLinejoin="round" /><path d="M7.4 10.6c1.4-1 3-1.5 4.6-1.5s3.2.5 4.6 1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M9.3 14.5h.01M14.7 14.5h.01" strokeLinecap="round" strokeLinejoin="round" /><path d="M9.2 18.6 7.2 22M14.8 18.6 16.8 22" strokeLinecap="round" strokeLinejoin="round" /></svg>Transportation</h3>
-                  <div className="amenrow"><div className="nm"><b>Hab Taman Sri Muda</b><span>Rapid KL bus hub · Route 751</span></div><div className="dist"><b>1.2 km</b><span>4 min</span></div></div>
-                  <div className="amenrow"><div className="nm"><b>KTM Shah Alam</b><span>KTM Komuter station</span></div><div className="dist"><b>3.8 km</b><span>8 min</span></div></div>
-                  <div className="amenrow"><div className="nm"><b>LRT Alam Megah</b><span>Kelana Jaya Line · park-and-ride</span></div><div className="dist"><b>6.5 km</b><span>11 min</span></div></div>
-                </div>
-                <div className="amencol">
-                  <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8l9-4 9 4-9 4-9-4z" strokeLinecap="round" strokeLinejoin="round" /><path d="M7 10v5c0 1.5 2.5 3 5 3s5-1.5 5-3v-5" strokeLinecap="round" strokeLinejoin="round" /></svg>Education</h3>
-                  <div className="amenrow"><div className="nm"><b>SK Taman Sri Muda 2</b><span>National primary school</span></div><div className="dist"><b>1.8 km</b><span>5 min</span></div></div>
-                  <div className="amenrow"><div className="nm"><b>SMK Taman Sri Muda</b><span>National secondary school</span></div><div className="dist"><b>2.3 km</b><span>6 min</span></div></div>
-                  <div className="amenrow"><div className="nm"><b>UiTM Shah Alam</b><span>Public university</span></div><div className="dist"><b>7.0 km</b><span>14 min</span></div></div>
-                </div>
-                <div className="amencol">
-                  <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2.6 8.6h18.8l-1.8 9.5a2 2 0 0 1-2 1.6H6.4a2 2 0 0 1-2-1.6L2.6 8.6z" strokeLinecap="round" strokeLinejoin="round" /><path d="M8.6 8.6 10.6 3.2M15.4 8.6 13.4 3.2" strokeLinecap="round" strokeLinejoin="round" /><path d="M9 12.4v3.6M12 12.4v3.6M15 12.4v3.6" strokeLinecap="round" strokeLinejoin="round" /></svg>Shopping</h3>
-                  <div className="amenrow"><div className="nm"><b>Pasar Moden Sri Muda</b><span>Fresh market &amp; daily groceries</span></div><div className="dist"><b>1.4 km</b><span>4 min</span></div></div>
-                  <div className="amenrow"><div className="nm"><b>Lotus's Shah Alam</b><span>Hypermarket &amp; retail</span></div><div className="dist"><b>6.6 km</b><span>12 min</span></div></div>
-                  <div className="amenrow"><div className="nm"><b>AEON Mall Shah Alam</b><span>Shopping, dining &amp; entertainment</span></div><div className="dist"><b>7.8 km</b><span>14 min</span></div></div>
-                </div>
-                <div className="amencol">
-                  <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2.5" y="7" width="19" height="13" rx="2.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M9 7V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6V7" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 11.2v5M9.5 13.7h5" strokeLinecap="round" strokeLinejoin="round" /></svg>Healthcare</h3>
-                  <div className="amenrow"><div className="nm"><b>Watsons Sri Muda</b><span>Pharmacy &amp; personal care</span></div><div className="dist"><b>1.3 km</b><span>4 min</span></div></div>
-                  <div className="amenrow"><div className="nm"><b>KPJ Selangor Specialist</b><span>Private specialist hospital</span></div><div className="dist"><b>4.8 km</b><span>9 min</span></div></div>
-                  <div className="amenrow"><div className="nm"><b>Columbia Asia Bukit Rimau</b><span>24-hour emergency dept.</span></div><div className="dist"><b>5.4 km</b><span>10 min</span></div></div>
-                </div>
+                {NEARBY.map((cat) => (
+                  <div className="amencol" key={cat.key}>
+                    <h3>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                        aria-hidden="true" dangerouslySetInnerHTML={{ __html: NEARBY_ICON[cat.key] }} />
+                      {cat.label}
+                    </h3>
+                    {cat.items.map((it) => (
+                      <div className="amenrow" key={it.name}>
+                        <div className="nm"><b>{it.name}</b><span>{it.kind}</span></div>
+                        <div className="dist"><b>{it.km}</b><span>{it.min}</span></div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
