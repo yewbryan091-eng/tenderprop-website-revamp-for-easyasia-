@@ -745,6 +745,16 @@ export function ResidensiSinaranDetail() {
             <div className="blkcard">
 
               <h2 className="sec-title">What's <span>Nearby?</span></h2>
+              {/* These figures sit on a page of exact numbers — RM517,000, 1,400 sqft,
+                  Leasehold 99 years — so unqualified they inherit that precision. One
+                  qualifier scoped to the whole section, placed ABOVE the data so it is in
+                  the reading path, rather than a "~" on all sixteen rows or a footnote
+                  underneath that nobody reaches. It answers three things at once: not exact,
+                  by ROAD (not straight-line, which is what a map pin would give), and
+                  measured from the development rather than from the unit. */}
+              <p className="sec-note">
+                Approximate road distances from the development. Drive times vary with traffic.
+              </p>
               <div className="amen">
                 {NEARBY.map((cat) => (
                   <div className="amencol" key={cat.key}>

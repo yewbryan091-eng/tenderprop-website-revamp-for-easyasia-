@@ -82,6 +82,15 @@ now good. **It gets one review pass, then it is frozen** unless something is act
 ### Week 4 · 24–31 Aug — harden and hand over
 **No new pages this week.** This is the week that decides whether the package is credible:
 - Full mobile pass at **375px**, every page, zero horizontal overflow.
+  - **🔴 KNOWN P0, deferred here by Bryan on 3 Aug ("mobile is last").** On the detail page at
+    375px the **sticky sub-nav is 100% hidden behind the header**. Verified live: header 253px
+    tall at `z-index: 60`, sub-nav sticks at `top: 0` with `z-index: 55`, and
+    `elementFromPoint` at the sub-nav's centre returns the header's own nav. So on every phone
+    there is no section navigation at all. Compounded: `scroll-margin-top` is **128px** against
+    that 253px header, so **every anchor link also lands underneath it**. Fix needs the header
+    height to drive both values, or a non-sticky header below 860px — it changes header
+    behaviour site-wide, which is why it waits for this week rather than being patched
+    mid-section.
 - Compliance sweep: Act 242 disclosure present, no banned vocabulary, no over-claims.
 - **Strip the 12 `demo: true` records.** They must not reach EasyAsia.
 - Cross-page consistency: nav, footer, section rhythm, type scale.

@@ -853,6 +853,18 @@ section.blk.band-deep  { background: var(--paper-deep); }
    Newsreader per the design system, and weight 600 not 800 — Newsreader ships 400..700, and
    above that the browser synthesises a fake bold (DESIGN-SYSTEM §2). Scoped to `.tp-detail`
    so it beats the listings rule regardless of stylesheet order. */
+/* A qualifier line directly under a section heading. Reusable — nine sections share
+   .sec-title and Location and the mortgage calculator will both want one of these.
+   `:has()` retunes the heading's own gap so the note reads as attached to the title
+   rather than as the first line of the content: 8px under the heading, then the full
+   --sec-title-gap before the content starts. */
+.tp-detail .sec-title:has(+ .sec-note) { margin-bottom: 8px; }
+.tp-detail .sec-note {
+  margin: 0 0 var(--sec-title-gap);
+  max-width: 66ch;
+  font-size: 13.5px; line-height: 1.5; color: var(--muted);
+}
+
 .tp-detail .sec-title {
   margin: 0 0 var(--sec-title-gap);
   font-family: var(--serif); font-optical-sizing: auto;
