@@ -48,6 +48,7 @@ const TITLE_TYPE = "Strata title";
    redundant. The listing cards were right and this one page was wrong. Reading it through
    displayType() means the label cannot drift from the rule again. */
 const TYPE_LABEL = displayType(SINARAN_TENDER);
+const LISTING_NAME = SINARAN_TENDER.name;
 const LAND_USE = SINARAN_TENDER.details?.landTitle;
 if (!LAND_USE) throw new Error("Residensi Sinaran land-use data is missing");
 
@@ -153,6 +154,85 @@ const NEARBY_ICON: Record<string, string> = {
   healthcare:
     "<rect x=\"2.5\" y=\"7\" width=\"19\" height=\"13\" rx=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M9 7V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6V7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" /><path d=\"M12 11.2v5M9.5 13.7h5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />",
 };
+
+/* FACILITIES — the iNewProject project-detail treatment, ported 1:1 from
+   ~/Downloads/2-Milla-Residence.html (.plain-grid / .plain-card / .facility-icon, CSS at
+   lines 18477-18520). GEOMETRY is exact: 999px capsule, .38rem/.8rem padding, .7rem grid
+   gap, .5rem icon gap, .82rem/600/1.4 type, 20px icon at stroke-width 1.8, round caps.
+   COLOUR is TenderProp's, per the standing rule that we adopt patterns from references and
+   never their palettes — iNewProject's #F5F5F5 neutral grey and #777 would read cold against
+   this warm page. One token swap if Bryan wants the literal grey.
+
+   The icon vocabulary is the full 18 from the TenderProp Sinaran bundle (viewBox 0 0 20 20,
+   which is why the stroke reads at 1.5 there and 1.8 here), plus two the set had no glyph
+   for. Held as a MAP so any listing can draw on all of them — a name with no entry simply
+   renders no icon rather than breaking, the same graceful failure the iNewProject page shows
+   on "Sky Deck". */
+const FACILITY_ICON: Record<string, string> = {
+  "BBQ Deck":
+    '<path d="M10 17a4 4 0 0 0 4-4c0-3-4-6.5-4-6.5S6 10 6 13a4 4 0 0 0 4 4z"/><path d="M10 17a1.7 1.7 0 0 0 1.7-1.7c0-1.2-1.7-2.6-1.7-2.6s-1.7 1.4-1.7 2.6A1.7 1.7 0 0 0 10 17z"/>',
+  "Cantilever-Viewing Deck":
+    '<circle cx="6" cy="13" r="2.6"/><circle cx="14" cy="13" r="2.6"/><path d="M8.6 13h2.8"/><path d="M5.2 10.6 6.4 5h2.1l.6 5.2"/><path d="M14.8 10.6 13.6 5h-2.1l-.6 5.2"/>',
+  "Children's Playground":
+    '<path d="M4 16h12"/><path d="M15 6v10"/><path d="M15 6c-5 0-8 4-8 10"/><path d="M5 12h4"/>',
+  "Co-working Lounge":
+    '<rect x="3" y="5" width="14" height="9" rx="1.5"/><path d="M10 14v3"/><path d="M8 17h4"/>',
+  "Family Pool":
+    '<path d="M2 12c2 0 2-1.5 4-1.5S8 12 10 12s2-1.5 4-1.5S16 12 18 12"/><path d="M2 16c2 0 2-1.5 4-1.5S8 16 10 16s2-1.5 4-1.5S16 16 18 16"/>',
+  "Flying Fox":
+    '<path d="M3 5h14"/><path d="M12 5 9 9"/><circle cx="9" cy="10.4" r="1.5"/><path d="M9 11.9v3l-2 2M9 14.9l2 2"/>',
+  "Games Room":
+    '<rect x="2.5" y="7" width="15" height="8" rx="4"/><path d="M6.5 9.6v2.8M5.1 11h2.8"/><circle cx="13" cy="10.4" r=".9"/><circle cx="15" cy="12.4" r=".9"/>',
+  Gymnasium:
+    '<path d="M4 7v6M7 5.5v9M13 5.5v9M16 7v6"/><path d="M7 10h6"/>',
+  "Heated-Jacuzzi":
+    '<path d="M2 15c2 0 2-1.5 4-1.5S8 15 10 15s2-1.5 4-1.5S16 15 18 15"/><path d="M7 9c0-1 1-1.2 1-2.2S7 5.6 7 4.6M10 9c0-1 1-1.2 1-2.2S10 5.6 10 4.6M13 9c0-1 1-1.2 1-2.2S13 5.6 13 4.6"/>',
+  "Infinity Pool":
+    '<path d="M6.2 7.6a2.4 2.4 0 1 0 0 4.8c2.4 0 4.2-4.8 6.6-4.8a2.4 2.4 0 1 1 0 4.8c-2.4 0-4.2-4.8-6.6-4.8z"/><path d="M2 16c2 0 2-1.3 4-1.3S8 16 10 16s2-1.3 4-1.3S16 16 18 16"/>',
+  "Jogging Path":
+    '<circle cx="12.4" cy="4.4" r="1.6"/><path d="M11 8 8.5 10l1.5 3-1 4"/><path d="M8.5 10 5.5 11"/><path d="M11 13l3 1 1 3"/>',
+  "Landscape Garden":
+    '<path d="M10 17v-4.2"/><path d="M10 12.8c-3 0-5-2-5-4.4S7 4 10 4s5 2 5 4.4-2 4.4-5 4.4z"/>',
+  Reflexology:
+    '<path d="M8.4 17c-1.5 0-2.5-1-2.5-2.5 0-2 1-3 1-5.5C6.9 6.2 8.4 5 10 5s3 1.6 3 4c0 3-1.5 4-1.5 6 0 1.2-1 2-3.1 2z"/><circle cx="13.9" cy="6.4" r=".85"/>',
+  "Residents' Lounge":
+    '<path d="M4.5 11.5V9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v2.5"/><rect x="2.5" y="11.3" width="15" height="4.5" rx="1.6"/><path d="M6 15.8v1.2M14 15.8v1.2"/>',
+  Surau:
+    '<path d="M4 16v-3.4a6 6 0 0 1 12 0V16"/><path d="M2.5 16h15"/><path d="M10 6.6V4.8"/><circle cx="10" cy="3.6" r=".8"/>',
+  "Swimming Pool":
+    '<path d="M2 13.6c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><path d="M2 17.2c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><path d="M7 12V5.2a1.8 1.8 0 0 1 3.6 0M12.6 12V5.2a1.8 1.8 0 0 1 3.6 0"/><path d="M7 8.4h5.6"/>',
+  "Wading Pool":
+    '<path d="M2 12.6c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><path d="M4 16.4h12"/>',
+  "Yoga Deck":
+    '<circle cx="10" cy="4.8" r="1.6"/><path d="M10 7.4v4"/><path d="M10 11.4c-2.2 0-4 1.1-4 3.2h8c0-2.1-1.8-3.2-4-3.2z"/><path d="M6.6 10.2 4 11.8M13.4 10.2 16 11.8"/>',
+  "Gated & Guarded":
+    '<path d="M10 2.5l5.8 2.5v4.2c0 4.2-2.8 6.8-5.8 8.3-3-1.5-5.8-4.1-5.8-8.3V5L10 2.5z"/>',
+  "Guardhouse":
+    '<path d="M10 2.5l5.8 2.5v4.2c0 4.2-2.8 6.8-5.8 8.3-3-1.5-5.8-4.1-5.8-8.3V5L10 2.5z"/><path d="M10 7.2c1.1 0 2 .9 2 2s-.9 2-2 2"/>',
+  "Visitor Parking":
+    '<path d="M4 13.6h12"/><path d="M5 13.6V10l1.5-3.2a1.4 1.4 0 0 1 1.3-.8h4.4a1.4 1.4 0 0 1 1.3.8L15 10v3.6"/><path d="M5 13.6v1.7h1.7v-1.7M13.3 13.6v1.7H15v-1.7"/><path d="M6.5 10.2h7"/>',
+};
+
+/* ⚠️ SINARAN'S OWN LIST, not the 18 in the reference. Those 18 are Tropicana Breeze Hill's —
+   a high-rise condo — and this page is a 62-unit landed townhouse scheme with no infinity
+   pool, flying fox, jacuzzi or games room. That is exactly why the section was deleted on
+   30 Jul: "the 18 amenities listed were borrowed condominium content, not this 62-unit
+   townhouse scheme." Re-adding them would put false facts on a live listing.
+
+   Every entry below is supported by something already on this page:
+     Gated & Guarded      PROPERTY_DETAILS - "Yes · single controlled access", and
+                          About para 3 names the guardhouse directly
+     Landscape Garden     About para 3 - "the shared grounds and the upkeep of common areas"
+     Children's Playground  visible in the gallery photographs
+     Visitor Parking      About para 7 - "the arithmetic actually works - visitors included"
+
+   ⚠️ STILL NEEDS THE AGENCY'S REAL LIST before handoff. See BACKEND-CONTRACT.md §3d. */
+const FACILITIES: string[] = [
+  "Gated & Guarded",
+  "Children's Playground",
+  "Landscape Garden",
+  "Visitor Parking",
+];
 
 const ABOUT_PARAS: string[] = [
   `Residensi Sinaran sits inside Taman Sri Muda, one of the older established          townships in Shah Alam &mdash; the kind of neighbourhood that finished growing a          decade ago. Sixty-two homes behind a single controlled entrance, which is small          enough that the place stays quiet.`,
@@ -396,7 +476,7 @@ export function ResidensiSinaranDetail() {
 
         <nav className="subnav" id="subnav" aria-label="Section navigation">
           <div className="wrap">
-            <div className="row"><a href="#tender">E-Tender Info</a> <a href="#details">Details</a> <a href="#about">About</a> <a href="#selling">Selling Points</a> <a href="#area">What's Nearby</a> <a href="#location">Location</a> <a href="#agent">Agent</a> <a href="#mortgage">Mortgage</a> <a href="#faq">FAQ</a></div>
+            <div className="row"><a href="#tender">E-Tender Info</a> <a href="#details">Details</a> <a href="#about">About</a> <a href="#selling">Selling Points</a> <a href="#area">What's Nearby</a> <a href="#facilities">Facilities</a> <a href="#location">Location</a> <a href="#agent">Agent</a> <a href="#mortgage">Mortgage</a> <a href="#faq">FAQ</a></div>
           </div>
         </nav>
 
@@ -753,7 +833,7 @@ export function ResidensiSinaranDetail() {
                   by ROAD (not straight-line, which is what a map pin would give), and
                   measured from the property rather than from a nearby landmark. */}
               <p className="sec-note">
-                Approximate road distances from the property. Drive times vary with traffic.
+                Approximate driving distance and time from {LISTING_NAME}.
               </p>
               <div className="amen">
                 {NEARBY.map((cat) => (
@@ -762,11 +842,15 @@ export function ResidensiSinaranDetail() {
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                         aria-hidden="true" dangerouslySetInnerHTML={{ __html: NEARBY_ICON[cat.key] }} />
                       {cat.label}
+                      {/* Labels the right-hand column, which until now carried bare numbers
+                          with nothing to say what they were. Sits in the heading row so it
+                          reads as a table header, not as a second category. */}
+                      <span className="amenkey">Distance &middot; Drive</span>
                     </h3>
                     {cat.items.map((it) => (
                       <div className="amenrow" key={it.name}>
                         <div className="nm"><b>{it.name}</b><span>{it.kind}</span></div>
-                        <div className="dist"><b>{it.km}</b><span>{it.min}</span></div>
+                        <div className="dist"><b>{it.km}</b><span>~{it.min}</span></div>
                       </div>
                     ))}
                   </div>
@@ -775,6 +859,32 @@ export function ResidensiSinaranDetail() {
             </div>
           </div>
         </section>
+
+        {/* FACILITIES — restored 3 Aug on Bryan's instruction, using iNewProject's own
+            project-detail treatment (.plain-card capsules). It was deleted on 30 Jul because
+            the 18 amenities it carried were Breeze Hill's condo facilities; the DESIGN was
+            never the problem, the CONTENT was. See FACILITIES above for what replaced them. */}
+        <section className="blk band-card" id="facilities">
+          <div className="wrap">
+            <div className="blkcard">
+              <h2 className="sec-title">Facilities</h2>
+              <ul className="fac-list">
+                {FACILITIES.map((name) => (
+                  <li className="fac-chip" key={name}>
+                    {/* No icon for a name the map does not carry — the label still prints.
+                        Same graceful failure the iNewProject page shows on "Sky Deck". */}
+                    {FACILITY_ICON[name] && (
+                      <svg viewBox="0 0 20 20" aria-hidden="true"
+                        dangerouslySetInnerHTML={{ __html: FACILITY_ICON[name] }} />
+                    )}
+                    <span>{name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
 
         <section className="blk band-card" id="location">
           <div className="wrap">

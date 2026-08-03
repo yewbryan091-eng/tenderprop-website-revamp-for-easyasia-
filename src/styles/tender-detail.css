@@ -728,7 +728,7 @@ section.blk.band-deep  { background: var(--paper-deep); }
   .tabbar button { border: 1.5px solid var(--line); background: var(--card); border-radius: 5px; padding: 8px 18px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; color: var(--muted); }
   .tabbar button.on { background: var(--burgundy); border-color: var(--burgundy); color: var(--burgundy-ink); }
   .sample-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: #FFF3D6; color: #7A5400; border: 1px solid #E8D4A2; border-radius: 4px; padding: 3px 9px; margin-left: 10px; vertical-align: middle; }
-  .histwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }.spgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px 30px; }.fac-list { display: flex; flex-wrap: wrap; gap: 14px 28px; list-style: none; margin: 0; padding: 0; }.fac-chip { display: inline-flex; align-items: center; padding: 0; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; }.fac-chip svg { width: 16px; height: 16px; flex: 0 0 auto; margin-right: 8px; fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }/* No numerals (Bryan). 01-06 implied a SEQUENCE and these are six unordered benefits.
+  .histwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }.spgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px 30px; }.fac-list { display: flex; flex-wrap: wrap; gap: 11px; list-style: none; margin: 16px 0 0; padding: 0; }.fac-chip { display: inline-flex; align-items: center; justify-content: flex-start; gap: 8px; border: 0; border-radius: 999px; background: var(--paper-deep); padding: 6px 13px; font-size: 13.1px; font-weight: 600; line-height: 1.4; color: var(--ink); text-align: left; }.fac-chip svg { width: 20px; height: 20px; flex-shrink: 0; display: block; fill: none; stroke: var(--muted); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }/* No numerals (Bryan). 01-06 implied a SEQUENCE and these are six unordered benefits.
    Nothing replaces them: the titles take the section's own left rail instead of sitting
    42px inside it, so the heading and all six items share one edge. The 3x2 grid already
    says "six parallel things" without a glyph to count them. */
@@ -748,6 +748,11 @@ section.blk.band-deep  { background: var(--paper-deep); }
   @media(max-width: 760px) { .amen { grid-template-columns: 1fr; row-gap: 28px; } }
   .amencol h3 { display: flex; align-items: center; gap: 9px; font-size: 13px; letter-spacing: .09em; text-transform: uppercase; color: var(--burgundy); margin: 0 0 12px; padding-bottom: 10px; border-bottom: 1.5px solid var(--line); }
   .amencol h3 svg { width: 18px; height: 18px; flex: none; }
+  /* Pushed to the column's right edge so it sits exactly over the figures it labels —
+     .amenrow .dist is right-aligned to the same edge. Muted and a step smaller than the
+     category beside it, because it is a column header, not a second heading. */
+  .amenkey { margin-left: auto; font-size: 11.5px; font-weight: 600; letter-spacing: .08em;
+    color: var(--muted); white-space: nowrap; }
   .amenrow { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; }
   .amenrow + .amenrow { border-top: 1px dashed var(--line); }
   .amenrow .nm b { font-size: 15.5px; font-weight: 700; line-height: 1.35; }

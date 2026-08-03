@@ -115,6 +115,7 @@ Longest lead time, so they cannot wait for the week that needs them.
 | 5 | `/services` | **The real service list.** What does the agency actually offer today? |
 | 6 | Detail page | **Sinaran's real closing date.** `2028-12-31` renders as **885 DAYS LEFT** in 76px type |
 | 7 | Homepage | Are the old testimonials **real, named clients**? If not they do not return |
+| 9 | Detail page | **Residensi Sinaran's real facilities.** The section is rebuilt and live, but its five entries are INFERRED from the page's own copy and photos. What does the development actually have? |
 | 8 | Tender terms | Is the **5-working-day** seller response a fixed rule? Is the tender **start date** real, or per listing? |
 
 ---

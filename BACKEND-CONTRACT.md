@@ -135,6 +135,36 @@ agency owns their accuracy. **Not acceptable:** shipping the current placeholder
 
 ---
 
+## 3d. Facilities — added 3 Aug 2026
+
+A flat list of facility names per listing. The frontend renders each as a capsule chip and
+looks the icon up **by name** — the same shape iNewProject's own page uses. **A name with no
+icon still renders**, label only, so the admin can type anything without breaking the page.
+
+| Field | Type | Notes |
+|---|---|---|
+| `facilities[]` | string | Facility name, e.g. `Children's Playground`. Order is the display order |
+
+**No icon field.** Icons live in the frontend, keyed on the name. If the agency needs a new
+facility icon, that is a frontend change, not a data one.
+
+**An empty or absent list omits the whole section** — the page never prints an empty Facilities
+heading.
+
+### ⚠️ Residensi Sinaran's list is inferred, not supplied
+
+The five names currently in `src/` are each defensible from something already on the page
+(`Gated & guarded` from Property Details, the guardhouse and shared grounds from the About
+copy, the playground from the gallery photographs, visitor parking from the About copy). **They
+are not a list the agency gave us.**
+
+This section was deleted once already, on 30 Jul, because it carried **18 amenities borrowed
+from a Tropicana Breeze Hill condominium** — infinity pool, flying fox, heated jacuzzi, games
+room — on a 62-unit landed townhouse scheme. **Do not restore that list.** The agency's real
+facilities are a founder input, tracked in `PLAN-AUGUST-DELIVERY.md` §5.
+
+---
+
 ## 4. Photos
 
 Ordered array per listing. Photo 1 is the card thumbnail and the gallery's opening frame.
