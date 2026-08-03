@@ -751,7 +751,8 @@ section.blk.band-deep  { background: var(--paper-deep); }
   /* Pushed to the column's right edge so it sits exactly over the figures it labels —
      .amenrow .dist is right-aligned to the same edge. Muted and a step smaller than the
      category beside it, because it is a column header, not a second heading. */
-  .amencol { --amen-c1: 66px; --amen-c2: 49px; }
+  .amencol { --amen-c1: 58px; --amen-c2: 62px; }
+  .amenkey span, .amenrow .dist b, .amenrow .dist span { white-space: nowrap; }
   .amenkey, .amenrow .dist {
     display: grid; grid-template-columns: var(--amen-c1) var(--amen-c2);
     column-gap: 8px; text-align: right; align-items: baseline;

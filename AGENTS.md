@@ -254,6 +254,14 @@ glance and obvious once measured, which is exactly why they keep shipping.
   visible gap are the same number.
 - **Measure GLYPH to GLYPH, not box to box.** Box geometry is blind to leading. When a gap looks
   wrong but measures right, use canvas `TextMetrics` (`actualBoundingBoxAscent/Descent`).
+- **⚠️ But NEVER size a layout from canvas.** Canvas silently falls back to a different font
+  when the family string does not match what the page actually loaded, and it reports the
+  fallback's metrics with no error. *Real case, 3 Aug:* `~14 min` measured **48.2px** on canvas
+  and renders at **59.3px** in the DOM — a **23% under-read** — so a column sized from it
+  wrapped every two-digit drive time onto a second line. Canvas is for *relative* questions
+  (where is the cap line, how deep is the descender). For any width a layout depends on,
+  measure a real node with its real computed style, and add `white-space: nowrap` so the
+  failure is a visible overflow rather than a silent wrap.
 - **Find out which child is governing the row** before touching padding. The tallest element sets
   the height silently — in that same block the *action* column was 100.8px against the price
   figure's 90.1px, so the button, not the price, was pinning the panel's top edge.
