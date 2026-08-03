@@ -511,16 +511,7 @@ export function ResidensiSinaranDetail() {
       ? mortgageLoan * mortgageMonthlyRate * Math.pow(1 + mortgageMonthlyRate, mortgageMonths)
         / (Math.pow(1 + mortgageMonthlyRate, mortgageMonths) - 1)
       : mortgageLoan / mortgageMonths;
-  const mortgageTotal = mortgageMonthly * mortgageMonths;
-  const mortgageInterest = Math.max(mortgageTotal - mortgageLoan, 0);
-  const mortgageDownAmount = mortgageValid ? mortgagePriceValue * mortgageDownValue / 100 : 0;
   const mortgageMoney = (amount: number) => mortgageValid && Number.isFinite(amount) ? rm(amount) : "—";
-  const resetMortgage = () => {
-    setMortgagePrice(String(RESERVE));
-    setMortgageDown("10");
-    setMortgageYears("35");
-    setMortgageRate("4.0");
-  };
 
   return (
     <div className="tp-detail">
@@ -1332,17 +1323,9 @@ export function ResidensiSinaranDetail() {
         <section className="blk band-card" id="mortgage">
           <div className="wrap">
             <h2 className="sec-title">Mortgage <span>Calculator</span></h2>
-            <p className="sec-note">
-              Estimate the monthly repayment at the price you plan to offer. Figures start
-              from the {rm(RESERVE)} reserve guide &mdash; adjust any of them.
-            </p>
 
             <div className="mortcard">
               <form className="mc-form" onSubmit={(event) => event.preventDefault()} noValidate>
-                <div className="mc-head">
-                  <span className="mc-kicker">Financing assumptions</span>
-                  <button type="button" className="mc-reset" onClick={resetMortgage}>Reset</button>
-                </div>
 
                 <div className="mc-fields">
                   <div className="mc-field mc-span2">
@@ -1408,17 +1391,12 @@ export function ResidensiSinaranDetail() {
                     : "Complete the highlighted fields to see an estimate."}
                 </span>
 
+                {/* ONE row (Bryan) — same as the iNewProject reference: the monthly answers
+                    "can I afford it", the loan amount answers "what am I borrowing", and
+                    everything else was arithmetic a bank rehearses anyway. */}
                 <dl className="mc-rows">
                   <div><dt>Loan amount</dt><dd>{mortgageMoney(mortgageLoan)}</dd></div>
-                  <div><dt>Down payment</dt><dd>{mortgageMoney(mortgageDownAmount)}</dd></div>
-                  <div><dt>Total interest</dt><dd>{mortgageMoney(mortgageInterest)}</dd></div>
-                  <div><dt>Total repayment</dt><dd>{mortgageMoney(mortgageTotal)}</dd></div>
                 </dl>
-
-                <p className="mc-dep">
-                  Your <b>{DEPOSIT}</b> refundable e-tender deposit forms the first part of
-                  that down payment &mdash; not a cost on top of it.
-                </p>
               </div>
             </div>
 
