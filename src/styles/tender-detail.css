@@ -985,8 +985,51 @@ section.blk.band-deep  { background: var(--paper-deep); }
      them. Rendered only above 820px — you cannot scan your own phone screen. */
   .ag-qr { display: flex; align-items: center; gap: 14px; margin-top: 16px;
     padding-top: 16px; border-top: 1px solid var(--line); width: 100%; }
-  .ag-qr-img { flex: none; width: 78px; height: 78px; display: block; }
+  /* A white plate with its own quiet zone, matching the WhatsApp-issued code Bryan sent.
+     It is not decoration: a QR needs a light quiet zone around it and high contrast to scan
+     reliably, and the previous transparent version sat straight on --paper with neither.
+     88px of symbol at 29 modules is ~3px each, which is what a phone camera needs. */
+  .ag-qr-plate { position: relative; flex: none; display: block;
+    width: 104px; height: 104px; padding: 8px;
+    background: #fff; border: 1px solid var(--line); border-radius: 14px; }
+  .ag-qr-img { display: block; width: 100%; height: 100%; }
   .ag-qr-img svg { width: 100%; height: 100%; display: block; }
+  /* ~18% of the symbol — well inside level H's 30% tolerance. The white ring gives the glyph
+     its own quiet zone so it reads as a mark rather than as damage to the code. */
+  .ag-qr-mark { position: absolute; inset: 0; margin: auto;
+    width: 26px; height: 26px; display: grid; place-items: center;
+    background: #fff; border-radius: 50%; color: #1FAF57; }
+  .ag-qr-mark svg { width: 17px; height: 17px; display: block; }
+  /* The plate is a real <button> now, so it needs to reset button chrome and say it is
+     interactive. Hover lifts the border to burgundy — the same signal every other control
+     on this page uses. */
+  button.ag-qr-plate { cursor: zoom-in; font: inherit; transition: border-color .15s ease, box-shadow .15s ease; }
+  button.ag-qr-plate:hover { border-color: var(--burgundy); box-shadow: 0 2px 10px rgba(23,19,15,.08); }
+  button.ag-qr-plate:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 3px; }
+  /* A QR reads as an image, not a control, so the affordance is named in words too. */
+  .ag-qr-zoom { display: block; margin-top: 4px; padding: 0; background: none; border: 0;
+    font: inherit; font-size: 12.5px; font-weight: 700; color: var(--burgundy); cursor: zoom-in;
+    text-decoration: underline; text-underline-offset: 3px; }
+  .ag-qr-zoom:hover { color: var(--ink); }
+
+  /* Enlarged. Sized so the symbol is ~9px per module — comfortably scannable from arm's
+     length, which 86px on the card is not. */
+  .qrmodal { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center;
+    padding: 24px; background: rgba(23,19,15,.72); }
+  .qrmodal-box { position: relative; background: var(--card); border-radius: 16px;
+    padding: 30px 34px 26px; text-align: center; max-width: 360px;
+    box-shadow: 0 24px 60px rgba(23,19,15,.35); }
+  .qrmodal-code { position: relative; display: block; width: 260px; height: 260px; margin: 0 auto 18px; }
+  .qrmodal-code .ag-qr-mark { width: 58px; height: 58px; }
+  .qrmodal-code .ag-qr-mark svg { width: 38px; height: 38px; }
+  .qrmodal-t { display: block; font-size: 16px; font-weight: 800; color: var(--ink); }
+  .qrmodal-s { display: block; margin-top: 5px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+  .qrmodal-x { position: absolute; top: 8px; right: 12px; width: 34px; height: 34px;
+    background: none; border: 0; font-size: 26px; line-height: 1; color: var(--muted);
+    cursor: pointer; border-radius: 50%; }
+  .qrmodal-x:hover { color: var(--ink); background: var(--paper-deep); }
+  .qrmodal-x:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { button.ag-qr-plate { transition: none; } }
   .ag-qr-t { font-size: 12.5px; line-height: 1.45; color: var(--muted); max-width: 20ch; }
   @media (max-width: 820px) { .ag-qr { display: none; } }
   .agentcard .btn.wa svg { width: 16px; height: 16px; margin-right: 8px; vertical-align: -3px; }
