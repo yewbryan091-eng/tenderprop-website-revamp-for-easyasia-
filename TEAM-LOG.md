@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Price History subject strip removal + Buy label |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Price History now opens directly on comparable evidence |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -52,7 +52,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 30 Jul | Property filters live in an inline disclosure **directly below Search**: tender closing cycle, reserve-price range, built-up area, land area and tenure. Price moved out of the Sort row; Tender by State remains standalone | Keeps “what qualifies” together in Search and “how results are ordered” in the results toolbar, while retaining TenderProp’s event/cycle framing | Bryan + Codex |
 | 30 Jul | Tender Information is one **full-bleed, shallow 40/60 split dossier** across every real listing: universal monochrome KL deadline panel left; listing facts, process and action right. No capped card, pin or paperclip | Bryan explicitly chose the Pexels panorama, then asked that this shared listing-page system span the viewport and match the `/tender` hero's compact height | Bryan + Codex |
 | 31 Jul | Tender Information's right panel follows **price → risk → privacy → outcome → action → optional learning**. Offer privacy means hidden from other buyers/the public; outcomes are accepted/countered/not accepted. Payment schedule and general process are separate utilities | Bryan approved the hierarchy brainstorm; three rendered treatments showed that named confidence blocks and one compact action band scan fastest without rebuilding the dossier as another card stack | Bryan + Codex |
-| 3 Aug | Price History returns as a **clearly labelled layout preview**: Buy/Rent comparable-evidence ledger, subject reference strip, masked rows, no dead `More` column and no gross yield until its basis is defined | Bryan asked Codex to implement his father's table sketch before verified agency/JPPH rows exist. The structure must be reviewable without turning sample values into property claims | Bryan + Codex |
+| 3 Aug | Price History returns as a **clearly labelled layout preview**: Buy/Rent comparable-evidence ledger with masked rows, no repeated subject-property strip, no dead `More` column and no gross yield until its basis is defined | Bryan wants buyers to reach the nearby evidence immediately; repeating the subject's price and specs added no decision value. The structure must remain reviewable without turning sample values into property claims | Bryan + Codex |
 
 ---
 
@@ -74,6 +74,15 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 3 Aug 2026 — Codex · Price History now jumps directly to nearby evidence
+Removed the repeated subject-property strip (name, reserve guide, built-up and guide psf). Buyers
+already receive those facts earlier, so Price History now runs heading + Buy/Rent switch straight
+into the relevant comparable ledger. The Buy sublabel now reads **Past sale transactions**.
+
+The prototype honesty marker remains, but it is folded into the ledger heading as a compact
+`LAYOUT PREVIEW` tag rather than occupying a standalone explanatory row. Removed all orphaned
+subject-strip and preview-row CSS; plan, design system and decision ledger now match the UI.
 
 ### 3 Aug 2026 — Codex · Price History introduction wording updated
 Applied Bryan's supplied sentence exactly: “Comparable sale price transaction and rental evidence

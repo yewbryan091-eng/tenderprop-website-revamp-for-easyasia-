@@ -1049,8 +1049,7 @@ export function ResidensiSinaranDetail() {
 
 
         {/* PRICE HISTORY — Bryan restored the architecture on 3 Aug. The rows remain
-            unmistakably masked because no verified transactions have been supplied yet.
-            The subject-property reference is real; the ledger rows are layout only. */}
+            unmistakably masked because no verified transactions have been supplied yet. */}
         <section className="blk band-card" id="history">
           <div className="wrap">
             <div className="blkcard price-history">
@@ -1080,22 +1079,10 @@ export function ResidensiSinaranDetail() {
                       }}
                     >
                       <span>{mode === "buy" ? "Buy" : "Rent"}</span>
-                      <small>{mode === "buy" ? "Sale transactions" : "Rental evidence"}</small>
+                      <small>{mode === "buy" ? "Past sale transactions" : "Rental evidence"}</small>
                     </button>
                   ))}
                 </div>
-              </div>
-
-              <dl className="ph-subject" aria-label="Subject property reference">
-                <div className="ph-subject-name"><dt>Subject property</dt><dd>{LISTING_NAME}</dd></div>
-                <div><dt>Reserve guide</dt><dd className="num">{rm(RESERVE)}</dd></div>
-                <div><dt>Built-up</dt><dd className="num">{PRICE_BASIS}</dd></div>
-                <div><dt>Guide price / sq ft</dt><dd className="num">RM{PSF} psf</dd></div>
-              </dl>
-
-              <div className="ph-preview-note">
-                <span className="sample-tag">Layout preview</span>
-                <p>Masked placeholders show the final column structure. Replace them with verified agency or JPPH records before publishing.</p>
               </div>
 
               <div
@@ -1105,7 +1092,10 @@ export function ResidensiSinaranDetail() {
                 aria-labelledby={`ph-tab-${priceHistoryMode}`}
               >
                 <div className="ph-ledger-head">
-                  <div><strong>{priceHistoryMode === "buy" ? "Comparable sale records" : "Comparable rental records"}</strong><span>Newest records first</span></div>
+                  <div>
+                    <strong>{priceHistoryMode === "buy" ? "Comparable sale records" : "Comparable rental records"}</strong>
+                    <span className="ph-preview-inline">Layout preview</span>
+                  </div>
                   <span>{priceHistoryMode === "buy" ? "Transacted evidence" : "Tenancy / asking evidence"}</span>
                 </div>
                 <div className="ph-table-wrap">

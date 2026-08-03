@@ -153,7 +153,8 @@ repetition gone it is short enough to read whole.
 ### 8. Price History — LAYOUT PREVIEW RESTORED 3 Aug 2026 (Bryan)
 - Job: show nearby comparable sale and rental evidence so a buyer has context for the amount they
   choose to offer.
-- Structure: Buy / Rent tabs; a subject-property reference strip; then a flat comparison ledger.
+- Structure: Buy / Rent tabs followed directly by a flat comparison ledger. Do not repeat the
+  subject property's price or specifications here; the buyer has already passed those sections.
   Buy shows date, comparable property, built-up and transacted price with derived RM/psf. Rent
   shows date, comparable property, built-up, monthly rent and whether the evidence is a completed
   tenancy or an asking rent.

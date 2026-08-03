@@ -745,9 +745,7 @@ section.blk.band-deep  { background: var(--paper-deep); }
   .viewmore[aria-expanded="true"] svg { transform: rotate(180deg); }
   @media (prefers-reduced-motion: reduce) { .viewmore svg { transition: none; } }
 
-  /* PRICE HISTORY — a comparable-evidence ledger, not an admin spreadsheet.
-     The subject property's real guide sits above the masked preview rows, so the table
-     answers one buyer question: "what evidence should I compare my offer against?" */
+  /* PRICE HISTORY — a comparable-evidence ledger, not an admin spreadsheet. */
   .ph-heading {
     display: grid; grid-template-columns: minmax(0, 1fr) auto;
     align-items: end; gap: clamp(22px, 4vw, 48px); margin-bottom: 24px;
@@ -773,33 +771,8 @@ section.blk.band-deep  { background: var(--paper-deep); }
   .ph-tabs button:hover { color: var(--ink); }
   .ph-tabs button.is-active { color: var(--burgundy); border-bottom-color: var(--burgundy); }
 
-  .ph-subject {
-    display: grid; grid-template-columns: 1.35fr repeat(3, minmax(0, 1fr));
-    margin: 0 0 15px; padding: 15px 18px;
-    border: 1px solid var(--line); border-left: 3px solid var(--burgundy);
-    border-radius: 0 7px 7px 0;
-    background: color-mix(in srgb, var(--paper-deep) 58%, var(--card));
-  }
-  .ph-subject > div { min-width: 0; padding: 0 18px; border-left: 1px solid var(--line); }
-  .ph-subject > div:first-child { padding-left: 0; border-left: 0; }
-  .ph-subject > div:last-child { padding-right: 0; }
-  .ph-subject dt {
-    margin: 0 0 4px; color: var(--muted);
-    font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
-  }
-  .ph-subject dd {
-    margin: 0; color: var(--ink); font-size: 14.5px; font-weight: 700;
-    line-height: 1.35; font-variant-numeric: tabular-nums;
-  }
-  .ph-subject-name dd { font-family: var(--serif); font-size: 17px; font-weight: 600; }
-
-  .ph-preview-note {
-    display: flex; align-items: center; gap: 10px;
-    margin: 0 0 14px; color: var(--muted); font-size: 12.5px; line-height: 1.45;
-  }
-  .ph-preview-note p { margin: 0; }
-  .sample-tag {
-    display: inline-block; flex: none; margin: 0; padding: 3px 8px;
+  .ph-preview-inline {
+    display: inline-block; width: max-content; flex: none; margin: 0; padding: 3px 8px;
     border: 1px solid color-mix(in srgb, var(--warn) 34%, var(--line)); border-radius: 3px;
     background: color-mix(in srgb, var(--warn) 8%, var(--card)); color: var(--warn);
     font-size: 10px; font-weight: 800; letter-spacing: .08em; line-height: 1.3;
@@ -814,6 +787,9 @@ section.blk.band-deep  { background: var(--paper-deep); }
   .ph-ledger-head div { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
   .ph-ledger-head strong { font-size: 14.5px; font-weight: 800; color: var(--ink); }
   .ph-ledger-head span { color: var(--muted); font-size: 11.5px; font-weight: 600; }
+  .ph-ledger-head .ph-preview-inline {
+    color: var(--warn); font-size: 10px; font-weight: 800; line-height: 1.3;
+  }
   .ph-ledger-head > span { letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
 
   .ph-table-wrap { overflow: hidden; border-bottom: 1px solid var(--line); }
@@ -852,16 +828,12 @@ section.blk.band-deep  { background: var(--paper-deep); }
   @media(max-width: 760px) {
     .ph-heading { grid-template-columns: 1fr; align-items: start; gap: 18px; }
     .ph-tabs { width: min(100%, 360px); }
-    .ph-subject { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 14px; }
-    .ph-subject > div { padding: 0 14px; }
-    .ph-subject > div:nth-child(3) { padding-left: 0; border-left: 0; }
     .ph-ledger-head > span { display: none; }
   }
   @media(max-width: 620px) {
     .ph-heading { margin-bottom: 20px; }
     .ph-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
     .ph-tabs button { padding-inline: 12px; }
-    .ph-preview-note { align-items: flex-start; }
     .ph-ledger-head div { display: block; }
     .ph-ledger-head div span { display: block; margin-top: 3px; }
     .ph-table-wrap { overflow: visible; border: 0; }
@@ -884,13 +856,6 @@ section.blk.band-deep  { background: var(--paper-deep); }
     .ph-amount strong { font-size: 17px; }
   }
   @media(max-width: 440px) {
-    .ph-subject { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 0; padding-block: 12px; }
-    .ph-subject > div { padding: 11px 10px; border-left: 0; border-top: 1px solid var(--line); }
-    .ph-subject > div:nth-child(odd) { padding-left: 0; }
-    .ph-subject > div:nth-child(even) { padding-right: 0; border-left: 1px solid var(--line); }
-    .ph-subject > div:nth-child(-n + 2) { padding-top: 0; border-top: 0; }
-    .ph-subject > div:nth-child(n + 3) { padding-bottom: 0; }
-    .ph-preview-note { display: grid; grid-template-columns: auto 1fr; }
     .ph-table tr { column-gap: 10px; padding-inline: 12px; }
   }
 

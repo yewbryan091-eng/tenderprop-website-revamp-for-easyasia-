@@ -181,9 +181,9 @@ including today, and the final day reads "1 day left" rather than "0".
   inside, plus a chevron that rotates on `[open]`.
 - **Pills / chips**: `999px` radius, `--card` background, 1px border, 13px/700.
 - **Comparable evidence ledger** (`.price-history`): Buy/Rent is a real mode switch, not two
-  side-by-side mini tables. The subject property's reserve guide, built-up and derived guide psf
-  sit in one reference strip above a native semantic table. Amounts form the strongest right-hand
-  column in Newsreader; everything else is quiet Inter with horizontal hairlines. At 620px the
+  side-by-side mini tables. It goes directly into a native semantic table rather than repeating
+  the subject property's price or specifications. Amounts form the strongest right-hand column
+  in Newsreader; everything else is quiet Inter with horizontal hairlines. At 620px the
   same table rows reflow into compact two-column records instead of forcing horizontal scrolling.
   Never add trend arrows, a dead `More` column, or estimated gross yield without a confirmed basis.
   Masked preview rows carry an explicit `LAYOUT PREVIEW` notice until verified records exist.
