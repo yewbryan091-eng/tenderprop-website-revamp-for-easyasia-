@@ -751,9 +751,9 @@ export function ResidensiSinaranDetail() {
                   the reading path, rather than a "~" on all sixteen rows or a footnote
                   underneath that nobody reaches. It answers three things at once: not exact,
                   by ROAD (not straight-line, which is what a map pin would give), and
-                  measured from the development rather than from the unit. */}
+                  measured from the property rather than from a nearby landmark. */}
               <p className="sec-note">
-                Approximate road distances from the development. Drive times vary with traffic.
+                Approximate road distances from the property. Drive times vary with traffic.
               </p>
               <div className="amen">
                 {NEARBY.map((cat) => (
