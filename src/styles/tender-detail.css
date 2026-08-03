@@ -161,7 +161,17 @@ section.blk.tender-band {
 }
 
 /* ── ZONE 1 · the number the page is about ───────────────────────────────────────── */
-.v1-price { grid-area: price; padding-bottom: clamp(10px, 1.1vw, 14px); }
+/* Price and the action share the row. The full-width button was 5.2x the width of its own
+   label — a banner, not a button — while this row sat 66% empty, 487px of dead space beside
+   the number. Pairing them puts the decision and the response to it in one glance. */
+.v1-price {
+  grid-area: price;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end; column-gap: clamp(20px, 3vw, 44px);
+  padding-bottom: clamp(10px, 1.1vw, 14px);
+}
+.v1-price-fig { min-width: 0; }
+.v1-act { display: grid; justify-items: center; gap: 6px; }
 .v1-price .num {
   display: block;
   margin: 3px 0 2px;
@@ -206,7 +216,7 @@ section.blk.tender-band {
 
 /* What happens AFTER the button is pressed, so it sits immediately above it. */
 .v1-outcome {
-  margin: 0 0 16px;
+  margin: 0;
   font-size: 12.5px; line-height: 1.5; color: var(--muted);
 }
 .v1-outcome b { color: var(--ink); font-weight: 700; }
@@ -215,13 +225,14 @@ section.blk.tender-band {
 /* ── ZONE 4 · the action ─────────────────────────────────────────────────────────── */
 .v1-submit {
   grid-area: submit;
-  padding-top: clamp(12px, 1.3vw, 16px);
+  padding-top: clamp(11px, 1.2vw, 15px);
   border-top: 1px solid var(--line);
 }
-.v1-submit-actions { display: grid; gap: 8px; justify-items: center; }
-.v1-submit-actions .btn-red {
-  width: 100%; justify-content: center; text-align: center;
-  padding: 13px 24px; font-size: 15.5px; border-radius: 10px;
+/* Natural width — sized by its label plus padding, not by the column. */
+.v1-act .btn-red {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 232px; padding: 13px 28px;
+  font-size: 15.5px; border-radius: 10px; white-space: nowrap;
 }
 
 /* The process link, replacing the 1-2-3 that explained it inline for the third time on this
@@ -252,9 +263,9 @@ section.blk.tender-band {
     padding: 28px 46px 28px 28px;
   }
   .v1-main { padding: 23px 26px 18px 40px; }
-  /* Copy and buttons stack once the row cannot hold both. */
-  .v1-submit { grid-template-columns: 1fr; gap: 12px; }
-  .v1-submit-actions { white-space: normal; }
+  /* Price and action stop sharing a row once it cannot hold both. */
+  .v1-price { grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
+  .v1-act { justify-items: start; }
 }
 
 @media(max-width: 820px) and (min-width: 701px) {
@@ -274,6 +285,9 @@ section.blk.tender-band {
 }
 
 @media(max-width: 740px) and (min-width: 701px) {
+  .v1-price { grid-template-columns: minmax(0, 1fr); row-gap: 16px; }
+  .v1-act { justify-items: stretch; }
+  .v1-act .btn-red { width: 100%; }
   .v1-terms { grid-template-columns: minmax(0, 1fr); }
   .v1-terms > div:first-child { padding-right: 0; padding-bottom: 14px; }
   .v1-terms > div + div { padding-left: 0; padding-top: 14px; border-left: 0; border-top: 1px solid var(--line); }
@@ -299,16 +313,9 @@ section.blk.tender-band {
     gap: 12px;
     padding: 14px;
   }
-  /* Up and down on a phone — two full-width tap targets. */
-  .v1-submit-actions {
-    flex-direction: column;
-    gap: 10px;
-    min-width: 0;
-    width: 100%;
-    white-space: normal;
-  }
-  .v1-submit-actions .btn-red,
-  .v1-submit-actions .v1-agent-alt { justify-content: center; text-align: center; }
+  /* Full-width tap target on a phone — the one place a full-bleed button is right. */
+  .v1-act { justify-items: stretch; }
+  .v1-act .btn-red { width: 100%; min-width: 0; justify-content: center; text-align: center; }
   /* Inside a fact cell now, so no grid placement — just a comfortable tap target. */
   .v1-howto { min-height: 44px; align-items: flex-end; padding-bottom: 6px; }
 }
@@ -937,11 +944,35 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
    rebuilt this way. Sized down from the hero's 112px for a 582px panel. */
 /* Single column now that the clock sits below rather than beside the numeral — no need to
    mirror a right-hand element to hold the centre axis. */
+/* 1fr · numeral · 1fr — the empty first column mirrors the H/M/S strip in the third, so the
+   numeral holds the panel's centre axis however wide the strip gets. Same as the hero. */
 .v1-timer .u {
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: baseline;
   padding: 0;
   border-left: 0;
   text-align: center;
+}
+.v1-timer .u b { grid-column: 2; grid-row: 1; }
+.v1-timer .u i { grid-column: 2; grid-row: 2; justify-self: center; }
+.v1-tick {
+  grid-column: 3; grid-row: 1; justify-self: start; align-self: baseline;
+  margin-left: clamp(10px, 1vw, 14px);
+  display: inline-flex; align-items: baseline; gap: 6px;
+  font-size: clamp(14px, 1.15vw, 17px);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.v1-tick::before,
+.v1-tick-cell + .v1-tick-cell::before {
+  content: ":"; margin-right: 6px; font-size: .72em; font-weight: 600; line-height: 1;
+  color: rgba(255, 255, 255, .55);
+}
+.v1-tick-cell { display: inline-flex; align-items: baseline; gap: 2px; }
+.v1-tick-value { font-size: 1em; font-weight: 700; letter-spacing: -.01em; color: rgba(255,255,255,.9); }
+.v1-tick-unit {
+  font-size: .58em; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: rgba(255, 255, 255, .58);
 }
 .v1-timer .u b {
   /* .8 line-height + em-based margins: digits carry no descenders, so the default leading
@@ -960,16 +991,6 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   font-style: normal; font-size: 12.5px; font-weight: 700;
   letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.82);
 }
-/* Live clock, stacked under the day count as plain HH:MM:SS. It used to hang off the
-   numeral's right as h/m/s cells; underneath and colon-separated it reads as one instrument
-   and needs no unit letters. Tabular so it cannot twitch on the second. */
-.v1-clock {
-  margin: 10px 0 0;
-  font-size: clamp(15px, 1.35vw, 19px); font-weight: 600; letter-spacing: .06em;
-  font-variant-numeric: tabular-nums;
-  color: rgba(255, 255, 255, .72);
-}
-
 /* The two dates that bracket the tender. "Register by" moved to the submit block, where it
    is actionable rather than another date to read. */
 .v1-dates {
@@ -993,10 +1014,19 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   display: block; font-size: 9.5px; font-weight: 800; letter-spacing: .12em;
   text-transform: uppercase; color: rgba(255, 255, 255, .66);
 }
+/* Same treatment as the /tender hero's cycle date (Bryan): italic Newsreader with a true
+   superior ordinal, and the month spelled in full — "1st October 2028", never "1 Oct". */
 .v1-dates b {
   display: block; margin-top: 4px; color: #fff;
-  font-family: var(--serif); font-optical-sizing: auto;
-  font-size: clamp(17px, 1.4vw, 21px); font-weight: 600; letter-spacing: -.012em; line-height: 1.15;
+  font-family: var(--serif); font-optical-sizing: auto; font-style: italic;
+  font-size: clamp(16px, 1.35vw, 20px); font-weight: 500;
+  letter-spacing: -.022em; line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.v1-dates b sup {
+  position: relative; top: -.66em; margin-left: .06em;
+  font-family: inherit; font-size: .42em; font-style: italic;
+  font-weight: 500; letter-spacing: 0; line-height: 0;
 }
 .v1-dates small {
   display: block; margin-top: 2px; font-size: 10.5px; line-height: 1.3;

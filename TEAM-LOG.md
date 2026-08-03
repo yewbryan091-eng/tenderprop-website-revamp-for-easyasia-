@@ -74,6 +74,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 3 Aug 2026 — Claude · CTA paired with the price · hero clock + full dates restored
+**The button.** Bryan: too wide. Measured: **743px of button for a 143px label — 5.2× its own
+text**, a banner not a button. And the price row ran **66% empty**, 487px of dead space beside
+RM517,000. Those two facts solve each other, so the action moved **up beside the price**: natural
+**232px (1.6×)**, agent whisper beneath. Safe to leave the closing position because the **sticky
+bar carries the same CTA** all the way down the page. The panel now closes on the outcome line.
+
+**Left panel, back to hero behaviour** (Bryan): the H/M/S strip **hangs off the numeral's
+baseline** again rather than sitting under it as `HH:MM:SS`. Mirrored `1fr auto 1fr` columns hold
+the numeral on the panel's axis.
+
+**Dates now match the /tender hero exactly**: italic Newsreader with a true superior ordinal and
+the month spelled in full — **"31st December 2028"**, never "31 Dec". New shared helper
+`ordinalDateParts()` in `tender-utils`, so the hero and the detail page cannot drift.
+
+🐛 **A script of mine failed silently and I shipped a panel with no Apply button.** The edit that
+moved the CTA up threw before writing; the edit that removed it from the bottom succeeded. **A
+multi-step refactor split across two scripts must be verified as a whole** — I checked the CSS and
+the types, but not that the button still existed. Bryan's screenshot found it.
+
 ### 3 Aug 2026 — Claude · Reassurance block dissolved into the facts it belongs to
 Bryan asked whether to delete the two notes (they repeat on /how-e-tender-works) or refine them.
 Neither: **each moved to where its question forms.**

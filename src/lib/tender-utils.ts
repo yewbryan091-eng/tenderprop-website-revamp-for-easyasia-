@@ -21,6 +21,22 @@ export function fmtRM(n: number) {
 /* DEMO VALUE (Bryan, 29 Jul): the data model has no listing-start field yet, so the
    card shows closing date minus 3 months — the founder's standard package length.
    Replace with a real per-listing start date when the agency/backend supplies one. */
+/* Full ordinal date, exactly as the /tender hero renders its cycle date — "1st October 2028",
+   not "1 Oct 2028". Returns the parts so the ordinal can be a real <sup>. */
+export function ordinalDateParts(closingDate: string) {
+  const [year, month, day] = closingDate.split("-").map(Number);
+  const lastTwo = day % 100;
+  const suffix = lastTwo >= 11 && lastTwo <= 13
+    ? "th"
+    : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
+  return { day, suffix, month: MONTHS_FULL[month - 1], year };
+}
+
+const MONTHS_FULL = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
 export function tenderStartOf(x: Tender) {
   const d = new Date(x.closingDate + "T00:00:00");
   d.setMonth(d.getMonth() - 3);

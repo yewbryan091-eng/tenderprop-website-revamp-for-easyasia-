@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { TENDERS } from "@/data/tenders";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
-import { MS_DAY, daysLeft, depositOf, fmtDate, isFinalDay, remainingMs, tenderStartOf } from "@/lib/tender-utils";
+import { MS_DAY, closeAtMs, daysLeft, depositOf, fmtDate, isFinalDay, ordinalDateParts, remainingMs } from "@/lib/tender-utils";
 import "@/styles/tender-detail.css";
 
 /* Ported 1:1 from residensi-sinaran-detail.html — the design canon.
@@ -19,8 +19,13 @@ const SINARAN_CLOSING = SINARAN_TENDER.closingDate;
 /* Absent keys mean the agency has not supplied that asset — the corresponding button is
    simply not rendered. See the `media` block on the Tender type. */
 const MEDIA = SINARAN_TENDER.media ?? {};
-/* ⚠️ Derived and founder-unconfirmed: closing − 3 months (see tenderStartOf). */
-const TENDER_START_LABEL = tenderStartOf(SINARAN_TENDER);
+/* Full ordinal dates, same treatment as the /tender hero: "1st October 2028".
+   ⚠️ The START is derived and founder-unconfirmed — closing − 3 months. */
+const TENDER_START = ordinalDateParts(
+  new Date(closeAtMs(SINARAN_CLOSING) - 92 * MS_DAY).toISOString().slice(0, 10),
+);
+const TENDER_CLOSE = ordinalDateParts(SINARAN_CLOSING);
+/* Plain string form, for the sticky bar and FAQ prose where a <sup> would be wrong. */
 const TENDER_CLOSE_LABEL = fmtDate(SINARAN_CLOSING);
 
 /* The payment ladder is derived, never typed. Founder-confirmed 30 Jul 2026: the 3%
@@ -386,18 +391,22 @@ export function ResidensiSinaranDetail() {
                             final 24 hours, where "0 days" says nothing. */}
                         <span className="u" aria-hidden="true">
                           <b>{!cd ? "\u00a0" : cd.finalDay ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m` : cd.days.toLocaleString("en-MY")}</b>
+                          {/* Hangs off the numeral's baseline, exactly as the /tender hero does
+                              (Bryan). Mirrored 1fr columns keep the numeral on the panel's axis. */}
+                          {cd && !cd.finalDay && (
+                            <span className="v1-tick">
+                              {[["h", cd.h], ["m", cd.m], ["s", cd.s]].map(([label, value]) => (
+                                <span className="v1-tick-cell" key={label as string}>
+                                  <span className="v1-tick-value">{String(value).padStart(2, "0")}</span>
+                                  <span className="v1-tick-unit">{label as string}</span>
+                                </span>
+                              ))}
+                            </span>
+                          )}
                           <i>{!cd ? "" : cd.finalDay ? "left today" : cd.days === 1 ? "day left" : "days left"}</i>
                         </span>
                       </div>
-                      {/* The live clock, below the day count and in plain HH:MM:SS. It used to
-                          hang off the numeral's right as h/m/s cells; stacked underneath it reads
-                          as one instrument, and the colon format needs no unit letters. Hidden on
-                          the final day, when the day count itself becomes hours and minutes. */}
-                      {cd && !cd.finalDay && (
-                        <p className="v1-clock" aria-hidden="true">
-                          {String(cd.h).padStart(2, "0")}:{String(cd.m).padStart(2, "0")}:{String(cd.s).padStart(2, "0")}
-                        </p>
-                      )}
+
                     </div>
 
                     {/* The two dates that bracket this tender. There is NO third "register by"
@@ -407,7 +416,7 @@ export function ResidensiSinaranDetail() {
                     <div className="v1-dates">
                       <div>
                         <span>Tender starts</span>
-                        <b>{TENDER_START_LABEL}</b>
+                        <b className="v1-date">{TENDER_START.day}<sup>{TENDER_START.suffix}</sup> {TENDER_START.month} {TENDER_START.year}</b>
                       </div>
                       {/* The two dates are a SPAN, not a list — the arrow says so. Decorative,
                           so aria-hidden; the labels already carry the meaning for a reader. */}
@@ -416,7 +425,7 @@ export function ResidensiSinaranDetail() {
                       </svg>
                       <div>
                         <span>Closing date</span>
-                        <b>{TENDER_CLOSE_LABEL}</b>
+                        <b className="v1-date">{TENDER_CLOSE.day}<sup>{TENDER_CLOSE.suffix}</sup> {TENDER_CLOSE.month} {TENDER_CLOSE.year}</b>
                         <small>End of day, MYT</small>
                       </div>
                     </div>
@@ -429,11 +438,25 @@ export function ResidensiSinaranDetail() {
                       what a buyer decides against. At a third of a shared row it carried the same
                       weight as "Method: E-Tender", which is the least surprising fact here. */}
                   <div className="v1-price">
-                    <span className="lbl">Reserve price</span>
-                    <b className="num">{rm(RESERVE)}</b>
-                    {/* FOUNDER-CORRECTED 1 Aug: never "minimum offer considered" or "the floor".
-                        Buyers do offer below it; the seller may accept or counter. */}
-                    <span className="sub">Offer above or below it</span>
+                    <div className="v1-price-fig">
+                      <span className="lbl">Reserve price</span>
+                      <b className="num">{rm(RESERVE)}</b>
+                      {/* FOUNDER-CORRECTED 1 Aug: never "minimum offer considered" or "the floor".
+                          Buyers do offer below it; the seller may accept or counter. */}
+                      <span className="sub">Offer above or below it</span>
+                    </div>
+                    {/* The action sits BESIDE the price, not at the foot of the panel. Two
+                        measurements drove it: the full-width button was 5.2x the width of its own
+                        label — a banner, not a button — and this row ran 66% empty, 487px of dead
+                        space beside the number. Pairing them puts the decision and the response to
+                        it in one glance. Safe to move off the closing position because the sticky
+                        bar carries the same CTA the whole way down the page. */}
+                    <div className="v1-act">
+                      <a className="btn-red" href="#">Apply for E-Tender</a>
+                      <a className="v1-agent-alt" href="https://wa.me/60123938255" target="_blank" rel="noopener">
+                        Or talk to the agent first
+                      </a>
+                    </div>
                   </div>
 
                   {/* What it costs to take part, and under what method. Paired because they are
@@ -464,28 +487,17 @@ export function ResidensiSinaranDetail() {
 
                   {/* No box around the button. The zone rule above already separates it, and a
                       container only competed with the thing inside it. */}
+                  {/* Closes the panel with what happens after you apply. The action itself now
+                      sits beside the price — see the note there.
+                      FOUNDER-VERIFIED (Bryan, 30 Jul): "it's not about win or lose — there's
+                      always a chance / room for negotiation done by the agent." Hedged, so it
+                      promises a route and never an outcome. See the DECISIONS table. */}
                   <div className="v1-submit">
-                    {/* No "Submit your e-tender" label above the button — the button says it.
-                        The agent route is DEMOTED to a quiet link, not a peer button: reaching
-                        the agent first turns this into a traditional sale and the tender never
-                        happens. It stays available (it is still a lead) but it must not read as
-                        an equal choice. */}
-                    {/* This answers what happens AFTER you press the button, so it sits
-                        immediately above it rather than in a block further up.
-                        FOUNDER-VERIFIED (Bryan, 30 Jul): "it's not about win or lose — there's
-                        always a chance / room for negotiation done by the agent." Hedged, so it
-                        promises a route and never an outcome. See the DECISIONS table. */}
                     <p className="v1-outcome">
                       <b>Accepted, countered or not accepted</b> &mdash; the seller responds within
                       5 working days, and where there is room to move the appointed agent
                       negotiates on your behalf.
                     </p>
-                    <div className="v1-submit-actions">
-                      <a className="btn-red" href="#">Apply for E-Tender</a>
-                      <a className="v1-agent-alt" href="https://wa.me/60123938255" target="_blank" rel="noopener">
-                        Or talk to the agent first
-                      </a>
-                    </div>
                   </div>
 
                   {/* The 1-2-3 "How the e-tender works" is gone. It was the THIRD explanation
