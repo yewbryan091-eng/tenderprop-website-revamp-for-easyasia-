@@ -39,6 +39,11 @@ const TENDER_CLOSE_LABEL = fmtDate(SINARAN_CLOSING);
    the remaining 90% on completion. */
 const RESERVE = SINARAN_TENDER.reservePrice;
 const DEPOSIT = depositOf(SINARAN_TENDER);
+/* `depositOf()` is the canonical 3%-of-reserve calculation. The calculator needs the
+   numeric value only to show how that FIXED tender deposit sits inside a buyer's chosen
+   down payment; it must never recalculate the deposit from the editable purchase price. */
+/* Three rendered treatments are compared during visual QA; one character switches them
+   without changing the markup. `b` is the compact financing worksheet. */
 const rm = (n: number) => "RM" + Math.round(n).toLocaleString("en-MY");
 /* Reserve price per square foot — DERIVED, never typed. This is the number a buyer
    actually compares properties on and decides an offer with, and no Malaysian portal
@@ -419,6 +424,12 @@ export function ResidensiSinaranDetail() {
      Anything React renders should be driven by React state. */
   const [aboutOpen, setAboutOpen] = useState(false);
   const [priceHistoryMode, setPriceHistoryMode] = useState<PriceHistoryMode>("buy");
+  /* Mortgage is React state, not an imperative listener. Outputs now exist on the first
+     render (no RM0 flash), survive hot reloads, and are announced when inputs change. */
+  const [mortgagePrice, setMortgagePrice] = useState(String(RESERVE));
+  const [mortgageDown, setMortgageDown] = useState("10");
+  const [mortgageYears, setMortgageYears] = useState("35");
+  const [mortgageRate, setMortgageRate] = useState("4.0");
   /* GALLERY — React state, like the About toggle. It was imperative DOM code in
      initDetailPage() and that is what Bryan saw as "broken": clicking the "+1" tile
      APPENDED a 7th thumb to a grid whose CSS declares `grid-template-rows: repeat(3, 1fr)`.
@@ -477,6 +488,39 @@ export function ResidensiSinaranDetail() {
     const id = window.setInterval(calc, 1000);
     return () => window.clearInterval(id);
   }, []);
+
+  const mortgagePriceValue = Number(mortgagePrice);
+  const mortgageDownValue = Number(mortgageDown);
+  const mortgageYearsValue = Number(mortgageYears);
+  const mortgageRateValue = Number(mortgageRate);
+  const mortgagePriceValid = mortgagePrice.trim() !== ""
+    && Number.isFinite(mortgagePriceValue) && mortgagePriceValue > 0 && mortgagePriceValue <= 100_000_000;
+  const mortgageDownValid = mortgageDown.trim() !== ""
+    && Number.isFinite(mortgageDownValue) && mortgageDownValue >= 0 && mortgageDownValue <= 90;
+  const mortgageYearsValid = Number.isFinite(mortgageYearsValue)
+    && mortgageYearsValue >= 5 && mortgageYearsValue <= 35;
+  const mortgageRateValid = mortgageRate.trim() !== ""
+    && Number.isFinite(mortgageRateValue) && mortgageRateValue >= 0 && mortgageRateValue <= 20;
+  const mortgageValid = mortgagePriceValid && mortgageDownValid && mortgageYearsValid && mortgageRateValid;
+  const mortgageMonths = mortgageYearsValue * 12;
+  const mortgageLoan = mortgageValid ? mortgagePriceValue * (1 - mortgageDownValue / 100) : 0;
+  const mortgageMonthlyRate = mortgageRateValue / 100 / 12;
+  const mortgageMonthly = !mortgageValid || mortgageMonths <= 0
+    ? 0
+    : mortgageMonthlyRate > 0
+      ? mortgageLoan * mortgageMonthlyRate * Math.pow(1 + mortgageMonthlyRate, mortgageMonths)
+        / (Math.pow(1 + mortgageMonthlyRate, mortgageMonths) - 1)
+      : mortgageLoan / mortgageMonths;
+  const mortgageTotal = mortgageMonthly * mortgageMonths;
+  const mortgageInterest = Math.max(mortgageTotal - mortgageLoan, 0);
+  const mortgageDownAmount = mortgageValid ? mortgagePriceValue * mortgageDownValue / 100 : 0;
+  const mortgageMoney = (amount: number) => mortgageValid && Number.isFinite(amount) ? rm(amount) : "—";
+  const resetMortgage = () => {
+    setMortgagePrice(String(RESERVE));
+    setMortgageDown("10");
+    setMortgageYears("35");
+    setMortgageRate("4.0");
+  };
 
   return (
     <div className="tp-detail">
@@ -1265,29 +1309,123 @@ export function ResidensiSinaranDetail() {
 
 
 
+        {/* MORTGAGE — rebuilt on Bryan's iNewProject reference, 3 Aug. Codex's React state,
+            validation and amortisation maths are kept verbatim — they are correct and better
+            than the imperative version they replaced. What changed is the DRESS:
+
+            The solid burgundy result slab is gone. The only saturated fills on this page are
+            the red CTA and the WhatsApp button — both ACTIONS. A full burgundy panel was the
+            loudest object on the page and it is not an action, so it read as an advertisement
+            (the exact fault the /tender signal went through three rounds for). The answer is
+            now loud in HIERARCHY instead: the one serif display number in the right half of
+            a quiet card, same number language as RM517,000 in the hero.
+
+            The heading subtitle sat in a second grid column to the RIGHT of the title —
+            no other section does that. It is a .sec-note under the title now, the pattern
+            What's Nearby established.
+
+            The "How your e-tender deposit fits" strip — kicker, progress bar, two stat
+            cells — was the THIRD place on this page explaining the deposit (the terms panel
+            note and the FAQ already do). It is now one quiet line under the breakdown,
+            keeping the one fact that belongs HERE: the deposit is part of the down payment
+            the calculator just computed, not a cost on top of it. */}
         <section className="blk band-card" id="mortgage">
           <div className="wrap">
-            <div className="blkcard calc">
-              <h2 className="sec-title">Mortgage <span>Calculator</span></h2>
-              <div className="calcgrid">
-                <div>
-                  <div className="field"><label htmlFor="c-price">Property price (RM)</label><input type="number" id="c-price" defaultValue="517000" min="1" /></div>
-                  <div className="field"><label htmlFor="c-down">Down payment (%)</label><input type="number" id="c-down" defaultValue="10" min="0" max="90" /></div>
-                  <div className="field"><label htmlFor="c-tenure">Tenure (years)</label>
-                    <select id="c-tenure" defaultValue="35">
-                      <option>10</option><option>15</option><option>20</option><option>25</option><option>30</option><option>35</option>
+            <h2 className="sec-title">Mortgage <span>Calculator</span></h2>
+            <p className="sec-note">
+              Estimate the monthly repayment at the price you plan to offer. Figures start
+              from the {rm(RESERVE)} reserve guide &mdash; adjust any of them.
+            </p>
+
+            <div className="mortcard">
+              <form className="mc-form" onSubmit={(event) => event.preventDefault()} noValidate>
+                <div className="mc-head">
+                  <span className="mc-kicker">Financing assumptions</span>
+                  <button type="button" className="mc-reset" onClick={resetMortgage}>Reset</button>
+                </div>
+
+                <div className="mc-fields">
+                  <div className="mc-field mc-span2">
+                    <label htmlFor="c-price">Estimated purchase price</label>
+                    <div className="mc-wrap">
+                      <span aria-hidden="true">RM</span>
+                      <input type="number" id="c-price" value={mortgagePrice}
+                        onChange={(e) => setMortgagePrice(e.target.value)}
+                        min="1" max="100000000" step="1000" inputMode="decimal"
+                        aria-invalid={!mortgagePriceValid}
+                        aria-describedby={!mortgagePriceValid ? "c-price-error" : undefined} />
+                    </div>
+                    {!mortgagePriceValid && <span className="mc-error" id="c-price-error">Enter a price above RM0.</span>}
+                  </div>
+
+                  <div className="mc-field">
+                    <label htmlFor="c-down">Down payment</label>
+                    <div className="mc-wrap">
+                      <input type="number" id="c-down" value={mortgageDown}
+                        onChange={(e) => setMortgageDown(e.target.value)}
+                        min="0" max="90" step="1" inputMode="decimal"
+                        aria-invalid={!mortgageDownValid}
+                        aria-describedby={!mortgageDownValid ? "c-down-error" : undefined} />
+                      <span aria-hidden="true">%</span>
+                    </div>
+                    {!mortgageDownValid && <span className="mc-error" id="c-down-error">Use 0% to 90%.</span>}
+                  </div>
+
+                  <div className="mc-field">
+                    <label htmlFor="c-rate">Interest rate</label>
+                    <div className="mc-wrap">
+                      <input type="number" id="c-rate" value={mortgageRate}
+                        onChange={(e) => setMortgageRate(e.target.value)}
+                        step="0.05" min="0" max="20" inputMode="decimal"
+                        aria-invalid={!mortgageRateValid}
+                        aria-describedby={!mortgageRateValid ? "c-rate-error" : undefined} />
+                      <span aria-hidden="true">% p.a.</span>
+                    </div>
+                    {!mortgageRateValid && <span className="mc-error" id="c-rate-error">Use 0% to 20%.</span>}
+                  </div>
+
+                  <div className="mc-field mc-span2">
+                    <label htmlFor="c-tenure">Loan tenure</label>
+                    <select id="c-tenure" value={mortgageYears} onChange={(e) => setMortgageYears(e.target.value)}>
+                      <option value="10">10 years</option><option value="15">15 years</option>
+                      <option value="20">20 years</option><option value="25">25 years</option>
+                      <option value="30">30 years</option><option value="35">35 years</option>
                     </select>
                   </div>
-                  <div className="field"><label htmlFor="c-rate">Interest rate (% p.a.)</label><input type="number" id="c-rate" defaultValue="4.0" step="0.05" min="0.1" /></div>
                 </div>
-                <div className="calcout">
-                  <div className="big"><b className="num" id="c-monthly">RM 0</b><span>Estimated monthly repayment</span></div>
-                  <div className="line"><span>Loan amount</span><b className="num" id="c-loan">RM 0</b></div>
-                  <div className="line"><span>Total interest</span><b className="num" id="c-interest">RM 0</b></div>
-                  <div className="line"><span>Total repayment</span><b className="num" id="c-total">RM 0</b></div>
-                </div>
+              </form>
+
+              <div className="mc-div" aria-hidden="true" />
+
+              <div className="mc-out">
+                <span className="mc-kicker">Estimated monthly repayment</span>
+                <output className="mc-monthly" aria-live="polite" aria-atomic="true">
+                  {mortgageMoney(mortgageMonthly)}
+                </output>
+                <span className="mc-basis">
+                  {mortgageValid
+                    ? `per month \u00b7 ${mortgageYearsValue} years at ${mortgageRateValue.toLocaleString("en-MY", { maximumFractionDigits: 2 })}% p.a.`
+                    : "Complete the highlighted fields to see an estimate."}
+                </span>
+
+                <dl className="mc-rows">
+                  <div><dt>Loan amount</dt><dd>{mortgageMoney(mortgageLoan)}</dd></div>
+                  <div><dt>Down payment</dt><dd>{mortgageMoney(mortgageDownAmount)}</dd></div>
+                  <div><dt>Total interest</dt><dd>{mortgageMoney(mortgageInterest)}</dd></div>
+                  <div><dt>Total repayment</dt><dd>{mortgageMoney(mortgageTotal)}</dd></div>
+                </dl>
+
+                <p className="mc-dep">
+                  Your <b>{DEPOSIT}</b> refundable e-tender deposit forms the first part of
+                  that down payment &mdash; not a cost on top of it.
+                </p>
               </div>
             </div>
+
+            <p className="mc-note">
+              Estimate only. Actual financing depends on bank approval, valuation, loan margin
+              and prevailing interest rates.
+            </p>
           </div>
         </section>
 

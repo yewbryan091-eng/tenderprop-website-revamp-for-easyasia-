@@ -102,29 +102,9 @@ export function initDetailPage(): () => void {
     });
   });
 
-  // ── Mortgage calculator ──
-  (function () {
-    var $ = function (id) { return document.getElementById(id); };
-    function fmt(n) { return "RM " + Math.round(n).toLocaleString("en-MY"); }
-    function calc() {
-      var price = parseFloat($("c-price").value) || 0;
-      var down = (parseFloat($("c-down").value) || 0) / 100;
-      var years = parseInt($("c-tenure").value, 10) || 35;
-      var rate = (parseFloat($("c-rate").value) || 0) / 100 / 12;
-      var loan = price * (1 - down);
-      var n = years * 12;
-      var monthly = rate > 0 ? loan * rate * Math.pow(1 + rate, n) / (Math.pow(1 + rate, n) - 1) : loan / n;
-      $("c-monthly").textContent = fmt(monthly);
-      $("c-loan").textContent = fmt(loan);
-      $("c-interest").textContent = fmt(monthly * n - loan);
-      $("c-total").textContent = fmt(monthly * n);
-    }
-    ["c-price", "c-down", "c-tenure", "c-rate"].forEach(function (id) {
-      $(id).addEventListener("input", calc);
-      $(id).addEventListener("change", calc);
-    });
-    calc();
-  })();
+  /* Mortgage calculator is React state in ResidensiSinaranDetail. Keeping this logic in
+     the DOM layer caused RM0 on first render, duplicate listeners after hot reloads, and
+     invalid inputs reaching the formula unchecked. */
 
   return () => timers.forEach((id) => window.clearInterval(id));
 }
