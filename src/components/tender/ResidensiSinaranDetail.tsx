@@ -285,14 +285,19 @@ const AGENT = {
   name: "Stephen Yew",
   firm: "The One Property Global Sdn Bhd",
   title: "Licensed Real Estate Agent (REA)",
-  /* Founder-supplied by Bryan, 3 Aug. ⚠️ Two flags worth resolving before go-live:
-     - "12345" follows a placeholder pattern; worth checking against the BOVAEP register.
-     - 966357-V is an SSM COMPANY registration number, not a BOVAEP agency registration
-       (those read E(1)xxxx). Act 242 disclosure normally wants the BOVAEP one. Both can be
-       shown — the company number is what appears on the letterhead — but if a BOVAEP
-       agency number exists it should be here too. */
+  /* Founder-supplied by Bryan, 3 Aug. THREE different identifiers, and they are not
+     interchangeable — each is shown where Malaysian agency marketing conventionally puts it:
+       ssmNo   SSM company registration. Corporate identity. Rides with the company NAME,
+               in brackets, exactly as it appears on letterhead and signage.
+       eNo     BOVAEP firm registration. THIS is the Act 242 one — it is what says the firm
+               is licensed to practise estate agency, and it is what the regulator's mark
+               carries. Bryan supplied it after I flagged that 966357-V could not be it.
+       reaNo   The individual agent's registration.
+     ⚠️ "12345" still follows a placeholder pattern — worth checking against the BOVAEP
+     register before go-live. The other two are real. */
   reaNo: "12345",
-  agencyNo: "966357-V",
+  ssmNo: "966357-V",
+  eNo: "E(1)2056",
   phone: "012-393 8255",
   whatsapp: "60123938255",
 };
@@ -1018,7 +1023,7 @@ export function ResidensiSinaranDetail() {
             The subject-property reference is real; the ledger rows are layout only. */}
         <section className="blk band-card" id="history">
           <div className="wrap">
-            <div className="blkcard price-history" data-treatment="tape">
+            <div className="blkcard price-history">
               <div className="ph-heading">
                 <div>
                   <h2 className="sec-title">Price <span>History</span></h2>
@@ -1108,31 +1113,45 @@ export function ResidensiSinaranDetail() {
             <div className="blkcard">
               <h2 className="sec-title">Listing <span>Agent</span></h2>
               <div className="agentcard">
-                <img className="face" src={AGENT_PHOTO} alt={AGENT.name} />
-                <div className="ag-id">
-                  <b className="ag-name">{AGENT.name}</b>
-                  <span className="ag-title">{AGENT.title}</span>
-                  <span className="ag-firm">{AGENT.firm}</span>
-                  {/* Act 242 disclosure. Inline and muted — present and checkable, without
-                      outranking the thing a buyer actually came here for. */}
-                  <span className="ag-reg">
-                    {AGENT.reaNo ? `REA ${AGENT.reaNo}` : "REA registration not stated"}
-                    {" \u00b7 "}
-                    {AGENT.agencyNo ? `Agency reg. ${AGENT.agencyNo}` : "agency registration not stated"}
-                  </span>
+                {/* LEFT — who. Given real room: the face anchors the card and the name is set
+                    at heading scale, because the single most persuasive thing here is that a
+                    named, licensed person is on the other end. */}
+                <div className="ag-who">
+                  <img className="face" src={AGENT_PHOTO} alt={AGENT.name} />
+                  <div className="ag-id">
+                    <b className="ag-name">{AGENT.name}</b>
+                    <span className="ag-title">{AGENT.title}</span>
+                    <span className="ag-firm">{AGENT.firm}{AGENT.ssmNo ? ` (${AGENT.ssmNo})` : ""}</span>
+                    {/* Act 242 disclosure. Present and checkable, ranked below the human. */}
+                    <span className="ag-reg">
+                      {AGENT.reaNo ? `REA ${AGENT.reaNo}` : "REA registration not stated"}
+                      {" \u00b7 "}
+                      {AGENT.eNo ? `Registered estate agency ${AGENT.eNo}` : "agency registration not stated"}
+                    </span>
+                  </div>
                 </div>
-                <div className="ag-act">
+
+                <div className="ag-div" aria-hidden="true" />
+
+                {/* RIGHT — why, then how. The previous version jumped straight to a WhatsApp
+                    button with no reason attached, and left ~500px of dead space beside it.
+                    This answers the question the button cannot: what do I get from talking to
+                    a person rather than just submitting? Straight from the founder briefing of
+                    3 Aug — the agent follows up, arranges the viewing, and negotiates. */}
+                <div className="ag-cta">
+                  <b className="ag-cta-h">Talk to {AGENT.name.split(" ")[0]} first</b>
+                  <p className="ag-cta-p">
+                    Ask about the property, the tender, or anything the listing does not answer
+                    &mdash; before you decide your number. After you apply he arranges your
+                    viewing, takes your offer to the seller and negotiates on your behalf.
+                  </p>
                   <a className="btn wa" href={`https://wa.me/${AGENT.whatsapp}`} target="_blank" rel="noopener">
                     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
                     WhatsApp
                   </a>
-                  {/* Names the relationship between the two routes (Bryan). Without it the
-                      number under a green button reads as a caption to the button rather than
-                      as a second, separate way in. */}
-                  <span className="ag-or">or call</span>
-                  {/* A real tel: link. This was plain text before, so on a phone the one thing
-                      a ready buyer wants to do — tap and call — was impossible. */}
-                  <a className="ag-tel" href={`tel:${AGENT_TEL}`}>{AGENT.phone}</a>
+                  <span className="ag-or">
+                    or call <a className="ag-tel" href={`tel:${AGENT_TEL}`}>{AGENT.phone}</a>
+                  </span>
                 </div>
               </div></div></div></section>
 

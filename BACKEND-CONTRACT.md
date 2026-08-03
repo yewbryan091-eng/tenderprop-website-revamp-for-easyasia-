@@ -213,7 +213,7 @@ records. In production an absent/empty `priceHistory` omits the section entirely
 
 ---
 
-## 3e. Address and the map — added 3 Aug 2026
+## 3f. Address and the map — added 3 Aug 2026
 
 Founder-supplied by Bryan on 3 Aug, **exact unit included**, resolving the open question about
 whether TenderProp publishes precise addresses. It does.

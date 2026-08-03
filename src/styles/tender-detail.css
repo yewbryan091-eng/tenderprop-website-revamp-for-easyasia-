@@ -851,44 +851,6 @@ section.blk.band-deep  { background: var(--paper-deep); }
     overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
   }
 
-  /* TEMPORARY comparison treatments for the required three-way rendered critique.
-     Deleted before shipping; only the chosen ledger treatment remains. */
-  .price-history[data-treatment="framed"] .ph-tabs {
-    gap: 5px; padding: 4px; border: 1px solid var(--line); border-radius: 7px;
-    background: var(--paper-deep);
-  }
-  .price-history[data-treatment="framed"] .ph-tabs button {
-    min-height: 46px; padding: 7px 16px; border: 0; border-radius: 5px;
-  }
-  .price-history[data-treatment="framed"] .ph-tabs button::after { display: none; }
-  .price-history[data-treatment="framed"] .ph-tabs button.is-active {
-    background: var(--burgundy); color: var(--burgundy-ink);
-  }
-  .price-history[data-treatment="framed"] .ph-subject {
-    border-left-width: 1px; border-radius: 7px; background: var(--paper-deep);
-  }
-  .price-history[data-treatment="framed"] .ph-table th,
-  .price-history[data-treatment="framed"] .ph-table td { border-right: 1px solid var(--line); }
-  .price-history[data-treatment="framed"] .ph-table th:last-child,
-  .price-history[data-treatment="framed"] .ph-table td:last-child { border-right: 0; }
-
-  .price-history[data-treatment="tape"] .ph-subject { margin-bottom: 24px; }
-  .price-history[data-treatment="tape"] .ph-preview-note,
-  .price-history[data-treatment="tape"] .ph-ledger-head > span,
-  .price-history[data-treatment="tape"] .ph-table thead { display: none; }
-  .price-history[data-treatment="tape"] .ph-ledger-head {
-    padding: 0 0 12px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0;
-  }
-  .price-history[data-treatment="tape"] .ph-table-wrap { border: 0; border-radius: 0; }
-  .price-history[data-treatment="tape"] .ph-table,
-  .price-history[data-treatment="tape"] .ph-table tbody { display: block; }
-  .price-history[data-treatment="tape"] .ph-table tr {
-    display: grid; grid-template-columns: 150px minmax(0, 1fr) 150px 220px;
-    align-items: center; border-bottom: 1px solid var(--line);
-  }
-  .price-history[data-treatment="tape"] .ph-table td { border: 0; }
-  .price-history[data-treatment="tape"] .ph-table .ph-amount { background: transparent; }
-
   @media(max-width: 760px) {
     .ph-heading { grid-template-columns: 1fr; align-items: start; gap: 18px; }
     .ph-tabs { width: min(100%, 360px); }
@@ -975,42 +937,55 @@ section.blk.band-deep  { background: var(--paper-deep); }
   .mapbox iframe { display: block; width: 100%; height: 380px; border: 0; }
 
   /* Agent */
-  /* A business card, read left to right: WHO, then HOW TO REACH THEM. The old version was
-     three stacked rows — portrait, then a four-column credential table, then two buttons —
-     which made it tall, form-shaped, and ranked "Agency registration" level with the phone
-     number. One row states the same facts in a third of the height.
-     max-width is gone: the card was capped at 940px inside an 1100px column, so it was the
-     only block on the page whose right edge did not line up with everything else. */
-  .agentcard { background: var(--paper); border: 1px solid var(--line); border-radius: 10px;
-    padding: clamp(20px, 2.6vw, 26px) clamp(20px, 2.6vw, 30px);
-    display: flex; align-items: center; flex-wrap: wrap; gap: 20px clamp(20px, 2.6vw, 30px); }
-  .ag-id { flex: 1 1 260px; min-width: 0; display: grid; gap: 2px; }
-  .ag-name { font-size: 21px; font-weight: 800; letter-spacing: -.015em; color: var(--ink); line-height: 1.2; }
-  .ag-title { font-size: 13.5px; font-weight: 600; color: var(--burgundy); }
-  .ag-firm { font-size: 14.5px; color: var(--ink); }
-  .ag-reg { margin-top: 4px; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
-  /* Action column: WhatsApp is the primary route and gets the fill; the number sits under it
-     as a real tel: link for anyone who would rather ring. */
-  .ag-act { flex: 0 0 auto; display: grid; justify-items: stretch; gap: 6px; text-align: center; }
-  /* Small and quiet — it is a connective, not a third option. Tightened gap above and
-     below so button, connective and number read as one stack. */
-  .ag-or { font-size: 12px; color: var(--muted); line-height: 1.2; }
-  .ag-tel { font-size: 14.5px; font-weight: 700; color: var(--ink); text-decoration: none;
-    font-variant-numeric: tabular-nums; padding: 4px 0; }
-  .ag-tel:hover { color: var(--burgundy); text-decoration: underline; text-underline-offset: 3px; }
-  .agentcard .btn.wa svg { width: 16px; height: 16px; margin-right: 7px; vertical-align: -3px; }
+  /* TWO HALVES, divided by the same hairline the rest of the page uses: WHO on the left,
+     WHY-then-HOW on the right.
+
+     The version before this was one tidy row — and Bryan was right that it was not fulfilling.
+     Two faults. It held ~450px of content in an 1100px card, so ~500px in the middle was dead
+     space with no owner. And it jumped from a name straight to a green button with no reason
+     attached, which is the one question a contact card has to answer: why talk to a person
+     instead of just submitting? Filling that space with the answer fixes both at once.
+
+     Ratio is 1.05/0.95 rather than 1/1 — the left column carries a 104px portrait plus four
+     text lines, so an even split left it visibly tighter than the right. */
+  .agentcard { background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
+    padding: clamp(22px, 2.8vw, 32px);
+    display: grid; grid-template-columns: 1.05fr 1px .95fr;
+    gap: clamp(24px, 3.2vw, 40px); align-items: center; }
+  .ag-div { background: var(--line); align-self: stretch; }
+
+  .ag-who { display: flex; align-items: flex-start; gap: clamp(16px, 1.8vw, 22px); min-width: 0; }
+  .agentcard img.face { flex: none; width: 104px; height: 104px; border-radius: 50%;
+    object-fit: cover; border: 3px solid var(--card); box-shadow: 0 0 0 1.5px var(--line); }
+  .ag-id { min-width: 0; display: grid; gap: 3px; padding-top: 4px; }
+  .ag-name { font-size: 24px; font-weight: 800; letter-spacing: -.018em; color: var(--ink); line-height: 1.15; }
+  .ag-title { font-size: 13.5px; font-weight: 700; color: var(--burgundy); }
+  .ag-firm { margin-top: 6px; font-size: 15px; color: var(--ink); line-height: 1.4; }
+  .ag-reg { font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+
+  .ag-cta { min-width: 0; display: grid; justify-items: start; gap: 0; }
+  .ag-cta-h { font-size: 16.5px; font-weight: 800; letter-spacing: -.012em; color: var(--ink); }
+  .ag-cta-p { margin: 7px 0 16px; font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 46ch; }
+  .ag-cta .btn.wa { padding: 12px 22px; font-size: 14.5px; }
+  .agentcard .btn.wa svg { width: 16px; height: 16px; margin-right: 8px; vertical-align: -3px; }
   .btn.wa { background: #1FAF57; border-color: #1FAF57; color: #fff; }
-  @media(max-width: 620px) {
-    .agentcard { gap: 16px; }
-    .ag-act { flex: 1 1 100%; }
+  /* The number is a peer route, not a caption to the button — so it names itself. */
+  .ag-or { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+  .ag-tel { font-weight: 700; color: var(--ink); text-decoration: none;
+    font-variant-numeric: tabular-nums; }
+  .ag-tel:hover { color: var(--burgundy); text-decoration: underline; text-underline-offset: 3px; }
+
+  @media(max-width: 820px) {
+    /* One column: the divider becomes a horizontal rule between the two halves. */
+    .agentcard { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+    .ag-div { height: 1px; }
   }
-  .agentcard img.face { flex: none; width: 88px; height: 88px; border-radius: 50%; object-fit: cover; border: 3px solid var(--card); box-shadow: 0 0 0 1.5px var(--line); }
-  .agentcard .meta { flex: 1; min-width: 200px; }
-  .agentcard .meta b { display: block; font-size: 18px; font-weight: 800; }
-  .agentcard .meta .co { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--burgundy); font-weight: 700; margin: 2px 0 4px; }
-  .agentcard .meta .ph { font-size: 14px; color: var(--muted); }
-  .agentcard .acts { display: flex; gap: 10px; flex-wrap: wrap; }
-  .agentcard .acts .btn { padding: 11px 18px; font-size: 14px; }
+  @media(max-width: 480px) {
+    .ag-who { flex-direction: column; }
+    .agentcard img.face { width: 84px; height: 84px; }
+    .ag-id { padding-top: 0; }
+    .ag-cta .btn.wa { width: 100%; justify-content: center; }
+  }
 
   /* Mortgage */
   .calcgrid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 3vw, 30px); align-items: start; }
