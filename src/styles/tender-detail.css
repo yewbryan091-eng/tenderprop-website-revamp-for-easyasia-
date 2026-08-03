@@ -174,12 +174,20 @@ section.blk.tender-band {
 .v1-terms {
   grid-area: terms;
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 30px);
+  gap: 0;
   padding: clamp(10px, 1.1vw, 14px) 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 .v1-terms > div { min-width: 0; }
+/* Vertical hairline between the two terms — the same separator the fact rows on the rest of
+   the page use, so the pair reads as two columns of one table rather than two loose blocks.
+   On the second cell only, so it sits between them and not at the outer edges. */
+.v1-terms > div:first-child { padding-right: clamp(16px, 2vw, 30px); }
+.v1-terms > div + div {
+  padding-left: clamp(16px, 2vw, 30px);
+  border-left: 1px solid var(--line);
+}
 /* `> div > b`, NOT `.v1-terms b` — the descendant form also caught the <b> inside the
    deposit note and rendered "Not an extra charge." as a 21px block heading. */
 .v1-terms > div > b {
@@ -267,6 +275,8 @@ section.blk.tender-band {
 
 @media(max-width: 740px) and (min-width: 701px) {
   .v1-terms { grid-template-columns: minmax(0, 1fr); }
+  .v1-terms > div:first-child { padding-right: 0; padding-bottom: 14px; }
+  .v1-terms > div + div { padding-left: 0; padding-top: 14px; border-left: 0; border-top: 1px solid var(--line); }
 }
 
 @media(max-width: 700px) {
