@@ -217,7 +217,7 @@ export function ResidensiSinaranDetail() {
                 <div className="actions">
                   <button type="button" className="icobtn" id="save-btn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 20.5l-1.4-1.3C5.4 14.5 2 11.4 2 7.6 2 4.9 4.1 3 6.7 3c1.5 0 2.9.7 3.8 1.8L12 6.2l1.5-1.4C14.4 3.7 15.8 3 17.3 3 19.9 3 22 4.9 22 7.6c0 3.8-3.4 6.9-8.6 11.6L12 20.5z" /></svg><span>Save</span></button>
                   <button type="button" className="icobtn" id="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" /></svg><span>Share</span></button>
-                  <a className="btn red" href="#">Apply for E-Tender</a>
+                  <a className="btn red" href="#">Submit your offer</a>
                 </div>
               </div>
             </div>
@@ -452,7 +452,7 @@ export function ResidensiSinaranDetail() {
                         it in one glance. Safe to move off the closing position because the sticky
                         bar carries the same CTA the whole way down the page. */}
                     <div className="v1-act">
-                      <a className="btn-red" href="#">Apply for E-Tender</a>
+                      <a className="btn-red" href="#">Submit your offer</a>
                       {/* Same treatment as "See how e-tender works" (Bryan) — both are ways out
                           that are not the action, so they share `.v1-textlink`. */}
                       <a className="v1-textlink v1-agent-alt" href="https://wa.me/60123938255" target="_blank" rel="noopener">
@@ -812,7 +812,7 @@ export function ResidensiSinaranDetail() {
         <div className="wrap in">
           <div className="identity"><span className="nm">Residensi Sinaran</span><span className="meta">E-Tender closes {TENDER_CLOSE_LABEL}</span></div>
           <div className="pr"><div className="k">Reserve price</div><div className="v num">RM517,000</div><span className="closes">Closes {TENDER_CLOSE_LABEL}</span></div>
-          <a className="btn red" href="#">Apply for E-Tender</a>
+          <a className="btn red" href="#">Submit your offer</a>
         </div>
       </div>
 
