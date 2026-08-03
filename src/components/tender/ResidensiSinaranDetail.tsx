@@ -213,7 +213,9 @@ export function ResidensiSinaranDetail() {
                 {/* "Reserve price" is auction vocabulary most subsale buyers have not met.
                     Say what it means right where the number is, or they read it as a fixed
                     asking price and the whole tender mechanic is misunderstood. */}
-                <div className="ovprice"><div className="k">Reserve Price</div><div className="v num">RM517,000</div><div className="s">The Reserve Price &mdash; you choose what to offer</div></div>
+                {/* No RESERVE PRICE eyebrow (Bryan). The sub-line below names the number, so the
+                    eyebrow was the same two words twice, two lines apart. */}
+                <div className="ovprice"><div className="v num">RM517,000</div><div className="s">The Reserve Price &mdash; a guide, you choose what to offer</div></div>
                 <div className="actions">
                   <button type="button" className="icobtn" id="save-btn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 20.5l-1.4-1.3C5.4 14.5 2 11.4 2 7.6 2 4.9 4.1 3 6.7 3c1.5 0 2.9.7 3.8 1.8L12 6.2l1.5-1.4C14.4 3.7 15.8 3 17.3 3 19.9 3 22 4.9 22 7.6c0 3.8-3.4 6.9-8.6 11.6L12 20.5z" /></svg><span>Save</span></button>
                   <button type="button" className="icobtn" id="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" /></svg><span>Share</span></button>
