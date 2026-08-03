@@ -506,7 +506,7 @@ export function ResidensiSinaranDetail() {
 
         <nav className="subnav" id="subnav" aria-label="Section navigation">
           <div className="wrap">
-            <div className="row"><a href="#tender">E-Tender Info</a> <a href="#details">Details</a> <a href="#about">About</a> <a href="#selling">Selling Points</a> <a href="#area">What's Nearby</a> <a href="#facilities">Facilities</a> <a href="#location">Location</a> <a href="#agent">Agent</a> <a href="#mortgage">Mortgage</a> <a href="#faq">FAQ</a></div>
+            <div className="row"><a className="snav-lead" href="#tender">Tender Information</a> <a href="#details">Details</a> <a href="#about">About</a> <a href="#selling">Selling Points</a> <a href="#area">What's Nearby</a> <a href="#facilities">Facilities</a> <a href="#location">Location</a> <a href="#agent">Agent</a> <a href="#mortgage">Mortgage</a> <a href="#faq">FAQ</a></div>
           </div>
         </nav>
 

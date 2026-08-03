@@ -582,6 +582,28 @@ section.blk.tender-band {
   .subnav .row::-webkit-scrollbar { display: none; }
   .subnav a { flex: 0 0 auto; padding: 15px 15px 12px; font-size: 13.5px; font-weight: 700; color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent; white-space: nowrap; }
   .subnav a:hover { color: var(--ink); }
+  /* ONE item set apart (Bryan): the section it points at is the whole point of the page —
+     countdown, reserve, deposit, apply — and in a row of ten identical labels nothing said so.
+
+     Newsreader ITALIC, not a script face. Three reasons it beats a calligraphic font here.
+     It is already loaded (the page requests Newsreader's italic axis for its headings, so
+     this costs zero extra network). It stays legible at nav size, where true scripts —
+     Great Vibes, Allura, Tangerine — turn to mush below about 20px and this is a control a
+     user has to scan, not a display line. And a humanist italic IS formal handwriting
+     historically: chancery italic was a handwriting style before it was a typeface, so it
+     reads as "written" without importing a wedding-invitation voice into a regulated
+     property platform.
+
+     Sized up 2px and set in burgundy so it carries weight standing still. The active state
+     still reads, because that is carried by the 3px underline. */
+  .subnav a.snav-lead {
+    font-family: var(--serif); font-optical-sizing: auto;
+    font-style: italic; font-weight: 600;
+    font-size: 15.5px; letter-spacing: 0;
+    color: var(--burgundy);
+  }
+  .subnav a.snav-lead:hover { color: var(--ink); }
+
   .subnav a.active { color: var(--burgundy); border-bottom-color: var(--burgundy); }
   @media(max-width: 860px) { .subnav { top: 0; } }
 
