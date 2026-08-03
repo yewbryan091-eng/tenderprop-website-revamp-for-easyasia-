@@ -167,11 +167,6 @@ export function ResidensiSinaranDetail() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [lightbox, step, closeViewer]);
-  /* Shown two-up. Closed renders the first two ENTIRE paragraphs rather than clipping at a
-     line count: a max-height clamp across columns cuts column 1 mid-sentence and then starts
-     column 2 at a new thought, so the reading order breaks. Rendering fewer whole paragraphs
-     keeps every visible sentence complete. */
-  const ABOUT_CLOSED_COUNT = 2;
   useEffect(() => {
     const calc = () => {
       /* ONE number feeds both the header pill and the panel below it. They used to be
@@ -656,8 +651,12 @@ export function ResidensiSinaranDetail() {
                 The 62 homes here are landed, gated and strata-managed &mdash; the guardhouse and
                 the grounds are the management body&rsquo;s job, not yours.
               </blockquote>
-              <div className="aboutbody">
-                {(aboutOpen ? ABOUT_PARAS : ABOUT_PARAS.slice(0, ABOUT_CLOSED_COUNT)).map((t) => (
+              {/* Every paragraph is ALWAYS in the DOM; collapsing is a CSS height clamp, not a
+                  slice (Bryan). Two reasons. The fade has to cut mid-sentence to read as a fade —
+                  slicing on a paragraph boundary fades out empty space and looks like a rendering
+                  fault. And a crawler should see the whole section either way. */}
+              <div className={`aboutbody${aboutOpen ? "" : " is-clamped"}`} id="about-body">
+                {ABOUT_PARAS.map((t) => (
                   <p key={t.slice(0, 24)} dangerouslySetInnerHTML={{ __html: t }} />
                 ))}
               </div>

@@ -222,6 +222,52 @@ Before any visual change reaches Bryan:
 5. Log the verdict in `DESIGN-SYSTEM.md` §7 when he rejects something. Verdicts transfer; rules did
    not prevent any of these.
 
+## 📐 ALIGNMENT AND SPACING COME FIRST (Bryan, 3 Aug 2026) — STANDING
+
+> *"i want to emphasize somethings too, and its important moving forward, which is the
+> concentration on the alignment and spacing of a design, its overlooked too many times
+> already."*
+
+**Not a preference — the thing this project gets wrong most often.** Alignment and spacing are
+checked with NUMBERS before any visual work is reported as done. Both faults are invisible to a
+glance and obvious once measured, which is exactly why they keep shipping.
+
+### Alignment — the edges must be provable
+
+- **Print every left edge and right boundary in the section.** They should collapse to a *small
+  set of repeated numbers*, not five values within 3px of each other.
+- **Right boundaries count as much as left ones.** A section with one left edge and three right
+  edges reads as sloppy even when nobody can say why. *Real case, About, 3 Aug:* the standfirst
+  was capped at `64ch` of 27px serif (999px) and the body at `78ch` of 16px sans (787px) — same
+  left edge, **212px apart on the right**. Fixed with one absolute token both share.
+- **`ch` is FONT-RELATIVE.** It can never hold two different typefaces to one column. When two
+  fonts must share a measure, the measure has to be absolute.
+- **Optical ≠ metric.** A 51px saturated block and 12.5px grey text on equal padding are not
+  balanced. Weight decides, and the number that *measures* equal will look wrong.
+
+### Spacing — every gap must be ONE intentional number
+
+- **Never let two mechanisms produce one gap.** A `gap` + a `min-height` tap target + a margin is
+  a gap nobody chose. *Real case, the Apply block:* a declared **6px** gap rendered as **21px**
+  because `min-height: 44px` on a 19px line box added 12.5px of invisible half-leading above AND
+  below. The fix was to move the gap into the element's own padding so the hit area and the
+  visible gap are the same number.
+- **Measure GLYPH to GLYPH, not box to box.** Box geometry is blind to leading. When a gap looks
+  wrong but measures right, use canvas `TextMetrics` (`actualBoundingBoxAscent/Descent`).
+- **Find out which child is governing the row** before touching padding. The tallest element sets
+  the height silently — in that same block the *action* column was 100.8px against the price
+  figure's 90.1px, so the button, not the price, was pinning the panel's top edge.
+- **Dead space at the end of a block is a defect, not neutral.** If nothing sits under it, it is a
+  gap with no owner.
+
+### The checks, every time, before saying done
+
+1. Print every left edge and right boundary in the section.
+2. Print every vertical gap between adjacent blocks — each must be a value you can point at in
+   the CSS.
+3. `grep` for duplicate selectors; the later one silently wins, and this repo has been bitten.
+4. **Then screenshot it.** Numbers verify *correctness*; only eyes detect *ugliness*.
+
 ## 🎨 THE DESIGN SOP — "improve the design" means ALL of it (Bryan, 30 Jul 2026)
 
 His words: *"when i say improve the design, you make use your critical thinking on how to improve

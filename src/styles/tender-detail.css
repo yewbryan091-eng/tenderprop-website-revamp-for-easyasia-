@@ -966,15 +966,40 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
    ~75 readable ceiling. But Property Details above fills this same width with TWO columns,
    not long lines — so matching the page's horizontal rhythm and keeping a readable measure
    are the same move. Each column lands around 65 characters. */
+/* ONE measure for the whole section. The standfirst was capped at 64ch of 27px serif (999px)
+   and the body at 78ch of 16px sans (787px) — same left edge, but the quote ran 212px further
+   right, so the section had two different right boundaries. `ch` is font-relative, so it can
+   never hold two different typefaces to one column. An absolute token can. */
+.blkcard.about { --about-measure: 50rem; }
+
+/* ONE vertical column (Bryan). The two-column split was my call and it was wrong for prose:
+   it makes the reader finish column 1 at the bottom of the section and then jump back UP to
+   the top to start column 2 — fine for a spec table, wrong for a continuous argument. The
+   measure problem it was solving is solved properly here instead, by capping the column at
+   78ch (~700px) rather than letting it run the full 1100px at ~137 characters a line. */
 .aboutbody {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: clamp(30px, 4vw, 60px);
-  align-items: start;
+  display: block;
+  max-width: var(--about-measure);
 }
 .aboutbody p { margin: 0 0 18px; color: var(--ink); font-size: 16px; line-height: 1.72; }
-@media (max-width: 760px) {
-  .aboutbody { grid-template-columns: minmax(0, 1fr); }
+.aboutbody p:last-child { margin-bottom: 0; }
+
+/* Collapsed. Clamped by HEIGHT, not by paragraph count, and the cut is faded rather than
+   hard. The height clamp is what makes the fade legible as a fade: cutting on a paragraph
+   boundary fades out empty space below the last line, which reads as a rendering fault
+   instead of "there is more of this". Mid-sentence is the point.
+
+   7 lines at 16px / 1.72 = 192.6px. A LINE count, not a character count, so every viewport
+   shows the same shape — a phone shows fewer words in the same seven lines, which is right.
+
+   mask-image rather than a gradient overlay: an overlay has to know the band colour behind
+   it, and this section sits on --band-paper while the next one does not. A mask fades to
+   whatever is actually there and cannot fall out of sync with a token. */
+.aboutbody.is-clamped {
+  max-height: 245px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 74%, rgba(0, 0, 0, .5) 89%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 74%, rgba(0, 0, 0, .5) 89%, transparent 100%);
 }
 
 /* The one argument nothing else on the page makes. Left rule rather than a box: it is the
@@ -988,7 +1013,7 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
 .about-quote {
   margin: 22px 0 30px; padding: 0;
   border-left: 0;
-  max-width: 64ch;
+  max-width: var(--about-measure);
   font-family: var(--serif); font-optical-sizing: auto;
   font-style: italic;
   font-size: clamp(21px, 2.3vw, 27px); font-weight: 500;
