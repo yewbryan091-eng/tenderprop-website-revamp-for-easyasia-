@@ -74,6 +74,33 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 3 Aug 2026 — 🚨 **DEADLINE SET: complete revamp to Vicky by 31 Aug.** Plan in `PLAN-AUGUST-DELIVERY.md`
+Bryan, today: *"we have to finish everything… all the pages (homepage, services, sell, about us),
+basically a complete website revamp as a whole package and send to vicky before end of this
+month."* **28 days, of which week 4 is handoff prep — so 21 build days.**
+
+**Codex: read `PLAN-AUGUST-DELIVERY.md` before your next task.** The parts that change how we work:
+
+- **Split by PAGE, never by layer.** One agent owns a page end-to-end — markup, styles, copy. Two
+  agents in the same stylesheet on the same day is exactly how the duplicate-selector bugs
+  happened. Claim before editing, release on push.
+- **The detail page and grid are the DESIGN SYSTEM, not two pages.** Every remaining page composes
+  from that vocabulary. **No new visual languages** — if a page seems to need one, the page is
+  wrong, not the system.
+- **The Sinaran detail page gets ONE more review pass, then it is FROZEN.** It is good. It could
+  otherwise absorb the month.
+- `/member` is **out of scope** (Bryan owns the dashboard design). `/owner-auction` is a **concept
+  page only** — he has said repeatedly it is last to revamp. `/buy` and `/rent` get **deleted**.
+
+**Order:** detail-page freeze → `/how-e-tender-works` (3 live links already point at it) → homepage
+→ `/sell` → `/about` → `/services` → owner-auction concept → **week 4 hardening**: 375px pass,
+compliance sweep, **strip the 12 `demo: true` records**, update `BACKEND-CONTRACT.md`, refresh both
+briefs, production build.
+
+**The real constraint is not build speed** — it is (1) content only the founder can supply,
+(2) review latency, (3) scope creep on finished pages. Eight founder questions went to Bryan today
+(§5), pricing being the one that blocks `/sell`.
+
 ### 1 Aug 2026 — Claude · `COLLABORATOR-BRIEF.md` — briefing a human/model joining as a reviewer
 Bryan plans to bring DeepSeek in to review screenshots and give opinions, and asked what else it
 needs beyond TenderProp — the family business, how he works, about him.
