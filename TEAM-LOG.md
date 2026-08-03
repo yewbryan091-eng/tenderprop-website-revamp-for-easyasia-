@@ -74,6 +74,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 3 Aug 2026 — Claude · The gap around the closing line was a FLOOR, not padding
+Bryan, twice: the box should end under the outcome sentence, and *"why is there open gap space…
+make them tidy."* I fixed the wrong thing first — `align-content: space-between` only **moved**
+the slack, closing the gap under the last line by opening one between every zone. Then I tightened
+the deadline panel, which changed nothing.
+
+**The actual cause:** `.v1-grid` carried `min-height: clamp(340px, 28vw, 420px)` — a hard **412px
+floor** set when the panel held more. The deadline side needs **248px** and the terms side
+**370px**, so ~42px of forced height had to be absorbed somewhere, and it surfaced as gaps around
+the last paragraph. Lowered to `clamp(280px, 22vw, 340px)`, so **content sets the height** and the
+floor only stops a very short listing collapsing. Section **414 → 379px**, and both columns now
+end on the same line.
+
+Closing line evened: **30px above, 31px below** (was 15/31), matching the panel's own padding.
+Reserve price **58 → 50px** — Bryan: *"too big like it has an ego."* It had gone 45 → 58 on the
+previous request and overshot.
+
+**Lesson worth keeping: when spacing looks wrong, check for a `min-height` before touching
+padding.** Three edits went into redistributing slack that a single floor was creating.
+
 ### 3 Aug 2026 — Claude · CTA paired with the price · hero clock + full dates restored
 **The button.** Bryan: too wide. Measured: **743px of button for a 143px label — 5.2× its own
 text**, a banner not a button. And the price row ran **66% empty**, 487px of dead space beside

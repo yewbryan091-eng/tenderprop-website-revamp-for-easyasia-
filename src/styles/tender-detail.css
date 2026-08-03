@@ -24,7 +24,12 @@ section.blk.tender-band {
 .v1-grid {
   display: grid;
   grid-template-columns: minmax(350px, 2fr) minmax(0, 3fr);
-  min-height: clamp(340px, 28vw, 420px);
+  /* Lowered from clamp(340px, 28vw, 420px). That floor was set when the panel carried more,
+     and it had stopped describing the content: the deadline side needs 248px, the terms side
+     370px — so 412px of forced height became slack the right column had to absorb, showing up
+     as gaps around the closing line. The content sets the height now; this only stops a very
+     short listing from collapsing. */
+  min-height: clamp(280px, 22vw, 340px);
 }
 
 /* ── Left: one decisive timing signal ── */
@@ -62,7 +67,9 @@ section.blk.tender-band {
      held four stacked blocks; with two it opened a ~230px hole in the middle that read as a
      missing element rather than as breathing room. */
   justify-content: center;
-  gap: clamp(20px, 3vh, 34px);
+  /* Tightened from clamp(20px, 3vh, 34px): this panel was 412px against the right column's
+     386px, and that 26px difference was the slack showing up as gaps on the other side. */
+  gap: clamp(14px, 2vh, 22px);
   min-height: 100%;
   text-align: center;
   padding: clamp(24px, 2.5vw, 36px) clamp(52px, 5vw, 76px) clamp(24px, 2.5vw, 34px) clamp(30px, 4vw, 60px);
@@ -154,10 +161,10 @@ section.blk.tender-band {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: "price" "terms" "submit";
-  /* space-between, not center: the left panel is taller, so centring left ~60px of dead space
-     below the last line. Spreading the zones lets the column fill its own height and the panel
-     ends exactly on the outcome sentence. */
-  align-content: space-between;
+  /* center, with the LEFT panel tightened to match — see .v1-deadline-content. space-between
+     only moved the slack: it closed the gap under the last line by opening one between every
+     zone instead. The fix is to remove the slack, not redistribute it. */
+  align-content: center;
   row-gap: 0;
   min-width: 0;
   padding: clamp(20px, 2.2vw, 30px) clamp(30px, 4vw, 58px) clamp(20px, 2.2vw, 30px) clamp(44px, 5vw, 72px);
@@ -179,7 +186,7 @@ section.blk.tender-band {
   display: block;
   margin: 3px 0 2px;
   font-family: var(--serif); font-optical-sizing: auto;
-  font-size: clamp(38px, 4.2vw, 58px); font-weight: 600;
+  font-size: clamp(34px, 3.6vw, 50px); font-weight: 600;
   line-height: 1; letter-spacing: -.022em; color: var(--ink);
 }
 
@@ -230,7 +237,9 @@ section.blk.tender-band {
    bottom border already separates it from what precedes it. */
 .v1-submit {
   grid-area: submit;
-  padding: clamp(11px, 1.2vw, 15px) 0 0;
+  /* Matches the panel's own bottom padding, so this last line sits evenly in its band —
+     it was 15px above and 31px below, which read as the paragraph having slipped. */
+  padding: clamp(20px, 2.2vw, 30px) 0 0;
 }
 /* Natural width — sized by its label plus padding, not by the column. */
 .v1-act .btn-red {
@@ -1002,7 +1011,7 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   /* start, not center: the closing cell carries an extra "End of day, MYT" line, so centring
      pushed the shorter cell down and the two DATES stopped sharing a line. */
   align-items: start;
-  padding-top: clamp(16px, 2.2vh, 24px);
+  padding-top: clamp(12px, 1.6vh, 17px);
   border-top: 1px solid rgba(255, 255, 255, .26);
 }
 .v1-dates > div { min-width: 0; }
