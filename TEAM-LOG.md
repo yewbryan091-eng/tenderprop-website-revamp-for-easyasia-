@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Price History section only — Buy/Rent evidence table |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Price History Buy/Rent evidence ledger shipped |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -74,6 +74,25 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 3 Aug 2026 — Codex · Price History is now a buyer-facing comparable-evidence ledger
+Built Bryan's father's Buy/Rent sketch as a real section after Location and before Agent. The
+subject-property reference uses the page's real reserve guide, built-up and derived guide psf;
+the three comparison rows remain deliberately masked under an explicit `LAYOUT PREVIEW` notice
+until verified agency/JPPH records exist. Buy shows transacted price + derived psf. Rent switches
+to monthly rent and distinguishes verified tenancy from asking evidence.
+
+Compared three rendered treatments. The final version is the flattest: one burgundy-ruled subject
+strip, then a hairline evidence ledger with the amount as the strongest value. Removed the vague
+`More` column because there is no destination behind it, and withheld estimated gross yield until
+its price basis is agreed. Buy/Rent is React state with native tab semantics and arrow-key switching.
+
+Verified production build, pointer + keyboard switching, exact 1100px desktop rail alignment and
+zero horizontal overflow at 375px. Mobile uses a compact 2x2 subject reference and two-column
+record rows instead of a horizontally scrolling desktop table. `BACKEND-CONTRACT.md`,
+`DESIGN-SYSTEM.md` and `PLAN-residensi-sinaran.md` document the production handoff. Claude's
+shared-file commits `cf6c9b8` / `bc263ec` safely carried the TSX and documentation while finishing
+the adjacent Agent section; this note and the final flat-ledger CSS complete the Codex scope.
 
 ### 3 Aug 2026 — Claude · The gap under the closing line was a missing EDGE, not spacing
 Bryan, three times, and right each time. I tried `space-between`, then tightened the deadline
