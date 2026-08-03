@@ -110,7 +110,7 @@ Longest lead time, so they cannot wait for the week that needs them.
 |---|---|---|
 | 1 | **`/sell`, week 2** | **Package pricing.** Actual RM for the 3-month vs 6-month seller package. Without this the revenue page cannot be finished |
 | 2 | `/sell`, homepage | **Real sold results** — any completed e-tender we can show, or confirmation there are none yet. Proof is what sells the concept to a seller |
-| 3 | Every page, week 4 | **Real REN + agency registration + footer legal identity.** `REN 123456` cannot ship |
+| 3 | ~~Every page~~ | ~~**Real REN + agency registration.**~~ **PARTLY ANSWERED 3 Aug:** REA **12345**, agency **966357-V**, both live on the detail page. Two things still open: `12345` follows a placeholder pattern and is worth checking against the BOVAEP register; and 966357-V is an **SSM company** number, not a **BOVAEP agency registration** (`E(1)xxxx`), which is what Act 242 disclosure normally cites. Footer legal identity still to do |
 | 4 | `/about` | **The company story** — founding, size, what the agency is known for. Cannot be invented |
 | 5 | `/services` | **The real service list.** What does the agency actually offer today? |
 | 6 | Detail page | **Sinaran's real closing date.** `2028-12-31` renders as **885 DAYS LEFT** in 76px type |

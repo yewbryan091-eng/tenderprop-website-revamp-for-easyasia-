@@ -150,9 +150,19 @@ repetition gone it is short enough to read whole.
   mark approximate ("~5 min drive"). Map iframe fixed height — check mobile.
 - Rule: approximations declared as approximations.
 
-### 8. Price History — REMOVED, stays out until real transactions exist (JPPH/agency).
-  Layout is kept in git history; the amber SAMPLE badge style exists if Bryan ever wants sample
-  rows shown honestly. Do NOT re-add invented rows (decisions ledger).
+### 8. Price History — LAYOUT PREVIEW RESTORED 3 Aug 2026 (Bryan)
+- Job: show nearby comparable sale and rental evidence so a buyer has context for the amount they
+  choose to offer.
+- Structure: Buy / Rent tabs; a subject-property reference strip; then a flat comparison ledger.
+  Buy shows date, comparable property, built-up and transacted price with derived RM/psf. Rent
+  shows date, comparable property, built-up, monthly rent and whether the evidence is a completed
+  tenancy or an asking rent.
+- **No real records have been supplied.** The prototype therefore uses masked placeholders under
+  an explicit `LAYOUT PREVIEW` notice. They are architecture, not market claims, and must be
+  replaced with verified JPPH or agency records before publishing.
+- The vague `More` column from the sketch is deliberately absent until real row-level details or a
+  source record exist. A dead chevron would promise an interaction with nothing behind it.
+- Rule: prices align as evidence, not decoration; no trend arrows or invented market summary.
 
 ### 9. Agent + Mortgage calculator
 - Job: trust + affordability. REN 123456 placeholder OK; "REA registration: Not stated" rows —

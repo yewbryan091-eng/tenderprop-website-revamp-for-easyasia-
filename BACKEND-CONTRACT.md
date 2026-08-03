@@ -30,6 +30,7 @@ At the data layer that bug becomes an admin typo nobody catches.
 | The **batch** a listing belongs to | grouping by identical `closingDate` | a batch id |
 | Listing **URL / slug** | `name` | — (see `url`, being retired) |
 | "Open / closed" status | `closingDate` vs now | a status flag |
+| Comparable sale **RM per sq ft** | `priceHistory.buy[].transactedPrice ÷ builtUpSqft` | an RM/psf field |
 
 **One thing the backend MUST own that looks derived but is not:** the closing **date** itself.
 Deadlines are MYT, end of day — `23:59:59+08:00`. Store a date, not a timestamp, and never a
@@ -163,6 +164,52 @@ This section was deleted once already, on 30 Jul, because it carried **18 amenit
 from a Tropicana Breeze Hill condominium** — infinity pool, flying fox, heated jacuzzi, games
 room — on a 62-unit landed townhouse scheme. **Do not restore that list.** The agency's real
 facilities are a founder input, tracked in `PLAN-AUGUST-DELIVERY.md` §5.
+
+---
+
+## 3e. Comparable price history — added 3 Aug 2026
+
+Per-listing evidence for similar properties near the subject property. Buy and Rent are separate
+arrays because a sale transaction and a rental asking record are not the same kind of evidence.
+The admin must support zero or more rows in each array. Newest records render first.
+
+### Buy / sale records
+
+| Field | Type | Notes |
+|---|---|---|
+| `priceHistory.buy[].date` | date or year-month | Keep the source's precision. Do not invent a day when JPPH supplies only month/year |
+| `priceHistory.buy[].datePrecision` | enum | `day` \| `month`; tells the frontend how to format `date` |
+| `priceHistory.buy[].comparableName` | string | Development or property name; property type alone does not prove comparability |
+| `priceHistory.buy[].locality` | string | Area/project context shown under the comparable name |
+| `priceHistory.buy[].propertyType` | enum | Use the shared property taxonomy |
+| `priceHistory.buy[].builtUpSqft` | integer | Used with price to derive RM/psf; omit when unavailable |
+| `priceHistory.buy[].transactedPrice` | integer (RM) | Completed sale transaction only — never an asking price |
+| `priceHistory.buy[].sourceLabel` | string | e.g. `JPPH`; required for credibility |
+| `priceHistory.buy[].sourceUrl` | URL \| null | Optional link to the source record |
+| `priceHistory.buy[].verifiedAt` | date | When TenderProp last checked the record |
+
+### Rent records
+
+| Field | Type | Notes |
+|---|---|---|
+| `priceHistory.rent[].date` | date or year-month | Keep the source's precision |
+| `priceHistory.rent[].datePrecision` | enum | `day` \| `month` |
+| `priceHistory.rent[].comparableName` | string | Development or property name |
+| `priceHistory.rent[].locality` | string | Area/project context |
+| `priceHistory.rent[].propertyType` | enum | Use the shared property taxonomy |
+| `priceHistory.rent[].builtUpSqft` | integer | Comparable size; omit when unavailable |
+| `priceHistory.rent[].monthlyRent` | integer (RM) | Monthly amount |
+| `priceHistory.rent[].evidenceType` | enum | `tenancy` \| `asking`. The frontend must label these differently |
+| `priceHistory.rent[].sourceLabel` | string | The source of the rent evidence |
+| `priceHistory.rent[].sourceUrl` | URL \| null | Optional source link |
+| `priceHistory.rent[].verifiedAt` | date | When TenderProp last checked the record |
+
+**Gross yield is deliberately not modelled yet.** It requires an agreed price denominator; using
+the subject reserve, a comparable transaction, or an asking price produces different answers.
+Until that rule is confirmed, showing a percentage would manufacture precision.
+
+**Prototype state:** the current Sinaran section contains visibly masked layout placeholders, not
+records. In production an absent/empty `priceHistory` omits the section entirely.
 
 ---
 

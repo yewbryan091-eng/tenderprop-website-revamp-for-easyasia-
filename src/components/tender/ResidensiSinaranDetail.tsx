@@ -264,6 +264,42 @@ const FACILITIES: string[] = [
   "Perimeter Walkway",
 ];
 
+/* LISTING AGENT — the section has exactly two jobs and nothing else belongs in it:
+   REACH A HUMAN FAST, and PROVE THAT HUMAN IS REAL AND LICENSED.
+
+   What came out, and why:
+     "Role on this e-tender: Appointed agent"  — Bryan: no need. Correct. It tells a buyer
+        nothing actionable; the agent on the listing is self-evidently the listing's agent.
+     "Send Enquiry" button — this was the FOURTH enquiry route on one page, after Submit your
+        offer (hero, panel and sticky bar), "Or talk to the agent first", and "Get your answer"
+        in Property Details. It also pointed at "#", so it did nothing at all.
+     The four-column <dl> — it ranked "Agency registration" equal to the phone number, and
+        two of its four cells rendered a big italic "Not stated", so a third of the section
+        was an admission that we lack data.
+
+   ⚠️ REA_NO and AGENCY_NO are STILL PLACEHOLDERS and this is an Act 242 disclosure point —
+   a buyer about to name a price on a RM517k property is entitled to see a real registration.
+   Founder question #3. They render inline and muted so a missing value reads as pending
+   rather than as the loudest thing in the card, but they MUST be real before go-live. */
+const AGENT = {
+  name: "Stephen Yew",
+  firm: "The One Property Global Sdn Bhd",
+  title: "Licensed Real Estate Agent (REA)",
+  /* Founder-supplied by Bryan, 3 Aug. ⚠️ Two flags worth resolving before go-live:
+     - "12345" follows a placeholder pattern; worth checking against the BOVAEP register.
+     - 966357-V is an SSM COMPANY registration number, not a BOVAEP agency registration
+       (those read E(1)xxxx). Act 242 disclosure normally wants the BOVAEP one. Both can be
+       shown — the company number is what appears on the letterhead — but if a BOVAEP
+       agency number exists it should be here too. */
+  reaNo: "12345",
+  agencyNo: "966357-V",
+  phone: "012-393 8255",
+  whatsapp: "60123938255",
+};
+/* tel: wants no spaces or dashes. Derived, so the printed number and the dialled one cannot
+   drift apart — the printed one was previously dead text that could not be tapped at all. */
+const AGENT_TEL = "+6" + AGENT.phone.replace(/[^0-9]/g, "");
+
 const ABOUT_PARAS: string[] = [
   `Residensi Sinaran sits inside Taman Sri Muda, one of the older established          townships in Shah Alam &mdash; the kind of neighbourhood that finished growing a          decade ago. Sixty-two homes behind a single controlled entrance, which is small          enough that the place stays quiet.`,
   `Each home runs over three storeys, which puts the shared living areas downstairs          and the private rooms above &mdash; the practical reason a family chooses a          townhouse over an apartment of the same size, and the reason the layout still          works as a household grows rather than forcing a move.`,
@@ -274,6 +310,35 @@ const ABOUT_PARAS: string[] = [
   `Parking is two dedicated bays rather than a shared allocation, which in a          sixty-two unit development means the arithmetic actually works &mdash; visitors          included. It is a small detail that becomes a daily one.`,
   `That the township is older is the point. Everything around it already exists, and          nothing about living here depends on a masterplan being finished or a neighbouring          phase being sold.`,
 ];
+
+/* PRICE HISTORY — structure-only preview.
+   Bryan's 3 Aug brief restores this section so EasyAsia can see the final Buy / Rent
+   architecture, but the project still has no verified JPPH or agency transaction rows.
+   These deliberately masked values demonstrate rhythm and hierarchy without publishing
+   made-up market evidence. Replace the whole object with backend data; do not unmask it. */
+type PriceHistoryMode = "buy" | "rent";
+type PriceHistoryPreviewRow = {
+  id: string;
+  date: string;
+  comparable: string;
+  context: string;
+  builtUp: string;
+  amount: string;
+  evidence: string;
+};
+
+const PRICE_HISTORY_PREVIEW: Record<PriceHistoryMode, PriceHistoryPreviewRow[]> = {
+  buy: [
+    { id: "buy-a", date: "DD MMM YYYY", comparable: "Nearby comparable A", context: "Townhouse · same locality", builtUp: "1,4XX sq ft", amount: "RM XXX,XXX", evidence: "RM XXX psf" },
+    { id: "buy-b", date: "DD MMM YYYY", comparable: "Nearby comparable B", context: "Townhouse · nearby project", builtUp: "1,4XX sq ft", amount: "RM XXX,XXX", evidence: "RM XXX psf" },
+    { id: "buy-c", date: "DD MMM YYYY", comparable: "Nearby comparable C", context: "Townhouse · same locality", builtUp: "1,3XX sq ft", amount: "RM XXX,XXX", evidence: "RM XXX psf" },
+  ],
+  rent: [
+    { id: "rent-a", date: "MMM YYYY", comparable: "Nearby rental A", context: "Townhouse · tenancy evidence", builtUp: "1,4XX sq ft", amount: "RM X,XXX / mo", evidence: "Verified tenancy" },
+    { id: "rent-b", date: "MMM YYYY", comparable: "Nearby rental B", context: "Townhouse · asking evidence", builtUp: "1,4XX sq ft", amount: "RM X,XXX / mo", evidence: "Asking rent" },
+    { id: "rent-c", date: "MMM YYYY", comparable: "Nearby rental C", context: "Townhouse · tenancy evidence", builtUp: "1,3XX sq ft", amount: "RM X,XXX / mo", evidence: "Verified tenancy" },
+  ],
+};
 
 export function ResidensiSinaranDetail() {
   useEffect(() => initDetailPage(), []);
@@ -290,6 +355,7 @@ export function ResidensiSinaranDetail() {
      worked and a reloaded page was dead, which is exactly the "sometimes broken" Bryan saw.
      Anything React renders should be driven by React state. */
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [priceHistoryMode, setPriceHistoryMode] = useState<PriceHistoryMode>("buy");
   /* GALLERY — React state, like the About toggle. It was imperative DOM code in
      initDetailPage() and that is what Bryan saw as "broken": clicking the "+1" tile
      APPENDED a 7th thumb to a grid whose CSS declares `grid-template-rows: repeat(3, 1fr)`.
@@ -506,7 +572,7 @@ export function ResidensiSinaranDetail() {
 
         <nav className="subnav" id="subnav" aria-label="Section navigation">
           <div className="wrap">
-            <div className="row"><a className="snav-lead" href="#tender">Tender Information</a> <a href="#details">Details</a> <a href="#about">About</a> <a href="#selling">Selling Points</a> <a href="#area">What's Nearby</a> <a href="#facilities">Facilities</a> <a href="#location">Location</a> <a href="#agent">Agent</a> <a href="#mortgage">Mortgage</a> <a href="#faq">FAQ</a></div>
+            <div className="row"><a className="snav-lead" href="#tender">Tender Information</a> <a href="#details">Details</a> <a href="#about">About</a> <a href="#selling">Selling Points</a> <a href="#area">What's Nearby</a> <a href="#facilities">Facilities</a> <a href="#location">Location</a> <a href="#history">Price History</a> <a href="#agent">Agent</a> <a href="#mortgage">Mortgage</a> <a href="#faq">FAQ</a></div>
           </div>
         </nav>
 
@@ -947,15 +1013,128 @@ export function ResidensiSinaranDetail() {
         </section>
 
 
-        {/* Price History section removed — the transaction rows were invented sample
-            data. Returns once real transactions are sourced (JPPH or agency records);
-            the .sample-tag style in tender-detail.css is reserved for that. */}
+        {/* PRICE HISTORY — Bryan restored the architecture on 3 Aug. The rows remain
+            unmistakably masked because no verified transactions have been supplied yet.
+            The subject-property reference is real; the ledger rows are layout only. */}
+        <section className="blk band-card" id="history">
+          <div className="wrap">
+            <div className="blkcard price-history" data-treatment="tape">
+              <div className="ph-heading">
+                <div>
+                  <h2 className="sec-title">Price <span>History</span></h2>
+                  <p className="sec-note">Comparable sale and rental evidence for similar properties near {LISTING_NAME}.</p>
+                </div>
+                <div className="ph-tabs" role="tablist" aria-label="Price history type">
+                  {(["buy", "rent"] as PriceHistoryMode[]).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      id={`ph-tab-${mode}`}
+                      role="tab"
+                      aria-selected={priceHistoryMode === mode}
+                      aria-controls="ph-panel"
+                      tabIndex={priceHistoryMode === mode ? 0 : -1}
+                      className={priceHistoryMode === mode ? "is-active" : ""}
+                      onClick={() => setPriceHistoryMode(mode)}
+                      onKeyDown={(event) => {
+                        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+                        event.preventDefault();
+                        const next: PriceHistoryMode = priceHistoryMode === "buy" ? "rent" : "buy";
+                        setPriceHistoryMode(next);
+                        window.requestAnimationFrame(() => document.getElementById(`ph-tab-${next}`)?.focus());
+                      }}
+                    >
+                      <span>{mode === "buy" ? "Buy" : "Rent"}</span>
+                      <small>{mode === "buy" ? "Sale transactions" : "Rental evidence"}</small>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <dl className="ph-subject" aria-label="Subject property reference">
+                <div className="ph-subject-name"><dt>Subject property</dt><dd>{LISTING_NAME}</dd></div>
+                <div><dt>Reserve guide</dt><dd className="num">{rm(RESERVE)}</dd></div>
+                <div><dt>Built-up</dt><dd className="num">{PRICE_BASIS}</dd></div>
+                <div><dt>Guide price / sq ft</dt><dd className="num">RM{PSF} psf</dd></div>
+              </dl>
+
+              <div className="ph-preview-note">
+                <span className="sample-tag">Layout preview</span>
+                <p>Masked placeholders show the final column structure. Replace them with verified agency or JPPH records before publishing.</p>
+              </div>
+
+              <div
+                className="ph-panel"
+                id="ph-panel"
+                role="tabpanel"
+                aria-labelledby={`ph-tab-${priceHistoryMode}`}
+              >
+                <div className="ph-ledger-head">
+                  <div><strong>{priceHistoryMode === "buy" ? "Comparable sale records" : "Comparable rental records"}</strong><span>Newest records first</span></div>
+                  <span>{priceHistoryMode === "buy" ? "Transacted evidence" : "Tenancy / asking evidence"}</span>
+                </div>
+                <div className="ph-table-wrap">
+                  <table className="ph-table">
+                    <caption className="ph-sr">
+                      {priceHistoryMode === "buy" ? "Comparable sale transaction layout" : "Comparable rental evidence layout"}
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Comparable property</th>
+                        <th scope="col">Built-up</th>
+                        <th scope="col" className="ph-amount-head">{priceHistoryMode === "buy" ? "Transacted price" : "Monthly rent"}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {PRICE_HISTORY_PREVIEW[priceHistoryMode].map((row) => (
+                        <tr key={row.id}>
+                          <td className="ph-date num"><span>{row.date}</span></td>
+                          <td className="ph-comparable"><strong>{row.comparable}</strong><span>{row.context}</span></td>
+                          <td className="ph-built num"><span>{row.builtUp}</span></td>
+                          <td className="ph-amount num"><strong>{row.amount}</strong><span>{row.evidence}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <section className="blk band-card" id="agent">
           <div className="wrap">
             <div className="blkcard">
               <h2 className="sec-title">Listing <span>Agent</span></h2>
-              <div className="agentcard"><div className="ag-top"><img className="face" src={AGENT_PHOTO} alt="Stephen Yew" /><div className="meta"><b>Stephen Yew</b><div className="co">The One Property Global &middot; Licensed REA</div></div></div><dl className="ag-creds"><div><dt>REA registration</dt><dd className="na">Not stated</dd></div><div><dt>Agency registration</dt><dd className="na">Not stated</dd></div><div><dt>Role on this e-tender</dt><dd>Appointed agent</dd></div><div><dt>Direct line</dt><dd className="num">012-393 8255</dd></div></dl><div className="ag-foot"><a className="btn wa" href="https://wa.me/60123938255" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>WhatsApp</a><a className="btn burg" href="#">Send Enquiry</a></div></div></div></div></section>
+              <div className="agentcard">
+                <img className="face" src={AGENT_PHOTO} alt={AGENT.name} />
+                <div className="ag-id">
+                  <b className="ag-name">{AGENT.name}</b>
+                  <span className="ag-title">{AGENT.title}</span>
+                  <span className="ag-firm">{AGENT.firm}</span>
+                  {/* Act 242 disclosure. Inline and muted — present and checkable, without
+                      outranking the thing a buyer actually came here for. */}
+                  <span className="ag-reg">
+                    {AGENT.reaNo ? `REA ${AGENT.reaNo}` : "REA registration not stated"}
+                    {" \u00b7 "}
+                    {AGENT.agencyNo ? `Agency reg. ${AGENT.agencyNo}` : "agency registration not stated"}
+                  </span>
+                </div>
+                <div className="ag-act">
+                  <a className="btn wa" href={`https://wa.me/${AGENT.whatsapp}`} target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                    WhatsApp
+                  </a>
+                  {/* Names the relationship between the two routes (Bryan). Without it the
+                      number under a green button reads as a caption to the button rather than
+                      as a second, separate way in. */}
+                  <span className="ag-or">or call</span>
+                  {/* A real tel: link. This was plain text before, so on a phone the one thing
+                      a ready buyer wants to do — tap and call — was impossible. */}
+                  <a className="ag-tel" href={`tel:${AGENT_TEL}`}>{AGENT.phone}</a>
+                </div>
+              </div></div></div></section>
 
 
 
