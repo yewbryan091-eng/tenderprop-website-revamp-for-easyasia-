@@ -267,6 +267,14 @@ including today, and the final day reads "1 day left" rather than "0".
   editing a rule, print the whole rule back and read it**, and sweep for duplicate properties:
   `re.finditer(r'([^{}]+)\{([^{}]*)\}')` then count property names per block.
 
+- **A token nothing uses is worse than no token.** `--sec-title-size` and `--sec-title-gap` were
+  declared in `tender-detail.css` — but that file had **no `.sec-title` rule at all**, so every
+  heading on the detail page fell through to `tender-listings.css`, which sizes headings for CARD
+  sections (23.5px Inter 800 instead of 35px Newsreader 600). The design system said one thing and
+  the page did another for weeks, and nothing errored. **When two stylesheets load on one page,
+  grep the selector in BOTH before assuming which rule is winning** — and scope page-specific
+  rules (`.tp-detail .sec-title`) so order cannot decide it.
+
 ## 6. Brand — non-negotiable
 
 - Cream / burgundy / red. **Never** import iNewProject's maroon palette. Adopt *patterns* from

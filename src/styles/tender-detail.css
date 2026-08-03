@@ -850,6 +850,26 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
 
   footer.site { background: var(--ink); color: #8F857A; font-size: 12.5px; padding: 20px 0; margin-top: clamp(36px, 6vh, 60px); }
 
+/* ══ SECTION HEADINGS — the detail page's own treatment ══════════════════════════════
+   These were rendering at 23.5px in Inter 800. Not a style choice: `tender-detail.css`
+   declares `--sec-title-size` but never had a `.sec-title` rule, so every heading on this
+   page was falling through to `tender-listings.css`, which sizes headings for CARD sections
+   at clamp(1.25rem, 1.6vw, 1.55rem). A dead token and a leaked rule, together.
+
+   Newsreader per the design system, and weight 600 not 800 — Newsreader ships 400..700, and
+   above that the browser synthesises a fake bold (DESIGN-SYSTEM §2). Scoped to `.tp-detail`
+   so it beats the listings rule regardless of stylesheet order. */
+.tp-detail .sec-title {
+  margin: 0 0 var(--sec-title-gap);
+  font-family: var(--serif); font-optical-sizing: auto;
+  font-size: var(--sec-title-size);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+.tp-detail .sec-title span { color: var(--burgundy); }
+
 /* ══ PROPERTY DETAILS — four zones in decreasing pricing impact ══════════════
    Zone 1 pricing bar · Zone 2 measurement band · Zone 3 not-disclosed · Zone 4 full spec */
 

@@ -74,6 +74,30 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 3 Aug 2026 — Claude · Section headings were wearing the LISTINGS page's style
+A spec came in saying the detail page's section headings should be Newsreader, not Inter. **It was
+right, and it exposed a real bug rather than a style preference.**
+
+`tender-detail.css` declares `--sec-title-size: clamp(1.75rem, 2.4vw, 2.25rem)` and
+`--sec-title-gap: 26px` — but **it has no `.sec-title` rule at all.** So every heading on the
+detail page was falling through to `tender-listings.css:762`, which sizes headings for CARD
+sections: **23.5px Inter 800**. A dead token and a leaked rule, together, for weeks.
+
+Fixed with `.tp-detail .sec-title` — scoped to the page wrapper so it wins regardless of
+stylesheet order, using the tokens that already existed. **Weight 600, not 800**: Newsreader ships
+400..700 and the browser fakes anything above (DESIGN-SYSTEM §2). All nine headings now measure
+**Newsreader / 35.28px / 600**, identical.
+
+❌ **Two other claims in the same spec were misreadings of a screenshot, and I did not act on them:**
+Selling Points numbering was said to skip 03 — it renders **01–06 sequential**; and "TENURE"/
+"Leasehold" were said to be clipped — **zero elements on the page have `scrollWidth > clientWidth`**.
+Both verified in the DOM before answering.
+
+**Vertical rhythm was also checked and is already uniform** — every section **56px/56px**, every
+heading gap **26px**, one set of values across the page. It comes from `--sec-pad` and
+`--sec-title-gap`, which is the system Bryan asked for on 30 Jul. Tender Information is `0/0`
+deliberately: it is the full-bleed dossier.
+
 ### 3 Aug 2026 — Claude · Tender Information refactored to Bryan's spec
 Spec delivered point by point; all of it implemented and verified in the render.
 
