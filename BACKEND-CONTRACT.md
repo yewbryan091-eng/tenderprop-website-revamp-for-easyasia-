@@ -245,6 +245,38 @@ string is the weakest link here. The printed address must still come from `addre
 
 ---
 
+## 3f. Listing agent — added 3 Aug 2026
+
+| Field | Type | Notes |
+|---|---|---|
+| `agent.name` | string | `Stephen Yew` |
+| `agent.title` | string | `Licensed Real Estate Agent (REA)` |
+| `agent.firm` | string | `The One Property Global Sdn Bhd` |
+| `agent.ssmNo` | string \| null | SSM **company** registration, e.g. `966357-V`. Renders in brackets after the firm name |
+| `agent.eNo` | string \| null | **BOVAEP firm registration**, e.g. `E(1)2056`. **This is the Act 242 disclosure** — not the SSM number |
+| `agent.reaNo` | string \| null | The individual's registration |
+| `agent.phone` | string | Display form, e.g. `012-393 8255` |
+| `agent.whatsapp` | string | Digits only with country code, e.g. `60123938255` |
+| `agent.photo` | asset | Portrait, square, ≥ 208px |
+
+**DERIVED — do not store:**
+
+| Shown | Derived from |
+|---|---|
+| the `tel:` link | `agent.phone`, stripped to digits |
+| the WhatsApp link | `agent.whatsapp` |
+| the **WhatsApp QR code** | `agent.whatsapp`, generated in the browser |
+
+**Never store a QR image.** It is generated from the number, so the two cannot drift apart —
+and a stored PNG would silently keep pointing at an old number after an agent changes phone.
+It is also generated **lazily and only above 820px**: a QR is useless on a phone, because you
+cannot scan your own screen, so the encoder is never shipped to mobile at all.
+
+`eNo` and `ssmNo` are **not interchangeable** and both should be stored. Act 242 disclosure
+cites the BOVAEP `E(1)` number; the SSM number is corporate identity and rides with the name.
+
+---
+
 ## 4. Photos
 
 Ordered array per listing. Photo 1 is the card thumbnail and the gallery's opening frame.
