@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { TENDERS } from "@/data/tenders";
+import { PropertyCard } from "@/components/tender/PropertyCard";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
-import { MS_DAY, closeAtMs, daysLeft, depositOf, displayType, fmtDate, isFinalDay, ordinalDateParts, remainingMs } from "@/lib/tender-utils";
+import { MS_DAY, closeAtMs, daysLeft, depositOf, displayType, fmtDate, isFinalDay, ordinalDateParts, remainingMs, tenderId } from "@/lib/tender-utils";
+/* The listings stylesheet too: Similar E-Tenders renders the SAME PropertyCard as the
+   /tender grid, and .props-grid / .prop-card are defined there. Without this the cards
+   render unstyled on this page. */
+import "@/styles/tender-listings.css";
 import "@/styles/tender-detail.css";
 
 /* Ported 1:1 from residensi-sinaran-detail.html — the design canon.
@@ -305,6 +310,28 @@ const AGENT = {
    drift apart — the printed one was previously dead text that could not be tapped at all. */
 const AGENT_TEL = "+6" + AGENT.phone.replace(/[^0-9]/g, "");
 
+/* SIMILAR E-TENDERS — derived, not typed. The three cards here used to be hand-written
+   markup with hardcoded prices (RM1,000,000, RM615,000, RM1,200,000) and all three linked to
+   /tender rather than to a listing, so they carried no closing date, no days-left, no deposit
+   and no agent. They were also a second, weaker card design competing with the real one.
+
+   Now they are the SAME PropertyCard the /tender grid uses, fed from the same records — so a
+   price change in tenders.ts moves both, and a card can never advertise a tender that has
+   already closed while claiming otherwise.
+
+   "Similar" means: same state, still open, not this listing, and closest in reserve price.
+   Demo records are excluded — they must never reach EasyAsia. */
+const SIMILAR = TENDERS
+  .filter((t) => !t.demo
+    && t.name !== SINARAN_TENDER.name
+    && t.stateKey === SINARAN_TENDER.stateKey
+    && t.propertyCategory === SINARAN_TENDER.propertyCategory
+    && remainingMs(t.closingDate) > 0)
+  .sort((a, b) =>
+    Math.abs(a.reservePrice - SINARAN_TENDER.reservePrice)
+    - Math.abs(b.reservePrice - SINARAN_TENDER.reservePrice))
+  .slice(0, 3);
+
 const ABOUT_PARAS: string[] = [
   `Residensi Sinaran sits inside Taman Sri Muda, one of the older established          townships in Shah Alam &mdash; the kind of neighbourhood that finished growing a          decade ago. Sixty-two homes behind a single controlled entrance, which is small          enough that the place stays quiet.`,
   `Each home runs over three storeys, which puts the shared living areas downstairs          and the private rooms above &mdash; the practical reason a family chooses a          townhouse over an apartment of the same size, and the reason the layout still          works as a household grows rather than forcing a move.`,
@@ -355,6 +382,7 @@ export function ResidensiSinaranDetail() {
      phone never fetches it at all. */
   const [waQr, setWaQr] = useState<string | null>(null);
   const [qrOpen, setQrOpen] = useState(false);
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   useEffect(() => {
     if (!qrOpen) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setQrOpen(false); };
@@ -1292,19 +1320,24 @@ export function ResidensiSinaranDetail() {
         <section className="blk band-card" id="similar">
           <div className="wrap">
             <h2 className="sec-title">Similar <span>E-Tenders</span></h2>
-            <div className="simgrid">
-              <a className="sim" href="/tender">
-                <div className="im"><img src={PROJECT_IMG("ara-damansara-height.jpg")} alt="Ara Damansara Height" loading="lazy" /></div>
-                <div className="bd"><span className="lc">Ara Damansara, Selangor</span><b>Ara Damansara Height</b><span className="pr num">RM1,000,000</span></div>
-              </a>
-              <a className="sim" href="/tender">
-                <div className="im"><img src={PROJECT_IMG("meranti-terrace.jpg")} alt="Meranti Terrace" loading="lazy" /></div>
-                <div className="bd"><span className="lc">Kota Kemuning, Selangor</span><b>Meranti Terrace</b><span className="pr num">RM615,000</span></div>
-              </a>
-              <a className="sim" href="/tender">
-                <div className="im"><img src={PROJECT_IMG("kemuning-utama-corner-unit.jpg")} alt="Kemuning Utama corner unit" loading="lazy" /></div>
-                <div className="bd"><span className="lc">Shah Alam, Selangor</span><b>Kemuning Utama Corner</b><span className="pr num">RM1,200,000</span></div>
-              </a>
+            <div className="props-grid grid-mode">
+              {SIMILAR.map((t) => {
+                const id = tenderId(t);
+                return (
+                  <PropertyCard
+                    key={id}
+                    x={t}
+                    saved={savedIds.has(id)}
+                    onToggleSave={(sid) =>
+                      setSavedIds((prev) => {
+                        const next = new Set(prev);
+                        if (next.has(sid)) next.delete(sid); else next.add(sid);
+                        return next;
+                      })
+                    }
+                  />
+                );
+              })}
             </div>
           </div>
         </section>
