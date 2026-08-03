@@ -453,8 +453,11 @@ export function ResidensiSinaranDetail() {
                         bar carries the same CTA the whole way down the page. */}
                     <div className="v1-act">
                       <a className="btn-red" href="#">Apply for E-Tender</a>
-                      <a className="v1-agent-alt" href="https://wa.me/60123938255" target="_blank" rel="noopener">
-                        Or talk to the agent first
+                      {/* Same treatment as "See how e-tender works" (Bryan) — both are ways out
+                          that are not the action, so they share `.v1-textlink`. */}
+                      <a className="v1-textlink v1-agent-alt" href="https://wa.me/60123938255" target="_blank" rel="noopener">
+                        <span>Or talk to the agent first</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
                       </a>
                     </div>
                   </div>
@@ -478,7 +481,7 @@ export function ResidensiSinaranDetail() {
                       <span className="lbl">Method</span>
                       <b>E-Tender</b>
                       <span className="sub">Confidential</span>
-                      <a className="v1-howto" href="/how-e-tender-works">
+                      <a className="v1-textlink v1-howto" href="/how-e-tender-works">
                         <span>See how e-tender works</span>
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
                       </a>

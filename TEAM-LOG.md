@@ -74,6 +74,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 3 Aug 2026 — Claude · Both secondary links now share one rule
+Bryan: *"talk to the agent should behave like see how e-tender works link, same colour, same font,
+same design… but second option, apply should dominate."* Right, and for a reason beyond
+consistency — **the muted grey was too quiet.** The Apply button is a filled red block and
+dominates on fill alone; making its alternative nearly invisible added no hierarchy, it only made
+a legitimate route hard to find. **Second, not hidden.**
+
+New `.v1-textlink` carries the look — 13px / 600 / burgundy / solid burgundy underline / arrow
+that travels on hover — and `.v1-howto` and `.v1-agent-alt` are now **placement only**. Verified
+identical: both render `13px / 600 / rgb(87,28,46)` with a matching underline colour, both have
+the arrow.
+
+🐛 Found while doing it: **`.v1-agent-alt` had no rule at all** — an earlier bulk sweep had removed
+it, so the link was rendering as unstyled default text and I had not noticed. Sharing a class now
+makes that failure mode impossible.
+
 ### 3 Aug 2026 — Claude · The gap around the closing line was a FLOOR, not padding
 Bryan, twice: the box should end under the outcome sentence, and *"why is there open gap space…
 make them tidy."* I fixed the wrong thing first — `align-content: space-between` only **moved**

@@ -283,6 +283,15 @@ including today, and the final day reads "1 day left" rather than "0".
   *"the same emphasis language as `.v1-reassure`"*. **Never bulk-delete rules by substring; and
   after any sweep, check brace depth AND diff what actually went.**
 
+- **Same KIND of element ⇒ same class, not the same values typed twice.** "See how e-tender
+  works" and "Or talk to the agent first" are both *ways out that are not the action*, so they
+  share `.v1-textlink` and placement-only classes carry the rest. Two rules with matching values
+  drift the moment one is edited — which is how the second link ended up muted grey while the
+  first was burgundy.
+- **Demoting is not hiding.** A filled button already dominates on fill alone; making its
+  alternative near-invisible adds no hierarchy and just makes a legitimate route hard to find.
+  Second, not hidden.
+
 ## 6. Brand — non-negotiable
 
 - Cream / burgundy / red. **Never** import iNewProject's maroon palette. Adopt *patterns* from
