@@ -176,7 +176,7 @@ section.blk.tender-band {
   display: block;
   margin: 3px 0 2px;
   font-family: var(--serif); font-optical-sizing: auto;
-  font-size: clamp(32px, 3.3vw, 45px); font-weight: 600;
+  font-size: clamp(38px, 4.2vw, 58px); font-weight: 600;
   line-height: 1; letter-spacing: -.022em; color: var(--ink);
 }
 
@@ -223,10 +223,13 @@ section.blk.tender-band {
 .v1 .sub { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
 
 /* ── ZONE 4 · the action ─────────────────────────────────────────────────────────── */
+/* The closing rule sits BELOW the outcome line, not above it (Bryan) — so the line reads as
+   the end of the section rather than a divider introducing one last paragraph. The terms row
+   already carries a bottom border, which separates this from what precedes it. */
 .v1-submit {
   grid-area: submit;
-  padding-top: clamp(11px, 1.2vw, 15px);
-  border-top: 1px solid var(--line);
+  padding: clamp(11px, 1.2vw, 15px) 0;
+  border-bottom: 1px solid var(--line);
 }
 /* Natural width — sized by its label plus padding, not by the column. */
 .v1-act .btn-red {
