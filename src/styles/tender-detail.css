@@ -167,7 +167,11 @@ section.blk.tender-band {
   align-content: center;
   row-gap: 0;
   min-width: 0;
-  padding: clamp(20px, 2.2vw, 30px) clamp(30px, 4vw, 58px) clamp(16px, 1.8vw, 22px) clamp(44px, 5vw, 72px);
+  /* Deliberately top-heavy. Equal padding measured equal and looked wrong: the top edge of
+     this panel carries a 51px saturated red block and the bottom edge carries 12.5px of grey
+     text, so 14px above the button crowded it against the section boundary while the same
+     14px below the closing line was ample. Optical balance, not metric balance. */
+  padding: clamp(14px, 1.5vw, 20px) clamp(30px, 4vw, 58px) clamp(10px, 1.2vw, 15px) clamp(44px, 5vw, 72px);
   /* The dossier's right panel is white and so is Property Details below it, so the section
      boundary was invisible: 31px of this panel's padding ran straight into 56px of the next
      section's, giving 87px of unbroken white under the closing line with no edge in it. That
@@ -187,7 +191,9 @@ section.blk.tender-band {
   padding-bottom: clamp(10px, 1.1vw, 14px);
 }
 .v1-price-fig { min-width: 0; }
-.v1-act { display: grid; justify-items: center; gap: 6px; }
+/* gap: 0 — the space under the button belongs to the link's own padding, not to this column.
+   See .v1-agent-alt: a column gap plus an invisible tap-target box double-counted it. */
+.v1-act { display: grid; justify-items: center; gap: 0; }
 .v1-price .num {
   display: block;
   margin: 3px 0 2px;
@@ -243,10 +249,9 @@ section.blk.tender-band {
    bottom border already separates it from what precedes it. */
 .v1-submit {
   grid-area: submit;
-  /* 18px, not 30. Symmetry was the wrong target: this is a two-line footnote to the terms
-     above it, and 30px on both sides made it read as floating between two blocks rather than
-     belonging to one. Closer to its divider, it attaches to the terms it qualifies. */
-  padding: clamp(12px, 1.4vw, 18px) 0 0;
+  /* Tight to the divider it hangs from — this is a footnote to the terms above, not a block
+     of its own. Every previous value let it drift away from what it qualifies. */
+  padding: clamp(8px, 0.9vw, 11px) 0 0;
 }
 /* Natural width — sized by its label plus padding, not by the column. */
 .v1-act .btn-red {
@@ -282,7 +287,18 @@ section.blk.tender-band {
 
 /* Placement only — the look is .v1-textlink's job. */
 .v1-howto { margin-top: 9px; }        /* inside the Method fact, under "Confidential" */
-.v1-agent-alt { min-height: 44px; }   /* under the Apply button */
+
+/* Under the Apply button. The gap is this element's OWN padding, so the hit area and the
+   visible gap are the same 11px. The old `min-height: 44px` made them different things:
+   a 13px link has a ~19px line box, so a 44px box padded it with 12.5px of invisible
+   half-leading above AND below — turning a declared 6px column gap into a 21px one and
+   leaving 12.5px of dead air beneath the underline with nothing under it to close it.
+   That dead air also made this column 100.8px against the price figure's 90.1px, so the
+   ACTION was setting the row height and pinning the button to the panel's top edge.
+   11 + 19 + 5 = 35px of hit height, over the 24px WCAG 2.2 minimum for a pointer;
+   coarse pointers get the full 44px below. */
+.v1-agent-alt { padding: 11px 10px 5px; }
+@media (pointer: coarse) { .v1-agent-alt { padding-top: 13px; padding-bottom: 12px; } }
 
 @media(min-width: 701px) and (max-width: 1100px) {
   .v1-grid {
@@ -336,17 +352,25 @@ section.blk.tender-band {
   .v1-main {
     padding: 28px 24px 20px;
   }
-  /* Full-width tap target for the primary action on a phone. */
-  .v1-submit {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 14px;
-  }
+  /* The price and the action CANNOT share a row here. This query never reset the two-column
+     `.v1-price` — only the 701–740px one did — so at 375px the figure got a 128px cell and
+     the button covered the number, rendering the headline as "RM517,0". Stack them. */
+  .v1-price { grid-template-columns: minmax(0, 1fr); row-gap: 18px; padding-bottom: 16px; }
   /* Full-width tap target on a phone — the one place a full-bleed button is right. */
   .v1-act { justify-items: stretch; }
   .v1-act .btn-red { width: 100%; min-width: 0; justify-content: center; text-align: center; }
+  /* Stretched to the button's width, so centre it under the label it belongs to. */
+  .v1-agent-alt { justify-content: center; }
+  /* Same reason as the price row: two 150px cells wrapped every link and threw the arrow of
+     "See how e-tender works" onto a line of its own at the far right. */
+  .v1-terms { grid-template-columns: minmax(0, 1fr); }
+  .v1-terms > div:first-child { padding-right: 0; padding-bottom: 14px; }
+  .v1-terms > div + div { padding-left: 0; padding-top: 14px; border-left: 0; border-top: 1px solid var(--line); }
+  /* Was `padding: 14px` — a leftover from when this zone held the button. It indented the
+     closing line 14px past every other zone in the panel and hung 14px off the bottom edge. */
+  .v1-submit { padding: 12px 0 0; }
   /* Inside a fact cell now, so no grid placement — just a comfortable tap target. */
-  .v1-howto { min-height: 44px; align-items: flex-end; padding-bottom: 6px; }
+  .v1-howto { padding-bottom: 6px; }
 }
 
 @media(max-width: 460px) {
