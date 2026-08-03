@@ -1163,8 +1163,9 @@ export function ResidensiSinaranDetail() {
                 <div className="ag-cta">
                   <p className="ag-cta-p">
                     Ask about the property, the tender, or anything the listing does not answer
-                    &mdash; before you decide your number. After you apply he arranges your
-                    viewing, takes your offer to the seller and negotiates on your behalf.
+                    &mdash; well before you settle on a number. The agent then stays with you the
+                    whole way: your viewing, your offer, the seller&rsquo;s response, and the SPA
+                    if it is accepted.
                   </p>
                   {/* Ranked, not three peers. WhatsApp is THE action and takes the fill;
                       calling is a genuine second route so it gets a real button but an
