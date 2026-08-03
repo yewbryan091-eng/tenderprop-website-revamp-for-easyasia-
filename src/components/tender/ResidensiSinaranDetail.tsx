@@ -783,8 +783,12 @@ export function ResidensiSinaranDetail() {
                     <div className="v1-act">
                       <a className="btn-red" href="#">Submit your offer</a>
                       {/* Same treatment as "See how e-tender works" (Bryan) — both are ways out
-                          that are not the action, so they share `.v1-textlink`. */}
-                      <a className="v1-textlink v1-agent-alt" href="https://wa.me/60123938255" target="_blank" rel="noopener">
+                          that are not the action, so they share `.v1-textlink`. Points at the
+                          Listing Agent SECTION rather than straight at WhatsApp: that section
+                          now carries the quote, WhatsApp, a tel: link and the QR, so a hesitant
+                          buyer arrives with context and four ways in, instead of being fired
+                          into a chat window cold. */}
+                      <a className="v1-textlink v1-agent-alt" href="#agent">
                         <span>Or talk to the agent first</span>
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
                       </a>
@@ -1473,7 +1477,7 @@ export function ResidensiSinaranDetail() {
         <div className="wrap in">
           <div className="identity"><span className="nm">Residensi Sinaran</span><span className="meta">E-Tender closes {TENDER_CLOSE_LABEL}</span></div>
           <div className="pr"><div className="k">Reserve price</div><div className="v num">RM517,000</div><span className="closes">Closes {TENDER_CLOSE_LABEL}</span></div>
-          <a className="btn red" href="#">Submit your offer</a>
+          <a className="btn red" href="#tender">Submit your offer</a>
         </div>
       </div>
 
