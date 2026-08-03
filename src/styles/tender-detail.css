@@ -153,7 +153,7 @@ section.blk.tender-band {
 .v1-main {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: "price" "terms" "notes" "submit";
+  grid-template-areas: "price" "terms" "submit";
   align-content: center;
   row-gap: 0;
   min-width: 0;
@@ -180,29 +180,29 @@ section.blk.tender-band {
   border-bottom: 1px solid var(--line);
 }
 .v1-terms > div { min-width: 0; }
-.v1-terms b {
+/* `> div > b`, NOT `.v1-terms b` — the descendant form also caught the <b> inside the
+   deposit note and rendered "Not an extra charge." as a 21px block heading. */
+.v1-terms > div > b {
   display: block; margin: 3px 0 1px;
   font-size: 21px; font-weight: 700; letter-spacing: -.012em; color: var(--ink);
 }
 .v1-terms .dep-amt { color: var(--good); }
-.v1 .sub { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+/* Attached to the figure rather than floated in a block of its own: the question "is this
+   money at risk?" forms while the eye is on the number, so it is answered there. No rule or
+   fill — the cell already groups it, and the green figure above carries the reassurance. */
+.v1-dep-note {
+  display: block; margin-top: 8px;
+  font-size: 12px; line-height: 1.45; color: var(--muted);
+}
+.v1-dep-note b { display: inline; margin: 0; font-size: inherit; color: var(--ink); font-weight: 700; }
 
-/* ── ZONE 3 · the two reassurances ───────────────────────────────────────────────── */
-.v1-notes {
-  grid-area: notes;
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 26px);
-  padding: clamp(11px, 1.2vw, 15px) 0;
+/* What happens AFTER the button is pressed, so it sits immediately above it. */
+.v1-outcome {
+  margin: 0 0 16px;
+  font-size: 12.5px; line-height: 1.5; color: var(--muted);
 }
-.v1-reassure {
-  margin: 0; padding-left: 13px;
-  border-left: 2px solid var(--good);
-  color: var(--muted); font-size: 12.5px; line-height: 1.5;
-}
-.v1-reassure b { color: var(--ink); font-weight: 700; }
-/* Burgundy, not green: this one is about the OUTCOME, not the money. Green stays the
-   "your deposit is safe" token so it keeps one meaning on this page. */
-.v1-negotiate { border-left-color: var(--burgundy); }
+.v1-outcome b { color: var(--ink); font-weight: 700; }
+.v1 .sub { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
 
 /* ── ZONE 4 · the action ─────────────────────────────────────────────────────────── */
 .v1-submit {
@@ -263,12 +263,10 @@ section.blk.tender-band {
     padding-right: 24px;
   }
   .v1-price .num { font-size: 24px; }
-  /* Two notes side by side get too narrow to read here — stack them. */
-  .v1-notes { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media(max-width: 740px) and (min-width: 701px) {
-  .v1-terms, .v1-notes { grid-template-columns: minmax(0, 1fr); }
+  .v1-terms { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media(max-width: 700px) {
@@ -909,8 +907,8 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
   .aboutbody { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* The one argument nothing else on the page makes. Left rule rather than a box: it is
-   the same emphasis language as .v1-reassure, so it belongs to the existing system. */
+/* The one argument nothing else on the page makes. Left rule rather than a box: it is the
+   same emphasis language the terms panel uses, so it belongs to the existing system. */
 .about-quote {
   margin: 24px 0; padding: 2px 0 2px 20px;
   border-left: 2px solid var(--burgundy);

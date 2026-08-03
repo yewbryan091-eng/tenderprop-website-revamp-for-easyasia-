@@ -275,6 +275,14 @@ including today, and the final day reads "1 day left" rather than "0".
   grep the selector in BOTH before assuming which rule is winning** — and scope page-specific
   rules (`.tp-detail .sec-title`) so order cannot decide it.
 
+- **Descendant selectors catch what you did not mean, twice over.** `.v1-terms b` was written for
+  the deposit figure — then a note was nested inside that zone and its `<b>` rendered as a **21px
+  block heading**. Use `> div > b`. Related, and worse: a script that strips rules by matching a
+  class name in the "selector" text will match that class inside a **preceding comment** — mine
+  deleted the About pull-quote and a media query's closing brace because a comment above it said
+  *"the same emphasis language as `.v1-reassure`"*. **Never bulk-delete rules by substring; and
+  after any sweep, check brace depth AND diff what actually went.**
+
 ## 6. Brand — non-negotiable
 
 - Cream / burgundy / red. **Never** import iNewProject's maroon palette. Adopt *patterns* from

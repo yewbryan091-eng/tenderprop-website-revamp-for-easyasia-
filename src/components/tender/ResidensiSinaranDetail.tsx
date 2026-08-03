@@ -443,6 +443,13 @@ export function ResidensiSinaranDetail() {
                       <span className="lbl">E-Tender deposit</span>
                       <b className="dep-amt">{DEPOSIT}</b>
                       <span className="sub">3% of the reserve price</span>
+                      {/* Attached to the figure, not floated in a separate block. "Is this money
+                          at risk?" forms while the eye is on the number — so it is answered
+                          there, at the point of need. */}
+                      <span className="v1-dep-note">
+                        <b>Not an extra charge.</b> It forms part of your 10% down payment and is
+                        returned in full if no sale proceeds.
+                      </span>
                     </div>
                     <div>
                       <span className="lbl">Method</span>
@@ -455,21 +462,6 @@ export function ResidensiSinaranDetail() {
                     </div>
                   </div>
 
-                  <div className="v1-notes">
-                    <p className="v1-reassure">
-                      <b>Your 3% deposit is not an extra charge.</b> It forms part of the standard
-                      10% down payment and is returned in full immediately if no sale proceeds.
-                    </p>
-                    {/* FOUNDER-VERIFIED (Bryan, 30 Jul): "it's not about win or lose — there's
-                        always a chance / room for negotiation done by the agent." Hedged so it
-                        promises a route, never an outcome. See the DECISIONS table. */}
-                    <p className="v1-reassure v1-negotiate">
-                      <b>Accepted, countered or not accepted.</b> The seller responds within
-                      5 working days &mdash; and where there is room to move, the appointed agent
-                      negotiates on your behalf.
-                    </p>
-                  </div>
-
                   {/* No box around the button. The zone rule above already separates it, and a
                       container only competed with the thing inside it. */}
                   <div className="v1-submit">
@@ -478,6 +470,16 @@ export function ResidensiSinaranDetail() {
                         the agent first turns this into a traditional sale and the tender never
                         happens. It stays available (it is still a lead) but it must not read as
                         an equal choice. */}
+                    {/* This answers what happens AFTER you press the button, so it sits
+                        immediately above it rather than in a block further up.
+                        FOUNDER-VERIFIED (Bryan, 30 Jul): "it's not about win or lose — there's
+                        always a chance / room for negotiation done by the agent." Hedged, so it
+                        promises a route and never an outcome. See the DECISIONS table. */}
+                    <p className="v1-outcome">
+                      <b>Accepted, countered or not accepted</b> &mdash; the seller responds within
+                      5 working days, and where there is room to move the appointed agent
+                      negotiates on your behalf.
+                    </p>
                     <div className="v1-submit-actions">
                       <a className="btn-red" href="#">Apply for E-Tender</a>
                       <a className="v1-agent-alt" href="https://wa.me/60123938255" target="_blank" rel="noopener">

@@ -74,6 +74,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 3 Aug 2026 — Claude · Reassurance block dissolved into the facts it belongs to
+Bryan asked whether to delete the two notes (they repeat on /how-e-tender-works) or refine them.
+Neither: **each moved to where its question forms.**
+- The deposit reassurance now sits **under the RM15,510 figure** — "is this money at risk?" occurs
+  while the eye is on the number, so it is answered there.
+- The outcome line sits **immediately above the button** — it describes what happens after you
+  press it.
+- **The separate notes zone is gone.** Four zones → three, section **501 → 461px** (hero is 412).
+
+🐛 **Two bad ones of mine, both caught by Bryan's screenshot rather than by me:**
+1. **`.v1-terms b` was a descendant selector** and caught the `<b>` inside the relocated deposit
+   note — "Not an extra charge." rendered as a **21px block heading** next to the figure it was
+   meant to support. Now `> div > b`.
+2. **My rule-removal script matched a class name inside a COMMENT.** A comment above `.about-quote`
+   read *"the same emphasis language as .v1-reassure"* — so the sweep deleted the About pull-quote
+   rule **and a media query's closing brace**. Restored; brace depth re-verified 0. **Do not
+   bulk-delete CSS rules by substring.**
+
+Both are now in DESIGN-SYSTEM §5.
+
 ### 3 Aug 2026 — Claude · Tender Information right panel rebuilt as FOUR ZONES
 Bryan: *"i just dont know how to make it nice."* The fault was hierarchy, not styling.
 
