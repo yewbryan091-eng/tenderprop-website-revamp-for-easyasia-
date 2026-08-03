@@ -979,13 +979,29 @@ section.blk.band-card { background: var(--card); --band-bg: var(--card); }sectio
 
 /* The one argument nothing else on the page makes. Left rule rather than a box: it is the
    same emphasis language the terms panel uses, so it belongs to the existing system. */
+/* A HOOK, so it is sized like one. Two things changed when the quote marks arrived:
+   the burgundy left rule became a second device saying "this is a quote", so it goes;
+   and at 20.5px the line set as ONE 1070px line, which reads as a caption under the
+   heading rather than a headline. At 27px it breaks to two, which gives it weight.
+   `max-width` caps the measure — a display size across the full 1100px column is a
+   tiring line length, and the cap is what forces the second line at any viewport. */
 .about-quote {
-  margin: 24px 0; padding: 2px 0 2px 20px;
-  border-left: 2px solid var(--burgundy);
+  margin: 22px 0 30px; padding: 0;
+  border-left: 0;
+  max-width: 64ch;
   font-family: var(--serif); font-optical-sizing: auto;
-  font-size: clamp(18px, 1.9vw, 20.5px); font-weight: 500;
-  line-height: 1.5; letter-spacing: -.008em; color: var(--ink);
+  font-style: italic;
+  font-size: clamp(21px, 2.3vw, 27px); font-weight: 500;
+  line-height: 1.36; letter-spacing: -.014em; color: var(--ink);
 }
+/* Quote marks live in CSS, not in the string: the copy stays clean and copy-pasteable, the
+   marks can be coloured independently of the sentence, and they are decoration so a screen
+   reader is not made to read them out. Upright, because an italic curly quote at this size
+   reads as a smudge. */
+.about-quote::before { content: "\201C"; }
+.about-quote::after { content: "\201D"; }
+.about-quote::before,
+.about-quote::after { font-style: normal; color: var(--burgundy); }
 @media (max-width: 700px) {
   .about-quote { margin: 20px 0; padding-left: 15px; }
 }

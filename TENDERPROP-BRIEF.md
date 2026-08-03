@@ -92,10 +92,17 @@ addition. Out of scope today. Do not build it.
 8. **The agent negotiates as the middleman.** A buyer may end up resubmitting a higher offer.
 9. The member's dashboard keeps a record of every e-tender they have submitted.
 
-**Buyers do not normally view the property before offering.** That is a deliberate difference from
-traditional sale — if a buyer talks to the agent and views first, it becomes an ordinary
-transaction and the tender never happens. (Still a lead, so it is not a loss — but it is not the
-product.)
+**Buyers usually offer BEFORE they view — but the viewing still happens.** ⚠️ An earlier version
+of this file said buyers "do not normally view the property before offering", implying viewing is
+excluded. **That was wrong** and was corrected by Bryan on 3 Aug 2026.
+
+The real sequence: a buyer sees a listing, fears someone else will tender and take it, and so
+submits an offer straight from the listing page. **That submission notifies the agent, the agent
+follows up, and the agent takes them to view the property.** Only then does the offer go to the
+seller. The agent guides the buyer **A–Z, viewing included**.
+
+Offer-first is **buyer urgency, not a platform rule.** Never write copy saying buyers cannot or
+should not view — and never treat the tender as something a viewing would spoil.
 
 ---
 

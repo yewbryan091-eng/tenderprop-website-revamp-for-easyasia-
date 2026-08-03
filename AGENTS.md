@@ -117,6 +117,8 @@ moves through this site. Ever.**
    price** — same shape as iNewProject's enquiry. Everything else on the form is pre-filled listing
    data (reference, address, built-up, tenure, reserve, deposit, tender date).
 3. Submit ⇒ **the agency receives a lead** and the agent follows up on those contact details.
+   **The agent then takes the buyer to VIEW the property.** See the viewing correction below —
+   the offer comes first, but the viewing absolutely happens.
 4. **The 3% deposit is collected AFTERWARDS, by the agent, into the agency's client account** —
    which BOVAEP mandates. It is never paid on TenderProp. The site must never imply otherwise.
 5. The agent takes the bid to the seller. Accept, decline, or counter — **the agent negotiates as
@@ -143,6 +145,38 @@ and TenderProp's beside it. 100 listings = 100 locations advertising the platfor
   hire; 3% deposit to enter the room; price climbs until sold. Reference: `ownerauction.my`.
   **Last thing to revamp.**
 - **Public auction** (bank foreclosures) is a FUTURE tab. Not now.
+
+### 📌 ADDENDUM — founder briefing, Bryan, 3 Aug 2026
+
+**Where e-tender comes from, and who it is really for.** Tender is the *traditional* way big,
+special and high-value Malaysian property is sold — **land, large factories, unusual assets**.
+A seller with a huge factory would rather run a tender than a normal listing. Historically buyers
+**submitted their tender offer in person to a licensed tender firm**; TenderProp moves that whole
+process online. It is open to **every** property — an ordinary terrace can run an e-tender — but
+the natural fit, and the pitch that lands hardest, is **large / special / high-value stock**.
+*Design consequence:* the site must not read as though it only handles RM500k townhouses. It has
+to hold a RM70m land parcel as comfortably as it holds Residensi Sinaran.
+
+**"2 IN 1" — corrected.** It was written down as "2+1". It is **2 in 1**: the seller chooses
+whether the property is sold **traditionally, by tender, or BOTH at once**. Both is the normal
+pitch — the seller loses nothing and gains a second channel.
+
+**🔴 VIEWING — this corrects a rule that was recorded WRONG.**
+Previously written: *"Buyers do not normally view the property before offering."* **Not right.**
+The actual sequence:
+1. A buyer sees a listing and is afraid someone else will tender and take it first. **That fear is
+   why they offer from the listing page** rather than asking for a viewing first.
+2. Submitting the offer **notifies the agent**.
+3. **The agent follows up and takes them to the viewing.**
+4. Only then does the offer go to the seller — accepted, countered, or not accepted.
+
+The agent guides the buyer **A–Z, viewing included**. Never write copy saying buyers cannot,
+should not, or do not view. The offer-first behaviour is *buyer urgency*, not a platform rule.
+
+**What an offer actually IS — the product insight.** No money moves and nothing is paid on the
+spot. The offer is **a lead with a price attached**. The agency gets a prospect *and* a read on
+what the market will really pay. Bryan: *"a bonus feature where we can see the public's offering
+intentions and prospects collection."*
 
 ## 🔌 EASYASIA OWNS THE BACKEND — build to the contract (Bryan, 1 Aug 2026)
 

@@ -11,7 +11,7 @@ export const Route = createFileRoute("/tender/residensi-sinaran")({
       {
         name: "description",
         content:
-          "Residensi Sinaran, Taman Sri Muda, Shah Alam. 3-storey townhouse open for sealed e-tender at a RM517,000 reserve price with a refundable RM15,510 e-tender deposit.",
+          "Residensi Sinaran, Taman Sri Muda, Shah Alam. Townhouse open for sealed e-tender at a RM517,000 reserve price with a refundable RM15,510 e-tender deposit.",
       },
       { property: "og:title", content: "Residensi Sinaran, Shah Alam — Open for E-Tender" },
       {

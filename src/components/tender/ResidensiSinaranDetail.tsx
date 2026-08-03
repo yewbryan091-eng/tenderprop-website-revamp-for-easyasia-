@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { TENDERS } from "@/data/tenders";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
-import { MS_DAY, closeAtMs, daysLeft, depositOf, fmtDate, isFinalDay, ordinalDateParts, remainingMs } from "@/lib/tender-utils";
+import { MS_DAY, closeAtMs, daysLeft, depositOf, displayType, fmtDate, isFinalDay, ordinalDateParts, remainingMs } from "@/lib/tender-utils";
 import "@/styles/tender-detail.css";
 
 /* Ported 1:1 from residensi-sinaran-detail.html — the design canon.
@@ -42,6 +42,12 @@ const BUILT_UP_SQFT = Number((SINARAN_TENDER.builtUp || "").replace(/[^0-9.]/g, 
 const PSF = BUILT_UP_SQFT ? Math.round(RESERVE / BUILT_UP_SQFT) : 0;
 const PRICE_BASIS = SINARAN_TENDER.builtUp.replace(/\s*sqft\b/i, " sq ft");
 const TITLE_TYPE = "Strata title";
+/* DERIVED, not typed. The hero had "3-Storey Townhouse" hardcoded, which quietly broke a
+   rule the rest of the site already follows: Townhouse is in NO_STOREY_PREFIX because
+   Bryan ruled the name already implies the stacked multi-storey form, so the prefix is
+   redundant. The listing cards were right and this one page was wrong. Reading it through
+   displayType() means the label cannot drift from the rule again. */
+const TYPE_LABEL = displayType(SINARAN_TENDER);
 const LAND_USE = SINARAN_TENDER.details?.landTitle;
 if (!LAND_USE) throw new Error("Residensi Sinaran land-use data is missing");
 
@@ -207,7 +213,7 @@ export function ResidensiSinaranDetail() {
                   <span className="ovcloses">Closes {TENDER_CLOSE_LABEL}{daysLabel ? " · " + daysLabel : ""}</span>
                 </p>
                 <h1>Residensi Sinaran</h1>
-                <p className="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0114 0c0 5.4-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>Taman Sri Muda, Shah Alam, Selangor · 3-Storey Townhouse</p>
+                <p className="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0114 0c0 5.4-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>Taman Sri Muda, Shah Alam, Selangor &middot; {TYPE_LABEL}</p>
               </div>
               <div className="ovside">
                 {/* "Reserve price" is auction vocabulary most subsale buyers have not met.
@@ -637,11 +643,18 @@ export function ResidensiSinaranDetail() {
                   on the page makes, so putting it behind a fold would defeat the reason it
                   exists — and a standfirst above the prose is where a reader expects the
                   section's thesis anyway. Everything below it clamps at 5 lines. */}
+              {/* A HOOK, not an argument (Bryan). Deliberately takes the one fact paragraphs 1
+                  and 2 do not — those are the only two visible before "View more", and a
+                  standfirst that repeats the paragraph directly beneath it is just an echo.
+                  Landed-plus-strata is paragraph 3's content, behind the fold, so the hook
+                  surfaces the thing that actually distinguishes this property.
+                  The previous quote also has to go on its own merit: it argued "walk the unit
+                  before deciding what to offer", and the founder briefing of 3 Aug says the
+                  real sequence is the other way round — offer first, then the agent takes you
+                  to the viewing. */}
               <blockquote className="about-quote">
-                The development is complete and handed over, so you can walk the actual unit,
-                check the finishes and see the neighbours before deciding what to offer. That
-                matters more here than in a normal sale: a sealed e-tender gives you one number
-                and no second attempt.
+                The 62 homes here are landed, gated and strata-managed &mdash; the guardhouse and
+                the grounds are the management body&rsquo;s job, not yours.
               </blockquote>
               <div className="aboutbody">
                 {(aboutOpen ? ABOUT_PARAS : ABOUT_PARAS.slice(0, ABOUT_CLOSED_COUNT)).map((t) => (
