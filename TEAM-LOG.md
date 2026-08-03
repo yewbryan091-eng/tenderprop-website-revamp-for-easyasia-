@@ -74,6 +74,23 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 3 Aug 2026 — Claude · The gap under the closing line was a missing EDGE, not spacing
+Bryan, three times, and right each time. I tried `space-between`, then tightened the deadline
+panel, then evened the paddings — none of it worked, because **most of that space was never the
+panel's.**
+
+**The dossier's right panel is white. Property Details below it is also white.** So the section
+boundary was invisible: 31px of the panel's padding ran straight into **56px of the next section's
+top padding**, giving **87px of unbroken white** under the sentence with no edge anywhere in it.
+No amount of padding tuning inside the dossier could fix a boundary that does not render.
+
+Fixed with a **1px bottom edge on `.v1-main`** — the panel's edge, not a rule under the paragraph
+(the distinction Bryan drew earlier). Bottom padding also 30 → 22px, so the sentence sits **23px
+from the edge**. Section **379 → 372px**.
+
+**Recorded in DESIGN-SYSTEM §5: a gap you cannot close by editing padding is a missing edge.
+Check the next section's background before tuning space.**
+
 ### 3 Aug 2026 — Claude · Both secondary links now share one rule
 Bryan: *"talk to the agent should behave like see how e-tender works link, same colour, same font,
 same design… but second option, apply should dominate."* Right, and for a reason beyond

@@ -292,6 +292,13 @@ including today, and the final day reads "1 day left" rather than "0".
   alternative near-invisible adds no hierarchy and just makes a legitimate route hard to find.
   Second, not hidden.
 
+- **A gap you cannot close by editing padding is a MISSING EDGE, not spacing.** The dossier's
+  white right panel butts onto Property Details, which is also white — so the section boundary was
+  invisible and 31px of panel padding ran straight into 56px of the next section's, reading as
+  **87px of unbroken white** under the closing line. Three separate spacing edits failed because
+  most of that space did not belong to the panel. **Before tuning padding, check what colour the
+  NEXT section is** — if it matches, the boundary needs an edge, not less air.
+
 ## 6. Brand — non-negotiable
 
 - Cream / burgundy / red. **Never** import iNewProject's maroon palette. Adopt *patterns* from

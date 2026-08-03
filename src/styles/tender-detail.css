@@ -167,7 +167,13 @@ section.blk.tender-band {
   align-content: center;
   row-gap: 0;
   min-width: 0;
-  padding: clamp(20px, 2.2vw, 30px) clamp(30px, 4vw, 58px) clamp(20px, 2.2vw, 30px) clamp(44px, 5vw, 72px);
+  padding: clamp(20px, 2.2vw, 30px) clamp(30px, 4vw, 58px) clamp(16px, 1.8vw, 22px) clamp(44px, 5vw, 72px);
+  /* The dossier's right panel is white and so is Property Details below it, so the section
+     boundary was invisible: 31px of this panel's padding ran straight into 56px of the next
+     section's, giving 87px of unbroken white under the closing line with no edge in it. That
+     is what read as a gap — not the spacing. This hairline is the panel's EDGE, not a rule
+     under the paragraph: it shows where the box actually ends. */
+  border-bottom: 1px solid var(--line);
 }
 
 /* ── ZONE 1 · the number the page is about ───────────────────────────────────────── */
