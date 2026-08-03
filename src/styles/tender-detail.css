@@ -227,7 +227,7 @@ section.blk.tender-band {
 /* What happens AFTER the button is pressed, so it sits immediately above it. */
 .v1-outcome {
   margin: 0;
-  font-size: 12.5px; line-height: 1.5; color: var(--muted);
+  font-size: 12.5px; line-height: 1.55; color: var(--muted);
 }
 .v1-outcome b { color: var(--ink); font-weight: 700; }
 .v1 .sub { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
@@ -237,9 +237,10 @@ section.blk.tender-band {
    bottom border already separates it from what precedes it. */
 .v1-submit {
   grid-area: submit;
-  /* Matches the panel's own bottom padding, so this last line sits evenly in its band —
-     it was 15px above and 31px below, which read as the paragraph having slipped. */
-  padding: clamp(20px, 2.2vw, 30px) 0 0;
+  /* 18px, not 30. Symmetry was the wrong target: this is a two-line footnote to the terms
+     above it, and 30px on both sides made it read as floating between two blocks rather than
+     belonging to one. Closer to its divider, it attaches to the terms it qualifies. */
+  padding: clamp(12px, 1.4vw, 18px) 0 0;
 }
 /* Natural width — sized by its label plus padding, not by the column. */
 .v1-act .btn-red {
