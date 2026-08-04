@@ -562,75 +562,50 @@
   /* Body — grid mode: one flex column, explicit order per block */
   .prop-card .pc-body { flex: 1; display: flex; flex-direction: column; min-width: 0; padding: 13px 15px 15px; }
   .prop-card .pc-ident, .prop-card .pc-side { display: contents; }
-  .prop-card .pc-title { order: 1; margin: 0; color: var(--ink); font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 19.5px; font-weight: 600; letter-spacing: -.015em; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .prop-card .pc-title { order: 1; margin: 0; color: var(--ink); font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 22px; font-weight: 600; letter-spacing: -.015em; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .prop-card .pc-title a { color: inherit; text-decoration: none; }
   .prop-card .pc-title a:hover { color: var(--burgundy); }
-  .prop-card .pc-loc { order: 2; display: flex; align-items: center; gap: 5px; margin: 4px 0 0; min-width: 0; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+  .prop-card .pc-loc { order: 2; display: flex; align-items: center; gap: 5px; margin: 4px 0 0; min-width: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
   .prop-card .pc-loc svg { flex: none; width: 13px; height: 13px; color: var(--burgundy); }
   .prop-card .pc-loc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* Property classification is the card's signature scan point. The left rule
-     reads like a dossier index tab, not another floating badge or decoration. */
-  /* Unboxed: property type is filter information, the reserve price is decision
-     information. Only the money block is emphasised so price outranks type. */
-  /* Label above value, always — not inline. `flex-wrap` gave a hybrid where short
-     types ("Condominium") stayed on the label's line and long ones ("2-Storey
-     Semi-Detached House") dropped below, so no two cards agreed. Stacking is also
-     the same shape as the TENDER START / BUILT-UP / TENURE rows underneath, so the
-     whole identity column now reads in one pattern. Full width means a property's
-     type name is never truncated or broken mid-phrase. */
-  .prop-card .pc-type {
-    order: 3; min-width: 0; display: flex; flex-direction: column; gap: 5px;
-    margin-top: 14px; padding: 0;
+  /* FACTS LINES — no headings. Type + tenure on one row, both areas on the next. The
+     old block stacked a 10px uppercase label above every value, which is what was eating
+     the card: six labels, six wasted lines. Areas keep a lowercase INLINE label because
+     "999 sqft" does not say WHICH area — inline costs no vertical space. */
+  .prop-card .pc-facts {
+    order: 3; margin: 10px 0 0; min-width: 0;
+    color: var(--ink); font-size: 14px; font-weight: 700;
+    letter-spacing: -.005em; line-height: 1.35;
   }
-  .prop-card .pc-type-label {
-    color: var(--muted); font-size: 10px; font-weight: 800;
-    letter-spacing: .11em; line-height: 1.25; text-transform: uppercase;
+  .prop-card .pc-areas {
+    order: 4; margin: 3px 0 0; min-width: 0;
+    color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1.4;
+    font-variant-numeric: tabular-nums;
   }
-  .prop-card .pc-type-value {
-    min-width: 0; color: var(--ink); font-size: 16px;
-    font-weight: 700; letter-spacing: -.015em; line-height: 1.3;
-    white-space: normal; overflow-wrap: break-word;
-  }
-    .prop-card .pc-type.is-missing .pc-type-label,
-  .prop-card .pc-type.is-missing .pc-type-value { color: var(--muted); }
-  /* title no longer reserves two lines — short names keep the location tight below (Bryan, 28 Jul) */
 
-  /* Financial band — institutional, never bright */
-  .prop-card .pc-money { order: 4; display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); align-items: end; gap: 8px; margin-top: 10px; padding: 10px 12px; border: 1px solid color-mix(in srgb, var(--line) 65%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--paper) 62%, var(--card)); }
-  .prop-card .pc-money-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .09em; line-height: 1.25; text-transform: uppercase; }
-  .prop-card .pc-money-value { display: block; color: var(--ink); font-size: clamp(18px, 6cqi, 22px); font-weight: 800; letter-spacing: -.035em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .prop-card .pc-deposit { min-width: 0; text-align: right; }
-  .prop-card .pc-deposit-value { display: block; color: var(--good); font-size: 13px; font-weight: 700; line-height: 1.25; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  /* The reserve is the decision number, so it gets the space the six labels gave back:
+     22 -> 27px, and it is the only labelled value left on the card. */
+  .prop-card .pc-money {
+    order: 5; margin-top: 12px; padding: 11px 13px;
+    border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    border-radius: 9px; background: color-mix(in srgb, var(--paper-deep) 45%, transparent);
+  }
+  .prop-card .pc-money-label {
+    display: block; margin-bottom: 3px; color: var(--muted); font-size: 11px;
+    font-weight: 800; letter-spacing: .09em; line-height: 1.25; text-transform: uppercase;
+  }
+  .prop-card .pc-money-value {
+    display: block; color: var(--ink); font-size: clamp(22px, 8cqi, 27px);
+    font-weight: 800; letter-spacing: -.03em; line-height: 1.1;
+    white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
 
-  /* Three permanent comparison slots keep every card aligned. Missing physical
-     dimensions render as an em dash instead of collapsing the structure. */
-  .prop-card .pc-details {
-    order: 5; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
-    gap: 0; margin: 14px 0 0;
-  }
-  .prop-card .pc-detail { min-width: 0; }
-  .prop-card .pc-detail + .pc-detail {
-    margin-left: 10px; padding-left: 10px;
-    border-left: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
-  }
-  .prop-card .pc-detail dt {
-    color: var(--muted); font-size: 9.5px; font-weight: 800;
-    letter-spacing: .07em; line-height: 1.3; text-transform: uppercase;
-  }
-  .prop-card .pc-detail dd {
-    min-width: 0; margin: 3px 0 0; overflow: hidden; color: var(--ink);
-    font-size: 12px; font-weight: 700; line-height: 1.35;
-    text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums;
-  }
-  .prop-card .pc-detail.is-missing dd { color: var(--muted); font-weight: 600; }
-
-  /* Agent footer + single CTA */
   .prop-card .pc-foot { order: 6; display: flex; align-items: center; gap: 10px; min-width: 0; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
   .prop-card .pc-avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
   .prop-card .pc-agent { flex: 1; min-width: 0; }
   .prop-card .pc-agent b { display: block; color: var(--ink); font-size: 13.5px; font-weight: 700; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .prop-card .pc-agent span { display: block; margin-top: 1px; color: var(--muted); font-size: 11px; font-weight: 500; }
+  .prop-card .pc-agent span { display: block; margin-top: 1px; color: var(--muted); font-size: 12px; font-weight: 500; }
   /* The icon sits outside the underline — underlining a phone glyph reads as a
      rendering fault. Only the number carries the link's rule. */
   .prop-card .pc-tel { flex: none; display: inline-flex; align-items: center; gap: 6px; color: var(--burgundy); font-size: 12.5px; font-weight: 700; text-decoration: none; white-space: nowrap; font-variant-numeric: tabular-nums; }

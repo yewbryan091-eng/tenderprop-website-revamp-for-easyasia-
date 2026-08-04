@@ -28,17 +28,38 @@ export function PropertyCard({
   const href = hrefFor(x);
   /* Start date leads the row: with the closing date in the photo pill, "Tender
      start" answers the other half of the window without duplicating the close. */
-  /* Three fixed slots on every card, in this order, no exceptions: when the shape
-     changes card to card there is nothing to compare across a batch. Missing values
-     render as an em dash rather than collapsing the row. */
-  const rows = [
-    { label: "E-Tender start", value: tenderStartOf(x) },
-    areaSlot(x),
-    { label: "Tenure", value: x.tenure || "\u2014" },
-  ];
+  /* CARD DIET — Bryan's father, 4 Aug: "one eye see all… information overload… font
+     needs to be big… position as the reader, what the reader wants."
+
+     Measured before: 24 pieces of text, 581px tall, smallest font 10px, EIGHT elements
+     under 12px. The two sites he pointed at carry 7 (AuctionPro) and 10 (OwnerAuction).
+     We were at 2.5-3x.
+
+     Six of those 24 were LABELS — words naming other words, every one at 10px and STACKED
+     above its value, so each cost a whole line. That is what was killing the space: not
+     the words, the STACK. His test, sharpened: if a value cannot stand alone, either it
+     does not belong on the card, or it is the one thing worth labelling.
+       Condominium  stands alone            -> label killed
+       Freehold     stands alone            -> label killed
+       999 sqft     does NOT say WHICH area -> keeps a lowercase INLINE label, which costs
+                                               no vertical space (OwnerAuction labels these too)
+       12 Sep 2026  "E-Tender start" — a browser cares when it CLOSES, and two dates on one
+                    card is one too many    -> whole row cut
+       RM15,930     "Refundable deposit" — derived from the reserve and a detail-page fact,
+                    not a browse decision   -> whole row cut
+       RM531,000    could read as an asking price -> THE ONE LABEL THAT SURVIVES
+
+     The agent block STAYS (Bryan, explicitly): a direct lead route needing no click-through,
+     and how every Malaysian portal does it. */
   const typeLabel = displayType(x);
-  const hasPropertyType = Boolean(typeLabel);
-  const propertyType = hasPropertyType ? typeLabel : "Not specified";
+  /* Type and tenure share ONE line, no headings — two facts, zero scaffolding. */
+  const identity = [typeLabel || null, x.tenure || null].filter(Boolean).join(" \u00b7 ");
+  /* BOTH areas when both exist, which is what his key-information list asks for. The old
+     card showed only one, picked by property type via areaSlot(). */
+  const areas = [
+    x.builtUp ? `Built-up ${x.builtUp}` : null,
+    x.landArea ? `Land ${x.landArea}` : null,
+  ].filter(Boolean).join(" \u00b7 ");
 
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
@@ -78,32 +99,14 @@ export function PropertyCard({
               one link instead of the same URL announced three times (photo, title, CTA). */}
           <h3 className="pc-title"><a className="pc-link" href={href}>{x.name}</a></h3>
           <p className="pc-loc"><PinIcon /><span>{x.area}, {x.stateName}</span></p>
-          <div className={"pc-type" + (hasPropertyType ? "" : " is-missing")}>
-            <span className="pc-type-label">Property type</span>
-            <strong className="pc-type-value">{propertyType}</strong>
-          </div>
-          {rows.length > 0 && (
-            <dl className="pc-details">
-              {rows.map((r) => (
-                <div className="pc-detail" key={r.label}>
-                  <dt>{r.label}</dt>
-                  <dd>{r.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
+          {identity && <p className="pc-facts">{identity}</p>}
+          {areas && <p className="pc-areas">{areas}</p>}
         </div>
 
         <div className="pc-side">
           <div className="pc-money">
-            <div className="pc-reserve">
-              <span className="pc-money-label">Reserve price</span>
-              <strong className="pc-money-value">{fmtPrice(x.reservePrice)}</strong>
-            </div>
-            <div className="pc-deposit">
-              <span className="pc-money-label">Refundable deposit</span>
-              <span className="pc-deposit-value">{depositOf(x)}</span>
-            </div>
+            <span className="pc-money-label">Reserve price</span>
+            <strong className="pc-money-value">{fmtPrice(x.reservePrice)}</strong>
           </div>
           <div className="pc-foot">
             <img className="pc-avatar" src={AGENT_PHOTO} alt="Stephen Yew, listing agent" loading="lazy" />
