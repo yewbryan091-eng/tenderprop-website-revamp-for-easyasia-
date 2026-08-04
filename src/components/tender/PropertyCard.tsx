@@ -1,6 +1,6 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
-import { ArrowRightIcon, BuildingIcon, CalendarIcon, ClockIcon, HeartIcon, PhoneIcon, PinIcon, RulerIcon } from "./icons";
+import { ArrowRightIcon, BuildingIcon, CalendarIcon, ClockIcon, HeartIcon, PhoneIcon, PinIcon } from "./icons";
 import { daysLeft, displayType, fmtDate, fmtPrice, hrefFor, tenderId } from "@/lib/tender-utils";
 
 /* The photo pill is the card's ONLY date. It carries the year because listings
@@ -52,17 +52,12 @@ export function PropertyCard({
      The agent block STAYS (Bryan, explicitly): a direct lead route needing no click-through,
      and how every Malaysian portal does it. */
   const typeLabel = displayType(x);
-  /* Type only — tenure dropped (Bryan). It is a DECIDING fact, not a browsing one, and it
-     was the longest value competing for the spec line. */
+  /* Type only — tenure dropped, then built-up and land area dropped too (Bryan, 4 Aug).
+     Size is a DECIDING fact, not a browsing one: nobody picks which card to open on square
+     feet, they pick on what it is, where, what it costs and how long is left. It still lives
+     on the detail spec sheet and, more importantly, in the grid's size FILTERS — which is the
+     right home for it, because that is where a buyer actually acts on size. */
   const identity = typeLabel || "";
-  /* BOTH areas when both exist, which is what his key-information list asks for. The old
-     card showed only one, picked by property type via areaSlot(). */
-  /* "999 sq ft", not "Built-up 999 sqft" — the ruler icon already says it is an area, the
-     same rule that removed the uppercase labels. When a property has both, they read
-     "999 / 1,540 sq ft": built-up then land, the convention OwnerAuction uses too. */
-  const sqft = (v: string) => v.replace(/\s*sq\s*\.?\s*ft\.?$/i, "").trim();
-  const areaParts = [x.builtUp ? sqft(x.builtUp) : null, x.landArea ? sqft(x.landArea) : null].filter(Boolean);
-  const areas = areaParts.length ? `${areaParts.join(" / ")} sq ft` : "";
 
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
@@ -109,15 +104,9 @@ export function PropertyCard({
           <p className="pc-loc"><PinIcon /><span>{x.area}, {x.stateName}</span></p>
         </div>
 
-        {/* BAND 1 — what it is, how big. Two cells, hairline between. */}
+        {/* BAND 1 — what it is. One cell now that the areas are gone (Bryan). */}
         <div className="pc-specs">
-          {/* TWO cells, two icons, two colours — the reference's shape, and it fits now that
-              tenure is gone and the area reads "999 sq ft" rather than "Built-up 999 sqft".
-              The split is the point: TYPE is a category and takes the accent, SIZE is a measure
-              and stays grey. One burgundy blob gave both the same rank and added a sixth
-              burgundy element to a card where the PRICE should own the accent. */}
           <span className="pc-spec pc-spec-type"><BuildingIcon /><span>{identity}</span></span>
-          {areas && <span className="pc-spec pc-spec-area"><RulerIcon /><span>{areas}</span></span>}
         </div>
 
         {/* BAND 2 — the decision: what it costs, and how long is left to act. */}
@@ -126,13 +115,21 @@ export function PropertyCard({
             <span className="pc-money-label">Reserve price</span>
             <strong className="pc-money-value">{fmtPrice(x.reservePrice)}</strong>
           </div>
-          {/* The DATE only. The day count already runs at 16.5px in the photo pill, and it
-              was rendering here a second time at 12.5px — the same fact twice on a card whose
-              whole redesign was "one eye see all". The pill keeps it; this cell is the date. */}
+          {/* MIRRORS the money cell: small uppercase label, then the value, then a muted
+              qualifier. "Closes" is a LABEL, not part of the value — inline it cost 48px of the
+              value line and pushed the price into this cell's hairline on every listing over
+              RM1m, which is 22 of our 36. As a label it costs nothing, because the label line
+              was empty anyway.
+
+              The day count does run twice (the photo pill carries it at 16.5px) and that is
+              deliberate: the pill is the GLANCE cue you read off the image while scrolling,
+              this is the same fact anchored to the price, where the decision gets made. */}
           <div className="pc-close">
             <CalendarIcon />
-            <span>
-              <b>{d <= 0 ? "E-Tender closed" : fmtDate(x.closingDate)}</b>
+            <span className="pc-close-txt">
+              <span className="pc-close-label">{d <= 0 ? "E-Tender" : "Closes"}</span>
+              <b>{d <= 0 ? "Closed" : fmtDate(x.closingDate)}</b>
+              {closeParts && <span className="pc-close-left">{closeParts.left}</span>}
             </span>
           </div>
         </div>

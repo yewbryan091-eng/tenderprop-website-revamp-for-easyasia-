@@ -143,9 +143,15 @@ export const RulerIcon = () => (
     <path d="M8 10.6l1.8 1.8M11 7.6l1.8 1.8M14 4.6l1.8 1.8M5 13.6l1.8 1.8" />
   </svg>
 );
+/* Date-grid dots, not an empty box — matches the reference crop Bryan sent, and at 17px the
+   dots are what make it read as a CALENDAR rather than a generic rounded rectangle. Three
+   columns by two rows, on their own thicker stroke so they survive the downscale: the 1.8
+   hairline that draws the frame renders a 1.3px dot, which turns to mush. */
 export const CalendarIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <rect x="3.5" y="5" width="17" height="16" rx="2.5" /><path d="M8 3v4M16 3v4M3.5 10h17" />
+    <rect x="3" y="5" width="18" height="16" rx="2.5" />
+    <path d="M8 3v4M16 3v4M3 10h18" />
+    <path d="M7.6 14h.01M12 14h.01M16.4 14h.01M7.6 17.6h.01M12 17.6h.01M16.4 17.6h.01" strokeWidth="2.6" />
   </svg>
 );
 export const ArrowRightIcon = () => (

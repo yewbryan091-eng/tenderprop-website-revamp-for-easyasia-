@@ -580,7 +580,9 @@
   .prop-card .pc-loc svg { flex: none; width: 15px; height: 15px; color: var(--burgundy); }
   .prop-card .pc-loc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* BAND 1 — type and size, hairline-separated cells. */
+  /* BAND 1 — the property type, on its own. Built-up and land area came off the card on
+     4 Aug (Bryan): size is what you FILTER on, not what you pick a card on. It still lives
+     on the detail spec sheet and in the grid's size filters. */
   .prop-card .pc-specs {
     order: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
     margin-top: 11px; padding-top: 11px; border-top: 1px solid var(--line);
@@ -589,24 +591,16 @@
   .prop-card .pc-spec { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--muted); font-size: 14px; font-weight: 600; line-height: 1.3; }
   .prop-card .pc-spec svg { flex: none; width: 17px; height: 17px; color: var(--muted); }
   .prop-card .pc-spec > span { min-width: 0; }
-  /* TYPE takes the accent — it is the category the buyer filters on. SIZE stays grey: it is
-     a measure, and a second burgundy value here would put the accent in two places in one row
-     while the PRICE below is the number that should own it. */
+  /* TYPE takes the accent — it is the category the buyer filters on. */
   .prop-card .pc-spec-type { color: var(--burgundy); font-weight: 700; }
   .prop-card .pc-spec-type svg { color: var(--burgundy); }
-  .prop-card .pc-spec-area { color: var(--muted); font-weight: 600; }
-  .prop-card .pc-spec-area svg { color: var(--muted); opacity: .85; }
-  .prop-card .pc-spec + .pc-spec { padding-left: 12px; border-left: 1px solid var(--line); }
-  /* Only stack when a long property type genuinely cannot share the line — the divider comes
-     off with it, since a vertical rule at the start of a wrapped line is a stray tick. */
-  @container (max-width: 270px) {
-    .prop-card .pc-specs { flex-direction: column; align-items: flex-start; gap: 7px; }
-    .prop-card .pc-spec + .pc-spec { padding-left: 0; border-left: 0; }
-  }
 
   /* BAND 2 — the decision. Price left, deadline right, hairline between. */
+  /* start, not center: both cells now open with an 11px uppercase label, and top-aligning is
+     what makes those two labels sit on one line. Centre-aligning cells of unequal height is
+     exactly what makes a price look like it is floating in the middle of its box. */
   .prop-card .pc-deal {
-    order: 4; display: flex; flex-wrap: nowrap; align-items: center; gap: 12px;
+    order: 4; display: flex; flex-wrap: nowrap; align-items: start; gap: 12px;
     margin-top: 11px; padding-top: 11px; border-top: 1px solid var(--line);
     min-width: 0;
   }
@@ -614,11 +608,27 @@
   .prop-card .pc-money-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase; }
   /* Ink, not burgundy (Bryan). It still outranks everything on SIZE and WEIGHT — 21px/800
      against a 14px row — and dropping the colour tightens the card's accent discipline. */
-  .prop-card .pc-money-value { display: block; color: var(--ink); font-size: clamp(19px, 6.4cqi, 21px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  /* 17px floor, not 19px: at 19px the clamp bottomed out on ~290px cards (2-up, just above the
+     680px breakpoint) and an eight-figure land parcel — RM70,000,000, and we hold five of them
+     — touched the hairline. Below ~297px the cqi term now takes over instead of pinning. Above
+     that nothing changes: at the 322px card it still resolves to 20.5px. */
+  .prop-card .pc-money-value { display: block; color: var(--ink); font-size: clamp(17px, 6.4cqi, 21px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  /* Centred against BOTH lines (Bryan) — the icon labels the whole deadline block, not just
+     the date, so it sits on the block's axis. */
   .prop-card .pc-close { flex: none; display: flex; align-items: center; gap: 8px; padding-left: 12px; border-left: 1px solid var(--line); min-width: 0; }
 
-  .prop-card .pc-close svg { flex: none; width: 17px; height: 17px; color: var(--muted); }
-  .prop-card .pc-close b { display: block; color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.3; white-space: nowrap; }
+  /* Red (Bryan) — and it makes the card's colour semantic: red is TIME everywhere on this
+     card (the day-count pill on the photo, this deadline), burgundy is the platform (type,
+     phone, CTA), ink is the money. Three hues, three jobs, no overlap. */
+  .prop-card .pc-close svg { flex: none; width: 18px; height: 18px; color: var(--red); }
+  .prop-card .pc-close-txt { min-width: 0; }
+  /* Same treatment as RESERVE PRICE on the left, so the two cells are structurally parallel:
+     label, value, qualifier. This is what stops the price cell and this one from disagreeing
+     about how much content they hold — the fault that makes a price look like it is floating. */
+  .prop-card .pc-close-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase; }
+  /* 14.5px, up from 13px: freeing the value line of the word "Closes" bought the room to make
+     the date BIGGER rather than smaller, which is the direction Bryan's father asked for. */
+  .prop-card .pc-close b { display: block; color: var(--ink); font-size: 14.5px; font-weight: 700; line-height: 1.25; white-space: nowrap; }
   .prop-card .pc-close-left { display: block; margin-top: 1px; color: var(--muted); font-size: 12.5px; line-height: 1.3; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   /* BAND 3 — who to call. */
