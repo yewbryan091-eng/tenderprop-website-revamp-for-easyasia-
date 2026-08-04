@@ -1,6 +1,6 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
-import { ArrowRightIcon, BuildingIcon, CalendarIcon, ClockIcon, HeartIcon, PhoneIcon, PinIcon, RulerIcon } from "./icons";
+import { ArrowRightIcon, BuildingIcon, CalendarIcon, ClockIcon, HeartIcon, PhoneIcon, PinIcon } from "./icons";
 import { daysLeft, displayType, fmtDate, fmtPrice, hrefFor, tenderId } from "@/lib/tender-utils";
 
 /* The photo pill is the card's ONLY date. It carries the year because listings
@@ -52,14 +52,17 @@ export function PropertyCard({
      The agent block STAYS (Bryan, explicitly): a direct lead route needing no click-through,
      and how every Malaysian portal does it. */
   const typeLabel = displayType(x);
-  /* Type and tenure share ONE line, no headings — two facts, zero scaffolding. */
-  const identity = [typeLabel || null, x.tenure || null].filter(Boolean).join(" \u00b7 ");
+  /* Type only — tenure dropped (Bryan). It is a DECIDING fact, not a browsing one, and it
+     was the longest value competing for the spec line. */
+  const identity = typeLabel || "";
   /* BOTH areas when both exist, which is what his key-information list asks for. The old
      card showed only one, picked by property type via areaSlot(). */
   const areas = [
     x.builtUp ? `Built-up ${x.builtUp}` : null,
     x.landArea ? `Land ${x.landArea}` : null,
   ].filter(Boolean).join(" \u00b7 ");
+  /* Everything the spec row carries, in one dot-separated string. */
+  const specLine = [identity || null, areas || null].filter(Boolean).join(" \u00b7 ");
 
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
@@ -108,8 +111,11 @@ export function PropertyCard({
 
         {/* BAND 1 — what it is, how big. Two cells, hairline between. */}
         <div className="pc-specs">
-          <span className="pc-spec pc-spec-type"><BuildingIcon /><span>{identity}</span></span>
-          {areas && <span className="pc-spec"><RulerIcon /><span>{areas}</span></span>}
+          {/* ONE line, ONE icon. Two icon-led cells could not share a 289px line — they need
+              ~350px — so they stacked and cost the card a whole row. Dot-separating the values
+              under a single building glyph keeps every fact (type, tenure, both areas) and
+              costs one line instead of two. */}
+          <span className="pc-spec pc-spec-type"><BuildingIcon /><span>{specLine}</span></span>
         </div>
 
         {/* BAND 2 — the decision: what it costs, and how long is left to act. */}
@@ -121,7 +127,7 @@ export function PropertyCard({
           <div className="pc-close">
             <CalendarIcon />
             <span>
-              <b>{d <= 0 ? "E-Tender closed" : `Closes ${fmtDate(x.closingDate)}`}</b>
+              <b>{d <= 0 ? "E-Tender closed" : fmtDate(x.closingDate)}</b>
               {closeParts && <span className="pc-close-left">{closeParts.left}</span>}
             </span>
           </div>
