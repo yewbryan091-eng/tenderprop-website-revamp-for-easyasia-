@@ -610,7 +610,7 @@ export function ResidensiSinaranDetail() {
                     {/* aria-live so the confirmation is announced, not just seen. */}
                     <span aria-live="polite">{shareNote ?? "Share"}</span>
                   </button>
-                  <a className="btn red" href="#">Submit your offer</a>
+                  <a className="btn red" href="#tender">Submit your offer</a>
                 </div>
               </div>
             </div>
