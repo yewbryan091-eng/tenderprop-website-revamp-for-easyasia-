@@ -108,6 +108,7 @@ Longest lead time, so they cannot wait for the week that needs them.
 
 | # | Needed for | Question |
 |---|---|---|
+| 10 | **The tender form** | **Response-time promise.** The post-submit courtesy message needs a window the agency can hit EVERY time, or none at all. What can Stephen commit to? Also: can a buyer submit more than one offer, or edit before close? |
 | 1 | **`/sell`, week 2** | **Package pricing.** Actual RM for the 3-month vs 6-month seller package. Without this the revenue page cannot be finished |
 | 2 | `/sell`, homepage | **Real sold results** — any completed e-tender we can show, or confirmation there are none yet. Proof is what sells the concept to a seller |
 | 3 | ~~Every page~~ | ~~**Real REN + agency registration.**~~ **PARTLY ANSWERED 3 Aug:** REA **12345**, agency **966357-V**, both live on the detail page. Two things still open: `12345` follows a placeholder pattern and is worth checking against the BOVAEP register; and 966357-V is an **SSM company** number, not a **BOVAEP agency registration** (`E(1)xxxx`), which is what Act 242 disclosure normally cites. Footer legal identity still to do |

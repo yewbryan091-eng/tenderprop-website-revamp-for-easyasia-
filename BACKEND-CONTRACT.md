@@ -331,6 +331,39 @@ The form is mostly pre-filled listing data. **The buyer supplies exactly four th
 Pre-filled from the listing: reference no., property type, address, built-up, land area, tenure,
 reserve price, deposit, property code, tender date.
 
+### ⚠️ The LIVE site contradicts the 3% rule — EasyAsia must not copy it
+
+Founder-confirmed again by Bryan on 4 Aug: **the deposit is 3% of the reserve price**, full stop.
+
+The current live form at `tenderprop.com` does not do this. On a listing with a
+**RM4,300,000** reserve it prints a deposit of **RM2,500** — that is **0.058%**, not 3%. Three per
+cent of that reserve is **RM129,000**. So the live backend is either storing a flat participation
+fee or a hand-typed value.
+
+**Whichever it is, it is not what we are specifying.** `deposit` is DERIVED (see §1) —
+`reservePrice × 3%` unless an explicit `deposit` override exists. Do not port the live
+behaviour across.
+
+### What happens after Submit — the flow to build
+
+1. **On-screen confirmation, immediately.** No third-party dependency. The buyer has one
+   question in the ten seconds after submitting — *did that go through?* — and unanswered doubt
+   is what makes people phone the agency to check.
+2. **A record on the member dashboard** under My E-Tender. This is the REAL receipt, and it is
+   what makes the account requirement earn its place.
+3. **WhatsApp courtesy message**, agency-branded, via the same AiSensy rails iNewProject uses.
+4. **Email**, because a WhatsApp message is unfindable in three weeks and an offer of this size
+   deserves a permanent record.
+
+Plus an instant internal alert to Bryan and his father — the lead engine doing its job.
+
+**⚠️ The courtesy message must never** confirm the offer is accepted, imply TenderProp
+negotiates, or read as a request for payment. It confirms an OFFER RECEIVED, nothing more.
+
+**⚠️ And it must not promise a response time the agency cannot hit every time.** It is sent at
+the highest-trust moment in the journey; a missed 24-hour promise damages exactly what it was
+sent to build. Either commit to a window that always holds, or keep it unbounded.
+
 **Also needed:** each submission is a record on the member's dashboard (`/member/` → My Tender), so
 a submission belongs to a member account and must be retrievable per member.
 
