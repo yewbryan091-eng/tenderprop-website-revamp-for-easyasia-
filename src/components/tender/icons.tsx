@@ -130,11 +130,14 @@ export const ArrowLeftCircleIcon = () => (
    Bryan found a card design he wanted duplicated: every fact on it is prefixed by
    a thin line icon, which is what lets the card drop its uppercase labels and stay
    readable. Same 24-grid and stroke language as the set above. */
-export const BuildingIcon = () => (
+/* A HOME, not an apartment block (Bryan, 4 Aug). The old glyph was a narrow tower with four
+   window dots and a ground line — five separate marks in a 17px box, which at card size read
+   as texture rather than a building. A pitched roof and a door are two marks and survive the
+   downscale, and they say "property" warmly, which is the register this portal wants. */
+export const HomeIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" />
-    <path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01" />
-    <path d="M10.5 21v-3.5h3V21" />
+    <path d="M3.2 10.2 12 3.4l8.8 6.8V19.4a1.6 1.6 0 0 1-1.6 1.6H4.8a1.6 1.6 0 0 1-1.6-1.6Z" />
+    <path d="M9.5 21v-6.2h5v6.2" />
   </svg>
 );
 export const RulerIcon = () => (

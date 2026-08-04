@@ -596,11 +596,12 @@
   .prop-card .pc-spec-type svg { color: var(--burgundy); }
 
   /* BAND 2 — the decision. Price left, deadline right, hairline between. */
-  /* start, not center: both cells now open with an 11px uppercase label, and top-aligning is
-     what makes those two labels sit on one line. Centre-aligning cells of unequal height is
-     exactly what makes a price look like it is floating in the middle of its box. */
+  /* Centred (Bryan, 4 Aug): the price block sits on the band's vertical axis rather than hanging
+     from the top. The trade is real and deliberate — the deadline cell runs one line taller, so
+     RESERVE PRICE now sits ~8px below CLOSES instead of level with it. Bryan chose the price's
+     position over the labels' alignment. */
   .prop-card .pc-deal {
-    order: 4; display: flex; flex-wrap: nowrap; align-items: start; gap: 12px;
+    order: 4; display: flex; flex-wrap: nowrap; align-items: center; gap: 12px;
     margin-top: 11px; padding-top: 11px; border-top: 1px solid var(--line);
     min-width: 0;
   }

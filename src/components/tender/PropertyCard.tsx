@@ -1,6 +1,6 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
-import { ArrowRightIcon, BuildingIcon, CalendarIcon, ClockIcon, HeartIcon, PhoneIcon, PinIcon } from "./icons";
+import { ArrowRightIcon, CalendarIcon, ClockIcon, HeartIcon, HomeIcon, PhoneIcon, PinIcon } from "./icons";
 import { daysLeft, displayType, fmtDate, fmtPrice, hrefFor, tenderId } from "@/lib/tender-utils";
 
 /* The photo pill is the card's ONLY date. It carries the year because listings
@@ -106,7 +106,7 @@ export function PropertyCard({
 
         {/* BAND 1 — what it is. One cell now that the areas are gone (Bryan). */}
         <div className="pc-specs">
-          <span className="pc-spec pc-spec-type"><BuildingIcon /><span>{identity}</span></span>
+          <span className="pc-spec pc-spec-type"><HomeIcon /><span>{identity}</span></span>
         </div>
 
         {/* BAND 2 — the decision: what it costs, and how long is left to act. */}
