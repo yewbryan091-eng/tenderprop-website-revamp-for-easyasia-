@@ -563,65 +563,81 @@
   .prop-card .pc-deadline.is-closed { background: rgba(23,19,15,.62); }
 
   /* Body — grid mode: one flex column, explicit order per block */
-  .prop-card .pc-body { flex: 1; display: flex; flex-direction: column; min-width: 0; padding: 13px 15px 15px; }
+  /* ── CARD BODY — built to the reference Bryan chose, 4 Aug ────────────────────
+     Four bands divided by hairlines: IDENTITY, what-it-is, the DEAL, who-to-call, then a
+     solid CTA. Every fact is prefixed by a thin line icon instead of an uppercase label —
+     that is the move that lets the labels go without the facts turning ambiguous, and it
+     costs nothing vertically because the icon sits beside the value rather than above it.
+     The one worded label left is "Reserve price": a bare RM531,000 could read as an asking
+     price. */
+  .prop-card .pc-body { flex: 1; display: flex; flex-direction: column; min-width: 0; padding: 18px 18px 18px; }
   .prop-card .pc-ident, .prop-card .pc-side { display: contents; }
-  .prop-card .pc-title { order: 1; margin: 0; color: var(--ink); font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 22px; font-weight: 600; letter-spacing: -.015em; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .prop-card .pc-title { order: 1; margin: 0; color: var(--ink); font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 23px; font-weight: 600; letter-spacing: -.015em; line-height: 1.15; }
   .prop-card .pc-title a { color: inherit; text-decoration: none; }
   .prop-card .pc-title a:hover { color: var(--burgundy); }
-  .prop-card .pc-loc { order: 2; display: flex; align-items: center; gap: 5px; margin: 4px 0 0; min-width: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
-  .prop-card .pc-loc svg { flex: none; width: 13px; height: 13px; color: var(--burgundy); }
+  .prop-card .pc-loc { order: 2; display: flex; align-items: center; gap: 6px; margin: 6px 0 0; min-width: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
+  .prop-card .pc-loc svg { flex: none; width: 15px; height: 15px; color: var(--burgundy); }
   .prop-card .pc-loc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* FACTS LINES — no headings. Type + tenure on one row, both areas on the next. The
-     old block stacked a 10px uppercase label above every value, which is what was eating
-     the card: six labels, six wasted lines. Areas keep a lowercase INLINE label because
-     "999 sqft" does not say WHICH area — inline costs no vertical space. */
-  .prop-card .pc-facts {
-    order: 3; margin: 10px 0 0; min-width: 0;
-    color: var(--ink); font-size: 14px; font-weight: 700;
-    letter-spacing: -.005em; line-height: 1.35;
+  /* BAND 1 — type and size, hairline-separated cells. */
+  .prop-card .pc-specs {
+    order: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line);
+    min-width: 0;
   }
-  .prop-card .pc-window {
-    order: 5; margin: 3px 0 0; min-width: 0;
-    color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1.4;
-    font-variant-numeric: tabular-nums;
-  }
-  .prop-card .pc-areas {
-    order: 4; margin: 3px 0 0; min-width: 0;
-    color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1.4;
-    font-variant-numeric: tabular-nums;
+  .prop-card .pc-spec { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--muted); font-size: 14px; font-weight: 600; line-height: 1.3; }
+  .prop-card .pc-spec svg { flex: none; width: 17px; height: 17px; color: var(--muted); }
+  .prop-card .pc-spec > span { min-width: 0; }
+  .prop-card .pc-spec-type { color: var(--burgundy); font-weight: 700; }
+  .prop-card .pc-spec-type svg { color: var(--burgundy); }
+  .prop-card .pc-spec + .pc-spec { padding-left: 12px; border-left: 1px solid var(--line); }
+  @container (max-width: 420px) {
+    .prop-card .pc-specs { flex-direction: column; align-items: flex-start; gap: 7px; }
+    .prop-card .pc-spec + .pc-spec { padding-left: 0; border-left: 0; }
   }
 
-  /* The reserve is the decision number, so it gets the space the six labels gave back:
-     22 -> 27px, and it is the only labelled value left on the card. */
-  .prop-card .pc-money {
-    order: 6; margin-top: 12px; padding: 11px 13px;
-    border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
-    border-radius: 9px; background: color-mix(in srgb, var(--paper-deep) 45%, transparent);
+  /* BAND 2 — the decision. Price left, deadline right, hairline between. */
+  .prop-card .pc-deal {
+    order: 4; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+    margin-top: 13px; padding-top: 13px; border-top: 1px solid var(--line);
+    min-width: 0;
   }
-  .prop-card .pc-money-label {
-    display: block; margin-bottom: 3px; color: var(--muted); font-size: 11px;
-    font-weight: 800; letter-spacing: .09em; line-height: 1.25; text-transform: uppercase;
+  .prop-card .pc-money { flex: 1 1 150px; min-width: 0; }
+  .prop-card .pc-money-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase; }
+  /* Burgundy, not ink — in the reference the price is the only coloured number, which is what
+     makes it read as the decision rather than as another fact. */
+  .prop-card .pc-money-value { display: block; color: var(--burgundy); font-size: clamp(22px, 8cqi, 26px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-close { flex: 1 1 auto; display: flex; align-items: center; gap: 9px; padding-left: 14px; border-left: 1px solid var(--line); min-width: 0; }
+  @container (max-width: 340px) {
+    .prop-card .pc-close { padding-left: 0; border-left: 0; }
   }
-  .prop-card .pc-money-value {
-    display: block; color: var(--ink); font-size: clamp(22px, 8cqi, 27px);
-    font-weight: 800; letter-spacing: -.03em; line-height: 1.1;
-    white-space: nowrap; font-variant-numeric: tabular-nums;
-  }
+  .prop-card .pc-close svg { flex: none; width: 19px; height: 19px; color: var(--muted); }
+  .prop-card .pc-close b { display: block; color: var(--ink); font-size: 13.5px; font-weight: 700; line-height: 1.3; white-space: nowrap; }
+  .prop-card .pc-close-left { display: block; margin-top: 1px; color: var(--muted); font-size: 12.5px; line-height: 1.3; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
-  .prop-card .pc-foot { order: 6; display: flex; align-items: center; gap: 10px; min-width: 0; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
-  .prop-card .pc-avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
+  /* BAND 3 — who to call. */
+  .prop-card .pc-foot { order: 5; display: flex; align-items: center; gap: 11px; min-width: 0; margin-top: 13px; padding-top: 13px; border-top: 1px solid var(--line); }
+  .prop-card .pc-avatar { flex: none; width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--card); box-shadow: 0 0 0 1px var(--line); }
   .prop-card .pc-agent { flex: 1; min-width: 0; }
-  .prop-card .pc-agent b { display: block; color: var(--ink); font-size: 13.5px; font-weight: 700; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .prop-card .pc-agent span { display: block; margin-top: 1px; color: var(--muted); font-size: 12px; font-weight: 500; }
-  /* The icon sits outside the underline — underlining a phone glyph reads as a
-     rendering fault. Only the number carries the link's rule. */
-  .prop-card .pc-tel { flex: none; display: inline-flex; align-items: center; gap: 6px; color: var(--burgundy); font-size: 12.5px; font-weight: 700; text-decoration: none; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .prop-card .pc-tel svg { width: 13px; height: 13px; flex: none; }
-  .prop-card .pc-tel span { border-bottom: 1px solid color-mix(in srgb, var(--burgundy) 35%, transparent); }
-  .prop-card .pc-tel:hover span { border-bottom-color: var(--burgundy); }
-  .prop-card .pc-cta { order: 7; display: block; margin-top: 14px; padding: 11px 14px; border: 1px solid color-mix(in srgb, var(--burgundy) 42%, transparent); border-radius: 9px; background: color-mix(in srgb, var(--burgundy) 6%, var(--card)); color: var(--burgundy); font-size: 13.5px; font-weight: 700; text-align: center; text-decoration: none; transition: background .15s ease, color .15s ease; }
-  .prop-card .pc-cta:hover { background: var(--burgundy); border-color: var(--burgundy); color: #fff; }
+  .prop-card .pc-agent b { display: block; color: var(--ink); font-size: 14.5px; font-weight: 700; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .prop-card .pc-agent span { display: block; margin-top: 1px; color: var(--muted); font-size: 12.5px; font-weight: 500; line-height: 1.3; }
+  .prop-card .pc-tel { flex: none; display: inline-flex; align-items: center; gap: 7px; color: var(--burgundy); font-size: 14px; font-weight: 700; text-decoration: none; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-tel svg { width: 15px; height: 15px; flex: none; }
+  .prop-card .pc-tel:hover span { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* FILLED, not outlined — the card's one solid block, anchoring the bottom the way the
+     photo anchors the top. */
+  .prop-card .pc-cta {
+    order: 6; display: flex; align-items: center; justify-content: center; gap: 9px;
+    margin-top: 15px; padding: 13px 16px; border-radius: 9px;
+    background: var(--burgundy); border: 1px solid var(--burgundy); color: #fff;
+    font-size: 14.5px; font-weight: 700; letter-spacing: -.005em; text-align: center;
+    transition: background .16s ease, border-color .16s ease;
+  }
+  .prop-card .pc-cta svg { flex: none; width: 17px; height: 17px; }
+  .prop-card:hover .pc-cta { background: #6d2439; border-color: #6d2439; }
+
   @media (prefers-reduced-motion: reduce) { .prop-card .pc-cta, .prop-card .save-btn::before { transition: none; } }
 
   /* List mode — media left, identity centre, decision details + CTA right */

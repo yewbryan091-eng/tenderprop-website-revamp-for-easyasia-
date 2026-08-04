@@ -125,3 +125,31 @@ export const ArrowLeftCircleIcon = () => (
     <circle cx="12" cy="12" r="9" /><path d="M13.5 8.5L10 12l3.5 3.5" /><path d="M10 12h5" />
   </svg>
 );
+
+/* ── Card glyphs, added 4 Aug for the rebuilt listing card ────────────────────
+   Bryan found a card design he wanted duplicated: every fact on it is prefixed by
+   a thin line icon, which is what lets the card drop its uppercase labels and stay
+   readable. Same 24-grid and stroke language as the set above. */
+export const BuildingIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" />
+    <path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01" />
+    <path d="M10.5 21v-3.5h3V21" />
+  </svg>
+);
+export const RulerIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M15.2 3.4 3.4 15.2a1.4 1.4 0 0 0 0 2l3.4 3.4a1.4 1.4 0 0 0 2 0L20.6 8.8a1.4 1.4 0 0 0 0-2l-3.4-3.4a1.4 1.4 0 0 0-2 0z" />
+    <path d="M8 10.6l1.8 1.8M11 7.6l1.8 1.8M14 4.6l1.8 1.8M5 13.6l1.8 1.8" />
+  </svg>
+);
+export const CalendarIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3.5" y="5" width="17" height="16" rx="2.5" /><path d="M8 3v4M16 3v4M3.5 10h17" />
+  </svg>
+);
+export const ArrowRightIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M5 12h13M13 6l6 6-6 6" />
+  </svg>
+);

@@ -1,7 +1,7 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
-import { ClockIcon, HeartIcon, PhoneIcon, PinIcon } from "./icons";
-import { daysLeft, displayType, fmtDate, fmtPrice, hrefFor, tenderId, tenderWindow } from "@/lib/tender-utils";
+import { ArrowRightIcon, BuildingIcon, CalendarIcon, ClockIcon, HeartIcon, PhoneIcon, PinIcon, RulerIcon } from "./icons";
+import { daysLeft, displayType, fmtDate, fmtPrice, hrefFor, tenderId } from "@/lib/tender-utils";
 
 /* The photo pill is the card's ONLY date. It carries the year because listings
    span 2026-2028, so "12 Dec" alone would be ambiguous. Never hardcoded. */
@@ -95,33 +95,48 @@ export function PropertyCard({
       </div>
 
       <div className="pc-body">
+        {/* Bryan found a reference card on 4 Aug and asked for it duplicated. Its idea: every
+            fact gets a thin line ICON instead of an uppercase label, and hairline rules divide
+            the card into four bands. That is what lets the labels go without the facts becoming
+            ambiguous — the icon does the naming the label used to do, at zero vertical cost.
+            Only the reserve price keeps a worded label, because a bare number could read as an
+            asking price. */}
         <div className="pc-ident">
-          {/* The card's single link. `.pc-title a::after` stretches it over the whole
-              card, so the entire surface is clickable while the accessibility tree sees
-              one link instead of the same URL announced three times (photo, title, CTA). */}
           <h3 className="pc-title"><a className="pc-link" href={href}>{x.name}</a></h3>
           <p className="pc-loc"><PinIcon /><span>{x.area}, {x.stateName}</span></p>
-          {identity && <p className="pc-facts">{identity}</p>}
-          {areas && <p className="pc-areas">{areas}</p>}
-          {/* Both dates, as ONE line. The pill answers "how urgent"; this answers "when
-              exactly" — different jobs, so there is no duplication between them. It replaces
-              a stacked "E-TENDER START" row plus a date inside the pill: three lines' worth
-              of card for one. */}
-          <p className="pc-window">Tender period {tenderWindow(x)}</p>
         </div>
 
-        <div className="pc-side">
+        {/* BAND 1 — what it is, how big. Two cells, hairline between. */}
+        <div className="pc-specs">
+          <span className="pc-spec pc-spec-type"><BuildingIcon /><span>{identity}</span></span>
+          {areas && <span className="pc-spec"><RulerIcon /><span>{areas}</span></span>}
+        </div>
+
+        {/* BAND 2 — the decision: what it costs, and how long is left to act. */}
+        <div className="pc-deal">
           <div className="pc-money">
             <span className="pc-money-label">Reserve price</span>
             <strong className="pc-money-value">{fmtPrice(x.reservePrice)}</strong>
           </div>
-          <div className="pc-foot">
-            <img className="pc-avatar" src={AGENT_PHOTO} alt="Stephen Yew, listing agent" loading="lazy" />
-            <span className="pc-agent"><b>Stephen Yew</b><span>REN 123456</span></span>
-            <a className="pc-tel" href="tel:+60123938255"><PhoneIcon /><span>012-393 8255</span></a>
+          <div className="pc-close">
+            <CalendarIcon />
+            <span>
+              <b>{d <= 0 ? "E-Tender closed" : `Closes ${fmtDate(x.closingDate)}`}</b>
+              {closeParts && <span className="pc-close-left">{closeParts.left}</span>}
+            </span>
           </div>
-          <span className="pc-cta" aria-hidden="true">View e-tender details</span>
         </div>
+
+        {/* BAND 3 — who to call. */}
+        <div className="pc-foot">
+          <img className="pc-avatar" src={AGENT_PHOTO} alt="Stephen Yew, listing agent" loading="lazy" />
+          <span className="pc-agent"><b>Stephen Yew</b><span>REN 123456</span></span>
+          <a className="pc-tel" href="tel:+60123938255"><PhoneIcon /><span>012-393 8255</span></a>
+        </div>
+
+        {/* Filled, not outlined — in the reference this is the card's one solid block, and it
+            anchors the bottom the way the photo anchors the top. */}
+        <span className="pc-cta" aria-hidden="true">View e-tender details<ArrowRightIcon /></span>
       </div>
     </article>
   );
