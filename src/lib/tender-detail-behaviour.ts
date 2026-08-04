@@ -51,19 +51,10 @@ export function initDetailPage(): () => void {
 
   /* Video / Drone media modal removed — no footage exists for this property. */
 
-  // ── Save / Share ──
-  (function () {
-    var s = document.getElementById("save-btn");
-    s.addEventListener("click", function () {
-      var on = s.classList.toggle("on");
-      s.setAttribute("aria-pressed", String(on));
-      s.querySelector("span").textContent = on ? "Saved" : "Save";
-    });
-    document.getElementById("share-btn").addEventListener("click", function () {
-      if (navigator.share) { navigator.share({ title: "Residensi Sinaran — TenderProp", url: location.href }).catch(function(){}); }
-      else if (navigator.clipboard) { navigator.clipboard.writeText(location.href); }
-    });
-  })();
+  /* Save / Share are React state in ResidensiSinaranDetail now. As DOM code, Save toggled a
+     CSS class and nothing else — so it did not persist, and it did not know about the
+     `tp_shortlist` the /tender grid writes. Saving on the grid then opening the listing showed
+     an empty heart, and vice versa: two save systems that never spoke. */
 
   // ── Scroll-spy sub-nav ──
   (function () {
