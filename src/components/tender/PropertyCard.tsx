@@ -1,6 +1,6 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
-import { ArrowRightIcon, BuildingIcon, CalendarIcon, ClockIcon, HeartIcon, PhoneIcon, PinIcon } from "./icons";
+import { ArrowRightIcon, BuildingIcon, CalendarIcon, ClockIcon, HeartIcon, PhoneIcon, PinIcon, RulerIcon } from "./icons";
 import { daysLeft, displayType, fmtDate, fmtPrice, hrefFor, tenderId } from "@/lib/tender-utils";
 
 /* The photo pill is the card's ONLY date. It carries the year because listings
@@ -57,12 +57,12 @@ export function PropertyCard({
   const identity = typeLabel || "";
   /* BOTH areas when both exist, which is what his key-information list asks for. The old
      card showed only one, picked by property type via areaSlot(). */
-  const areas = [
-    x.builtUp ? `Built-up ${x.builtUp}` : null,
-    x.landArea ? `Land ${x.landArea}` : null,
-  ].filter(Boolean).join(" \u00b7 ");
-  /* Everything the spec row carries, in one dot-separated string. */
-  const specLine = [identity || null, areas || null].filter(Boolean).join(" \u00b7 ");
+  /* "999 sq ft", not "Built-up 999 sqft" — the ruler icon already says it is an area, the
+     same rule that removed the uppercase labels. When a property has both, they read
+     "999 / 1,540 sq ft": built-up then land, the convention OwnerAuction uses too. */
+  const sqft = (v: string) => v.replace(/\s*sq\s*\.?\s*ft\.?$/i, "").trim();
+  const areaParts = [x.builtUp ? sqft(x.builtUp) : null, x.landArea ? sqft(x.landArea) : null].filter(Boolean);
+  const areas = areaParts.length ? `${areaParts.join(" / ")} sq ft` : "";
 
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
@@ -111,11 +111,13 @@ export function PropertyCard({
 
         {/* BAND 1 — what it is, how big. Two cells, hairline between. */}
         <div className="pc-specs">
-          {/* ONE line, ONE icon. Two icon-led cells could not share a 289px line — they need
-              ~350px — so they stacked and cost the card a whole row. Dot-separating the values
-              under a single building glyph keeps every fact (type, tenure, both areas) and
-              costs one line instead of two. */}
-          <span className="pc-spec pc-spec-type"><BuildingIcon /><span>{specLine}</span></span>
+          {/* TWO cells, two icons, two colours — the reference's shape, and it fits now that
+              tenure is gone and the area reads "999 sq ft" rather than "Built-up 999 sqft".
+              The split is the point: TYPE is a category and takes the accent, SIZE is a measure
+              and stays grey. One burgundy blob gave both the same rank and added a sixth
+              burgundy element to a card where the PRICE should own the accent. */}
+          <span className="pc-spec pc-spec-type"><BuildingIcon /><span>{identity}</span></span>
+          {areas && <span className="pc-spec pc-spec-area"><RulerIcon /><span>{areas}</span></span>}
         </div>
 
         {/* BAND 2 — the decision: what it costs, and how long is left to act. */}
