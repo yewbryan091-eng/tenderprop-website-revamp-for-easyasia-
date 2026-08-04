@@ -126,11 +126,13 @@ export function PropertyCard({
             <span className="pc-money-label">Reserve price</span>
             <strong className="pc-money-value">{fmtPrice(x.reservePrice)}</strong>
           </div>
+          {/* The DATE only. The day count already runs at 16.5px in the photo pill, and it
+              was rendering here a second time at 12.5px — the same fact twice on a card whose
+              whole redesign was "one eye see all". The pill keeps it; this cell is the date. */}
           <div className="pc-close">
             <CalendarIcon />
             <span>
               <b>{d <= 0 ? "E-Tender closed" : fmtDate(x.closingDate)}</b>
-              {closeParts && <span className="pc-close-left">{closeParts.left}</span>}
             </span>
           </div>
         </div>
