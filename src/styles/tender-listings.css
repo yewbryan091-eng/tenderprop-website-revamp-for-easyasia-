@@ -554,13 +554,30 @@
   .prop-card .save-btn.saved::before { background: var(--burgundy); }
   .prop-card .save-btn.saved svg { fill: #fff; stroke: #fff; }
   .prop-card .save-btn:focus-visible { outline: 2px solid var(--red); outline-offset: -4px; border-radius: 50%; }
-  .prop-card .pc-deadline { position: absolute; left: 12px; bottom: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; max-width: calc(100% - 24px); padding: 7px 13px; border-radius: 999px; background: rgba(23,19,15,.88); color: #fff; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
-  .prop-card .pc-deadline svg { flex: none; width: 15px; height: 15px; stroke-width: 2.2; }
+  /* OPAQUE, and the same near-white chip as the save heart 12px above it. The old pill was
+     rgba(23,19,15,.88) — 12% of the PHOTO bled through, so the countdown's contrast was set by
+     whatever image the agency uploaded and could not be guaranteed. It was also the only
+     near-black element on a paper/burgundy/red card, which is why it read as generic portal
+     chrome, and it forced the numeral onto a third red (#FF8578) that existed purely to survive
+     that scrim. On white the brand red works directly: 4.9:1, and one less red on the card. */
+  /* GLASS, not solid white. Solid white at these exact dimensions read LOUDER than the old
+     near-black chip did — light elements advance — which is what made the countdown suddenly
+     look oversized without a pixel changing. The blur puts the quietness back while keeping the
+     16.5px numeral Bryan asked for when he said the day count was too small to see.
+     Contrast is bounded, not photo-dependent like the old .88 scrim: at .82 white the worst
+     possible backdrop (pure black) still resolves the chip to ~#D0D0D0, where the brand red
+     reads 3.9:1 — over the 3:1 that 16.5px/800 needs as large text. */
+  .prop-card .pc-deadline { position: absolute; left: 12px; bottom: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; max-width: calc(100% - 24px); padding: 7px 14px; border-radius: 999px; background: rgba(255,255,255,.82); -webkit-backdrop-filter: blur(14px) saturate(1.5); backdrop-filter: blur(14px) saturate(1.5); border: 1px solid rgba(255,255,255,.6); box-shadow: 0 2px 10px rgba(23,19,15,.16); color: var(--ink); font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-deadline svg { flex: none; width: 15px; height: 15px; stroke-width: 2.2; color: var(--red); }
   /* The day count LEADS and the date supports it. It was 11.5px, inline, and second in the
      sentence — for the one number a normal property listing does not have. */
   .prop-card .pc-when { display: flex; min-width: 0; }
-  .prop-card .pc-deadline.is-soon { background: var(--red); }
-  .prop-card .pc-deadline.is-closed { background: rgba(23,19,15,.62); }
+  /* Now a REAL escalation. White chip -> solid red chip is a jump you catch mid-scroll; the old
+     near-black -> red was two dark chips a shade apart. Under 14 days the whole pill goes red. */
+  .prop-card .pc-deadline.is-soon { background: var(--red); border-color: var(--red); box-shadow: 0 2px 10px rgba(200,40,28,.35); color: #fff; }
+  .prop-card .pc-deadline.is-soon svg { color: #fff; }
+  .prop-card .pc-deadline.is-closed { background: rgba(255,255,255,.82); color: var(--muted); }
+  .prop-card .pc-deadline.is-closed svg { color: var(--muted); }
 
   /* Body — grid mode: one flex column, explicit order per block */
   /* ── CARD BODY — built to the reference Bryan chose, 4 Aug ────────────────────
@@ -644,15 +661,22 @@
 
   /* FILLED, not outlined — the card's one solid block, anchoring the bottom the way the
      photo anchors the top. */
+  /* QUIET at rest, solid on hover. This bar is 47px — 8.9% of the card — and it is decorative:
+     the title's stretched ::after takes every click, so its only job is to say "this card
+     opens". Twelve solid burgundy bars down a grid is ~560px of the heaviest colour we own
+     spent on an affordance, and it competed with the photo and the price for first look. A
+     wash reads as the same control, costs no height, and filling on hover makes the card feel
+     live — which the old solid version could not do, having nowhere left to go. */
   .prop-card .pc-cta {
     order: 6; display: flex; align-items: center; justify-content: center; gap: 9px;
     margin-top: 12px; padding: 11px 16px; border-radius: 9px;
-    background: var(--burgundy); border: 1px solid var(--burgundy); color: #fff;
+    background: color-mix(in srgb, var(--burgundy) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--burgundy) 32%, transparent);
+    color: var(--burgundy);
     font-size: 14.5px; font-weight: 700; letter-spacing: -.005em; text-align: center;
-    transition: background .16s ease, border-color .16s ease;
+    transition: background .16s ease, border-color .16s ease, color .16s ease;
   }
   .prop-card .pc-cta svg { flex: none; width: 17px; height: 17px; }
-  .prop-card:hover .pc-cta { background: #6d2439; border-color: #6d2439; }
 
   @media (prefers-reduced-motion: reduce) { .prop-card .pc-cta, .prop-card .save-btn::before { transition: none; } }
 
@@ -1035,11 +1059,12 @@
   .props-grid.list-mode .pc-tel svg { width: 15px; height: 15px; }
 }
 
-/* Countdown accent inside the photo pill. The brand red (#C8281C) only manages ~3.4:1
-   on the pill's near-black scrim, under AA — so on-dark uses a lightened tint that
-   still reads as the same red. `is-soon`/`is-closed` states keep their own colours. */
+/* Countdown accent inside the photo pill. On the new near-white chip the BRAND red works
+   directly at 4.9:1 — no lightened stand-in needed, so the card is down to two reds (this and
+   the calendar) plus burgundy, instead of three. `is-soon`/`is-closed` inherit their state
+   colour from the pill. */
 .prop-card .pc-deadline .pc-left { display: block; font-size: 16.5px; font-weight: 800;
-  letter-spacing: -.01em; line-height: 1.15; color: #FF8578; white-space: nowrap; }
+  letter-spacing: -.01em; line-height: 1.15; color: var(--red); white-space: nowrap; }
 .prop-card .pc-deadline.is-soon .pc-left,
 .prop-card .pc-deadline.is-closed .pc-left { color: inherit; }
 
@@ -1079,8 +1104,10 @@
 .prop-card .save-btn { z-index: 2; }
 .prop-card .pc-tel { position: relative; z-index: 2; }
 .prop-card .pc-cta { cursor: pointer; }
-/* The CTA is decorative now — the stretched link takes the click — so it must still
-   respond on hover or it reads as disabled. */
+/* The CTA is decorative — the stretched link takes the click — so it must still respond on
+   hover or it reads as disabled. This used to be a no-op: the base was already solid burgundy
+   and an earlier rule's #6d2439 hover was overridden by this one setting it straight back to
+   var(--burgundy). Now the base is a wash, so filling it here is a real state change. */
 .prop-card:hover .pc-cta { background: var(--burgundy); border-color: var(--burgundy); color: #fff; }
 .prop-card:focus-within { outline: 2px solid var(--red); outline-offset: 3px; }
 .prop-card .pc-link:focus-visible { outline: none; }
