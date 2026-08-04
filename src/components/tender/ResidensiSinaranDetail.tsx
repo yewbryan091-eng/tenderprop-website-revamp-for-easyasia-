@@ -590,11 +590,12 @@ export function ResidensiSinaranDetail() {
                     come back later, bring someone else in. Deliberately NOT a fourth button —
                     a contact action here would be the fifth route to the agent on this page
                     and would steal weight from the one thing the page exists to collect.
-                    Primary FIRST (Bryan, matching iNewProject): a left-to-right reader meets
-                    the action before the utilities. The cluster stays right-aligned, so the
-                    row still ends flush on the price's right edge — only the order changed. */}
+                    Primary LAST (Bryan). The cluster is right-aligned under a right-aligned
+                    price, so the terminal position is the strong one here — and it puts the
+                    CTA's right edge on the same rail as RM517,000. Reading order argues for
+                    primary-first, which is why iNewProject does it, but their cluster is
+                    left-aligned; ours is not. */}
                 <div className="actions">
-                  <a className="btn red" href="#">Submit your offer</a>
                   <button
                     type="button"
                     className={"icobtn" + (isSaved ? " on" : "")}
@@ -609,6 +610,7 @@ export function ResidensiSinaranDetail() {
                     {/* aria-live so the confirmation is announced, not just seen. */}
                     <span aria-live="polite">{shareNote ?? "Share"}</span>
                   </button>
+                  <a className="btn red" href="#">Submit your offer</a>
                 </div>
               </div>
             </div>
