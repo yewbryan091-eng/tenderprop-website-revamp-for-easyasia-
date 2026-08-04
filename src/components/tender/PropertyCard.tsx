@@ -85,9 +85,11 @@ export function PropertyCard({
         <span className={"pc-deadline" + (soon ? " is-soon" : "") + (d <= 0 ? " is-closed" : "")}>
           <ClockIcon />
           {closeParts ? (
-            <span>{closeParts.date} · <b className="pc-left">{closeParts.left}</b></span>
+            <span className="pc-when">
+              <b className="pc-left">{closeParts.left}</b>
+            </span>
           ) : (
-            <span>{dlTxt}</span>
+            <span className="pc-when"><b className="pc-left">{dlTxt}</b></span>
           )}
         </span>
       </div>
