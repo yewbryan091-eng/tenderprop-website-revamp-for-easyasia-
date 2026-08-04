@@ -43,6 +43,22 @@ export function tenderStartOf(x: Tender) {
   return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+/* The tender WINDOW as one string — "12 Sep – 12 Dec 2026".
+   Both dates were on the card as two separate labelled rows and got cut in the diet. Bryan
+   wants them back, and a range is how they come back for the price of ONE line instead of
+   three: they are not two facts, they are one — the period this tender is open.
+   The start year is dropped when both dates share it, which is the common case since tenders
+   run about three months. */
+export function tenderWindow(x: Tender) {
+  const end = new Date(x.closingDate + "T00:00:00");
+  const start = new Date(x.closingDate + "T00:00:00");
+  start.setMonth(start.getMonth() - 3);
+  const sameYear = start.getFullYear() === end.getFullYear();
+  const s = `${start.getDate()} ${MONTHS[start.getMonth()]}${sameYear ? "" : ` ${start.getFullYear()}`}`;
+  const e = `${end.getDate()} ${MONTHS[end.getMonth()]} ${end.getFullYear()}`;
+  return `${s} \u2013 ${e}`;
+}
+
 /* ── HOW LONG IS LEFT — one definition, every surface ──────────────────────────────
    This was computed six separate ways and they disagreed on two axes:
      · ROUNDING — ceil on the cards and the detail header, floor on both big countdowns,

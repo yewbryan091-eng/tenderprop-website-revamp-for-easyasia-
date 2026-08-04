@@ -1,7 +1,7 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
 import { ClockIcon, HeartIcon, PhoneIcon, PinIcon } from "./icons";
-import { areaSlot, daysLeft, depositOf, displayType, fmtDate, fmtPrice, hrefFor, tenderId, tenderStartOf } from "@/lib/tender-utils";
+import { daysLeft, displayType, fmtDate, fmtPrice, hrefFor, tenderId, tenderWindow } from "@/lib/tender-utils";
 
 /* The photo pill is the card's ONLY date. It carries the year because listings
    span 2026-2028, so "12 Dec" alone would be ambiguous. Never hardcoded. */
@@ -103,6 +103,11 @@ export function PropertyCard({
           <p className="pc-loc"><PinIcon /><span>{x.area}, {x.stateName}</span></p>
           {identity && <p className="pc-facts">{identity}</p>}
           {areas && <p className="pc-areas">{areas}</p>}
+          {/* Both dates, as ONE line. The pill answers "how urgent"; this answers "when
+              exactly" — different jobs, so there is no duplication between them. It replaces
+              a stacked "E-TENDER START" row plus a date inside the pill: three lines' worth
+              of card for one. */}
+          <p className="pc-window">Tender period {tenderWindow(x)}</p>
         </div>
 
         <div className="pc-side">

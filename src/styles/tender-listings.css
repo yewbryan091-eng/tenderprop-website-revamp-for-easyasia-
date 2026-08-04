@@ -581,6 +581,11 @@
     color: var(--ink); font-size: 14px; font-weight: 700;
     letter-spacing: -.005em; line-height: 1.35;
   }
+  .prop-card .pc-window {
+    order: 5; margin: 3px 0 0; min-width: 0;
+    color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+  }
   .prop-card .pc-areas {
     order: 4; margin: 3px 0 0; min-width: 0;
     color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1.4;
@@ -590,7 +595,7 @@
   /* The reserve is the decision number, so it gets the space the six labels gave back:
      22 -> 27px, and it is the only labelled value left on the card. */
   .prop-card .pc-money {
-    order: 5; margin-top: 12px; padding: 11px 13px;
+    order: 6; margin-top: 12px; padding: 11px 13px;
     border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
     border-radius: 9px; background: color-mix(in srgb, var(--paper-deep) 45%, transparent);
   }
