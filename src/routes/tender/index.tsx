@@ -5,13 +5,10 @@ import { PropertyCard } from "@/components/tender/PropertyCard";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
 import { StateFilters } from "@/components/tender/StateFilters";
-import {
-  CheckCircleIcon,
-  LockIcon,
-  ReturnIcon,
-  TaHome,
-  TaPin,
-} from "@/components/tender/icons";
+/* CheckCircleIcon / LockIcon / ReturnIcon went with the assurances panel on 4 Aug. The
+   definitions stay in icons.tsx — the three assurances they illustrated are moving to
+   /how-e-tender-works, which is where that copy answers a question the reader has by then. */
+import { TaHome, TaPin } from "@/components/tender/icons";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
@@ -471,45 +468,47 @@ function TenderListings() {
               <p className="hero-foot">Offers close at the end of the closing date</p>
             </div>
           </div>
+          {/* RIGHT PANEL — orientation, not reassurance (Bryan, 4 Aug). It used to hold three
+              trust promises; they answer an objection a visitor cannot have until they know
+              what an e-tender IS, so they move to /how-e-tender-works and this panel's whole
+              job becomes getting a cold reader to that page.
+
+              <ol> is the honest element: order IS the content here. A reader who takes OFFER
+              before FIND believes they pay before they choose a property, which is the single
+              most damaging thing this panel could imply. Ordinals are CSS counters, never DOM
+              text, so a screen reader gets list semantics once instead of hearing "oh-one"
+              twice; the aria-label covers Safari flattening lists under list-style: none.
+              Labels are sentence case in the DOM and uppercased in CSS, and they are <b>
+              (stylistic offset) rather than <strong> — they are run-in heads, not emphasis. */}
           <div className="hero-panel hero-panel-right">
             <div className="hero-panel-inner">
-              <p className="hero-eyebrow">WHY BUYERS CHOOSE E-TENDER</p>
-              <ul className="hero-flow hero-assurances" aria-label="Sealed e-tender assurances">
-                <li className="hero-assurance hero-assurance-primary">
-                  <span className="hero-assurance-icon" aria-hidden="true"><LockIcon /></span>
-                  <div>
-                    <h2 className="hero-seal-title">Your offer stays <em>private</em></h2>
-                    <p>Nobody else ever sees your offer — not other buyers, not the public. Every offer is handled confidentially throughout the e-tender process.</p>
-                  </div>
+              <p className="hero-eyebrow">New to E-Tender?</p>
+              <h2 className="hero-steps-head">
+                <span>E-Tender in</span>
+                <span><em>3 simple steps.</em></span>
+              </h2>
+              <ol className="hero-steps" aria-label="How E-Tender works, in three steps">
+                <li>
+                  <p className="hero-step-body">
+                    <b>Find</b>Browse the properties open for E-Tender.
+                  </p>
                 </li>
-                <li className="hero-assurance hero-assurance-agent">
-                  <div>
-                    <strong>Your offer reaches the seller directly</strong>
-                    <p>Every e-tender offer is presented directly to the seller for fair and confidential consideration.</p>
-                  </div>
+                <li>
+                  <p className="hero-step-body">
+                    <b>Offer</b>Sign in and submit your price, with a 3% deposit on it &mdash; part of
+                    your 10% down payment, returned in full if your offer isn&rsquo;t accepted.
+                  </p>
                 </li>
-                <li className="hero-assurance hero-assurance-outcome">
-                  <div className="hero-outcome-content">
-                    <strong>A clear outcome either way</strong>
-                    <div className="hero-outcome-grid">
-                      <div className="hero-outcome-option is-accepted">
-                        <span className="hero-outcome-label">
-                          <span className="hero-outcome-status-icon" aria-hidden="true"><CheckCircleIcon /></span>
-                          Accepted
-                        </span>
-                        <span>Proceed with the purchase, through to SPA signing.</span>
-                      </div>
-                      <div className="hero-outcome-option is-refunded">
-                        <span className="hero-outcome-label">
-                          <span className="hero-outcome-status-icon" aria-hidden="true"><ReturnIcon /></span>
-                          Not accepted
-                        </span>
-                        <span>Your deposit is returned in full, immediately.</span>
-                      </div>
-                    </div>
-                  </div>
+                <li>
+                  <p className="hero-step-body">
+                    <b>Connect</b>Our licensed agent contacts you and takes your offer forward.
+                  </p>
                 </li>
-              </ul>
+              </ol>
+              <a className="hero-steps-cta" href="/how-e-tender-works">
+                <span>See how E-Tender works</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+              </a>
             </div>
           </div>
         </section>

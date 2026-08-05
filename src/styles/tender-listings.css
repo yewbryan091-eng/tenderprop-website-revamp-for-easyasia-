@@ -207,78 +207,130 @@
   .hero-panel-left.is-dark .hero-timer-unit { color: var(--burgundy-ink); }
   .hero-panel-left.is-dark .hero-timer-value { color: var(--card); }
 
-  /* Right panel: three icon-led assurances. They are truths buyers need to
-     recognise at a glance, not numbered instructions they must memorise. */
-  .hero-seal-title {
-    margin: 0 0 4px; font-family: Newsreader, Georgia, serif; font-weight: 600;
-    font-size: clamp(21px, 2vw, 28px); line-height: 1.1; letter-spacing: -.02em; color: var(--ink);
+  /* ── RIGHT PANEL — "E-Tender in 3 simple steps." ────────────────────────────────────
+     Replaced the three icon-led assurances on 4 Aug. MEASURED at 1280, not estimated:
+       section 358.40px · panel padding-block 38.4px · content box 281.60px
+       stack   281.60px · overflow 0.00px · page shift 0px (min-height untouched)
+     Fixed content is 264.11px; the remaining 17.49px is collected into ONE gap by
+     margin-top:auto on the CTA, so the largest step in the rhythm is also the overflow
+     valve — and it equals exactly one 12.5/1.4 body line.
+     THE LINE BUDGET IS A CONTRACT: 1 / 3 / 2. Step 02 is 133 characters against a
+     measured 134-character ceiling. .hero-tender is overflow:hidden, so two unexpected
+     wrapped lines slice the bottom off the CTA with no error anywhere.
+     NOTE the previous panel overflowed its own padding by 39px and rendered 18.8px from
+     the top against a declared 38.4px. This one does not. */
+
+  /* line-height MUST be declared: it inherits 1.6 from body, silently spending 17.6px
+     where 11px is needed — 6.6px of a 281.6px budget. */
+  .hero-panel-right .hero-eyebrow {
+    margin: 0 0 8px;
+    font-size: 11px; font-weight: 800; line-height: 1;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--burgundy);
   }
-  .hero-seal-title em { font-style: italic; font-weight: inherit; }
-  .hero-flow { list-style: none; margin: 0; padding: 0; }
-  /* 1B hierarchy: the privacy promise is the LEAD (icon + serif headline);
-     the two supporting facts below run icon-less at full width. */
-  .hero-assurance {
-    display: grid; grid-template-columns: minmax(0, 1fr);
-    padding: clamp(10px, 1vw, 13px) 0;
-    border-bottom: 1px solid var(--line);
+
+  /* Overrides the global h1,h2 rule on all four of its properties. text-wrap goes to
+     normal deliberately: `balance` makes the line count non-deterministic, and the line
+     count is the only thing standing between this panel and a clipped CTA. */
+  .hero-steps-head {
+    margin: 0 0 13px;
+    font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+    font-weight: 500; font-size: 26px; line-height: 1.06;   /* 2 x 27.56 = 55.11 */
+    letter-spacing: -.015em; text-wrap: normal; color: var(--ink);
   }
-  .hero-assurance-primary {
-    grid-template-columns: var(--hero-lock-box, 47px) minmax(0, 1fr);
-    gap: 14px; align-items: start;
+  .hero-steps-head span { display: block; }   /* the break is content, never a wrap */
+  .hero-steps-head em { font-style: italic; font-weight: inherit; color: var(--burgundy); }
+
+  /* NO icon circles, no connector, no rules, no spine. A 56px circle per step costs 168px
+     plus gaps — over 60% of the budget — to say what a 16px numeral says, and a 48px icon
+     gutter would drop the measure to ~235px and push step 02 to five lines. Rules between
+     rows cost 60px against 22px for plain gaps, and rules SEPARATE: right when the panel
+     held three unrelated truths, wrong now that the three items are one causal chain. */
+  .hero-steps {
+    list-style: none;
+    margin: 0 0 10px;          /* 10px is the hard floor of the CTA gap */
+    padding: 0;
+    counter-reset: tpstep;
+    display: grid; row-gap: 11px;
   }
-  .hero-assurance:first-child { padding-top: 5px; }
-  .hero-assurance:last-child { padding-bottom: 0; border-bottom: 0; }
-  .hero-assurance-icon {
-    display: grid; place-items: center; width: 36px; height: 36px;
+  .hero-steps li {
+    counter-increment: tpstep;
+    display: grid; grid-template-columns: 34px minmax(0, 1fr);
+    /* baseline puts the Newsreader ordinal exactly on the Inter body's first baseline
+       across two fonts at two sizes — no hand-tuned translateY to go stale. */
+    align-items: baseline;
+  }
+  .hero-steps li::before {
+    content: counter(tpstep, decimal-leading-zero);
+    font-family: "Newsreader", Georgia, serif; font-weight: 500;
+    font-size: 16px; line-height: 1; font-variant-numeric: tabular-nums;
     color: var(--burgundy);
   }
-  .hero-assurance-icon svg { display: block; width: 30px; height: 30px; }
-  /* The lock is the panel's one visual anchor and was reading smaller than the
-     serif headline beside it. Sized to sit level with that headline instead. */
-  .hero-assurance-primary .hero-assurance-icon { width: 100%; height: var(--hero-lock, 52px); align-self: start; }
-  .hero-assurance-primary .hero-assurance-icon svg { width: 100%; height: 100%; }
-  /* Lock stays RED per Bryan (29 Jul) — the one non-semantic icon allowed off-burgundy. */
-  .hero-assurance-primary .hero-assurance-icon { color: var(--red); }
-  .hero-assurance-outcome .outcome-path-stem { stroke: var(--muted); }
-  .hero-assurance-outcome .outcome-path-accepted { color: var(--good); }
-  .hero-assurance-outcome .outcome-path-refunded { color: var(--red); }
-  .hero-assurance strong {
-    display: block; margin-bottom: 2px; font-size: 14.5px; font-weight: 700;
-    line-height: 1.25; letter-spacing: -.01em; color: var(--ink);
+  /* --ink, NOT --muted. MEASURED: this panel is a .84 paper wash over a photograph, so the
+     composited background bottoms out near #D2CDC9, where --muted reads 3.35:1 — a live AA
+     failure the outgoing `.hero-assurance p` was already shipping. --ink holds 11.60:1 at
+     that same worst case, and it is what this file's own house note already asks for:
+     "these are the promises, they should not whisper". */
+  .hero-step-body {
+    grid-column: 2; margin: 0;
+    font-size: 12.5px; font-weight: 400; line-height: 1.4;   /* 17.50px per line */
+    color: var(--ink); hyphens: none;
   }
-  .hero-assurance p { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
-  .hero-outcome-content { min-width: 0; }
-  .hero-outcome-grid {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 13px; margin-top: 8px;
+  /* Run-in, not stacked. Stacking costs one line box per step — 3 x 17.5 = 52.5px, a whole
+     headline — and that single decision is the difference between fitting and not. Set 1px
+     under the body as optical caps correction, not as hierarchy. */
+  .hero-step-body b {
+    margin-right: 8px;
+    font-size: 11.5px; font-weight: 800;
+    letter-spacing: .07em; text-transform: uppercase; color: var(--ink);
   }
-  /* Redesigned (Bryan, 29 Jul): the two outcomes are STATES, so each gets its own
-     softly tinted panel — colour as fill rather than a hairline. Body text runs in
-     ink, not muted: these are the promises, they should not whisper. */
-  .hero-outcome-option {
-    min-width: 0; padding: 11px 13px 12px;
-    border-radius: 9px; border: 1px solid;
-    color: var(--ink); font-size: 13px; line-height: 1.45;
+
+  /* A saturated fill is CORRECT here, by the founder's own rule (ResidensiSinaranDetail.tsx
+     :1382) — fills are RESERVED for actions, and read as an advertisement only when the
+     block is not one. This is now the site's sole route to /how-e-tender-works on this
+     route: the search-band link went on 4 Aug and the header never had one. That earns a
+     door, not a doorbell — 12,917px2 of target against ~4,000 for a text link.
+     Burgundy, not red: red means TIME on this page and already carries the countdown and
+     the Search button 110px below. Measured clearance from the diagonal at the bar's bottom
+     corner is 144.20px, so the two burgundy masses cannot fuse across the seam. */
+  .hero-steps-cta {
+    margin-top: auto;                       /* THE VALVE — 17.49px at 1280 */
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    height: 40px; padding: 0 18px;
+    background: var(--burgundy); color: #fff;
+    font-size: 14px; font-weight: 700; line-height: 1; letter-spacing: .01em;
+    text-decoration: none; border-radius: 0;
+    transition: background .16s ease;
   }
-  .hero-outcome-option.is-accepted {
-    background: color-mix(in srgb, var(--good) 7%, var(--card));
-    border-color: color-mix(in srgb, var(--good) 28%, transparent);
+  .hero-steps-cta:hover { background: color-mix(in srgb, var(--burgundy) 86%, #fff); }
+  .hero-steps-cta:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 3px; }
+  .hero-steps-cta svg {
+    flex: none; width: 16px; height: 16px;
+    fill: none; stroke: #fff; stroke-width: 2.2;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: transform .16s ease;
   }
-  .hero-outcome-option.is-refunded {
-    background: color-mix(in srgb, var(--red) 6%, var(--card));
-    border-color: color-mix(in srgb, var(--red) 24%, transparent);
+  .hero-steps-cta:hover svg { transform: translateX(3px); }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-steps-cta, .hero-steps-cta svg { transition: none; }
   }
-  .hero-outcome-option.is-accepted .hero-outcome-label { color: var(--good); }
-  .hero-outcome-option.is-refunded .hero-outcome-label { color: var(--red); }
-  .hero-outcome-label {
-    display: flex; align-items: center; gap: 5px; margin-bottom: 3px; color: var(--ink);
-    font-size: 11.5px; font-weight: 800; letter-spacing: .05em;
-    line-height: 1.25; text-transform: uppercase; white-space: nowrap;
+
+  /* flex:1 gives the inner a definite height so margin-top:auto can resolve; it replaces
+     the parent's justify-content:center for this panel, which now manages its whole box. */
+  .hero-panel-right .hero-panel-inner {
+    flex: 1 1 auto; display: flex; flex-direction: column;
   }
-  .hero-outcome-status-icon { display: inline-grid; place-items: center; width: 14px; height: 14px; flex: none; }
-  .hero-outcome-status-icon svg { display: block; width: 100%; height: 100%; }
-  .hero-outcome-option.is-accepted .hero-outcome-status-icon { color: var(--good); }
-  .hero-outcome-option.is-refunded .hero-outcome-status-icon { color: var(--red); }
+
+  /* THE 1214px TROUGH — the real global minimum, and no design met it before this.
+     min-height floors at 340px there while the BASE padding-block is clamp(28px,3.5vw,48px)
+     = 42.49px, giving a 255.02px box: 26.6px LESS than at 1280. Extending the existing
+     >=1280 panel padding down to 821 lifts it to a measured 267.16px. Right panel only —
+     the left panel keeps its own padding and its own rhythm. */
+  @media (min-width: 821px) {
+    .hero-panel-right {
+      padding-top: clamp(24px, 3vw, 40px);
+      padding-bottom: clamp(24px, 3vw, 40px);
+    }
+  }
 
   /* Wide desktop: the image panel owns ~2/3 of the hero. Same height, same seam,
      the right panel simply runs a little tighter so all content still fits. */
@@ -288,22 +340,33 @@
     .hero-panel-left,
     .hero-panel-right { background-size: cover; background-position: center 20%; }
 
-    .hero-panel-right { padding-top: clamp(24px, 3vw, 40px); padding-bottom: clamp(24px, 3vw, 40px); padding-right: clamp(18px, 3.2vw, 44px); }
-    .hero-panel-right .hero-panel-inner { max-width: 520px; }
-    .hero-seal-title { font-size: clamp(18px, 1.7vw, 23px); }
-  }
-  /* At the narrow edge of desktop the dominant left plane leaves a compact
-     confidence rail. Tighten its rhythm rather than letting the final outcome
-     card fall below the clipped hero boundary. */
-  @media (min-width: 1280px) and (max-width: 1375px) {
-    .hero-seal-title { font-size: 18px; }
-    .hero-assurance-primary { --hero-lock-box: 44px; --hero-lock: 48px; }
-    .hero-assurance { padding-top: 8px; padding-bottom: 8px; }
-    .hero-assurance:first-child { padding-top: 3px; }
-    .hero-assurance:last-child { padding-bottom: 0; }
-    .hero-assurance p { font-size: 11.75px; line-height: 1.38; }
-    .hero-outcome-grid { margin-top: 6px; }
-    .hero-outcome-option { font-size: 12.25px; line-height: 1.4; }
+    .hero-panel-right { padding-right: clamp(18px, 3.2vw, 44px); }
+
+    /* THE WEDGE. Measured live: the panel's clip edge runs 892.5px at y=0 to 740.7px at
+       y=358.4 — 151.8px of travel, a 22.9 degree lean. The flat 917.125px padding-left is
+       calibrated for the TOP of that diagonal and over-clears everywhere below (40.9px at
+       the content top, 160.2px at the bottom). Pulling the column 16px left leaves a
+       MEASURED 24.93px of clearance at the tightest point, sitting on 13.9px of exposed
+       paper seam (~38.8px of visible separation), and takes the measure 306.92 -> 322.92px.
+       That +16px is not cosmetic: it is exactly what holds step 01 to one line and step 02
+       to three, which is the difference between fitting and clipping. The wedge pays for
+       the fit. DO NOT copy this into 1024-1279 — the split there is 62/50 and the same
+       subtraction leaves ~3.7px.
+       shape-outside along the diagonal was rejected outright: it rags the left edge on
+       every line, which is the fault Bryan names more than any other.
+       The max() caps the measure at 520px by moving the LEFT edge right, so the right edge
+       stays flush (measured right gutter at 1600 = 44.00px = padding-right exactly).
+       max-height caps the valve: uncapped, the gap above the CTA MEASURED 85.89px at 1600,
+       which is a hole. At 292px it tops out at 37.89px — never more than the panel's own
+       padding — and the surplus becomes panel padding via the parent's centring. Inert
+       below ~1328px. */
+    .hero-panel-right {
+      padding-left: max(
+        calc(var(--hero-top-split) + 2.5% - 16px),
+        calc(100% - clamp(18px, 3.2vw, 44px) - 520px)
+      );
+    }
+    .hero-panel-right .hero-panel-inner { max-width: none; max-height: 292px; }
   }
   /* 1024–1279px: a safer 60/40 so the right column never crowds. */
   @media (min-width: 1024px) and (max-width: 1279px) {
@@ -311,30 +374,26 @@
     .hero-panel-left,
     .hero-panel-right { background-size: cover; background-position: center 62%; }
     .hero-panel-right .hero-panel-inner { max-width: 480px; }
-    .hero-seal-title { font-size: 19px; }
-  }
-  /* Side-by-side compact desktops: fit the richer outcome copy to the existing
-     plane instead of making the whole hero taller. */
-  @media (min-width: 821px) and (max-width: 1279px) {
-    .hero-panel-right .hero-eyebrow { margin-bottom: 4px; font-size: 10px; }
-    .hero-assurance { padding: 7px 0; }
-    .hero-assurance-primary { --hero-lock-box: 41px; --hero-lock: 45px; gap: 12px; }
-    .hero-assurance:first-child { padding-top: 2px; }
-    .hero-assurance:last-child { padding-bottom: 0; }
-    .hero-assurance-icon { width: 31px; height: 31px; }
-    .hero-assurance-icon svg { width: 27px; height: 27px; }
-
-    .hero-assurance strong { margin-bottom: 1px; font-size: 13.5px; }
-    .hero-assurance p { font-size: 11.25px; line-height: 1.34; }
-    .hero-outcome-grid { gap: 10px; margin-top: 5px; }
-    .hero-outcome-option { padding-top: 5px; font-size: 12px; line-height: 1.36; }
-    .hero-outcome-label { margin-bottom: 2px; font-size: 10.5px; }
-    .hero-outcome-status-icon { width: 13px; height: 13px; }
+    /* The measure OPENS here (283-368px) but the BOX closes (267.2px at the 1214 trough,
+       278.6px at 1024). At 12.5px the 1024 column pushes step 02 to four lines and leaves
+       1.19px of valve — measured. A quarter-point type step and a 4px narrower ordinal
+       column hold it at three lines with 20.80px at 1024 and 9.41px at 1214. */
+    .hero-steps-head { font-size: 24px; }
+    .hero-step-body { font-size: 12.25px; line-height: 1.4; }
+    .hero-step-body b { font-size: 11.25px; }
+    .hero-steps li { grid-template-columns: 30px minmax(0, 1fr); }
   }
   @media (min-width: 821px) and (max-width: 1023px) {
     .hero-tender { --hero-top-split: 58%; --hero-bot-split: 46%; }
     .hero-panel-left,
     .hero-panel-right { background-size: cover; background-position: center 62%; }
+    /* Split is 58/46 and the column narrows to ~256px. Measured 2/4/2 lines here with
+       11.69px of valve at 821 — the step count still reads, the lines just run on. */
+    .hero-steps-head { font-size: 22px; margin-bottom: 11px; }
+    .hero-step-body { font-size: 12px; line-height: 1.38; }
+    .hero-step-body b { font-size: 11px; }
+    .hero-steps { row-gap: 10px; }
+    .hero-steps li { grid-template-columns: 30px minmax(0, 1fr); }
   }
 
   @media (max-width: 820px) {
@@ -357,8 +416,12 @@
     .hero-timer-days .hero-timer-value { font-size: clamp(58px, 17vw, 78px); }
     .hero-timer { align-self: center; margin-bottom: 16px; }
     .hero-cycle-count { margin-top: 10px; }
-    .hero-seal-title { font-size: 19px; }
-    .hero-assurance-primary { --hero-lock-box: 44px; --hero-lock: 48px; gap: 14px; }
+    /* The panel is static and min-height:0 down here, so nothing can clip. Give it room
+       and take the bar to a 48px touch target. */
+    .hero-steps-head { font-size: 28px; }
+    .hero-step-body { font-size: 13.5px; }
+    .hero-steps { row-gap: 13px; }
+    .hero-steps-cta { height: 48px; font-size: 15px; }
   }
 
   /* Search band — sits directly below the hero date */
