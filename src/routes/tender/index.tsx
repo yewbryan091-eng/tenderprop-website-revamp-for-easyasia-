@@ -517,25 +517,13 @@ function TenderListings() {
         {/* SEARCH BAND — sits directly below the hero date */}
         <section className="hero-search-band" aria-labelledby="property-search-title">
           <div className="wrap">
-            {/* "New to e-tender?" — CHOSEN 31 Jul (treatment 2 of 3), set beside the heading
-                at Bryan's request. Type, never a filled block: the maroon card this replaced
-                read as an ad wherever it was placed, because a saturated block is the loudest
-                object on a flat cream page. The 2px rule gives the line an edge to sit against
-                so it reads as part of the masthead, not a stray link. */}
+            {/* The "New to e-tender? See how it works" line lived here from 31 Jul. Removed
+                4 Aug (Bryan): the hero's right panel now carries that job as its whole purpose,
+                and the two sat about 600px apart pointing at the same page. Two links to one
+                destination inside one screen is not emphasis, it is a split signal — the panel
+                is the one that gets to be loud. */}
             <div className="search-intro">
               <h2 id="property-search-title">Find a property <span className="hl">open for e-tender</span></h2>
-              {/* The question is NOT inside the anchor. Only "See how it works" looks
-                  clickable, so only it may be clickable — a hit area larger than its
-                  affordance means a click that looks inert navigates the page. */}
-              <p className="howto-line">
-                <b>New to e-tender?</b>
-                <a className="howto-link" href="/how-e-tender-works" aria-label="See how e-tender works">
-                  See how it works
-                  <svg className="howto-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M5 12h13M13 6l6 6-6 6" />
-                  </svg>
-                </a>
-              </p>
             </div>
             <form
               className="search-form"

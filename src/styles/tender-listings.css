@@ -363,9 +363,12 @@
 
   /* Search band — sits directly below the hero date */
   .hero-search-band { background: var(--paper-deep); border-bottom: 1px solid var(--line); padding: clamp(34px, 5vw, 52px) 0 22px; }
-  /* Heading and the "New to e-tender?" line share a baseline, side by side. */
-  .hero-search-band .search-intro { --head-size: clamp(30px, 4vw, 46px); display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 22px; margin-bottom: 22px; }
-  .hero-search-band .search-intro h2 { flex: 0 1 auto; max-width: 760px; margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-weight: 600; font-size: var(--head-size); line-height: 1.08; letter-spacing: -.015em; color: var(--ink); }
+  /* One heading, nothing beside it. This was a baseline-aligned flex row carrying the
+     "New to e-tender?" line until 4 Aug, when that line moved into the hero's right panel.
+     With a single child the flex row, its gap, its wrap guard and the 1200px breakpoint that
+     unwrapped it were all doing nothing, so they came out with it. */
+  .hero-search-band .search-intro { --head-size: clamp(30px, 4vw, 46px); margin-bottom: 22px; }
+  .hero-search-band .search-intro h2 { max-width: 760px; margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-weight: 600; font-size: var(--head-size); line-height: 1.08; letter-spacing: -.015em; color: var(--ink); }
   .hero-search-band .search-intro h2 .hl { color: var(--burgundy); font-style: italic; }
   .search-form { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--burgundy); border-radius: 12px; padding: 18px 18px 20px; box-shadow: 0 1px 2px rgba(23,19,15,.03); }
   .search-bar { display: grid; grid-template-columns: minmax(0,5fr) minmax(0,2fr) minmax(0,1.6fr); gap: 12px; align-items: end; }
@@ -443,22 +446,8 @@
     .property-filter-field.is-built-up,
     .property-filter-field.is-land-area { grid-column: span 1; }
   }
-  /* MEASURED, not guessed: heading + rule + line need 1080px of content box at the
-     heading's 46px cap, and the band carries 80px of padding — so the row stops fitting
-     at a 1160px viewport. The breakpoint sits at 1200px for 40px of slack.
-     Below it the line drops to its own row and the rule goes with it, or it reads as a
-     blockquote under the heading. The layout change and the rule removal MUST share one
-     breakpoint: left to flex-wrap alone, the line would wrap while the rule was still
-     shown, which looks like a render glitch. `flex-wrap: wrap` stays only as an
-     overflow guard. **If the heading or link copy changes, re-measure this number.** */
-  @media(max-width: 1200px) {
-    .hero-search-band .search-intro { display: block; }
-    .hero-search-band .search-intro .howto-line { margin-top: 12px; }
-    .hero-search-band .search-intro .howto-line::before { display: none; }
-  }
   @media(max-width: 640px) {
     .hero-search-band .search-intro { margin-bottom: 18px; }
-    .hero-search-band .search-intro .howto-link { font-size: 15px; }
     .search-form { padding: 14px; }
     .search-bar { grid-template-columns: 1fr; }
     .search-actions { grid-column: auto; }
@@ -1204,55 +1193,3 @@
   /* Diagonal is gone below this; centre it with the rest of the stacked panel. */
 }
 
-/* ══ "NEW TO E-TENDER?" — beside the search heading ══════════════════════════════════
-   CHOSEN 31 Jul (treatment 2 of 3). Bryan asked for it close to the title: at the far
-   right of the row it had no relationship to the heading and read as a stray link.
-   Type, never a filled block — the maroon card this replaced read as an ad wherever it
-   was placed, because a saturated block is the loudest object on a flat cream page. */
-.howto-line {
-  flex: none; margin: 0;
-  /* Centred on the rule, NOT baseline-aligned to the heading. Against 46px type a 17px
-     line sitting on the shared baseline hangs at the foot of the rule and reads as
-     sinking; past roughly a 2:1 size ratio, optical centring beats baseline alignment.
-     The rule itself still ends on the heading's baseline — see ::before. */
-  display: inline-flex; align-items: center;
-  font-size: 17px; line-height: 1.3;
-}
-/* The rule is a flex item, not a border. An empty block flex item baseline-aligns on its
-   BOTTOM edge, so the rule ends exactly on the shared baseline and rises to the heading's
-   cap height — derived from --head-size so it tracks the clamp instead of being a guessed
-   pixel value. As a border it sagged 16px below the cap and stopped short of the baseline. */
-.howto-line::before {
-  content: ""; flex: none; width: 2px; height: calc(var(--head-size) * .72);
-  margin-right: 20px;
-  background: color-mix(in srgb, var(--burgundy) 55%, transparent);
-  transition: background .16s ease;
-}
-/* The rule belongs to the link even though it is not inside it, so it answers the link's
-   hover — the divider and the link read as one object. */
-.howto-line:has(.howto-link:hover)::before { background: var(--burgundy); }
-.howto-line b { flex: none; margin-right: 8px; font-weight: 600; color: var(--ink); }
-
-/* Underlined AND burgundy AND arrowed: colour alone is never a link affordance, and the
-   underline is what makes it read as clickable at a glance without going blue, which
-   would be the only non-brand colour on the page. */
-.howto-link {
-  display: inline-flex; align-items: center; gap: 7px;
-  color: var(--burgundy); font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 4px; text-decoration-thickness: 1.5px;
-  text-decoration-color: color-mix(in srgb, var(--burgundy) 55%, transparent);
-  transition: text-decoration-color .16s ease;
-}
-.howto-link:hover { text-decoration-color: var(--burgundy); }
-.howto-link:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 4px; border-radius: 3px; }
-.howto-arrow {
-  /* The path starts at x=5 of a 24 viewBox, so the glyph carries ~3px of its own left
-     padding — pulled back so the optical gap matches the 7px metric one. */
-  flex: none; width: 16px; height: 16px; margin-left: -3px;
-  fill: none; stroke: var(--burgundy);
-  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
-  transition: transform .16s ease;
-}
-.howto-link:hover .howto-arrow { transform: translateX(3px); }
-@media (prefers-reduced-motion: reduce) { .howto-line *, .howto-line::before { transition: none; } }
