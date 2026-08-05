@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **PLANNING — nothing built.** Loop infrastructure created; homepage inspected. Surface 1 (header + hero) blocked on 4 founder questions in `loop/iteration-state.md` §2. **Codex is READ-ONLY on the homepage for the duration of this loop** — audits go to `loop/reviews/`, nothing else |
+| **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **ITERATION 01 BUILT — awaiting Codex audit.** Surface 1 (header + hero) rebuilt; self-score 83/100, zero P0. **Codex: audit next, using `loop/codex-auditor-prompt.md` → `loop/reviews/iter-01-codex.md`. READ-ONLY on the homepage — do not edit `src/routes/index.tsx` or `src/styles/home.css`** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
@@ -75,6 +75,40 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 5 Aug 2026 — Claude · Homepage ITERATION 01 built: header + hero. **Codex, you are up**
+
+Bryan settled the four hero questions (`loop/iteration-state.md` §2) and Surface 1 is built.
+Self-score **83/100, zero P0**, all regression guards pass. **Audit it** with
+`loop/codex-auditor-prompt.md` and write to `loop/reviews/iter-01-codex.md` only.
+
+**What it is.** A 55/45 hero on the cream ground, no slab. Left: eyebrow, Newsreader headline,
+one lede, one red CTA into `/tender`, seller route as a quiet ink link. Right: the cycle as a
+document — day count, closing date, and a native table of the **five real listings** in the
+12 Dec cycle against their reserve guides. `/` no longer uses `PageShell`, so this loop never
+enters a file the other eight routes depend on.
+
+**Q3 answered with evidence, and it failed:** `/tender` has **no** `validateSearch` / `useSearch`
+/ `URLSearchParams` — its search is local `useState`. A homepage search box would submit a query
+`/tender` ignores, so the box is out. Restoring it is work on `/tender`, not on the hero.
+
+**Two shared-file things I flagged rather than touched** — both are yours to agree or disagree with:
+1. **`SiteHeader` is 252px tall at 375px**, 38% of a phone viewport before the hero starts. Same
+   header as the week-4 P0 in `PLAN-AUGUST-DELIVERY.md` §4.
+2. **`.btn.red:hover` in `tender-listings.css`** carries `box-shadow: 0 4px 12px rgba(200,40,28,.2)`
+   plus a lift, against a brand rule that caps shadow at `0 1px 2px rgba(23,19,15,.03)`.
+
+Plus: the **root meta description** says *"Sealed-bid property tenders"* — bare "tender" breaks
+§3c and "sealed-bid" is auction vocabulary — and **`/tender` has no `<h1>` at all**, which my
+primary CTA now lands on.
+
+**One shared file I DID edit, small and announced:** removed the dead `.home-doors` / `.door` /
+`.cycle-line` rules from `site-shell.css` (25 lines). Zero hits across `src/` after the homepage
+stopped using them; brace balance verified before and after.
+
+**My own top fault, unfixed on purpose:** 127px of dead space under the statement column at
+desktop (139px at 1024). Three fixes are available and each costs something, so I left it for the
+judge rather than picking one and defending it.
 
 ### 5 Aug 2026 — Claude · 🔁 HOMEPAGE LOOP ENGINEERING started. Codex: read this before your next task
 

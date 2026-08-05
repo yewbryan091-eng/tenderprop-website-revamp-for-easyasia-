@@ -1,0 +1,183 @@
+/* ── HOMEPAGE ─────────────────────────────────────────────────────────────────
+   Owned by `/` alone. Tokens, `.wrap`, header/footer chrome and `.btn` come from
+   tender-listings.css; nothing here is shared with another route, so the homepage
+   loop never edits a file that eight other pages depend on.
+
+   ITERATION 01 — Surface 1, header + hero. Founder decisions in
+   loop/iteration-state.md §2. Composed from the existing vocabulary (cream ground,
+   Newsreader display, Inter UI, one red action, hairline rules, 14px card radius)
+   in a NEW shape — not /tender's diagonal split.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Sticky-footer skeleton, so a short first-viewport-only page does not float the
+   footer up the screen while the lower surfaces are still unbuilt. */
+.home { min-height: 100vh; display: flex; flex-direction: column; }
+.home main { flex: 1; }
+
+/* ── The hero band ─────────────────────────────────────────────────────────────
+   Sits directly on the page ground (--paper). No slab, no scrim, no full-bleed
+   saturated block: on a restrained cream page prominence comes from position and
+   whitespace, and a filled block reads as an ad wherever it is put
+   (DESIGN-SYSTEM §7, row 1 — "i dont like it, its ugly placement"). */
+.hp-hero { padding: clamp(38px, 5.4vw, 72px) 0 clamp(44px, 6vw, 80px); }
+
+/* 55/45. minmax(0,·) on both tracks so a long property name overflows visibly
+   inside its own cell instead of widening the grid and taking the page with it. */
+.hp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+/* ── LEFT: the statement ───────────────────────────────────────────────────── */
+
+.hp-kick {
+  margin: 0 0 12px;
+  font-size: 11.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--burgundy);
+}
+
+/* Overrides the global `h1 { font-weight: 800 }` — Newsreader only loads 400–700, and
+   asking for 800 makes the browser synthesise a muddy fake bold (DESIGN-SYSTEM §2).
+   600 is the house weight. */
+.hp-say h1 {
+  margin: 0 0 16px;
+  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-weight: 600; font-size: clamp(31px, 4.1vw, 52px);
+  line-height: 1.06; letter-spacing: -.015em;
+}
+.hp-say h1 em { font-style: italic; color: var(--burgundy); }
+
+/* No `max-width` in ch: the column is already 55% of a 1100px content width, which
+   puts this at ~72 characters at its largest — inside the ~75 readable ceiling. Left
+   uncapped on purpose so the lede's RIGHT edge lands on the column edge shared by the
+   headline and the action block, rather than inventing a fourth boundary. */
+.hp-lede {
+  margin: 0;
+  font-size: clamp(15px, 1.55vw, 17.5px); line-height: 1.6; color: var(--muted);
+}
+
+/* ONE mechanism makes this gap. A flex column with a single `gap` and zeroed child
+   margins means the 16px between the button and the seller line is 16px — an
+   inline-block button plus a margin plus the parent's line-height is how a declared
+   6px rendered as 21px on the Apply block (AGENTS.md, spacing). */
+.hp-act {
+  margin-top: clamp(22px, 2.8vw, 30px);
+  display: flex; flex-direction: column; align-items: flex-start; gap: 16px;
+}
+
+/* Q4: secondary, and quiet. The anchor is INK with a hairline, not burgundy — the
+   red CTA is the only accent in this zone, and a burgundy link beside it would put
+   two accents in one block. Burgundy arrives on hover, where it reads as response. */
+.hp-seller { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.hp-seller a {
+  color: var(--ink); font-weight: 600; text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 32%, transparent);
+  transition: color .15s ease, border-color .15s ease;
+}
+.hp-seller a:hover { color: var(--burgundy); border-bottom-color: var(--burgundy); }
+
+/* ── RIGHT: the cycle, as a document ───────────────────────────────────────────
+   White card on cream. It reads as a record of a real event — deadline, then the
+   properties in it — which is the proof a stranger needs and the framing the whole
+   site depends on: a cycle, never a catalogue (PLAN-site-architecture §1). */
+.hp-cycle {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: clamp(20px, 2.2vw, 28px);
+  box-shadow: 0 1px 2px rgba(23, 19, 15, .03);
+}
+
+.hp-cycle-kick {
+  margin: 0 0 10px;
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--burgundy);
+}
+
+/* Baseline-aligned row, left-aligned: the numeral and its unit are one unit, and
+   nothing here is centred — centring a figure with its unit is what put "134 DAYS
+   LEFT" 53px off the axis everything else shared (DESIGN-SYSTEM §5). */
+.hp-cycle-count { margin: 0; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+/* Sized to stay SUBORDINATE to the headline at every width, which the first build got
+   wrong: 50px against a 52px h1 on desktop is not a designed relationship, and at 375px
+   a 40px numeral under a 31px headline inverted the hierarchy outright. This clamp holds
+   the numeral at ~0.85 of the h1 from 375 to 1440 — clearly second, still the anchor of
+   its own column. */
+.hp-cycle-n {
+  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-weight: 600; font-size: clamp(30px, 3.3vw, 44px); line-height: 1;
+  letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.hp-cycle-u {
+  font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hp-cycle-date { margin: 10px 0 0; font-size: 13.5px; color: var(--muted); }
+.hp-cycle-date b { color: var(--ink); font-weight: 600; }
+/* Real superscript for the ordinal, matching the treatment Bryan chose for the
+   /tender hero's closing date (TEAM-LOG, 29 Jul). */
+.hp-cycle-date sup { font-size: .6em; vertical-align: super; letter-spacing: 0; }
+
+/* A native table because this IS tabular — property against reserve. Same reasoning
+   as the comparable-evidence ledger on the detail page (DESIGN-SYSTEM §4). */
+.hp-cycle-table { width: 100%; border-collapse: collapse; margin-top: 18px; }
+.hp-cycle-table th,
+.hp-cycle-table td {
+  text-align: left; padding: 9px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 62%, transparent);
+}
+.hp-cycle-table thead th {
+  padding: 0 0 7px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--muted);
+}
+.hp-cycle-table thead th:last-child,
+.hp-cycle-table tbody td { text-align: right; }
+.hp-cycle-table tbody th { font-weight: 400; padding-right: 14px; }
+.hp-cycle-table tbody th .n { display: block; font-size: 14px; font-weight: 600; color: var(--ink); }
+.hp-cycle-table tbody th .a { display: block; margin-top: 1px; font-size: 12px; color: var(--muted); }
+/* nowrap so a squeezed column fails as a VISIBLE overflow rather than silently
+   wrapping a price onto two lines (AGENTS.md, spacing). vertical-align: top keeps
+   the figure on the property's first line, not floating against its area. */
+.hp-cycle-table tbody td {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  font-variant-numeric: tabular-nums; white-space: nowrap; vertical-align: top;
+}
+.hp-cycle-table tbody tr:last-child th,
+.hp-cycle-table tbody tr:last-child td { border-bottom: 0; padding-bottom: 0; }
+
+.hp-cycle-foot { margin: 14px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+
+/* ── Focus. Not optional (DESIGN-SYSTEM §6). ──────────────────────────────── */
+.hp-say a:focus-visible,
+.hp-cycle a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+
+/* ── Responsive ────────────────────────────────────────────────────────────────
+   Collapses at 920px: below that, 45% of the content width cannot hold a property
+   name and a reserve figure on one row, and 55% cannot hold a 40px headline. The
+   card follows the statement rather than leading it — the deadline only means
+   something once you know what an E-Tender is. */
+@media (max-width: 920px) {
+  /* minmax(0, 1fr), NEVER a bare 1fr. A bare `1fr` carries an implicit `min-width: auto`,
+     so the column cannot shrink below its content's min-content width — and this card
+     contains a nowrap price cell and "Single Storey Landed @ OUG". At 375px that pushed
+     the single column past the viewport and took the whole left column with it, because
+     both sit in the same track. Caught in the render at 375, not in the code. */
+  .hp-grid { grid-template-columns: minmax(0, 1fr); gap: clamp(26px, 5vw, 34px); }
+  .hp-hero { padding-top: clamp(30px, 5vw, 44px); }
+}
+
+@media (max-width: 460px) {
+  .hp-cycle-table tbody th { padding-right: 10px; }
+  .hp-cycle-table tbody th .n { font-size: 13.5px; }
+  .hp-cycle-table tbody td { font-size: 13.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home .btn,
+  .hp-seller a { transition: none; }
+  .home .btn.red:hover { transform: none; }
+}

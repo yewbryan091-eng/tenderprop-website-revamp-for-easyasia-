@@ -20,8 +20,6 @@
 .shell-hero .cta-row .btn.red:hover { background: #A81F15; }
 .shell-hero .cta-row .btn.ghost { border-color: var(--ink); color: var(--ink); }
 .shell-hero .cta-row .btn.ghost:hover { background: var(--ink); color: var(--paper); }
-.shell-hero .cycle-line { margin-top: 18px; font-size: 13.5px; color: var(--muted); }
-.shell-hero .cycle-line b { color: var(--ink); font-variant-numeric: tabular-nums; }
 
 /* The planned rooms of a page, visible as structure. Honest about being a frame. */
 .shell-frames { padding-bottom: clamp(40px, 7vh, 72px); }
@@ -52,29 +50,11 @@
   letter-spacing: .06em; text-transform: uppercase; color: var(--warn, #9A6A00);
 }
 
-/* Homepage product doors */
-.home-doors { padding: clamp(10px, 2vh, 20px) 0 clamp(36px, 6vh, 60px); }
-.home-doors .doors { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 720px) { .home-doors .doors { grid-template-columns: 1fr; } }
-.door {
-  display: block; text-decoration: none; color: var(--ink);
-  border: 1px solid var(--line); border-radius: 14px; background: var(--card);
-  padding: clamp(20px, 3vw, 30px); transition: border-color .15s, transform .15s;
-}
-.door:hover { border-color: var(--burgundy); transform: translateY(-2px); }
-.door .k { font-size: 11px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: var(--muted); }
-.door h2 {
-  margin: 8px 0 8px; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-weight: 600; font-size: clamp(22px, 2.6vw, 30px); letter-spacing: -.015em;
-}
-.door p { margin: 0 0 14px; color: var(--muted); font-size: 14px; line-height: 1.55; }
-.door .go { font-weight: 700; font-size: 13.5px; color: var(--burgundy); }
-.door.is-live .k::after {
-  content: "LIVE"; margin-left: 8px; color: var(--good);
-  background: color-mix(in srgb, var(--good) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--good) 30%, transparent);
-  padding: 2px 7px; border-radius: 999px; font-size: 9.5px;
-}
+/* The homepage's product doors and cycle line lived here until 5 Aug 2026. The
+   homepage now owns its own composition in src/styles/home.css and no longer uses
+   PageShell, so those rules were dead: `.door`, `.doors`, `.home-doors` and
+   `.cycle-line` return zero hits across src/. Removed rather than left behind —
+   dead CSS naming a component that no longer exists is what the next agent trips on. */
 
 /* Sticky-footer page skeleton so short framed pages don't float the footer mid-screen */
 .page-shell { min-height: 100vh; display: flex; flex-direction: column; }

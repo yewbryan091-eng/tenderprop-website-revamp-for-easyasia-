@@ -149,4 +149,4 @@ automatically a **P0** — see `loop/regression-guards.md` §3.
 
 | Iter | Surface | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | Total | Δ | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| — | Header + hero | — | — | — | — | — | — | — | — | — | — | — | not built |
+| 01 | Header + hero | 17 | 12 | 12 | 9 | 10 | 7 | 7 | 5 | 4 | **83** | — | Claude self-score, pre-audit |
