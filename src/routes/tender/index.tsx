@@ -487,27 +487,36 @@ function TenderListings() {
                 <span>E-Tender in</span>
                 <span><em>3 simple steps.</em></span>
               </h2>
+              {/* Stacked heads, not run-in (Bryan, 4 Aug). The "01 — " is a CSS counter on the
+                  head, so the ordinal is still never DOM text and a screen reader hears the
+                  list once rather than "oh-one" twice. Dropping the hanging gutter hands the
+                  whole 372px column back to the sentences, which is what pays for the extra
+                  three head lines. */}
               <ol className="hero-steps" aria-label="How E-Tender works, in three steps">
                 <li>
+                  <p className="hero-step-head">Find</p>
                   <p className="hero-step-body">
-                    <b>Find</b>Browse the properties open for E-Tender.
+                    Browse properties open for E-Tender and choose one you&rsquo;re interested in.
                   </p>
                 </li>
                 <li>
+                  <p className="hero-step-head">Offer</p>
                   <p className="hero-step-body">
-                    <b>Offer</b>Sign in and submit your price, with a 3% deposit on it &mdash; part of
-                    your 10% down payment, returned in full if your offer isn&rsquo;t accepted.
+                    Submit your price privately before the E-Tender closes.
                   </p>
                 </li>
                 <li>
+                  <p className="hero-step-head">Connect</p>
                   <p className="hero-step-body">
-                    <b>Connect</b>Our licensed agent contacts you and takes your offer forward.
+                    Our team follows up with you on viewing, your offer and the next steps.
                   </p>
                 </li>
               </ol>
               <a className="hero-steps-cta" href="/how-e-tender-works">
-                <span>See how E-Tender works</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+                <span className="hero-steps-cta-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+                </span>
+                <span className="hero-steps-cta-label">See how E-Tender works</span>
               </a>
             </div>
           </div>

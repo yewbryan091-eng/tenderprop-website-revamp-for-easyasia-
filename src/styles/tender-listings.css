@@ -223,7 +223,7 @@
   /* line-height MUST be declared: it inherits 1.6 from body, silently spending 17.6px
      where 11px is needed — 6.6px of a 281.6px budget. */
   .hero-panel-right .hero-eyebrow {
-    margin: 0 0 9px;
+    margin: 0 0 6px;
     font-size: clamp(11px, calc(11px + (100vw - 1280px) * .0085), 13.5px); font-weight: 800; line-height: 1;
     letter-spacing: .16em; text-transform: uppercase; color: var(--burgundy);
   }
@@ -232,12 +232,18 @@
      normal deliberately: `balance` makes the line count non-deterministic, and the line
      count is the only thing standing between this panel and a clipped CTA. */
   .hero-steps-head {
-    margin: 0 0 13px;
+    margin: 0 0 11px;
     font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-    font-weight: 500; font-size: clamp(26px, calc(26px + (100vw - 1280px) * .030), 33px); line-height: 1.06;
+    font-weight: 500; font-size: clamp(24px, calc(24px + (100vw - 1280px) * .028), 28px); line-height: 1.06;
     letter-spacing: -.015em; text-wrap: normal; color: var(--ink);
   }
   .hero-steps-head span { display: block; }   /* the break is content, never a wrap */
+  /* Second line starts at the MIDPOINT of the first (Bryan). Measured: "E-Tender in" is
+     4.815em wide, so half is 2.4em — set in em, not px, so the offset tracks the fluid
+     headline instead of drifting as the type scales. At 1470 that puts the indented line's
+     right edge at 252.4px inside a 372.1px column, so it cannot wrap; the tightest band
+     (821px) still clears by ~80px. */
+  .hero-steps-head span + span { margin-left: 2.4em; }
   .hero-steps-head em { font-style: italic; font-weight: inherit; color: var(--burgundy); }
 
   /* NO icon circles, no connector, no rules, no spine. A 56px circle per step costs 168px
@@ -250,7 +256,7 @@
     margin: 0 0 10px;          /* 10px is the hard floor of the CTA gap */
     padding: 0;
     counter-reset: tpstep;
-    display: grid; row-gap: clamp(11px, calc(11px + (100vw - 1280px) * .012), 13px);
+    display: grid; row-gap: clamp(9px, calc(9px + (100vw - 1280px) * .010), 10.5px);
   }
   .hero-steps li {
     counter-increment: tpstep;
@@ -265,6 +271,24 @@
     font-size: clamp(16px, calc(16px + (100vw - 1280px) * .016), 20px); line-height: 1; font-variant-numeric: tabular-nums;
     color: var(--burgundy);
   }
+  /* Sentence case, not uppercase, and it keeps the size it fell into by inheritance because
+     that is the render Bryan approved — pinned explicitly so it cannot drift. line-height is
+     the whole fix: unset it inherits 1.6 from body (25.6px on a 16px face). */
+  .hero-step-head {
+    grid-column: 2; margin: 0;
+    /* NEWSREADER, not Inter. The app loads Inter's weight axis only — no italic face
+       (__root.tsx:100) — so font-style:italic on Inter gets a synthetic oblique: a mechanically
+       slanted roman, which is visibly crude at bold. Newsreader ships its italic axis in the
+       same request we already make, it is a TRUE italic, and it is the face of the 01/02/03
+       sitting immediately to the left and of "3 simple steps." above — so the head now ties to
+       both instead of introducing a third voice.
+       Bumped ~1.5px against the Inter size it replaces: at a shared point size a serif reads
+       smaller than a sans, because the x-height is lower. */
+    font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+    font-size: clamp(15px, calc(15px + (100vw - 1280px) * .008), 17px);
+    font-weight: 600; font-style: italic; line-height: 1.25; letter-spacing: -.005em; color: var(--ink);
+  }
+
   /* --ink, NOT --muted. MEASURED: this panel is a .84 paper wash over a photograph, so the
      composited background bottoms out near #D2CDC9, where --muted reads 3.35:1 — a live AA
      failure the outgoing `.hero-assurance p` was already shipping. --ink holds 11.60:1 at
@@ -272,16 +296,8 @@
      "these are the promises, they should not whisper". */
   .hero-step-body {
     grid-column: 2; margin: 0;
-    font-size: clamp(12.5px, calc(12.5px + (100vw - 1280px) * .0095), 15px); font-weight: 400; line-height: 1.42;
+    font-size: clamp(12.5px, calc(12.5px + (100vw - 1280px) * .0095), 15px); font-weight: 400; line-height: 1.38;
     color: var(--ink); hyphens: none;
-  }
-  /* Run-in, not stacked. Stacking costs one line box per step — 3 x 17.5 = 52.5px, a whole
-     headline — and that single decision is the difference between fitting and not. Set 1px
-     under the body as optical caps correction, not as hierarchy. */
-  .hero-step-body b {
-    margin-right: clamp(8px, calc(8px + (100vw - 1280px) * .006), 10.5px);
-    font-size: clamp(11.5px, calc(11.5px + (100vw - 1280px) * .009), 14px); font-weight: 800;
-    letter-spacing: .07em; text-transform: uppercase; color: var(--ink);
   }
 
   /* A saturated fill is CORRECT here, by the founder's own rule (ResidensiSinaranDetail.tsx
@@ -298,26 +314,44 @@
        visible hole under the steps — the block reads as one object or it reads as two. Slack
        is now absorbed by the parent's justify-content:center as PADDING, above and below the
        whole block, where it is invisible. */
-    margin-top: clamp(14px, calc(14px + (100vw - 1280px) * .022), 24px);
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    height: clamp(40px, calc(40px + (100vw - 1280px) * .032), 48px); padding: 0 clamp(18px, 1.4vw, 24px);
+    margin-top: clamp(11px, calc(11px + (100vw - 1280px) * .015), 17px);
+    /* Icon circle LEFT, label after it — the treatment Bryan picked. Rounded, not square:
+       the circle needs a radius to belong to, and a hard-cornered bar around a round badge
+       reads as two unrelated shapes. */
+    display: flex; align-items: center; justify-content: flex-start;
+    gap: clamp(13px, calc(13px + (100vw - 1280px) * .012), 16px);
+    height: clamp(40px, calc(40px + (100vw - 1280px) * .032), 48px);
+    padding-left: clamp(7px, calc(7px + (100vw - 1280px) * .006), 9px);
+    padding-right: clamp(18px, 1.4vw, 24px);
+    border-radius: 10px;
     background: var(--burgundy); color: #fff;
     font-size: clamp(14px, calc(14px + (100vw - 1280px) * .012), 17px); font-weight: 700; line-height: 1; letter-spacing: .01em;
-    text-decoration: none; border-radius: 0;
+    text-decoration: none;
     transition: background .16s ease;
   }
   .hero-steps-cta:hover { background: color-mix(in srgb, var(--burgundy) 86%, #fff); }
   .hero-steps-cta:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 3px; }
-  .hero-steps-cta svg {
-    flex: none; width: clamp(16px, calc(16px + (100vw - 1280px) * .014), 20px);
-    height: clamp(16px, calc(16px + (100vw - 1280px) * .014), 20px);
-    fill: none; stroke: #fff; stroke-width: 2.2;
-    stroke-linecap: round; stroke-linejoin: round;
+  /* Paper disc, burgundy arrow — 8.18:1, and it is the only light object inside the fill, so
+     it reads as the button's eye. Sized off the bar's own height so the two clamps stay in
+     step: bar 40->48px, disc 31->38px, a constant ~10px of burgundy around it. */
+  .hero-steps-cta-icon {
+    flex: none; display: grid; place-items: center;
+    width: clamp(31px, calc(31px + (100vw - 1280px) * .028), 38px);
+    height: clamp(31px, calc(31px + (100vw - 1280px) * .028), 38px);
+    border-radius: 50%; background: var(--paper);
     transition: transform .16s ease;
   }
-  .hero-steps-cta:hover svg { transform: translateX(3px); }
+  .hero-steps-cta-icon svg {
+    width: 54%; height: 54%;
+    fill: none; stroke: var(--burgundy); stroke-width: 2.3;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .hero-steps-cta-label { min-width: 0; }
+  /* The disc travels, not the glyph — moving a 20px arrow inside a static circle reads as a
+     rattle; moving the whole badge reads as the button leaning forward. */
+  .hero-steps-cta:hover .hero-steps-cta-icon { transform: translateX(3px); }
   @media (prefers-reduced-motion: reduce) {
-    .hero-steps-cta, .hero-steps-cta svg { transition: none; }
+    .hero-steps-cta, .hero-steps-cta-icon { transition: none; }
   }
 
   /* Plain block. The inner used to be a full-height flex column so margin-top:auto could
@@ -333,8 +367,8 @@
      the left panel keeps its own padding and its own rhythm. */
   @media (min-width: 821px) {
     .hero-panel-right {
-      padding-top: clamp(24px, 3vw, 40px);
-      padding-bottom: clamp(24px, 3vw, 40px);
+      padding-top: clamp(18px, 1.7vw, 24px);
+      padding-bottom: clamp(18px, 1.7vw, 24px);
     }
   }
 
@@ -347,6 +381,7 @@
     .hero-panel-right { background-size: cover; background-position: center 20%; }
 
     .hero-panel-right { padding-right: clamp(18px, 3.2vw, 44px); }
+    .hero-panel-right { padding-top: clamp(18px, 1.7vw, 24px); padding-bottom: clamp(18px, 1.7vw, 24px); }
 
     /* THE WEDGE. Measured live: the panel's clip edge runs 892.5px at y=0 to 740.7px at
        y=358.4 — 151.8px of travel, a 22.9 degree lean. The flat 917.125px padding-left is
@@ -388,9 +423,10 @@
        278.6px at 1024). At 12.5px the 1024 column pushes step 02 to four lines and leaves
        1.19px of valve — measured. A quarter-point type step and a 4px narrower ordinal
        column hold it at three lines with 20.80px at 1024 and 9.41px at 1214. */
-    .hero-steps-head { font-size: 24px; }
-    .hero-step-body { font-size: 12.25px; line-height: 1.4; }
-    .hero-step-body b { font-size: 11.25px; }
+    .hero-steps-head { font-size: 22px; }
+    .hero-step-head { font-size: 14.5px; }
+    .hero-step-body { font-size: 12.25px; line-height: 1.38; }
+    .hero-steps { row-gap: 8px; }
     .hero-steps li { grid-template-columns: 30px minmax(0, 1fr); }
   }
   @media (min-width: 821px) and (max-width: 1023px) {
@@ -399,10 +435,10 @@
     .hero-panel-right { background-size: cover; background-position: center 62%; }
     /* Split is 58/46 and the column narrows to ~256px. Measured 2/4/2 lines here with
        11.69px of valve at 821 — the step count still reads, the lines just run on. */
-    .hero-steps-head { font-size: 22px; margin-bottom: 11px; }
+    .hero-steps-head { font-size: 21px; margin-bottom: 10px; }
+    .hero-step-head { font-size: 14px; }
     .hero-step-body { font-size: 12px; line-height: 1.38; }
-    .hero-step-body b { font-size: 11px; }
-    .hero-steps { row-gap: 10px; }
+    .hero-steps { row-gap: 8px; }
     .hero-steps li { grid-template-columns: 30px minmax(0, 1fr); }
   }
 
@@ -429,6 +465,7 @@
     /* The panel is static and min-height:0 down here, so nothing can clip. Give it room
        and take the bar to a 48px touch target. */
     .hero-steps-head { font-size: 28px; }
+    .hero-step-head { font-size: 17px; }
     .hero-step-body { font-size: 13.5px; }
     .hero-steps { row-gap: 13px; }
     .hero-steps-cta { height: 48px; font-size: 15px; }
