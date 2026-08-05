@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **ITERATION 03 — NEW ARCHITECTURE from Bryan's reference.** Diagonal 45/55, "The smarter way to buy property.", maroon fade over a KL image. Structure pass only; **hero image is a placeholder** pending Bryan. Supersedes the 55/45 card of 01–02. **READ-ONLY on the homepage — do not edit `src/routes/index.tsx` or `src/styles/home.css`** |
-| Tender listings page — **card rebuild to Bryan's Buyer-POV reference, 6 Aug** | `PropertyCard.tsx`, card + list-mode rules in `tender-listings.css` | **Claude** | 6 Aug | Rebuilding the card to Bryan's annotated reference: price leads under image, address + built-up return, STARTS/CLOSES period band, solid maroon CTA |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | **Card rebuilt to Bryan's Buyer-POV reference 6 Aug** (`7b672de`), then 3 audit P1s fixed (`8992354`): list-mode price/title inversion, per-row CTA baselines, the period→agent seam minimum |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
