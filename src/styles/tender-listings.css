@@ -223,8 +223,8 @@
   /* line-height MUST be declared: it inherits 1.6 from body, silently spending 17.6px
      where 11px is needed — 6.6px of a 281.6px budget. */
   .hero-panel-right .hero-eyebrow {
-    margin: 0 0 8px;
-    font-size: 11px; font-weight: 800; line-height: 1;
+    margin: 0 0 9px;
+    font-size: clamp(11px, calc(11px + (100vw - 1280px) * .0085), 13.5px); font-weight: 800; line-height: 1;
     letter-spacing: .16em; text-transform: uppercase; color: var(--burgundy);
   }
 
@@ -234,7 +234,7 @@
   .hero-steps-head {
     margin: 0 0 13px;
     font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-    font-weight: 500; font-size: 26px; line-height: 1.06;   /* 2 x 27.56 = 55.11 */
+    font-weight: 500; font-size: clamp(26px, calc(26px + (100vw - 1280px) * .030), 33px); line-height: 1.06;
     letter-spacing: -.015em; text-wrap: normal; color: var(--ink);
   }
   .hero-steps-head span { display: block; }   /* the break is content, never a wrap */
@@ -250,7 +250,7 @@
     margin: 0 0 10px;          /* 10px is the hard floor of the CTA gap */
     padding: 0;
     counter-reset: tpstep;
-    display: grid; row-gap: 11px;
+    display: grid; row-gap: clamp(11px, calc(11px + (100vw - 1280px) * .012), 13px);
   }
   .hero-steps li {
     counter-increment: tpstep;
@@ -262,7 +262,7 @@
   .hero-steps li::before {
     content: counter(tpstep, decimal-leading-zero);
     font-family: "Newsreader", Georgia, serif; font-weight: 500;
-    font-size: 16px; line-height: 1; font-variant-numeric: tabular-nums;
+    font-size: clamp(16px, calc(16px + (100vw - 1280px) * .016), 20px); line-height: 1; font-variant-numeric: tabular-nums;
     color: var(--burgundy);
   }
   /* --ink, NOT --muted. MEASURED: this panel is a .84 paper wash over a photograph, so the
@@ -272,15 +272,15 @@
      "these are the promises, they should not whisper". */
   .hero-step-body {
     grid-column: 2; margin: 0;
-    font-size: 12.5px; font-weight: 400; line-height: 1.4;   /* 17.50px per line */
+    font-size: clamp(12.5px, calc(12.5px + (100vw - 1280px) * .0095), 15px); font-weight: 400; line-height: 1.42;
     color: var(--ink); hyphens: none;
   }
   /* Run-in, not stacked. Stacking costs one line box per step — 3 x 17.5 = 52.5px, a whole
      headline — and that single decision is the difference between fitting and not. Set 1px
      under the body as optical caps correction, not as hierarchy. */
   .hero-step-body b {
-    margin-right: 8px;
-    font-size: 11.5px; font-weight: 800;
+    margin-right: clamp(8px, calc(8px + (100vw - 1280px) * .006), 10.5px);
+    font-size: clamp(11.5px, calc(11.5px + (100vw - 1280px) * .009), 14px); font-weight: 800;
     letter-spacing: .07em; text-transform: uppercase; color: var(--ink);
   }
 
@@ -293,18 +293,24 @@
      the Search button 110px below. Measured clearance from the diagonal at the bar's bottom
      corner is 144.20px, so the two burgundy masses cannot fuse across the seam. */
   .hero-steps-cta {
-    margin-top: auto;                       /* THE VALVE — 17.49px at 1280 */
+    /* Sits directly under step 03, exactly as the reference does. It used to carry
+       margin-top:auto as an overflow valve, which parked it on the panel floor and opened a
+       visible hole under the steps — the block reads as one object or it reads as two. Slack
+       is now absorbed by the parent's justify-content:center as PADDING, above and below the
+       whole block, where it is invisible. */
+    margin-top: clamp(14px, calc(14px + (100vw - 1280px) * .022), 24px);
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    height: 40px; padding: 0 18px;
+    height: clamp(40px, calc(40px + (100vw - 1280px) * .032), 48px); padding: 0 clamp(18px, 1.4vw, 24px);
     background: var(--burgundy); color: #fff;
-    font-size: 14px; font-weight: 700; line-height: 1; letter-spacing: .01em;
+    font-size: clamp(14px, calc(14px + (100vw - 1280px) * .012), 17px); font-weight: 700; line-height: 1; letter-spacing: .01em;
     text-decoration: none; border-radius: 0;
     transition: background .16s ease;
   }
   .hero-steps-cta:hover { background: color-mix(in srgb, var(--burgundy) 86%, #fff); }
   .hero-steps-cta:focus-visible { outline: 2px solid var(--burgundy); outline-offset: 3px; }
   .hero-steps-cta svg {
-    flex: none; width: 16px; height: 16px;
+    flex: none; width: clamp(16px, calc(16px + (100vw - 1280px) * .014), 20px);
+    height: clamp(16px, calc(16px + (100vw - 1280px) * .014), 20px);
     fill: none; stroke: #fff; stroke-width: 2.2;
     stroke-linecap: round; stroke-linejoin: round;
     transition: transform .16s ease;
@@ -314,11 +320,11 @@
     .hero-steps-cta, .hero-steps-cta svg { transition: none; }
   }
 
-  /* flex:1 gives the inner a definite height so margin-top:auto can resolve; it replaces
-     the parent's justify-content:center for this panel, which now manages its whole box. */
-  .hero-panel-right .hero-panel-inner {
-    flex: 1 1 auto; display: flex; flex-direction: column;
-  }
+  /* Plain block. The inner used to be a full-height flex column so margin-top:auto could
+     resolve; with the CTA back under the steps the parent's justify-content:center centres
+     the whole block, which is what puts the leftover height into equal padding top and
+     bottom instead of into one hole above the button. */
+  .hero-panel-right .hero-panel-inner { display: block; }
 
   /* THE 1214px TROUGH — the real global minimum, and no design met it before this.
      min-height floors at 340px there while the BASE padding-block is clamp(28px,3.5vw,48px)
@@ -366,7 +372,11 @@
         calc(100% - clamp(18px, 3.2vw, 44px) - 520px)
       );
     }
-    .hero-panel-right .hero-panel-inner { max-width: none; max-height: 292px; }
+    /* NO max-height. It was capped at 292px to stop margin-top:auto opening a hole at wide
+       viewports; with the valve gone the cap only threw height away — at 1470 the content box
+       is 331.6px and the panel was still rendering a 292px stack at 1280's type sizes. The
+       type scales into that height now instead. */
+    .hero-panel-right .hero-panel-inner { max-width: none; }
   }
   /* 1024–1279px: a safer 60/40 so the right column never crowds. */
   @media (min-width: 1024px) and (max-width: 1279px) {
