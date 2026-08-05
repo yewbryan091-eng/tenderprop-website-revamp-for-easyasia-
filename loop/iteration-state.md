@@ -9,7 +9,11 @@ written under ACCEPTED FIXES.
 Header + hero / first viewport
 
 **STATUS:**
-ITERATION 02 BUILT — awaiting Codex audit. Judge verdict on 01 was **LOOP AGAIN**
+**ITERATION 03 — NEW ARCHITECTURE, structure pass.** Bryan supplied a reference design on
+5 Aug that supersedes the 55/45 card composition of iterations 01–02. Scope this pass was
+deliberately narrow, in his words: *"just build the diagonal left side right side 45/55 first,
+left side ensure theres the smarter way to buy property title and right side ensure theres the
+maroon fading, i will proceed to go find the image."* **The hero image is a placeholder.**
 
 **LOCKED:**
 None
@@ -130,6 +134,25 @@ zero hits across `src/routes/tender/index.tsx`, `src/router.tsx` and `src/routes
 search state is local `useState` only. A homepage search box could submit a query and `/tender`
 would ignore it. **Condition not met ⇒ search removed.** Restoring it is a real piece of work on
 `/tender` (add `validateSearch`, seed state from it), not a hero change.
+
+### 🔴 AMENDMENT — Bryan, 5 Aug 2026, from a supplied reference design
+
+**Q1 and Q2 are superseded.** The hero architecture is now:
+
+| | Decision |
+|---|---|
+| **Composition** | Full-bleed **diagonal** split, **~45 left / ~55 right**. This reverses iterations 01–02's 55/45 and replaces the card with a two-plane hero |
+| **Left, on paper** | The headline **"The smarter way to buy property."** — *buy property.* in burgundy italic |
+| **Right** | A KL image under a **maroon fade**, carrying the cycle |
+| **Image** | ⚠️ **Bryan is sourcing it.** Placeholder wired to `--hp-hero-image` in `home.css` — one value to swap |
+
+Q2 previously said *"do NOT copy /tender's diagonal split verbatim."* That still holds and is not
+violated: this diagonal is **mirrored** — `/tender` darkens the LEFT plane, the homepage darkens
+the RIGHT. Same technique and tokens, opposite composition, so the two pages read as a pair rather
+than a repeat.
+
+**Q3 (no search) and Q4 (seller path secondary, never a second red button) are UNCHANGED and
+still binding.** The reference shows neither; both are carried forward.
 
 ### What Surface 1 must accomplish — Bryan, 5 Aug
 
@@ -313,10 +336,81 @@ about.
 
 ---
 
-## 5. ITERATION HISTORY
+## 5. ITERATION 03 — CLAUDE SELF-CRITIQUE (structure pass)
+
+Screenshots: `loop/screenshots/iter-03-hero-{1440,1280,1024,768,390,375}.png`.
+
+**SCOPE.** Bryan's four requirements only — the diagonal, the 45/55, the title, the maroon fade.
+Not a full surface rebuild, and **not scoreable as one**: the hero image is a placeholder, and the
+image is half of what this composition is.
+
+**BUILT.** Two absolutely positioned planes clipped to a shared seam, driven by `--hp-top-split`
+(48%) and `--hp-bot-split` (40%) — the light plane averages ~45% and leans the way the reference
+does. Same technique as `/tender`'s hero, mirrored. Left carries the pill, the headline, the
+lede, the red CTA, *How E-Tender works*, one assurance line and the seller route. Right carries
+the cycle over the image under the maroon fade.
+
+**One alignment improvement worth keeping:** the hero's content edges are derived from `.wrap`'s
+own formula (`--hp-gutter`), so they land on the **same x as the header, footer and every section
+below**. `/tender`'s hero pads from the viewport instead and sits 114px outside the site's column
+at 1440. This one does not repeat that.
+
+**THREE FAULTS FOUND BY LOOKING, NOT BY READING THE CSS.**
+
+1. 🔴 **The maroon fade was washed out.** `.hp-panel` is `inset: 0`, so the panel's box spans the
+   **whole hero** and only the clip-path makes it a wedge. My gradient ran dense→thin across
+   0–100% of that box, which put the entire dense half in the clipped-away region — the visible
+   wedge got only the thin tail and read as flat mauve over a photo. Stops now start at 55%, so
+   the fade does all its work between the seam and the right edge.
+2. 🔴 **P0 at 390px — the statement panel rendered on maroon.** In the stacked media query I set
+   `.hp-panel { position: static }`. That reparents the fade's absolutely positioned `::before`
+   to `.hp-hero`, stretching the maroon across the **entire** hero: ink-on-maroon body copy, and
+   the burgundy `buy property.` disappeared into the background completely. `position: relative`
+   lays out identically and keeps the overlay scoped. **One keyword, two failures, invisible in
+   the source.**
+3. 🟠 **The headline ran to three lines** at 54px in a 370px column, losing the reference's
+   two-beat break. Capped at 47px with `max-width: 8.2em` — measured in the h1's own em, which is
+   safe here because the measure and the type are the same element and the same face.
+
+**VERIFIED.** Zero horizontal overflow at **1440 / 1280 / 1024 / 768 / 390 / 375**. Every text
+colour passes AA against its plane — lowest is 4.92 (lede on paper) and 4.97 (clock labels on
+burgundy); the day count, date and ghost button sit at 10.54. Build, `eslint` and `tsc` green.
+Braces balanced, no equal-specificity duplicate selectors. All fourteen hard rules pass.
+
+**PROVISIONAL SCORE — not comparable to 01/02.** The rubric measures a finished surface; this is a
+structure pass on a placeholder image. Holding the score until the real image lands rather than
+publishing a number that will move for reasons unrelated to the work.
+
+**DELIBERATELY NOT BUILT FROM THE REFERENCE — each needs a decision.**
+
+| Reference element | Why it is not here |
+|---|---|
+| **"36 properties open"** stat block | 36 is the raw record count and **12 of those are fabricated `demo: true` fillers**. The real number is 24 open, 5 in this cycle. Rendering 36 would ship an invented statistic |
+| **"Verified & regulated · Licensed professionals"** | Agency voice in a marketing zone — the H9 Act 242 split puts that in the footer, About, FAQ and the apply point, never the hero |
+| **DAYS / HRS / MINS / SECS as four equal cells** | The founder ruled that exact treatment out (DESIGN-SYSTEM §3d). Built as the approved compromise instead: day count as headline, H/M/S demoted beneath it and `aria-hidden` — the same ranked pair `/tender` already runs |
+| **Search band** below the hero | Q3 stands: `/tender` still cannot receive a query |
+| **"How E-Tender works" beside the CTA** | It does not fit. At the action row's height the seam is at x≈608 and the button alone ends at 522; adding the link inline pushes to 674 and crosses the diagonal. It sits below instead — see the open question |
+
+**OPEN QUESTIONS FOR THE JUDGE.**
+
+1. **Two CTAs, one destination.** The left red button and the right ghost button both go to
+   `/tender`, as in the reference. Ranked correctly, but redundant. Keep both, or drop the ghost?
+2. **The action row.** Shorten the button to *"Browse open E-Tenders"* so *How E-Tender works* fits
+   beside it as the reference shows, or keep the long label and leave the link below?
+3. **"Malaysia's E-Tender platform"** — the reference reads *"Malaysia's TRUSTED E-Tender
+   platform."* I dropped "trusted": it is an unverifiable claim in a marketing zone on a platform
+   with no completed e-tenders to point at yet. Put it back?
+4. **The image.** Placeholder is the platform KL monochrome. The reference is a warm golden-hour
+   KLCC shot — the fade is tuned for a bright top-right, so a darker image will need the stops
+   re-tuned.
+
+---
+
+## 6. ITERATION HISTORY
 
 | Iter | Surface | Score | Verdict | Notes |
 |---|---|---|---|---|
 | 00 | Header + hero | — | — | Loop infrastructure created; homepage inspected; planning only |
 | 01 | Header + hero | 83 | **LOOP AGAIN** | New 55/45 composition. 0 overflow at 6 widths, guards pass. Judge accepted 5 fixes |
-| 02 | Header + hero | **90** | *awaiting Codex* | Ledger removed, hero rebalanced, 44px target, skip link, flat CTA. **Not a lock — Δ +7, and one P1 deferred** |
+| 02 | Header + hero | 90 | superseded | Ledger removed, hero rebalanced, 44px target, skip link, flat CTA. Never audited — Bryan changed the architecture first |
+| 03 | Header + hero | *held* | *structure pass* | **New architecture from Bryan's reference:** diagonal 45/55, "The smarter way to buy property.", maroon fade. 0 overflow at 6 widths, AA throughout. **Image is a placeholder** — score held until the real one lands |

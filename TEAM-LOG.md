@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **ITERATION 02 BUILT — awaiting Codex audit.** Judge verdict on 01 was LOOP AGAIN; all five accepted fixes are done. Self-score 90/100, **not a lock** (Δ +7, one P1 deferred). **Codex: audit → `loop/reviews/iter-02-codex.md`. READ-ONLY on the homepage — do not edit `src/routes/index.tsx` or `src/styles/home.css`** |
+| **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **ITERATION 03 — NEW ARCHITECTURE from Bryan's reference.** Diagonal 45/55, "The smarter way to buy property.", maroon fade over a KL image. Structure pass only; **hero image is a placeholder** pending Bryan. Supersedes the 55/45 card of 01–02. **READ-ONLY on the homepage — do not edit `src/routes/index.tsx` or `src/styles/home.css`** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
@@ -75,6 +75,46 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 5 Aug 2026 — Claude · Homepage ITERATION 03: **new hero architecture** — diagonal, maroon fade
+
+Bryan supplied a reference design that supersedes the 55/45 card of iterations 01–02. His scope for
+this pass was explicit and narrow: *"just build the diagonal left side right side 45/55 first, left
+side ensure theres the smarter way to buy property title and right side ensure theres the maroon
+fading, i will proceed to go find the image."*
+
+**The hero is now a full-bleed diagonal**, ~45 light / ~55 dark, built with the SAME technique as
+`/tender`'s — two `clip-path`'d planes on shared split tokens — but **mirrored**: `/tender` darkens
+the left plane, the homepage darkens the right. Left carries "The smarter way to *buy property.*";
+right carries the cycle over a KL image under a maroon fade.
+
+⚠️ **The hero image is a PLACEHOLDER** (`tender-information-kl.jpg`). Bryan is sourcing the real
+one. It swaps at a single value — `--hp-hero-image` in `home.css`.
+
+**One alignment improvement worth stealing for `/tender`:** this hero derives its content edges
+from `.wrap`'s own formula, so they land on the same x as the header, footer and every section
+below. **`/tender`'s hero pads from the viewport and sits 114px outside the site's column at
+1440** — a real misalignment on the canon page, yours to take or leave.
+
+🐛 **Two traps this cost me, both invisible in the source:**
+
+1. **An `inset: 0` panel is full-width even when clip-path makes it a wedge.** My maroon gradient
+   ran dense→thin across 0–100% of the panel box, so the entire dense half landed in the
+   clipped-away region and the visible wedge got only the thin tail — flat mauve over a photo.
+   Stops have to start at the seam.
+2. **`position: static` in a stacking media query reparents an absolute `::before`.** Collapsing
+   the diagonal at 900px with `.hp-panel { position: static }` handed the fade's overlay to
+   `.hp-hero`, stretching maroon across the WHOLE hero: ink-on-maroon body copy and the burgundy
+   `buy property.` swallowed entirely. `position: relative` lays out the same and keeps it scoped.
+
+**Verified:** 0 overflow at 1440/1280/1024/768/390/375, every text colour AA against its plane
+(lowest 4.92), build + eslint + tsc green, all fourteen hard rules pass.
+
+**NOT built from the reference, deliberately** — "36 properties open" (36 is the raw count and 12
+of those are fabricated `demo:true` fillers; real is 24 open / 5 in cycle), "Verified & regulated ·
+Licensed professionals" (agency voice in a marketing zone, H9), the four equal DAYS/HRS/MINS/SECS
+cells (founder ruled that out — built as the ranked day-count-plus-strip `/tender` already uses),
+and the search band (Q3 still stands).
 
 ### 5 Aug 2026 — Claude · Homepage ITERATION 02: ledger removed, hero rebalanced. **Codex, audit 02**
 

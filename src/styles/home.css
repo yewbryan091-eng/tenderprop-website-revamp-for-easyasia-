@@ -1,104 +1,154 @@
 /* ── HOMEPAGE ─────────────────────────────────────────────────────────────────
-   Owned by `/` alone. Tokens, `.wrap`, header/footer chrome and `.btn` come from
-   tender-listings.css; nothing here is shared with another route, so the homepage
-   loop never edits a file that eight other pages depend on.
+   Owned by `/` alone. Tokens, `.wrap`, header/footer chrome, `.btn` and `.skip-link`
+   come from tender-listings.css; nothing here is shared with another route, so the
+   homepage loop never edits a file eight other pages depend on.
 
-   ITERATION 01 — Surface 1, header + hero. Founder decisions in
-   loop/iteration-state.md §2. Composed from the existing vocabulary (cream ground,
-   Newsreader display, Inter UI, one red action, hairline rules, 14px card radius)
-   in a NEW shape — not /tender's diagonal split.
+   ITERATION 03 — NEW ARCHITECTURE from Bryan's reference, 5 Aug 2026. Full-bleed
+   diagonal, ~45 left / ~55 right. Left is the statement on paper; right is the cycle
+   over a KL image under a maroon fade. Supersedes the 55/45 card of iterations 01–02.
    ──────────────────────────────────────────────────────────────────────────── */
 
-/* Sticky-footer skeleton, so a short first-viewport-only page does not float the
-   footer up the screen while the lower surfaces are still unbuilt. */
 .home { min-height: 100vh; display: flex; flex-direction: column; }
 .home main { flex: 1; }
+.home #main:focus { outline: none; }
 
-/* ── The hero band ─────────────────────────────────────────────────────────────
-   Sits directly on the page ground (--paper). No slab, no scrim, no full-bleed
-   saturated block: on a restrained cream page prominence comes from position and
-   whitespace, and a filled block reads as an ad wherever it is put
-   (DESIGN-SYSTEM §7, row 1 — "i dont like it, its ugly placement"). */
-.hp-hero { padding: clamp(38px, 5.4vw, 72px) 0 clamp(44px, 6vw, 80px); }
+/* ── The diagonal ──────────────────────────────────────────────────────────────
+   Same technique as /tender's hero — two absolutely positioned planes, each clipped
+   to one side of a shared seam, with the split expressed as tokens so the angle is
+   ONE knob. Mirrored: /tender darkens the left, this darkens the right.
 
-/* 55/45. minmax(0,·) on both tracks so a long property name overflows visibly
-   inside its own cell instead of widening the grid and taking the page with it. */
-/* `align-items: center`, changed from `start` in iteration 02 and ONLY because the
-   measurements demanded it. With the ledger removed the card fell from 513.7px to 191.2px
-   against a 386.9px statement, so top-alignment left 195.7px of void under the card —
-   a bigger hole than the one iteration 01 was faulted for, in the other corner.
-   Centring is a composition fix, not filler: it adds no content and removes the void by
-   distributing it. The cost is the shared top edge the two columns had, which was only
-   worth having while their heights were comparable. */
-.hp-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
-  gap: clamp(28px, 4vw, 56px);
-  align-items: center;
+   The seam crosses the top edge at 48% and the bottom edge at 40%, so the light plane
+   averages ~45% of the width and leans the way the reference does. Change the angle by
+   editing these two numbers and nothing else — every padding below is derived from them. */
+.hp-hero {
+  position: relative;
+  width: 100%;
+  background: var(--paper);
+  min-height: clamp(430px, 38vw, 580px);
+  overflow: hidden;
+  --hp-top-split: 48%;   /* diagonal crosses the TOP edge here */
+  --hp-bot-split: 40%;   /* ...and the BOTTOM edge here */
+  --hp-seam: .5%;        /* half the seam width, in section-width units */
+  /* Reproduces `.wrap`'s content edge (max-width 1180 + its own padding) so the hero's
+     left and right content edges land on the SAME x as the header, footer and every
+     section below. /tender's hero pads from the viewport instead and sits 114px outside
+     the site's column at 1440 — not repeating that here. */
+  --hp-gutter: calc(max(0px, (100% - 1180px) / 2) + clamp(18px, 4vw, 40px));
 }
+
+.hp-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.hp-panel-left {
+  clip-path: polygon(
+    0 0,
+    calc(var(--hp-top-split) - var(--hp-seam)) 0,
+    calc(var(--hp-bot-split) - var(--hp-seam)) 100%,
+    0 100%
+  );
+  /* Right padding follows the diagonal at its NARROWEST point (the bottom) so no line
+     of copy can ever crowd the seam, whatever the angle. */
+  padding: clamp(30px, 3.4vw, 52px) calc(100% - var(--hp-bot-split) + 2.5%) clamp(30px, 3.4vw, 52px) var(--hp-gutter);
+}
+
+.hp-panel-right {
+  /* Burgundy base is load-bearing: the panel stays readable if the photo never loads. */
+  background-color: var(--burgundy);
+  /* ⚠️ PLACEHOLDER. Bryan is sourcing the real hero image — swap this one value. */
+  background-image: var(--hp-hero-image, url(/assets/layout/tender-information-kl.jpg));
+  background-size: cover;
+  background-position: 62% center;
+  clip-path: polygon(
+    calc(var(--hp-top-split) + var(--hp-seam)) 0,
+    100% 0,
+    100% 100%,
+    calc(var(--hp-bot-split) + var(--hp-seam)) 100%
+  );
+  /* Left padding clears the seam at its widest point (the top). */
+  padding: clamp(30px, 3.4vw, 52px) var(--hp-gutter) clamp(30px, 3.4vw, 52px) calc(var(--hp-top-split) + 3%);
+}
+
+/* THE MAROON FADE. Dense where the type sits, thinning toward the top right so the
+   skyline reads. Flat colour throughout — this is a wash, not a gloss: the brand bans
+   gradients as decoration, and the exception here is legibility over a photograph,
+   the same job /tender's paper wash does on its own panel. */
+/* ⚠️ THE STOPS ARE KEYED TO THE PANEL BOX, NOT THE VISIBLE SHAPE. `.hp-panel` is
+   `inset: 0`, so this box spans the WHOLE hero and only the clip-path makes it a
+   wedge — 0% here is the hero's LEFT edge, far outside anything you can see. The
+   first build ran dense→thin across 0–100% and put the entire dense half in the
+   clipped-away region, so the visible wedge got only the thin tail and read as a flat
+   mauve tint over a photograph. Everything before ~40% is invisible by construction:
+   the fade has to do all of its work between the seam and the right edge. */
+.hp-panel-right::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    var(--burgundy) 0%,
+    var(--burgundy) 55%,
+    color-mix(in srgb, var(--burgundy) 88%, transparent) 70%,
+    color-mix(in srgb, var(--burgundy) 62%, transparent) 86%,
+    color-mix(in srgb, var(--burgundy) 38%, transparent) 100%
+  );
+  pointer-events: none;
+}
+
+.hp-panel-inner { position: relative; z-index: 1; width: 100%; min-width: 0; }
 
 /* ── LEFT: the statement ───────────────────────────────────────────────────── */
 
-.hp-kick {
-  margin: 0 0 12px;
-  font-size: 11.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase;
+.hp-pill {
+  display: inline-block; margin: 0 0 20px;
+  padding: 6px 14px; border-radius: 999px;
+  background: color-mix(in srgb, var(--burgundy) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--burgundy) 20%, transparent);
+  font-size: 10.5px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase;
   color: var(--burgundy);
 }
 
-/* Overrides the global `h1 { font-weight: 800 }` — Newsreader only loads 400–700, and
-   asking for 800 makes the browser synthesise a muddy fake bold (DESIGN-SYSTEM §2).
-   600 is the house weight. */
-.hp-say h1 {
+/* Overrides the global `h1 { font-weight: 800 }` — Newsreader only loads 400–700 and
+   asking for 800 synthesises a muddy fake bold (DESIGN-SYSTEM §2). 600 is house weight. */
+/* Capped at 47px and measured in its OWN em, so the break lands where the reference
+   puts it — "The smarter way / to buy property." At 54px in this column it ran to
+   three lines and lost the two-beat rhythm the line is built on. `em` is safe here
+   precisely because the measure and the type are the same element and the same face;
+   `ch` would not be — it is font-relative and cannot hold two typefaces to one column. */
+.hp-panel-left h1 {
   margin: 0 0 16px;
+  max-width: 8.2em;
   font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-weight: 600; font-size: clamp(31px, 4.1vw, 52px);
-  line-height: 1.06; letter-spacing: -.015em;
+  font-weight: 600; font-size: clamp(32px, 3.4vw, 47px);
+  line-height: 1.04; letter-spacing: -.018em;
 }
-.hp-say h1 em { font-style: italic; color: var(--burgundy); }
+.hp-panel-left h1 em { font-style: italic; color: var(--burgundy); }
 
-/* No `max-width` in ch: the column is already 55% of a 1100px content width, which
-   puts this at ~72 characters at its largest — inside the ~75 readable ceiling. Left
-   uncapped on purpose so the lede's RIGHT edge lands on the column edge shared by the
-   headline and the action block, rather than inventing a fourth boundary. */
-.hp-lede {
-  margin: 0;
-  font-size: clamp(15px, 1.55vw, 17.5px); line-height: 1.6; color: var(--muted);
-}
+.hp-lede { margin: 0; font-size: clamp(14.5px, 1.15vw, 16px); line-height: 1.6; color: var(--muted); }
 
-/* ONE mechanism makes this gap. A flex column with a single `gap` and zeroed child
-   margins means the 16px between the button and the seller line is 16px — an
-   inline-block button plus a margin plus the parent's line-height is how a declared
-   6px rendered as 21px on the Apply block (AGENTS.md, spacing). */
+/* ONE mechanism per gap — a flex row/column with a single `gap` and zeroed child
+   margins. A button's inline-block leading plus a margin is how a declared 6px
+   rendered as 21px on the Apply block (AGENTS.md, spacing). */
 .hp-act {
-  margin-top: clamp(22px, 2.8vw, 30px);
-  display: flex; flex-direction: column; align-items: flex-start; gap: 16px;
+  margin-top: clamp(22px, 2.4vw, 28px);
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px 22px;
 }
 
-/* Q4: secondary, and quiet. The anchor is INK with a hairline, not burgundy — the
-   red CTA is the only accent in this zone, and a burgundy link beside it would put
-   two accents in one block. Burgundy arrives on hover, where it reads as response. */
-.hp-seller { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
-/* ≥44px hit area WITHOUT touching the typography (iteration 02, accepted fix).
-   Vertical padding on an INLINE box extends its hit area and background without
-   affecting the line box, so nothing moves: 17px of visible text, 45px of target.
-   `box-decoration-break: clone` is what makes it survive wrapping — at 375px this
-   link runs to two lines, and the default `slice` gives the top padding only to the
-   first fragment and the bottom only to the last, leaving the middle short.
-
-   Two approaches were tried and rejected first. Block padding pushes the underline
-   off the baseline and makes a quiet text link button-shaped, which the fix forbids.
-   An absolutely-positioned `::after` overlay measured 44px and passed at 1440 — then
-   failed the hit test at 375, because an absolute child of a WRAPPED inline resolves
-   against one fragment, not the union. It looked correct and only the click test
-   caught it. The underline moves from `border-bottom` to a real `text-decoration`
-   so it stays glued to the text while the padding grows around it. */
-.hp-seller a {
-  color: var(--ink); font-weight: 600;
-  /* Asymmetric on purpose: 9 above, 19 below = 45px of target. Symmetric 14/14 also
-     cleared 44px, but it left only 4px between this hit area and the primary CTA's —
-     close enough that a tap meant for the button could land on the link. The space
-     BELOW is unused, so the target grows downward and the clearance goes to 9px. */
-  padding: 9px 0 19px;
+/* Same KIND of element ⇒ same class. "How E-Tender works" and the seller route are
+   both ways out that are NOT the action, so they share one rule and cannot drift
+   (DESIGN-SYSTEM §5). Ink, not burgundy: the red CTA is the only accent in this zone.
+   Padding (not a min-height) buys the 44px target, and `box-decoration-break: clone`
+   keeps it whole when the seller line wraps to two lines at 375px — an absolutely
+   positioned overlay measured 44px and still failed the hit test there, because an
+   absolute child of a WRAPPED inline resolves against one fragment, not the union. */
+.hp-out {
+  color: var(--ink); font-weight: 600; font-size: 13.5px;
+  padding: 11px 0;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   text-decoration: underline;
@@ -107,90 +157,120 @@
   text-decoration-color: color-mix(in srgb, var(--ink) 32%, transparent);
   transition: color .15s ease, text-decoration-color .15s ease;
 }
-.hp-seller a:hover { color: var(--burgundy); text-decoration-color: var(--burgundy); }
+.hp-out:hover { color: var(--burgundy); text-decoration-color: var(--burgundy); }
 
-/* ── RIGHT: the cycle, as a document ───────────────────────────────────────────
-   White card on cream. It reads as a record of a real event — deadline, then the
-   properties in it — which is the proof a stranger needs and the framing the whole
-   site depends on: a cycle, never a catalogue (PLAN-site-architecture §1). */
-.hp-cycle {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: clamp(20px, 2.2vw, 28px);
-  box-shadow: 0 1px 2px rgba(23, 19, 15, .03);
-}
+.hp-assure { margin: 22px 0 0; font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.hp-seller { margin: 8px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+/* Grow the seller target DOWNWARD into space nothing else uses: symmetric padding left
+   only 4px between this hit area and the CTA's, close enough for a mis-tap. */
+.hp-seller .hp-out { padding: 6px 0 16px; }
+
+/* ── RIGHT: the cycle, on maroon ───────────────────────────────────────────── */
 
 .hp-cycle-kick {
-  margin: 0 0 10px;
-  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--burgundy);
+  margin: 0 0 18px;
+  font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--burgundy-ink) 80%, transparent);
 }
+.hp-cycle-lab { margin: 0 0 6px; font-size: 13px; color: color-mix(in srgb, var(--burgundy-ink) 78%, transparent); }
 
-/* Baseline-aligned row, left-aligned: the numeral and its unit are one unit, and
-   nothing here is centred — centring a figure with its unit is what put "134 DAYS
-   LEFT" 53px off the axis everything else shared (DESIGN-SYSTEM §5). */
-.hp-cycle-count { margin: 0; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-/* Sized to stay SUBORDINATE to the headline at every width, which the first build got
-   wrong: 50px against a 52px h1 on desktop is not a designed relationship, and at 375px
-   a 40px numeral under a 31px headline inverted the hierarchy outright. This clamp holds
-   the numeral at ~0.85 of the h1 from 375 to 1440 — clearly second, still the anchor of
-   its own column. */
+.hp-cycle-count { margin: 0; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .hp-cycle-n {
   font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-weight: 600; font-size: clamp(30px, 3.3vw, 44px); line-height: 1;
-  letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums;
+  font-weight: 600; font-size: clamp(44px, 4.6vw, 64px); line-height: 1;
+  letter-spacing: -.02em; color: var(--burgundy-ink); font-variant-numeric: tabular-nums;
 }
 .hp-cycle-u {
-  font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
-  color: var(--muted);
+  font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--burgundy-ink) 76%, transparent);
 }
 
-.hp-cycle-date { margin: 10px 0 0; font-size: 13.5px; color: var(--muted); }
-.hp-cycle-date b { color: var(--ink); font-weight: 600; }
-/* Real superscript for the ordinal, matching the treatment Bryan chose for the
-   /tender hero's closing date (TEAM-LOG, 29 Jul). */
+/* The H/M/S strip: the SAME deadline, demoted. Never a peer of the day count. */
+.hp-clock {
+  margin: 16px 0 0; padding: 0; list-style: none;
+  display: flex; gap: 26px;
+}
+.hp-clock li { display: flex; flex-direction: column; gap: 2px; }
+.hp-clock .v {
+  font-family: "Newsreader", Georgia, serif; font-weight: 600; font-size: 19px; line-height: 1;
+  color: var(--burgundy-ink); font-variant-numeric: tabular-nums;
+}
+.hp-clock .k {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--burgundy-ink) 62%, transparent);
+}
+
+.hp-cycle-date {
+  margin: 24px 0 0; padding-top: 18px;
+  border-top: 1px solid color-mix(in srgb, var(--burgundy-ink) 24%, transparent);
+  display: flex; flex-direction: column; gap: 5px;
+  font-size: 12.5px; color: color-mix(in srgb, var(--burgundy-ink) 76%, transparent);
+}
+.hp-cycle-date b { font-size: 16px; font-weight: 600; color: var(--burgundy-ink); }
 .hp-cycle-date sup { font-size: .6em; vertical-align: super; letter-spacing: 0; }
 
-/* The cycle ledger's table rules were REMOVED in iteration 02 along with the table itself —
-   Surface 2 owns property-level proof. No rules were left orphaned; this note is the only
-   remaining mention, deliberately, so the next agent knows the removal was intentional. */
-
-.hp-cycle-foot { margin: 12px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+/* Secondary on a dark plane. `--red` fails AA on dark scrims (~3.4:1), so the one red
+   action stays on the paper side and this is an outline in the panel's own ink. */
+.hp-ghost {
+  align-self: flex-start;
+  margin-top: 22px;
+  display: inline-block; padding: 11px 20px; border-radius: 8px;
+  border: 1.5px solid color-mix(in srgb, var(--burgundy-ink) 42%, transparent);
+  color: var(--burgundy-ink); font-weight: 600; font-size: 14px; text-decoration: none;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.hp-ghost:hover {
+  background: color-mix(in srgb, var(--burgundy-ink) 12%, transparent);
+  border-color: var(--burgundy-ink);
+}
 
 /* ── Focus. Not optional (DESIGN-SYSTEM §6). ──────────────────────────────── */
-.hp-say a:focus-visible,
-.hp-cycle a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
-/* The skip link's target. `tabindex="-1"` makes <main> programmatically focusable so the
-   skip actually moves focus; suppressing the ring here is the standard pairing, because
-   the destination is a whole page region and the viewport jump is the visible feedback. */
-.home #main:focus { outline: none; }
+.hp-panel-left a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+.hp-panel-right a:focus-visible { outline: 2px solid var(--burgundy-ink); outline-offset: 3px; border-radius: 4px; }
 
-/* ── Primary CTA — FLAT (iteration 02, accepted fix) ───────────────────────────
-   The shared `.btn.red:hover` lifts by 1px and casts `0 4px 12px rgba(200,40,28,.2)`,
-   against a brand rule that caps shadow at `0 1px 2px rgba(23,19,15,.03)` and bans gloss
-   outright. Overridden HERE rather than in tender-listings.css: that file dresses every
-   button on /tender and the detail page, and this loop does not touch those surfaces.
-   `transition: all` is replaced by named properties — `all` animates layout properties
-   nobody intended, and it is what made the lift cheap to add in the first place. */
+/* ── Primary CTA — FLAT ────────────────────────────────────────────────────────
+   The shared `.btn.red:hover` lifts 1px and casts `0 4px 12px rgba(200,40,28,.2)`,
+   against a brand rule capping shadow at `0 1px 2px rgba(23,19,15,.03)`. Overridden
+   here, not in tender-listings.css: that file dresses every button on /tender and the
+   detail page, and this loop does not touch those. `transition: all` becomes named
+   properties — `all` animates things nobody intended. */
 .home .btn { transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
 .home .btn.red:hover { background: #A81F15; transform: none; box-shadow: none; }
+.home .btn.red { font-size: 14.5px; }
 
 /* ── Responsive ────────────────────────────────────────────────────────────────
-   Collapses at 920px, where 55% of the content width can no longer hold the headline
-   at a size that still leads. The card follows the statement rather than leading it —
-   a deadline only means something once you know what an E-Tender is. */
-@media (max-width: 920px) {
-  /* minmax(0, 1fr), NEVER a bare 1fr. A bare `1fr` carries an implicit `min-width: auto`,
-     so the track cannot shrink below its content's min-content width. In iteration 01 the
-     card's nowrap price cell pushed the single column past a 375px viewport and took the
-     left column with it. The ledger is gone, but the guard stays: it costs nothing and
-     the next thing put in this card will not have to rediscover it. */
-  .hp-grid { grid-template-columns: minmax(0, 1fr); gap: clamp(26px, 5vw, 34px); }
-  .hp-hero { padding-top: clamp(30px, 5vw, 44px); }
+   The diagonal collapses at 900px into a clean vertical stack — statement first, then
+   the cycle. A deadline only means something once you know what an E-Tender is. */
+@media (max-width: 900px) {
+  .hp-hero { min-height: 0; }
+  /* `relative`, NOT `static`. Both lay out identically in flow — but the maroon fade is
+     an absolutely positioned `::before`, and dropping the panel out of the positioned
+     set reparents that overlay to `.hp-hero`, which stretches the gradient across the
+     WHOLE hero. The statement panel then rendered ink-on-maroon and the burgundy
+     `buy property.` vanished into the background entirely. One keyword, two failures,
+     invisible in the CSS and obvious in the render at 390px. */
+  .hp-panel { position: relative; clip-path: none; }
+  .hp-panel-left { padding: clamp(28px, 6vw, 44px) var(--hp-gutter) clamp(30px, 6vw, 40px); }
+  .hp-panel-right { padding: clamp(30px, 6vw, 44px) var(--hp-gutter); background-position: center; }
+  .hp-panel-right::before {
+    background: linear-gradient(
+      168deg,
+      var(--burgundy) 0%,
+      var(--burgundy) 40%,
+      color-mix(in srgb, var(--burgundy) 78%, transparent) 72%,
+      color-mix(in srgb, var(--burgundy) 46%, transparent) 100%
+    );
+  }
+  .hp-act { gap: 8px 18px; }
+}
+
+@media (max-width: 420px) {
+  .hp-clock { gap: 18px; }
+  .hp-act .btn.red { width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .home .btn,
-  .hp-seller a { transition: none; }
+  .hp-out,
+  .hp-ghost { transition: none; }
 }
