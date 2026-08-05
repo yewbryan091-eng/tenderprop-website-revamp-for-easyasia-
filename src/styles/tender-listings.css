@@ -625,7 +625,13 @@
 
   /* Properties grid/list — three cards are the desktop contract. The state rail
      yields first, so card content is never compressed merely to keep it visible. */
-  .props-grid { display: grid; gap: 22px; align-items: start; }
+  /* No align-items: start — grid's default STRETCH is load-bearing. Start made every
+     card shrink-wrap, which nullified .pc-foot's margin-top:auto and put the CTAs of a
+     mixed 1-/2-line-title row on different baselines. With stretch, cards in a row share
+     the tallest height and the slack lands above the agent divider, so every CTA in a
+     row sits on one baseline. (28 Jul "ragged heights accepted" tolerated raggedness;
+     it never required it.) */
+  .props-grid { display: grid; gap: 22px; }
   .props-grid.grid-mode { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .props-grid.list-mode { grid-template-columns: minmax(0, 1fr); container-type: inline-size; }
   @media(max-width: 1180px) { .props-grid.grid-mode { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -717,7 +723,11 @@
   /* 5 — the window. Two parallel cells, label / date / qualifier, vertical
      hairline between. Days-left rides under CLOSES, tied to the date it counts
      toward; the glass pill on the photo stays the mid-scroll glance. */
-  .prop-card .pc-period { margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line); min-width: 0; }
+  /* margin-BOTTOM is the guaranteed minimum air above the agent hairline — .pc-foot's
+     margin-top:auto alone resolves to 0 on the tallest card of every row (and on every
+     single-column card), crashing the seam into the 12px days-left line while the twin
+     hairline above this band carries 12px. Auto still absorbs the stretch slack on top. */
+  .prop-card .pc-period { margin-top: 12px; margin-bottom: 12px; padding-top: 11px; border-top: 1px solid var(--line); min-width: 0; }
   .prop-card .pc-period-kick { display: block; margin-bottom: 8px; color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
   .prop-card .pc-period-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 14px; }
   .prop-card .pc-date { min-width: 0; }
@@ -766,7 +776,9 @@
     .props-grid.list-mode .pc-media-link { aspect-ratio: auto; height: 100%; min-height: 280px; }
     .props-grid.list-mode .pc-body { display: flex; flex-direction: row; align-items: stretch; gap: 18px; padding: 18px 20px; }
     .props-grid.list-mode .pc-main { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
-    .props-grid.list-mode .pc-main .pc-period { margin-top: auto; }
+    /* Bottom-pinned, and margin-bottom zeroed: the grid card's 12px minimum would end
+       the description column 12px above the rail's CTA baseline opposite. */
+    .props-grid.list-mode .pc-main .pc-period { margin-top: auto; margin-bottom: 0; }
     .props-grid.list-mode .pc-rail { display: flex; flex-direction: column; flex: 0 0 clamp(196px, 20cqi, 250px); min-width: 0; padding-left: 18px; border-left: 1px solid var(--line); }
     /* The rail owns its edges: the grid-mode hairline above the agent would double
        the rail's own left border into a T-junction. */
@@ -1101,25 +1113,19 @@
   .property-filter-foot .pf-apply { flex: 1 1 auto; }
 }
 
-/* ── List mode type scale (Bryan: "increase the overall font size for the left side")
-   A list row is ~1200px wide against a ~290px grid card, so the grid card's type is
-   undersized here — the identity column can carry a proper reading scale. Scoped to
-   list mode only so the grid stays as approved. ── */
+/* ── List mode type scale — RECUT 6 Aug for the rebuilt card.
+   The old block here predated the rebuild: it bumped the TITLE to 25px — the exact
+   size the price caps at — so "reserve price is the strongest text" (Bryan's sheet,
+   ledger 6 Aug) held in grid mode and silently INVERTED in list mode. It also styled
+   .pc-type/.pc-detail, classes the rebuild removed. Caught by the audit, both lenses.
+   The scale below keeps the grid card's 1.6:1 price-over-title ratio at list size,
+   and .pc-size rides with .pc-loc — same rank, same size, never split. ── */
 @container (min-width: 700px) {
-  .props-grid.list-mode .pc-title { font-size: 25px; letter-spacing: -.02em; }
-  .props-grid.list-mode .pc-loc { font-size: 14.5px; }
-  .props-grid.list-mode .pc-loc svg { width: 15px; height: 15px; }
-  .props-grid.list-mode .pc-type { margin-top: 16px; }
-  .props-grid.list-mode .pc-type-label { font-size: 11px; letter-spacing: .085em; }
-  .props-grid.list-mode .pc-type-value { font-size: 19.5px; }
-  .props-grid.list-mode .pc-detail dt { font-size: 11px; letter-spacing: .075em; }
-  .props-grid.list-mode .pc-detail dd { font-size: 15.5px; margin-top: 5px; }
-  .props-grid.list-mode .pc-detail + .pc-detail { margin-left: 16px; padding-left: 16px; }
-}
-
-@container (min-width: 700px) {
-  .props-grid.list-mode .pc-tel { font-size: 14px; }
-  .props-grid.list-mode .pc-tel svg { width: 15px; height: 15px; }
+  .props-grid.list-mode .pc-money-label { font-size: 11.5px; }
+  .props-grid.list-mode .pc-money-value { font-size: 30px; }
+  .props-grid.list-mode .pc-title { font-size: 19px; letter-spacing: -.015em; }
+  .props-grid.list-mode .pc-loc,
+  .props-grid.list-mode .pc-size { font-size: 14.5px; }
 }
 
 /* Countdown accent inside the photo pill. On the new near-white chip the BRAND red works
