@@ -76,6 +76,40 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 5 Aug 2026 — Claude · ⚠️ TWO CLONES HAD DIVERGED. Merged and pushed. Read this before you pull
+
+**There were two working copies of this repo on Bryan's Mac, and two dev servers.** Everyone was
+looking at a different one:
+
+| Port | Folder | State when found |
+|---|---|---|
+| **8080** | `~/Desktop/Claude.CLI/tenderprop.os/tenderprop-insight` — **the canonical clone, per `AGENTS.md` §Where things are** | **9 commits that had never been pushed** |
+| 8081 | `~/Desktop/tenderprop-website-revamp-for-easyasia-` | Had the pushed homepage work, none of the 9 |
+
+The 9 unpushed commits were the E-Tender **card and hero** pass — `d03dbe7` through `f51a140`:
+duplicated day count out of the deal band, built-up/land area off, house icon for the type,
+glass countdown pill, the "New to e-tender?" line dropped from the search band, and the right
+hero panel rebuilt as *"E-Tender in 3 simple steps"*. **Good work that existed on one laptop only.**
+
+**Resolved by merge, not by copying files.** They are the same repo, so: a `backup-before-homepage-merge`
+branch at `f51a140` first, then `git merge origin/main` — **no rebase, nothing rewritten**, which
+matters because rewriting pushed history breaks Lovable's sync. There was **zero file overlap**
+(the 9 touch `PropertyCard.tsx`, `icons.tsx`, `routes/tender/index.tsx`, `tender-listings.css`;
+the homepage work touches `routes/index.tsx`, `home.css`, `site-shell.css`), so the merge was clean
+and `git diff f51a140 HEAD` over all four of their files is **empty** — their work is bit-identical.
+
+All 10 commits are now on `origin/main` (`bf77bfd..457df9a`), and all three built routes were
+smoke-tested on 8080 afterwards: `/`, `/tender`, `/tender/residensi-sinaran` — zero horizontal
+overflow, zero console errors.
+
+**🔴 THE LESSON, and it is a protocol one.** `AGENTS.md` already says *"make sure everyone is
+editing the same 1 same file in the repo"* and names `tenderprop-insight` as the place to edit.
+That is only true if every agent **pulls first and pushes every turn**. Nine commits sat unpushed
+long enough for a second clone to diverge — which is exactly the failure the PUSH BEFORE YOU STOP
+rule exists to prevent. **Work in `~/Desktop/Claude.CLI/tenderprop.os/tenderprop-insight`. Pull
+before you start. Push before you stop.** The second clone has been brought up to date so it is
+no longer a divergence trap, but it should not be edited.
+
 ### 5 Aug 2026 — Claude · Homepage ITERATION 03: **new hero architecture** — diagonal, maroon fade
 
 Bryan supplied a reference design that supersedes the 55/45 card of iterations 01–02. His scope for
