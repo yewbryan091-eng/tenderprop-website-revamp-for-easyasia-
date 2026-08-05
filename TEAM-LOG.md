@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **ITERATION 03 — NEW ARCHITECTURE from Bryan's reference.** Diagonal 45/55, "The smarter way to buy property.", maroon fade over a KL image. Structure pass only; **hero image is a placeholder** pending Bryan. Supersedes the 55/45 card of 01–02. **READ-ONLY on the homepage — do not edit `src/routes/index.tsx` or `src/styles/home.css`** |
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
+| Tender listings page — **card rebuild to Bryan's Buyer-POV reference, 6 Aug** | `PropertyCard.tsx`, card + list-mode rules in `tender-listings.css` | **Claude** | 6 Aug | Rebuilding the card to Bryan's annotated reference: price leads under image, address + built-up return, STARTS/CLOSES period band, solid maroon CTA |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -53,6 +53,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 30 Jul | Property filters live in an inline disclosure **directly below Search**: tender closing cycle, reserve-price range, built-up area, land area and tenure. Price moved out of the Sort row; Tender by State remains standalone | Keeps “what qualifies” together in Search and “how results are ordered” in the results toolbar, while retaining TenderProp’s event/cycle framing | Bryan + Codex |
 | 30 Jul | Tender Information is one **full-bleed, shallow 40/60 split dossier** across every real listing: universal monochrome KL deadline panel left; listing facts, process and action right. No capped card, pin or paperclip | Bryan explicitly chose the Pexels panorama, then asked that this shared listing-page system span the viewport and match the `/tender` hero's compact height | Bryan + Codex |
 | 31 Jul | Tender Information's right panel follows **price → risk → privacy → outcome → action → optional learning**. Offer privacy means hidden from other buyers/the public; outcomes are accepted/countered/not accepted. Payment schedule and general process are separate utilities | Bryan approved the hierarchy brainstorm; three rendered treatments showed that named confidence blocks and one compact action band scan fastest without rebuilding the dossier as another card stack | Bryan + Codex |
+| 6 Aug | **The listing card follows Bryan's annotated Buyer-POV reference**: image → reserve price (strongest text, **burgundy**) → type · name → address → built-up → E-TENDER PERIOD (starts/closes, days left under the close) → agent → **solid maroon** "View E-Tender Details" CTA | Bryan supplied the reference sheet explicitly ("this image looks very clear what i want to achieve"). **Knowingly reverses two 4-Aug rulings** — price to ink, and CTA as a wash-at-rest — and restores built-up via `areaSlot()`. The day count renders twice (photo pill + under CLOSES) because the sheet draws both | Bryan |
 | 3 Aug | Price History returns as a **clearly labelled layout preview**: Buy/Rent comparable-evidence ledger with masked rows, no repeated subject-property strip, no dead `More` column and no gross yield until its basis is defined | Bryan wants buyers to reach the nearby evidence immediately; repeating the subject's price and specs added no decision value. The structure must remain reviewable without turning sample values into property claims | Bryan + Codex |
 
 ---
@@ -75,6 +76,30 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 6 Aug 2026 — Claude · Listing card rebuilt to Bryan's Buyer-POV reference
+
+Bryan supplied an annotated reference sheet for the card and said build exactly that. Done, in
+`PropertyCard.tsx` + the card CSS. Scan order now: image (badge / heart / glass days-left pill,
+all kept) → **RESERVE PRICE in burgundy, the strongest text** → type · name on one line
+("Condominium · 222 Residency") → address (street when supplied, else area + state — never
+invented) → built-up via `areaSlot()` → **E-TENDER PERIOD** band (STARTS / CLOSES, days left
+under the close) → agent → **solid maroon "View E-Tender Details"** CTA.
+
+**Codex: two of your 4-Aug rulings are knowingly reversed by the sheet** — price ink→burgundy,
+CTA wash→solid — and built-up is back. Ledger row added. Your glass pill, the agent band and the
+single stretched-link pattern all survive; DOM order now IS the visual order (the `order:` system
+is gone). `.pc-main`/`.pc-rail` are `display: contents` in grid mode and become the description
+column / right rail in list mode.
+
+🐛 One catch worth knowing: the price sat OUTSIDE `.pc-main` at first, so list mode's row layout
+put RM531,000 beside the title on one line. Caught in the render, not the code — the wrapper's
+whole job is choosing what stacks in list mode, so the price had to live inside it.
+
+Verified: 0 page overflow at 1440 / 800 / 720 / **681 (302px cards, narrowest 2-up)** / 375; no
+element spills its card at any of those; list mode + both toggles work; tsc, eslint, build green.
+Screenshots in `loop/screenshots/card-0*.png`. An adversarial multi-lens audit was running at
+push time; its confirmed findings land as a follow-up commit.
 
 ### 5 Aug 2026 — Claude · ⚠️ TWO CLONES HAD DIVERGED. Merged and pushed. Read this before you pull
 

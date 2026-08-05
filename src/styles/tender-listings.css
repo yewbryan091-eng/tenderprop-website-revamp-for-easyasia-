@@ -678,78 +678,58 @@
   .prop-card .pc-deadline.is-closed { background: rgba(255,255,255,.82); color: var(--muted); }
   .prop-card .pc-deadline.is-closed svg { color: var(--muted); }
 
-  /* Body — grid mode: one flex column, explicit order per block */
-  /* ── CARD BODY — built to the reference Bryan chose, 4 Aug ────────────────────
-     Four bands divided by hairlines: IDENTITY, what-it-is, the DEAL, who-to-call, then a
-     solid CTA. Every fact is prefixed by a thin line icon instead of an uppercase label —
-     that is the move that lets the labels go without the facts turning ambiguous, and it
-     costs nothing vertically because the icon sits beside the value rather than above it.
-     The one worded label left is "Reserve price": a bare RM531,000 could read as an asking
-     price. */
-  .prop-card .pc-body { flex: 1; display: flex; flex-direction: column; min-width: 0; padding: 15px 16px 16px; }
-  .prop-card .pc-ident, .prop-card .pc-side { display: contents; }
+  /* ── CARD BODY — rebuilt to Bryan's Buyer-POV reference, 6 Aug ────────────────
+     Scan order fixed by his annotated sheet: RESERVE PRICE leads (the strongest
+     text after the image), then type · name, address, built-up, the E-TENDER
+     PERIOD band (starts / closes, days left under the close), agent, one solid
+     maroon CTA. DOM order IS the visual order — the old `order:` system is gone,
+     so grid and list mode read the same markup the same way.
 
-  .prop-card .pc-title { order: 1; margin: 0; color: var(--ink); font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto; font-size: 23px; font-weight: 600; letter-spacing: -.015em; line-height: 1.15; }
-  .prop-card .pc-title a { color: inherit; text-decoration: none; }
+     Accent discipline on the new card: BURGUNDY is the accent (price, icons,
+     CTA) and red appears only where time escalates (the under-14-days pill).
+     The price returning to burgundy reverses the 4 Aug ink ruling — the
+     reference draws it maroon and names it "most important info, large and high
+     contrast". One accent per zone still holds: this card has one. */
+  .prop-card .pc-body { flex: 1; display: flex; flex-direction: column; min-width: 0; padding: 14px 16px 16px; }
+  /* Wrappers exist for LIST MODE to grab; everywhere else they dissolve. */
+  .prop-card .pc-main, .prop-card .pc-rail { display: contents; }
+
+  /* 2 — the price. Label survives because a bare figure could read as an asking
+     price. cqi floor keeps RM70,000,000 (we hold five eight-figure parcels)
+     inside a 2-up card without touching the edges. */
+  .prop-card .pc-money { min-width: 0; }
+  .prop-card .pc-money-label { display: block; margin-bottom: 3px; color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
+  .prop-card .pc-money-value { display: block; color: var(--burgundy); font-size: clamp(19px, 7.6cqi, 25px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  /* 3 — type · name is the card's ONE real link; ::after stretches it card-wide. */
+  .prop-card .pc-title { display: flex; align-items: flex-start; gap: 8px; margin: 10px 0 0; color: var(--ink); font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.35; }
+  .prop-card .pc-title svg { flex: none; width: 17px; height: 17px; margin-top: 2px; color: var(--burgundy); }
+  .prop-card .pc-title a { min-width: 0; color: inherit; text-decoration: none; }
   .prop-card .pc-title a:hover { color: var(--burgundy); }
-  .prop-card .pc-loc { order: 2; display: flex; align-items: center; gap: 6px; margin: 6px 0 0; min-width: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
+  .prop-card .pc-loc { display: flex; align-items: center; gap: 8px; margin: 7px 0 0; min-width: 0; color: var(--muted); font-size: 13.5px; line-height: 1.4; }
   .prop-card .pc-loc svg { flex: none; width: 15px; height: 15px; color: var(--burgundy); }
   .prop-card .pc-loc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* BAND 1 — the property type, on its own. Built-up and land area came off the card on
-     4 Aug (Bryan): size is what you FILTER on, not what you pick a card on. It still lives
-     on the detail spec sheet and in the grid's size filters. */
-  .prop-card .pc-specs {
-    order: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
-    margin-top: 11px; padding-top: 11px; border-top: 1px solid var(--line);
-    min-width: 0;
-  }
-  .prop-card .pc-spec { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--muted); font-size: 14px; font-weight: 600; line-height: 1.3; }
-  .prop-card .pc-spec svg { flex: none; width: 17px; height: 17px; color: var(--muted); }
-  .prop-card .pc-spec > span { min-width: 0; }
-  /* TYPE takes the accent — it is the category the buyer filters on. */
-  .prop-card .pc-spec-type { color: var(--burgundy); font-weight: 700; }
-  .prop-card .pc-spec-type svg { color: var(--burgundy); }
+  /* 4 — the area a buyer is buying (floor for strata, land for landed). */
+  .prop-card .pc-size { display: flex; align-items: center; gap: 8px; margin: 7px 0 0; min-width: 0; color: var(--muted); font-size: 13.5px; font-weight: 600; line-height: 1.4; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-size svg { flex: none; width: 15px; height: 15px; color: var(--burgundy); }
 
-  /* BAND 2 — the decision. Price left, deadline right, hairline between. */
-  /* Centred (Bryan, 4 Aug): the price block sits on the band's vertical axis rather than hanging
-     from the top. The trade is real and deliberate — the deadline cell runs one line taller, so
-     RESERVE PRICE now sits ~8px below CLOSES instead of level with it. Bryan chose the price's
-     position over the labels' alignment. */
-  .prop-card .pc-deal {
-    order: 4; display: flex; flex-wrap: nowrap; align-items: center; gap: 12px;
-    margin-top: 11px; padding-top: 11px; border-top: 1px solid var(--line);
-    min-width: 0;
-  }
-  .prop-card .pc-money { flex: 1 1 auto; min-width: 0; }
-  .prop-card .pc-money-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase; }
-  /* Ink, not burgundy (Bryan). It still outranks everything on SIZE and WEIGHT — 21px/800
-     against a 14px row — and dropping the colour tightens the card's accent discipline. */
-  /* 17px floor, not 19px: at 19px the clamp bottomed out on ~290px cards (2-up, just above the
-     680px breakpoint) and an eight-figure land parcel — RM70,000,000, and we hold five of them
-     — touched the hairline. Below ~297px the cqi term now takes over instead of pinning. Above
-     that nothing changes: at the 322px card it still resolves to 20.5px. */
-  .prop-card .pc-money-value { display: block; color: var(--ink); font-size: clamp(17px, 6.4cqi, 21px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  /* Centred against BOTH lines (Bryan) — the icon labels the whole deadline block, not just
-     the date, so it sits on the block's axis. */
-  .prop-card .pc-close { flex: none; display: flex; align-items: center; gap: 8px; padding-left: 12px; border-left: 1px solid var(--line); min-width: 0; }
+  /* 5 — the window. Two parallel cells, label / date / qualifier, vertical
+     hairline between. Days-left rides under CLOSES, tied to the date it counts
+     toward; the glass pill on the photo stays the mid-scroll glance. */
+  .prop-card .pc-period { margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line); min-width: 0; }
+  .prop-card .pc-period-kick { display: block; margin-bottom: 8px; color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
+  .prop-card .pc-period-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 14px; }
+  .prop-card .pc-date { min-width: 0; }
+  .prop-card .pc-date + .pc-date { padding-left: 14px; border-left: 1px solid color-mix(in srgb, var(--line) 62%, transparent); }
+  .prop-card .pc-date-label { display: block; margin-bottom: 3px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase; }
+  .prop-card .pc-date b { display: flex; align-items: center; gap: 7px; color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1.3; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-date b svg { flex: none; width: 15px; height: 15px; color: var(--burgundy); }
+  .prop-card .pc-date-left { display: block; margin-top: 2px; padding-left: 22px; color: var(--muted); font-size: 12px; line-height: 1.3; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
-  /* Red (Bryan) — and it makes the card's colour semantic: red is TIME everywhere on this
-     card (the day-count pill on the photo, this deadline), burgundy is the platform (type,
-     phone, CTA), ink is the money. Three hues, three jobs, no overlap. */
-  .prop-card .pc-close svg { flex: none; width: 18px; height: 18px; color: var(--red); }
-  .prop-card .pc-close-txt { min-width: 0; }
-  /* Same treatment as RESERVE PRICE on the left, so the two cells are structurally parallel:
-     label, value, qualifier. This is what stops the price cell and this one from disagreeing
-     about how much content they hold — the fault that makes a price look like it is floating. */
-  .prop-card .pc-close-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase; }
-  /* 14.5px, up from 13px: freeing the value line of the word "Closes" bought the room to make
-     the date BIGGER rather than smaller, which is the direction Bryan's father asked for. */
-  .prop-card .pc-close b { display: block; color: var(--ink); font-size: 14.5px; font-weight: 700; line-height: 1.25; white-space: nowrap; }
-  .prop-card .pc-close-left { display: block; margin-top: 1px; color: var(--muted); font-size: 12.5px; line-height: 1.3; white-space: nowrap; font-variant-numeric: tabular-nums; }
-
-  /* BAND 3 — who to call. */
-  .prop-card .pc-foot { order: 5; display: flex; align-items: center; gap: 10px; min-width: 0; margin-top: 11px; padding-top: 11px; border-top: 1px solid var(--line); }
+  /* 6 — the agent, last, visually smaller than the price. margin-top:auto pins
+     agent + CTA to the card's foot, so ragged content above cannot float them. */
+  .prop-card .pc-foot { display: flex; align-items: center; gap: 10px; min-width: 0; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); }
   .prop-card .pc-avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--card); box-shadow: 0 0 0 1px var(--line); }
   .prop-card .pc-agent { flex: 1; min-width: 0; }
   .prop-card .pc-agent b { display: block; color: var(--ink); font-size: 14.5px; font-weight: 700; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -758,20 +738,17 @@
   .prop-card .pc-tel svg { width: 15px; height: 15px; flex: none; }
   .prop-card .pc-tel:hover span { text-decoration: underline; text-underline-offset: 3px; }
 
-  /* FILLED, not outlined — the card's one solid block, anchoring the bottom the way the
-     photo anchors the top. */
-  /* QUIET at rest, solid on hover. This bar is 47px — 8.9% of the card — and it is decorative:
-     the title's stretched ::after takes every click, so its only job is to say "this card
-     opens". Twelve solid burgundy bars down a grid is ~560px of the heaviest colour we own
-     spent on an affordance, and it competed with the photo and the price for first look. A
-     wash reads as the same control, costs no height, and filling on hover makes the card feel
-     live — which the old solid version could not do, having nowhere left to go. */
+  /* 7 — SOLID maroon, per the reference sheet ("CTA button in brand maroon").
+     This reverses the 4 Aug wash-at-rest ruling — the sheet draws the filled
+     button explicitly, and with the price now carrying the card's only other
+     accent the bottom anchor earns its weight back. Still decorative: the
+     stretched title link takes the click, so hover must answer (rule below). */
   .prop-card .pc-cta {
-    order: 6; display: flex; align-items: center; justify-content: center; gap: 9px;
-    margin-top: 12px; padding: 11px 16px; border-radius: 9px;
-    background: color-mix(in srgb, var(--burgundy) 8%, transparent);
-    border: 1px solid color-mix(in srgb, var(--burgundy) 32%, transparent);
-    color: var(--burgundy);
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    margin-top: 12px; padding: 12px 16px; border-radius: 9px;
+    background: var(--burgundy);
+    border: 1px solid var(--burgundy);
+    color: var(--burgundy-ink);
     font-size: 14.5px; font-weight: 700; letter-spacing: -.005em; text-align: center;
     transition: background .16s ease, border-color .16s ease, color .16s ease;
   }
@@ -779,44 +756,31 @@
 
   @media (prefers-reduced-motion: reduce) { .prop-card .pc-cta, .prop-card .save-btn::before { transition: none; } }
 
-  /* List mode — media left, identity centre, decision details + CTA right */
+  /* List mode — media left; description column centre; agent + CTA lift into a
+     bordered right rail via .pc-rail (display:contents everywhere else). The
+     description column pins the PERIOD band to its foot so it lines up with the
+     CTA opposite — the same move that fixed the old dead-space fault here. */
   @container (min-width: 700px) {
     .props-grid.list-mode .prop-card { display: grid; grid-template-columns: clamp(268px, 31cqi, 392px) minmax(0, 1fr); }
     .props-grid.list-mode .pc-media { height: 100%; }
-    .props-grid.list-mode .pc-media-link { aspect-ratio: auto; height: 100%; min-height: 250px; }
-    .props-grid.list-mode .pc-body { display: grid; grid-template-columns: minmax(0, 1fr) clamp(196px, 20cqi, 250px); align-items: start; gap: 18px; padding: 20px; }
-    /* Column, not block: title/location/type sit at the top and the three facts get
-       pushed to the bottom, so the identity column fills the card's height instead of
-       leaving ~150px of dead space under it. The facts then line up with the CTA. */
-    .props-grid.list-mode .pc-ident { display: flex; flex-direction: column; min-width: 0; height: 100%; }
-    .props-grid.list-mode .pc-side { display: flex; flex-direction: column; gap: 14px; min-width: 0; height: 100%; padding-left: 18px; border-left: 1px solid var(--line); }
-    .props-grid.list-mode .pc-title { min-height: 0; -webkit-line-clamp: 2; }
-    .props-grid.list-mode .pc-money { grid-template-columns: minmax(0, 1fr); text-align: left; margin-top: 0; }
-    .props-grid.list-mode .pc-deposit { text-align: left; }
-    /* The three facts now sit in the WIDE identity column, three across, instead of
-       being squeezed into the ~250px rail — where `grid-template-columns` could not
-       override the base rule's `grid-auto-flow: column`, so values clipped to
-       "1", "9." and "F". The rail keeps money, agent and CTA: the decision, not
-       the description. */
-    /* ONE rule for this selector. There were two — the later `margin-top: 16px`
-       silently overrode `margin-top: auto` at identical specificity, which is why the
-       facts stayed pinned to the top and left a void under them. `auto` pushes them
-       to the foot of the identity column so they line up with the CTA opposite. */
-    .props-grid.list-mode .pc-details { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); }
-    .props-grid.list-mode .pc-foot { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 3px 10px; align-items: center; }
+    .props-grid.list-mode .pc-media-link { aspect-ratio: auto; height: 100%; min-height: 280px; }
+    .props-grid.list-mode .pc-body { display: flex; flex-direction: row; align-items: stretch; gap: 18px; padding: 18px 20px; }
+    .props-grid.list-mode .pc-main { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
+    .props-grid.list-mode .pc-main .pc-period { margin-top: auto; }
+    .props-grid.list-mode .pc-rail { display: flex; flex-direction: column; flex: 0 0 clamp(196px, 20cqi, 250px); min-width: 0; padding-left: 18px; border-left: 1px solid var(--line); }
+    /* The rail owns its edges: the grid-mode hairline above the agent would double
+       the rail's own left border into a T-junction. */
+    .props-grid.list-mode .pc-foot { margin-top: 0; padding-top: 0; border-top: 0; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 3px 10px; align-items: center; }
     .props-grid.list-mode .pc-avatar { grid-row: span 2; }
     .props-grid.list-mode .pc-tel { grid-column: 2; justify-self: start; }
-    .props-grid.list-mode .pc-cta { margin-top: 0; }
+    .props-grid.list-mode .pc-cta { margin-top: auto; }
   }
 
+  /* One-column phones: the period cells keep their two-up shape — "12 Aug 2026"
+     fits a ~150px half even at 375 — but the hairline between them earns its
+     keep only while both cells share a row. */
   @media (max-width: 420px) {
-    .prop-card .pc-money { grid-template-columns: minmax(0, 1fr); gap: 9px; }
-    .prop-card .pc-deposit {
-      display: flex; align-items: baseline; justify-content: space-between;
-      gap: 12px; padding-top: 9px; border-top: 1px solid
-      color-mix(in srgb, var(--line) 60%, transparent); text-align: left;
-    }
-    .prop-card .pc-deposit .pc-money-label { margin-bottom: 0; }
+    .prop-card .pc-body { padding: 13px 14px 15px; }
   }
 
   /* Pagination (iNewProject pattern, in TenderProp maroon) */
@@ -1204,10 +1168,9 @@
 .prop-card .pc-tel { position: relative; z-index: 2; }
 .prop-card .pc-cta { cursor: pointer; }
 /* The CTA is decorative — the stretched link takes the click — so it must still respond on
-   hover or it reads as disabled. This used to be a no-op: the base was already solid burgundy
-   and an earlier rule's #6d2439 hover was overridden by this one setting it straight back to
-   var(--burgundy). Now the base is a wash, so filling it here is a real state change. */
-.prop-card:hover .pc-cta { background: var(--burgundy); border-color: var(--burgundy); color: #fff; }
+   hover or it reads as disabled. Base is solid burgundy (6 Aug reference), so hover goes to
+   the documented burgundy hover shade — a real state change, not a repaint of the same value. */
+.prop-card:hover .pc-cta { background: #411322; border-color: #411322; }
 .prop-card:focus-within { outline: 2px solid var(--red); outline-offset: 3px; }
 .prop-card .pc-link:focus-visible { outline: none; }
 

@@ -1,16 +1,48 @@
 import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
-import { ArrowRightIcon, CalendarIcon, ClockIcon, HeartIcon, HomeIcon, PhoneIcon, PinIcon } from "./icons";
-import { daysLeft, displayType, fmtDate, fmtPrice, hrefFor, tenderId } from "@/lib/tender-utils";
+import {
+  ArrowRightIcon,
+  CalendarIcon,
+  ClockIcon,
+  HeartIcon,
+  HomeIcon,
+  PhoneIcon,
+  PinIcon,
+  RulerIcon,
+} from "./icons";
+import {
+  areaSlot,
+  daysLeft,
+  displayType,
+  fmtDate,
+  fmtPrice,
+  hrefFor,
+  tenderId,
+  tenderStartOf,
+} from "@/lib/tender-utils";
 
-/* The photo pill is the card's ONLY date. It carries the year because listings
-   span 2026-2028, so "12 Dec" alone would be ambiguous. Never hardcoded. */
+/* ── CARD REBUILT TO BRYAN'S BUYER-POV REFERENCE, 6 Aug 2026 ──────────────────
+   His annotated sheet fixes the scan order: image → RESERVE PRICE (the strongest
+   text on the card) → type · name → address → built-up → E-TENDER PERIOD
+   (starts / closes, days left under the close) → agent → one solid maroon CTA.
 
-/* One semantic tender-notice card. Grid mode stacks it; list mode splits it into
-   media / identity / decision details — same render path, driven by the
-   container class on .props-grid. */
+   Two deliberate reversals of earlier rulings, both made BY the reference:
+     · The reserve price returns to BURGUNDY (was moved to ink 4 Aug). The sheet
+       renders it maroon and names it "most important info, large and high
+       contrast" — and the card's other accents came off in the same pass, so the
+       one-accent rule still holds: burgundy IS this card's accent.
+     · Built-up returns (came off 4 Aug). The sheet lists it as scan item 4; it
+       shows via areaSlot(), so a condo shows floor area and a bungalow shows land
+       — the area a buyer is actually buying.
+
+   The day count runs twice — the glass pill on the photo (the mid-scroll glance)
+   and under CLOSES (anchored to the date, where the decision is made). Both are
+   drawn explicitly in the reference: annotation 5 puts "days left under close
+   date" while the Quick Scan Badge stays on the image. */
 export function PropertyCard({
-  x, saved, onToggleSave,
+  x,
+  saved,
+  onToggleSave,
 }: {
   x: Tender;
   saved: boolean;
@@ -18,57 +50,36 @@ export function PropertyCard({
 }) {
   const id = tenderId(x);
   const d = daysLeft(x.closingDate);
-  const soon = d > 0 && d <= 14;
-  const dlTxt =
-    d <= 0 ? "E-Tender closed" : `Closes ${fmtDate(x.closingDate)} · ${d} ${d === 1 ? "day" : "days"} left`;
-  /* Split so the countdown can carry the accent on its own. The date stays neutral;
-     only the time pressure is coloured — two accents in one pill would compete. */
-  const closeParts =
-    d <= 0 ? null : { date: `Closes ${fmtDate(x.closingDate)}`, left: `${d} ${d === 1 ? "day" : "days"} left` };
+  const open = d > 0;
+  const soon = open && d <= 14;
+  const leftTxt = `${d} ${d === 1 ? "day" : "days"} left`;
   const href = hrefFor(x);
-  /* Start date leads the row: with the closing date in the photo pill, "Tender
-     start" answers the other half of the window without duplicating the close. */
-  /* CARD DIET — Bryan's father, 4 Aug: "one eye see all… information overload… font
-     needs to be big… position as the reader, what the reader wants."
-
-     Measured before: 24 pieces of text, 581px tall, smallest font 10px, EIGHT elements
-     under 12px. The two sites he pointed at carry 7 (AuctionPro) and 10 (OwnerAuction).
-     We were at 2.5-3x.
-
-     Six of those 24 were LABELS — words naming other words, every one at 10px and STACKED
-     above its value, so each cost a whole line. That is what was killing the space: not
-     the words, the STACK. His test, sharpened: if a value cannot stand alone, either it
-     does not belong on the card, or it is the one thing worth labelling.
-       Condominium  stands alone            -> label killed
-       Freehold     stands alone            -> label killed
-       999 sqft     does NOT say WHICH area -> keeps a lowercase INLINE label, which costs
-                                               no vertical space (OwnerAuction labels these too)
-       12 Sep 2026  "E-Tender start" — a browser cares when it CLOSES, and two dates on one
-                    card is one too many    -> whole row cut
-       RM15,930     "Refundable deposit" — derived from the reserve and a detail-page fact,
-                    not a browse decision   -> whole row cut
-       RM531,000    could read as an asking price -> THE ONE LABEL THAT SURVIVES
-
-     The agent block STAYS (Bryan, explicitly): a direct lead route needing no click-through,
-     and how every Malaysian portal does it. */
   const typeLabel = displayType(x);
-  /* Type only — tenure dropped, then built-up and land area dropped too (Bryan, 4 Aug).
-     Size is a DECIDING fact, not a browsing one: nobody picks which card to open on square
-     feet, they pick on what it is, where, what it costs and how long is left. It still lives
-     on the detail spec sheet and, more importantly, in the grid's size FILTERS — which is the
-     right home for it, because that is where a buyer actually acts on size. */
-  const identity = typeLabel || "";
+  /* areaSlot picks WHICH area matters for this property form (floor for strata,
+     land for landed) — the same rule the detail page uses. The data writes
+     "1,400 sqft"; the reference reads "1,604 sq ft". Display-only normalise. */
+  const size = areaSlot(x);
+  const sizeTxt = size.value === "—" ? null : size.value.replace(/sqft/i, "sq ft");
+  /* Street address when the agency has supplied one (only Sinaran today),
+     otherwise the honest fallback every record can fill. Never invented. */
+  const where = x.address || `${x.area}, ${x.stateName}`;
 
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
       <div className="pc-media">
         <span className="pc-media-link">
-          <img src={PROJECT_IMG(x.image)} alt={`${x.name} — ${x.area}, ${x.stateName}`} loading="lazy" />
+          <img
+            src={PROJECT_IMG(x.image)}
+            alt={`${x.name} — ${x.area}, ${x.stateName}`}
+            loading="lazy"
+          />
         </span>
         <div className="pc-tags">
           <span className="pc-status">E-Tender</span>
           {x.demo && (
-            <span className="demo-badge" title="Fabricated sample record — not real inventory">DEMO</span>
+            <span className="demo-badge" title="Fabricated sample record — not real inventory">
+              DEMO
+            </span>
           )}
         </div>
         <button
@@ -76,74 +87,110 @@ export function PropertyCard({
           className={"save-btn" + (saved ? " saved" : "")}
           aria-label="Save to shortlist"
           aria-pressed={saved}
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleSave(id); }}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onToggleSave(id);
+          }}
         >
           <HeartIcon />
         </button>
-        <span className={"pc-deadline" + (soon ? " is-soon" : "") + (d <= 0 ? " is-closed" : "")}>
+        <span className={"pc-deadline" + (soon ? " is-soon" : "") + (!open ? " is-closed" : "")}>
           <ClockIcon />
-          {closeParts ? (
-            <span className="pc-when">
-              <b className="pc-left">{closeParts.left}</b>
-            </span>
-          ) : (
-            <span className="pc-when"><b className="pc-left">{dlTxt}</b></span>
-          )}
+          <span className="pc-when">
+            <b className="pc-left">{open ? leftTxt : "E-Tender closed"}</b>
+          </span>
         </span>
       </div>
 
       <div className="pc-body">
-        {/* Bryan found a reference card on 4 Aug and asked for it duplicated. Its idea: every
-            fact gets a thin line ICON instead of an uppercase label, and hairline rules divide
-            the card into four bands. That is what lets the labels go without the facts becoming
-            ambiguous — the icon does the naming the label used to do, at zero vertical cost.
-            Only the reserve price keeps a worded label, because a bare number could read as an
-            asking price. */}
-        <div className="pc-ident">
-          <h3 className="pc-title"><a className="pc-link" href={href}>{x.name}</a></h3>
-          <p className="pc-loc"><PinIcon /><span>{x.area}, {x.stateName}</span></p>
-        </div>
-
-        {/* BAND 1 — what it is. One cell now that the areas are gone (Bryan). */}
-        <div className="pc-specs">
-          <span className="pc-spec pc-spec-type"><HomeIcon /><span>{identity}</span></span>
-        </div>
-
-        {/* BAND 2 — the decision: what it costs, and how long is left to act. */}
-        <div className="pc-deal">
+        {/* pc-main dissolves (display: contents) in grid mode and becomes the
+            description COLUMN in list mode — which is why the price lives inside
+            it: as a direct child of the body it sat beside the title in list
+            mode's row, price and name colliding on one line. */}
+        <div className="pc-main">
+          {/* 2 — the price, before anything else. The one worded label survives
+              because a bare RM531,000 could read as an asking price. */}
           <div className="pc-money">
             <span className="pc-money-label">Reserve price</span>
             <strong className="pc-money-value">{fmtPrice(x.reservePrice)}</strong>
           </div>
-          {/* MIRRORS the money cell: small uppercase label, then the value, then a muted
-              qualifier. "Closes" is a LABEL, not part of the value — inline it cost 48px of the
-              value line and pushed the price into this cell's hairline on every listing over
-              RM1m, which is 22 of our 36. As a label it costs nothing, because the label line
-              was empty anyway.
 
-              The day count does run twice (the photo pill carries it at 16.5px) and that is
-              deliberate: the pill is the GLANCE cue you read off the image while scrolling,
-              this is the same fact anchored to the price, where the decision gets made. */}
-          <div className="pc-close">
-            <CalendarIcon />
-            <span className="pc-close-txt">
-              <span className="pc-close-label">{d <= 0 ? "E-Tender" : "Closes"}</span>
-              <b>{d <= 0 ? "Closed" : fmtDate(x.closingDate)}</b>
-              {closeParts && <span className="pc-close-left">{closeParts.left}</span>}
-            </span>
+          {/* 3 — what and where. Type and name share one line, reference format:
+              "Condominium · Siti Apartment". The title is still the card's ONE real
+              link; its ::after stretches over the whole card. */}
+          <h3 className="pc-title">
+            <HomeIcon />
+            <a className="pc-link" href={href}>
+              {typeLabel ? `${typeLabel} · ` : ""}
+              {x.name}
+            </a>
+          </h3>
+          <p className="pc-loc">
+            <PinIcon />
+            <span>{where}</span>
+          </p>
+          {/* 4 — the size a buyer is buying. Absent value ⇒ no row, never a dash:
+              absence removes a control, it does not add an apology. */}
+          {sizeTxt && (
+            <p className="pc-size">
+              <RulerIcon />
+              <span>{sizeTxt}</span>
+            </p>
+          )}
+
+          {/* 5 — the window. Start date is the founder-approved demo derivation
+              (closing − 3 months, tenderStartOf) until the backend supplies a real
+              per-listing date. Days-left sits under the close, tied to the date. */}
+          <div className="pc-period">
+            <span className="pc-period-kick">E-Tender period</span>
+            <div className="pc-period-grid">
+              <span className="pc-date">
+                <span className="pc-date-label">Starts</span>
+                <b>
+                  <CalendarIcon />
+                  {tenderStartOf(x)}
+                </b>
+              </span>
+              <span className="pc-date">
+                <span className="pc-date-label">Closes</span>
+                <b>
+                  <CalendarIcon />
+                  {fmtDate(x.closingDate)}
+                </b>
+                <span className="pc-date-left">{open ? leftTxt : "Closed"}</span>
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* BAND 3 — who to call. */}
-        <div className="pc-foot">
-          <img className="pc-avatar" src={AGENT_PHOTO} alt="Stephen Yew, listing agent" loading="lazy" />
-          <span className="pc-agent"><b>Stephen Yew</b><span>REN 123456</span></span>
-          <a className="pc-tel" href="tel:+60123938255"><PhoneIcon /><span>012-393 8255</span></a>
-        </div>
+        {/* 6 + 7 — agent, then the action. Wrapped so list mode can lift the pair
+            into its own rail; display: contents everywhere else. */}
+        <div className="pc-rail">
+          <div className="pc-foot">
+            <img
+              className="pc-avatar"
+              src={AGENT_PHOTO}
+              alt="Stephen Yew, listing agent"
+              loading="lazy"
+            />
+            <span className="pc-agent">
+              <b>Stephen Yew</b>
+              <span>REN 123456</span>
+            </span>
+            <a className="pc-tel" href="tel:+60123938255">
+              <PhoneIcon />
+              <span>012-393 8255</span>
+            </a>
+          </div>
 
-        {/* Filled, not outlined — in the reference this is the card's one solid block, and it
-            anchors the bottom the way the photo anchors the top. */}
-        <span className="pc-cta" aria-hidden="true">View e-tender details<ArrowRightIcon /></span>
+          {/* Solid maroon, per the reference — the card's bottom anchor. Decorative:
+              the stretched title link takes the click. */}
+          <span className="pc-cta" aria-hidden="true">
+            View E-Tender Details
+            <ArrowRightIcon />
+          </span>
+        </div>
       </div>
     </article>
   );
