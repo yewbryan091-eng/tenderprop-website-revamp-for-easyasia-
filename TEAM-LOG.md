@@ -14,6 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
+| **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **PLANNING — nothing built.** Loop infrastructure created; homepage inspected. Surface 1 (header + hero) blocked on 4 founder questions in `loop/iteration-state.md` §2. **Codex is READ-ONLY on the homepage for the duration of this loop** — audits go to `loop/reviews/`, nothing else |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
@@ -74,6 +75,41 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 5 Aug 2026 — Claude · 🔁 HOMEPAGE LOOP ENGINEERING started. Codex: read this before your next task
+
+Bryan has put the homepage on a **controlled loop** instead of the usual build-and-review pass:
+one surface at a time, adversarially audited, scored /100, and **LOCKED** before the next starts.
+System is in **`HOMEPAGE-LOOP-ENGINEERING.md`** (root) with the working files under `loop/`.
+
+**What changes for Codex.** Your role in this loop is fixed: **adversarial auditor, READ-ONLY.**
+`loop/codex-auditor-prompt.md` is your standing brief — the eleven attack axes, the mandatory
+finding format (SEVERITY / AXIS / EVIDENCE / WHY IT MATTERS / RECOMMENDED FIX), and the three
+allowed verdicts (REJECT · LOOP AGAIN · LOCK CANDIDATE). **Write only to `loop/reviews/iter-NN-codex.md`.**
+Findings are evidence for Bryan, not instructions to Claude: **only what Bryan places under
+ACCEPTED FIXES in `loop/iteration-state.md` is binding.**
+
+**Status: PLANNING. Nothing is built and no frontend file has been modified.** This turn created
+the loop infrastructure, inspected the existing homepage, and claimed the area.
+
+**What the inspection found** (full detail in `loop/iteration-state.md` §1): `/` is
+`src/routes/index.tsx`, 60 lines, and there is no real homepage — a `PageShell` type stack, a
+cycle line, two product doors, and the dashed "Page frame" to-do grid. No hero image, no search,
+no listings, no primary CTA, **and nothing addressed to a seller at all.**
+
+⚠️ **Two things worth your attention:**
+
+1. **Only `src/routes/index.tsx` is homepage-only.** `PageShell`, `SiteHeader`, `SiteFooter` and
+   `site-shell.css` are load-bearing for **eight other routes**. Per `PLAN-AUGUST-DELIVERY.md` §6
+   I will either keep changes there tiny and push immediately, or grow homepage-owned components
+   and leave the shared ones alone. Shout if you need any of them.
+2. **Two copy lines already on `/` contradict canon** and will not be carried forward:
+   *"your deposit counts toward the 10%"* (`index.tsx:20`) and *"or your deposit back in full"*
+   (`index.tsx:42`). Both imply a deposit exists at offer time; deposit timing is still on the
+   **unresolved** list in §3 of this log, and no money moves on this site.
+
+**Your detail-page claim from 3 Aug is still open** in §1 — Mortgage Calculator. Release it when
+you push so the table stays true.
 
 ### 3 Aug 2026 — Codex · Price History now jumps directly to nearby evidence
 Removed the repeated subject-property strip (name, reserve guide, built-up and guide psf). Buyers
