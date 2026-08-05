@@ -14,6 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
+| **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **ITERATION 03 — NEW ARCHITECTURE from Bryan's reference.** Diagonal 45/55, "The smarter way to buy property.", maroon fade over a KL image. Structure pass only; **hero image is a placeholder** pending Bryan. Supersedes the 55/45 card of 01–02. **READ-ONLY on the homepage — do not edit `src/routes/index.tsx` or `src/styles/home.css`** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
@@ -74,6 +75,147 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 5 Aug 2026 — Claude · Homepage ITERATION 03: **new hero architecture** — diagonal, maroon fade
+
+Bryan supplied a reference design that supersedes the 55/45 card of iterations 01–02. His scope for
+this pass was explicit and narrow: *"just build the diagonal left side right side 45/55 first, left
+side ensure theres the smarter way to buy property title and right side ensure theres the maroon
+fading, i will proceed to go find the image."*
+
+**The hero is now a full-bleed diagonal**, ~45 light / ~55 dark, built with the SAME technique as
+`/tender`'s — two `clip-path`'d planes on shared split tokens — but **mirrored**: `/tender` darkens
+the left plane, the homepage darkens the right. Left carries "The smarter way to *buy property.*";
+right carries the cycle over a KL image under a maroon fade.
+
+⚠️ **The hero image is a PLACEHOLDER** (`tender-information-kl.jpg`). Bryan is sourcing the real
+one. It swaps at a single value — `--hp-hero-image` in `home.css`.
+
+**One alignment improvement worth stealing for `/tender`:** this hero derives its content edges
+from `.wrap`'s own formula, so they land on the same x as the header, footer and every section
+below. **`/tender`'s hero pads from the viewport and sits 114px outside the site's column at
+1440** — a real misalignment on the canon page, yours to take or leave.
+
+🐛 **Two traps this cost me, both invisible in the source:**
+
+1. **An `inset: 0` panel is full-width even when clip-path makes it a wedge.** My maroon gradient
+   ran dense→thin across 0–100% of the panel box, so the entire dense half landed in the
+   clipped-away region and the visible wedge got only the thin tail — flat mauve over a photo.
+   Stops have to start at the seam.
+2. **`position: static` in a stacking media query reparents an absolute `::before`.** Collapsing
+   the diagonal at 900px with `.hp-panel { position: static }` handed the fade's overlay to
+   `.hp-hero`, stretching maroon across the WHOLE hero: ink-on-maroon body copy and the burgundy
+   `buy property.` swallowed entirely. `position: relative` lays out the same and keeps it scoped.
+
+**Verified:** 0 overflow at 1440/1280/1024/768/390/375, every text colour AA against its plane
+(lowest 4.92), build + eslint + tsc green, all fourteen hard rules pass.
+
+**NOT built from the reference, deliberately** — "36 properties open" (36 is the raw count and 12
+of those are fabricated `demo:true` fillers; real is 24 open / 5 in cycle), "Verified & regulated ·
+Licensed professionals" (agency voice in a marketing zone, H9), the four equal DAYS/HRS/MINS/SECS
+cells (founder ruled that out — built as the ranked day-count-plus-strip `/tender` already uses),
+and the search band (Q3 still stands).
+
+### 5 Aug 2026 — Claude · Homepage ITERATION 02: ledger removed, hero rebalanced. **Codex, audit 02**
+
+Judge verdict on iteration 01 was **LOOP AGAIN** with five accepted fixes; all five are done and
+nothing else was touched. Self-score **90/100** — and **that is not a lock**: the condition needs
+two consecutive iterations moving by under 2 points and this one moved +7, with one P1 still
+deferred. Audit → `loop/reviews/iter-02-codex.md`.
+
+**The five-row property ledger is out of the cycle panel.** Surface 1 establishes the product and
+the current cycle; Surface 2 owns property-level inventory and proof. Nothing replaced it.
+
+**The rebalance is the part worth knowing about.** Removing the ledger did not shrink the
+imbalance — it **inverted and enlarged** it. The card fell 513.7 → 191.2px against a 386.9px
+statement, so 127px of void under the statement became **196px of void under the card**.
+`align-items: center` distributes it: 97.8 above / 97.9 below at 1440, 91.9 / 91.9 at 1024.
+No content added. The two columns lose their shared top edge, which was only worth having while
+their heights were comparable.
+
+⚠️ **A trap worth adding to your mental list.** The 44px seller-link target first shipped as an
+absolutely positioned `::after` overlay. It measured exactly 44px and hit-tested clean at 1440 —
+and **failed at 375**, because an absolute child of a **wrapped inline** resolves against one
+fragment, not the union, so the second line had no target at all. Only `elementFromPoint` caught
+it; `getBoundingClientRect` reported the union and looked correct. Now done with vertical padding
+on the inline box + `box-decoration-break: clone`, underline moved from `border-bottom` to a real
+`text-decoration` so it stays on the text.
+
+**CTA flattened in `home.css`, not in `tender-listings.css`** — the shared rule dresses every
+button on `/tender` and the detail page, and this loop does not touch those. If you want the lift
+and the `0 4px 12px` shadow gone site-wide, that is your call on your own surfaces.
+
+**Still open and NOT mine to fix:** the 252px mobile header, the root meta description's
+*"Sealed-bid property tenders"*, and `/tender` having no `<h1>`.
+
+### 5 Aug 2026 — Claude · Homepage ITERATION 01 built: header + hero. **Codex, you are up**
+
+Bryan settled the four hero questions (`loop/iteration-state.md` §2) and Surface 1 is built.
+Self-score **83/100, zero P0**, all regression guards pass. **Audit it** with
+`loop/codex-auditor-prompt.md` and write to `loop/reviews/iter-01-codex.md` only.
+
+**What it is.** A 55/45 hero on the cream ground, no slab. Left: eyebrow, Newsreader headline,
+one lede, one red CTA into `/tender`, seller route as a quiet ink link. Right: the cycle as a
+document — day count, closing date, and a native table of the **five real listings** in the
+12 Dec cycle against their reserve guides. `/` no longer uses `PageShell`, so this loop never
+enters a file the other eight routes depend on.
+
+**Q3 answered with evidence, and it failed:** `/tender` has **no** `validateSearch` / `useSearch`
+/ `URLSearchParams` — its search is local `useState`. A homepage search box would submit a query
+`/tender` ignores, so the box is out. Restoring it is work on `/tender`, not on the hero.
+
+**Two shared-file things I flagged rather than touched** — both are yours to agree or disagree with:
+1. **`SiteHeader` is 252px tall at 375px**, 38% of a phone viewport before the hero starts. Same
+   header as the week-4 P0 in `PLAN-AUGUST-DELIVERY.md` §4.
+2. **`.btn.red:hover` in `tender-listings.css`** carries `box-shadow: 0 4px 12px rgba(200,40,28,.2)`
+   plus a lift, against a brand rule that caps shadow at `0 1px 2px rgba(23,19,15,.03)`.
+
+Plus: the **root meta description** says *"Sealed-bid property tenders"* — bare "tender" breaks
+§3c and "sealed-bid" is auction vocabulary — and **`/tender` has no `<h1>` at all**, which my
+primary CTA now lands on.
+
+**One shared file I DID edit, small and announced:** removed the dead `.home-doors` / `.door` /
+`.cycle-line` rules from `site-shell.css` (25 lines). Zero hits across `src/` after the homepage
+stopped using them; brace balance verified before and after.
+
+**My own top fault, unfixed on purpose:** 127px of dead space under the statement column at
+desktop (139px at 1024). Three fixes are available and each costs something, so I left it for the
+judge rather than picking one and defending it.
+
+### 5 Aug 2026 — Claude · 🔁 HOMEPAGE LOOP ENGINEERING started. Codex: read this before your next task
+
+Bryan has put the homepage on a **controlled loop** instead of the usual build-and-review pass:
+one surface at a time, adversarially audited, scored /100, and **LOCKED** before the next starts.
+System is in **`HOMEPAGE-LOOP-ENGINEERING.md`** (root) with the working files under `loop/`.
+
+**What changes for Codex.** Your role in this loop is fixed: **adversarial auditor, READ-ONLY.**
+`loop/codex-auditor-prompt.md` is your standing brief — the eleven attack axes, the mandatory
+finding format (SEVERITY / AXIS / EVIDENCE / WHY IT MATTERS / RECOMMENDED FIX), and the three
+allowed verdicts (REJECT · LOOP AGAIN · LOCK CANDIDATE). **Write only to `loop/reviews/iter-NN-codex.md`.**
+Findings are evidence for Bryan, not instructions to Claude: **only what Bryan places under
+ACCEPTED FIXES in `loop/iteration-state.md` is binding.**
+
+**Status: PLANNING. Nothing is built and no frontend file has been modified.** This turn created
+the loop infrastructure, inspected the existing homepage, and claimed the area.
+
+**What the inspection found** (full detail in `loop/iteration-state.md` §1): `/` is
+`src/routes/index.tsx`, 60 lines, and there is no real homepage — a `PageShell` type stack, a
+cycle line, two product doors, and the dashed "Page frame" to-do grid. No hero image, no search,
+no listings, no primary CTA, **and nothing addressed to a seller at all.**
+
+⚠️ **Two things worth your attention:**
+
+1. **Only `src/routes/index.tsx` is homepage-only.** `PageShell`, `SiteHeader`, `SiteFooter` and
+   `site-shell.css` are load-bearing for **eight other routes**. Per `PLAN-AUGUST-DELIVERY.md` §6
+   I will either keep changes there tiny and push immediately, or grow homepage-owned components
+   and leave the shared ones alone. Shout if you need any of them.
+2. **Two copy lines already on `/` contradict canon** and will not be carried forward:
+   *"your deposit counts toward the 10%"* (`index.tsx:20`) and *"or your deposit back in full"*
+   (`index.tsx:42`). Both imply a deposit exists at offer time; deposit timing is still on the
+   **unresolved** list in §3 of this log, and no money moves on this site.
+
+**Your detail-page claim from 3 Aug is still open** in §1 — Mortgage Calculator. Release it when
+you push so the table stays true.
 
 ### 3 Aug 2026 — Codex · Price History now jumps directly to nearby evidence
 Removed the repeated subject-property strip (name, reserve guide, built-up and guide psf). Buyers
