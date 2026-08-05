@@ -9,7 +9,7 @@ written under ACCEPTED FIXES.
 Header + hero / first viewport
 
 **STATUS:**
-ITERATION 01 BUILT — awaiting Codex audit
+ITERATION 02 BUILT — awaiting Codex audit. Judge verdict on 01 was **LOOP AGAIN**
 
 **LOCKED:**
 None
@@ -23,12 +23,19 @@ Establish the homepage hero architecture before implementation.
 **CURRENT SCORE:**
 N/A — nothing built
 
-**ACCEPTED FIXES:**
-None yet — no audit has run. Surface 1 was built directly from the founder decisions in §2.
+**ACCEPTED FIXES — from the Codex iteration-01 audit, accepted by Bryan 5 Aug. All five DONE.**
+
+| # | Sev | Accepted fix | Status |
+|---|---|---|---|
+| 1 | P1 | **Remove the five-row property/reserve ledger** from the cycle panel. Retain the real cycle, the count of open E-Tenders where real data supports it, the countdown, the closing date and the cycle identity. **Do not replace it with new content merely to fill space** | ✅ removed; nothing put in its place |
+| 2 | P1/P2 | **Rebalance the hero after removal.** Re-measure at 1440 and 1024; fix composition **only if a meaningful imbalance remains**. No filler to force equal heights | ✅ measured, imbalance was real and inverted, fixed with `align-items: center` |
+| 3 | P2 | **Seller link ≥44px hit area**, keeping the quiet visual treatment and never competing with the primary CTA | ✅ 44px verified by hit test at 1440 and 375 |
+| 4 | P2 | **Skip link** — the established TenderProp pattern, targeting homepage main content, reusing the existing implementation | ✅ same `.skip-link` class and placement as `/tender`; focus lands on `#main` |
+| 5 | P2 | **Flatten the primary CTA** — remove the lift and oversized shadow; explicit property transitions, not `transition: all` | ✅ scoped to `.home` so `/tender` is untouched |
 
 **NEXT ACTION:**
-Codex audit of Iteration 01 → `loop/reviews/iter-01-codex.md`, using
-`loop/codex-auditor-prompt.md`. Bryan then fills ACCEPTED FIXES.
+Codex audit of Iteration 02 → `loop/reviews/iter-02-codex.md`, using
+`loop/codex-auditor-prompt.md`. Bryan then fills the next ACCEPTED FIXES.
 
 ---
 
@@ -234,9 +241,82 @@ Bryan would rather judge against alternatives, say so and iteration 02 builds th
 
 ---
 
-## 4. ITERATION HISTORY
+## 4. ITERATION 02 — CLAUDE SELF-CRITIQUE
+
+Screenshots: `loop/screenshots/iter-02-hero-{1440,1024,390}.png`.
+
+**WHAT I CHANGED.** Only the five accepted fixes. Hero architecture, copy, CTA hierarchy and the
+buyer/seller priority are untouched; `SiteHeader`, `/tender` and the detail pages were not opened.
+
+**BEFORE / AFTER — the hero columns.**
+
+| | 1440 | 1024 | 390 |
+|---|---|---|---|
+| Statement height | 386.9 → **386.9** | 353.9 → **353.9** | 362.6 → **362.6** |
+| Card height | 513.7 → **191.2** | 492.5 → **170.0** | 479.7 → **161.2** |
+| Imbalance (card − statement) | +126.8 → **−195.7** | +138.6 → **−183.9** | stacked |
+| After rebalance: space above / below card | — → **97.8 / 97.9** | — → **91.9 / 91.9** | stacked |
+| Horizontal overflow | 0 → **0** | 0 → **0** | 0 → **0** |
+
+**The rebalance was needed, and the measurement is why.** Removing the ledger did not reduce the
+imbalance — it **inverted and enlarged** it, from 127px of void under the statement to 196px of
+void under the card. `align-items: center` distributes that space instead of pooling it in one
+corner: 97.8 above and 97.9 below at 1440, symmetric to a tenth of a pixel. **Nothing was added.**
+The cost is the shared top edge the two columns had, which was only worth having while their
+heights were comparable.
+
+**Edges and gaps hold.** One left and one right edge per column at every width — statement
+L170/R744.2, card L800.2/R1270 at 1440. Gaps: statement 12 / 16 / 30, action block 16, card
+10 / 10 / 12. Every one a value in the CSS. No duplicate selectors in `home.css`; braces balanced.
+
+**THE FIX THAT PASSED AND WAS STILL WRONG.** The 44px hit area first shipped as an absolutely
+positioned `::after` overlay. It measured exactly 44px and hit-tested clean at 1440 — and **failed
+at 375**, because an absolute child of a *wrapped* inline resolves against one fragment, not the
+union, so the second line had no target. Replaced with vertical padding on the inline box plus
+`box-decoration-break: clone`, and the underline moved from `border-bottom` to a real
+`text-decoration` so it stays glued to the text. Verified by `elementFromPoint` at ±21px from each
+line fragment, at both widths.
+
+Then the fix created its own hazard: symmetric 14/14 padding left only **4px** between this hit
+area and the primary CTA's, close enough that a tap meant for the button could land on the link.
+Made asymmetric — 9 above, 19 below, into space nothing else uses — and the clearance is now 9px
+with the button still winning its own bottom edge.
+
+**SELF-SCORE — 90/100 (was 83, Δ +7).**
+
+| Band | 01 | 02 | Why it moved |
+|---|---|---|---|
+| Understood quickly | 17 | **16** | ⬇ Honest cost of an accepted fix: the five real names and reserves were the concrete proof in the first viewport. "5 properties" is now a claim where it used to be something you could see, and a headline beside a small date card is a more common shape than a headline beside a live ledger. Understanding is unchanged; distinctiveness is slightly down |
+| Visual hierarchy | 12 | **14** | ⬆ The card no longer out-weighs its rank. Three clean levels |
+| Alignment + spacing | 12 | **14** | ⬆ Symmetric to 0.1px, all gaps declared, and a real spacing hazard caught by hit-testing rather than by eye |
+| Design-system consistency | 9 | **10** | ⬆ Reuses the existing `.skip-link` rather than inventing one; CTA hover back inside the flat-brand rule |
+| Product accuracy | 10 | **10** | — all fourteen hard rules pass |
+| Desktop composition | 7 | **8** | ⬆ The void is gone. Held back because the 45% column now holds 191px of content in a 470px-wide track — it no longer earns its width |
+| Mobile / responsive | 7 | **8** | ⬆ 44px target verified by hit test. Still carrying the 252px header |
+| CTA clarity | 5 | **5** | — flat now, and the seller target does not steal from it |
+| Accessibility | 4 | **5** | ⬆ Target size fixed, skip link verified to move focus to `#main` |
+
+**⚠️ 90 IS NOT A LOCK.** The lock condition needs **two consecutive iterations improving by
+< 2 points**; this one moved **+7**. It also needs zero unresolved P1, and one remains (below).
+Reporting 90 as a candidate would be exactly the rounding-toward-the-threshold the rubric warns
+about.
+
+**UNRESOLVED.**
+
+| Sev | Item | Why still open |
+|---|---|---|
+| **P1** | `SiteHeader` is 252px tall at 375px — 38% of a phone viewport before the hero starts | Shared header; Bryan's brief says do not redesign it, and `PLAN-AUGUST-DELIVERY.md` §4 already defers it to week 4. **Blocks a formal LOCK under a strict reading** |
+| P2 | Root meta description says *"Sealed-bid property tenders"* and *"refundable deposits"* | Bare "tender" breaks §3c, "sealed-bid" is auction vocabulary. Shared `__root.tsx` |
+| P2 | `/tender` has no `<h1>` — the primary CTA's destination | Canon page, outside this claim |
+| P2 | **New:** the 45% column is 470px wide holding 191px of content | Fixing it means touching the founder-approved 55/45 split, so it is a judge question, not a builder decision |
+| P3 | *"Single Storey Landed @ OUG"* | No longer rendered on the homepage — it left with the ledger. Still an agency data issue for Surface 2 |
+
+---
+
+## 5. ITERATION HISTORY
 
 | Iter | Surface | Score | Verdict | Notes |
 |---|---|---|---|---|
 | 00 | Header + hero | — | — | Loop infrastructure created; homepage inspected; planning only |
-| 01 | Header + hero | **83** | *awaiting Codex* | New 55/45 composition. 0 overflow at 6 widths, guards pass, zero business-rule violations. Top open fault: 127px dead space bottom-left |
+| 01 | Header + hero | 83 | **LOOP AGAIN** | New 55/45 composition. 0 overflow at 6 widths, guards pass. Judge accepted 5 fixes |
+| 02 | Header + hero | **90** | *awaiting Codex* | Ledger removed, hero rebalanced, 44px target, skip link, flat CTA. **Not a lock — Δ +7, and one P1 deferred** |

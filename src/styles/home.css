@@ -23,11 +23,18 @@
 
 /* 55/45. minmax(0,·) on both tracks so a long property name overflows visibly
    inside its own cell instead of widening the grid and taking the page with it. */
+/* `align-items: center`, changed from `start` in iteration 02 and ONLY because the
+   measurements demanded it. With the ledger removed the card fell from 513.7px to 191.2px
+   against a 386.9px statement, so top-alignment left 195.7px of void under the card —
+   a bigger hole than the one iteration 01 was faulted for, in the other corner.
+   Centring is a composition fix, not filler: it adds no content and removes the void by
+   distributing it. The cost is the shared top edge the two columns had, which was only
+   worth having while their heights were comparable. */
 .hp-grid {
   display: grid;
   grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
   gap: clamp(28px, 4vw, 56px);
-  align-items: start;
+  align-items: center;
 }
 
 /* ── LEFT: the statement ───────────────────────────────────────────────────── */
@@ -71,12 +78,36 @@
    red CTA is the only accent in this zone, and a burgundy link beside it would put
    two accents in one block. Burgundy arrives on hover, where it reads as response. */
 .hp-seller { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+/* ≥44px hit area WITHOUT touching the typography (iteration 02, accepted fix).
+   Vertical padding on an INLINE box extends its hit area and background without
+   affecting the line box, so nothing moves: 17px of visible text, 45px of target.
+   `box-decoration-break: clone` is what makes it survive wrapping — at 375px this
+   link runs to two lines, and the default `slice` gives the top padding only to the
+   first fragment and the bottom only to the last, leaving the middle short.
+
+   Two approaches were tried and rejected first. Block padding pushes the underline
+   off the baseline and makes a quiet text link button-shaped, which the fix forbids.
+   An absolutely-positioned `::after` overlay measured 44px and passed at 1440 — then
+   failed the hit test at 375, because an absolute child of a WRAPPED inline resolves
+   against one fragment, not the union. It looked correct and only the click test
+   caught it. The underline moves from `border-bottom` to a real `text-decoration`
+   so it stays glued to the text while the padding grows around it. */
 .hp-seller a {
-  color: var(--ink); font-weight: 600; text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--ink) 32%, transparent);
-  transition: color .15s ease, border-color .15s ease;
+  color: var(--ink); font-weight: 600;
+  /* Asymmetric on purpose: 9 above, 19 below = 45px of target. Symmetric 14/14 also
+     cleared 44px, but it left only 4px between this hit area and the primary CTA's —
+     close enough that a tap meant for the button could land on the link. The space
+     BELOW is unused, so the target grows downward and the clearance goes to 9px. */
+  padding: 9px 0 19px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--ink) 32%, transparent);
+  transition: color .15s ease, text-decoration-color .15s ease;
 }
-.hp-seller a:hover { color: var(--burgundy); border-bottom-color: var(--burgundy); }
+.hp-seller a:hover { color: var(--burgundy); text-decoration-color: var(--burgundy); }
 
 /* ── RIGHT: the cycle, as a document ───────────────────────────────────────────
    White card on cream. It reads as a record of a real event — deadline, then the
@@ -121,63 +152,45 @@
    /tender hero's closing date (TEAM-LOG, 29 Jul). */
 .hp-cycle-date sup { font-size: .6em; vertical-align: super; letter-spacing: 0; }
 
-/* A native table because this IS tabular — property against reserve. Same reasoning
-   as the comparable-evidence ledger on the detail page (DESIGN-SYSTEM §4). */
-.hp-cycle-table { width: 100%; border-collapse: collapse; margin-top: 18px; }
-.hp-cycle-table th,
-.hp-cycle-table td {
-  text-align: left; padding: 9px 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 62%, transparent);
-}
-.hp-cycle-table thead th {
-  padding: 0 0 7px;
-  font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
-  color: var(--muted);
-}
-.hp-cycle-table thead th:last-child,
-.hp-cycle-table tbody td { text-align: right; }
-.hp-cycle-table tbody th { font-weight: 400; padding-right: 14px; }
-.hp-cycle-table tbody th .n { display: block; font-size: 14px; font-weight: 600; color: var(--ink); }
-.hp-cycle-table tbody th .a { display: block; margin-top: 1px; font-size: 12px; color: var(--muted); }
-/* nowrap so a squeezed column fails as a VISIBLE overflow rather than silently
-   wrapping a price onto two lines (AGENTS.md, spacing). vertical-align: top keeps
-   the figure on the property's first line, not floating against its area. */
-.hp-cycle-table tbody td {
-  font-size: 14px; font-weight: 600; color: var(--ink);
-  font-variant-numeric: tabular-nums; white-space: nowrap; vertical-align: top;
-}
-.hp-cycle-table tbody tr:last-child th,
-.hp-cycle-table tbody tr:last-child td { border-bottom: 0; padding-bottom: 0; }
+/* The cycle ledger's table rules were REMOVED in iteration 02 along with the table itself —
+   Surface 2 owns property-level proof. No rules were left orphaned; this note is the only
+   remaining mention, deliberately, so the next agent knows the removal was intentional. */
 
-.hp-cycle-foot { margin: 14px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.hp-cycle-foot { margin: 12px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
 
 /* ── Focus. Not optional (DESIGN-SYSTEM §6). ──────────────────────────────── */
 .hp-say a:focus-visible,
 .hp-cycle a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+/* The skip link's target. `tabindex="-1"` makes <main> programmatically focusable so the
+   skip actually moves focus; suppressing the ring here is the standard pairing, because
+   the destination is a whole page region and the viewport jump is the visible feedback. */
+.home #main:focus { outline: none; }
+
+/* ── Primary CTA — FLAT (iteration 02, accepted fix) ───────────────────────────
+   The shared `.btn.red:hover` lifts by 1px and casts `0 4px 12px rgba(200,40,28,.2)`,
+   against a brand rule that caps shadow at `0 1px 2px rgba(23,19,15,.03)` and bans gloss
+   outright. Overridden HERE rather than in tender-listings.css: that file dresses every
+   button on /tender and the detail page, and this loop does not touch those surfaces.
+   `transition: all` is replaced by named properties — `all` animates layout properties
+   nobody intended, and it is what made the lift cheap to add in the first place. */
+.home .btn { transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
+.home .btn.red:hover { background: #A81F15; transform: none; box-shadow: none; }
 
 /* ── Responsive ────────────────────────────────────────────────────────────────
-   Collapses at 920px: below that, 45% of the content width cannot hold a property
-   name and a reserve figure on one row, and 55% cannot hold a 40px headline. The
-   card follows the statement rather than leading it — the deadline only means
-   something once you know what an E-Tender is. */
+   Collapses at 920px, where 55% of the content width can no longer hold the headline
+   at a size that still leads. The card follows the statement rather than leading it —
+   a deadline only means something once you know what an E-Tender is. */
 @media (max-width: 920px) {
   /* minmax(0, 1fr), NEVER a bare 1fr. A bare `1fr` carries an implicit `min-width: auto`,
-     so the column cannot shrink below its content's min-content width — and this card
-     contains a nowrap price cell and "Single Storey Landed @ OUG". At 375px that pushed
-     the single column past the viewport and took the whole left column with it, because
-     both sit in the same track. Caught in the render at 375, not in the code. */
+     so the track cannot shrink below its content's min-content width. In iteration 01 the
+     card's nowrap price cell pushed the single column past a 375px viewport and took the
+     left column with it. The ledger is gone, but the guard stays: it costs nothing and
+     the next thing put in this card will not have to rediscover it. */
   .hp-grid { grid-template-columns: minmax(0, 1fr); gap: clamp(26px, 5vw, 34px); }
   .hp-hero { padding-top: clamp(30px, 5vw, 44px); }
-}
-
-@media (max-width: 460px) {
-  .hp-cycle-table tbody th { padding-right: 10px; }
-  .hp-cycle-table tbody th .n { font-size: 13.5px; }
-  .hp-cycle-table tbody td { font-size: 13.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .home .btn,
   .hp-seller a { transition: none; }
-  .home .btn.red:hover { transform: none; }
 }

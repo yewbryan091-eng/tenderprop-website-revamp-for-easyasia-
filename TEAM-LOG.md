@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **ITERATION 01 BUILT — awaiting Codex audit.** Surface 1 (header + hero) rebuilt; self-score 83/100, zero P0. **Codex: audit next, using `loop/codex-auditor-prompt.md` → `loop/reviews/iter-01-codex.md`. READ-ONLY on the homepage — do not edit `src/routes/index.tsx` or `src/styles/home.css`** |
+| **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **ITERATION 02 BUILT — awaiting Codex audit.** Judge verdict on 01 was LOOP AGAIN; all five accepted fixes are done. Self-score 90/100, **not a lock** (Δ +7, one P1 deferred). **Codex: audit → `loop/reviews/iter-02-codex.md`. READ-ONLY on the homepage — do not edit `src/routes/index.tsx` or `src/styles/home.css`** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Expanded property filters shipped below Search |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
@@ -75,6 +75,38 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 5 Aug 2026 — Claude · Homepage ITERATION 02: ledger removed, hero rebalanced. **Codex, audit 02**
+
+Judge verdict on iteration 01 was **LOOP AGAIN** with five accepted fixes; all five are done and
+nothing else was touched. Self-score **90/100** — and **that is not a lock**: the condition needs
+two consecutive iterations moving by under 2 points and this one moved +7, with one P1 still
+deferred. Audit → `loop/reviews/iter-02-codex.md`.
+
+**The five-row property ledger is out of the cycle panel.** Surface 1 establishes the product and
+the current cycle; Surface 2 owns property-level inventory and proof. Nothing replaced it.
+
+**The rebalance is the part worth knowing about.** Removing the ledger did not shrink the
+imbalance — it **inverted and enlarged** it. The card fell 513.7 → 191.2px against a 386.9px
+statement, so 127px of void under the statement became **196px of void under the card**.
+`align-items: center` distributes it: 97.8 above / 97.9 below at 1440, 91.9 / 91.9 at 1024.
+No content added. The two columns lose their shared top edge, which was only worth having while
+their heights were comparable.
+
+⚠️ **A trap worth adding to your mental list.** The 44px seller-link target first shipped as an
+absolutely positioned `::after` overlay. It measured exactly 44px and hit-tested clean at 1440 —
+and **failed at 375**, because an absolute child of a **wrapped inline** resolves against one
+fragment, not the union, so the second line had no target at all. Only `elementFromPoint` caught
+it; `getBoundingClientRect` reported the union and looked correct. Now done with vertical padding
+on the inline box + `box-decoration-break: clone`, underline moved from `border-bottom` to a real
+`text-decoration` so it stays on the text.
+
+**CTA flattened in `home.css`, not in `tender-listings.css`** — the shared rule dresses every
+button on `/tender` and the detail page, and this loop does not touch those. If you want the lift
+and the `0 4px 12px` shadow gone site-wide, that is your call on your own surfaces.
+
+**Still open and NOT mine to fix:** the 252px mobile header, the root meta description's
+*"Sealed-bid property tenders"*, and `/tender` having no `<h1>`.
 
 ### 5 Aug 2026 — Claude · Homepage ITERATION 01 built: header + hero. **Codex, you are up**
 

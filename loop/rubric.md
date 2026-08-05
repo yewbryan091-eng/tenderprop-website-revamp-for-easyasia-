@@ -149,4 +149,5 @@ automatically a **P0** — see `loop/regression-guards.md` §3.
 
 | Iter | Surface | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | Total | Δ | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 01 | Header + hero | 17 | 12 | 12 | 9 | 10 | 7 | 7 | 5 | 4 | **83** | — | Claude self-score, pre-audit |
+| 01 | Header + hero | 17 | 12 | 12 | 9 | 10 | 7 | 7 | 5 | 4 | **83** | — | LOOP AGAIN — 5 fixes accepted |
+| 02 | Header + hero | 16 | 14 | 14 | 10 | 10 | 8 | 8 | 5 | 5 | **90** | **+7** | Claude self-score, pre-audit. **Not a lock:** Δ ≥ 2 and one P1 deferred |

@@ -4,14 +4,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
 import { TENDERS } from "@/data/tenders";
-import {
-  MS_DAY,
-  daysLeft,
-  fmtPrice,
-  isFinalDay,
-  ordinalDateParts,
-  remainingMs,
-} from "@/lib/tender-utils";
+import { MS_DAY, daysLeft, isFinalDay, ordinalDateParts, remainingMs } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 import "@/styles/home.css";
 
@@ -90,8 +83,14 @@ function HomePage() {
 
   return (
     <div className="home">
+      {/* The established TenderProp skip-link, same class and same placement as /tender's
+          (first child, before the header). `tabIndex={-1}` on the target so focus actually
+          lands there — an anchor alone moves the viewport but not always the focus ring. */}
+      <a className="skip-link" href="#main">
+        Skip to main content
+      </a>
       <SiteHeader />
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="hp-hero" aria-labelledby="hp-title">
           <div className="wrap hp-grid">
             {/* LEFT ~55% — what this is, and the one way in */}
@@ -118,9 +117,12 @@ function HomePage() {
               </div>
             </div>
 
-            {/* RIGHT ~45% — the product proved with real data, not decoration.
-                No photograph: one property's picture above the value proposition
-                re-runs the catalogue framing the cycle exists to replace. */}
+            {/* RIGHT ~45% — the CYCLE, and only the cycle.
+                ITERATION 02, accepted fix: the five-row property/reserve ledger is REMOVED.
+                Surface 1 establishes the product and the current cycle; Surface 2 owns
+                property-level inventory and proof. Nothing replaced it — an empty space is
+                the honest result of removing something, and filling it would just be the
+                ledger again in another costume. */}
             <aside className="hp-cycle" aria-labelledby="hp-cycle-kick">
               <p className="hp-cycle-kick" id="hp-cycle-kick">
                 Next E-Tender cycle · {IN_CYCLE.length} properties
@@ -140,37 +142,11 @@ function HomePage() {
                   <sup>{close.suffix}</sup> {close.month} {close.year}
                 </b>
               </p>
-
-              <table className="hp-cycle-table">
-                <thead>
-                  <tr>
-                    <th scope="col">Property</th>
-                    <th scope="col">Reserve guide</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {IN_CYCLE.map((t) => (
-                    <tr key={t.name}>
-                      <th scope="row">
-                        <span className="n">{t.name}</span>
-                        {/* Some listing names already carry their locality — "Single Storey
-                            Landed @ OUG" over a line reading "OUG" is the same fact twice in
-                            one row, which is the redundancy Bryan catches every time. */}
-                        {!t.name.toLowerCase().includes(t.area.toLowerCase()) && (
-                          <span className="a">{t.area}</span>
-                        )}
-                      </th>
-                      <td>{fmtPrice(t.reservePrice)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {/* One fact, stated once. "A reserve is a guide, not a minimum" was the THIRD
-                  statement of that in a single viewport — the lede says it, the column header
-                  says it. This line carries the one thing nothing else does: there is no
-                  intra-day cutoff, a cycle runs to the end of its closing date. */}
-              <p className="hp-cycle-foot">Offers close at the end of the closing date.</p>
+              {/* Reworded, not restyled. With the table gone this line sat directly under
+                  "Offers close 12th December 2026" and read "Offers close … Offers close".
+                  It still carries the one fact nothing else does — founder-confirmed, there
+                  is no intra-day cut-off; a cycle runs to the end of its closing date. */}
+              <p className="hp-cycle-foot">Closing is end of day, Malaysian time.</p>
             </aside>
           </div>
         </section>
