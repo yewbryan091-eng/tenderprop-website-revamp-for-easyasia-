@@ -52,39 +52,52 @@
     height: 2px; border-radius: 2px; background: var(--burgundy);
   }
 
-  /* ── OWNER AUCTION: one tab carrying its package annotation ──────────────────
-     The subtitle is ABSOLUTE, and that is the whole trick. Out of flow it adds
-     nothing to the anchor's width or height, so:
-       · the Owner Auction ↔ Sell gap matches every other gap — no fifth tab
-       · all four primary labels keep one shared baseline
-       · the header does not grow; the subtitle hangs into its existing 14px of
-         bottom padding
-     It stays inside the <a>, so the whole unit is clickable — a click on any
-     descendant of an anchor activates it, absolute or not.
-     `left: 56%` is the founder's offset: the annotation starts past the middle of
-     the title and trails to the lower right, reading as attached to Owner Auction
-     rather than sitting between two tabs. */
+  /* ── OWNER AUCTION: ONE tab, simply a WIDER one ──────────────────────────────
+     Corrected 6 Aug after Bryan saw it: the annotation was absolutely positioned, so
+     the tab stayed title-width and the gold text ran on UNDERNEATH Sell and Services.
+     Wrong reading of "don't alter the spacing" — his point is that this is a single
+     standalone tab that is simply LONGER than the others because it carries the
+     annotation. So the annotation is back IN FLOW: it sets the anchor's width, and
+     Sell begins cleanly after it.
+
+     Two things keep that from costing anything:
+       · `align-items: flex-start` on the list aligns the anchors' TOPS, so all four
+         primary labels still share one baseline even though this anchor is taller.
+       · `margin-bottom` cancels the annotation's line from the anchor's MARGIN box,
+         so the row — and the header — do not grow. The annotation hangs into the
+         header's existing bottom padding, exactly as before.
+     Hit area is unaffected: the negative margin shrinks the margin box, never the
+     border box, so both lines remain inside the anchor and clickable. */
+  .nav ul { align-items: flex-start; }
+  .nav-oa {
+    /* How far the annotation starts across the title — the founder's lower-right
+       offset, pulled left on his eye (62px → 40px, ~57% → ~37% of "Owner Auction" at
+       15.5px/500). It still trails to the lower right, and because the annotation
+       sets this tab's width, moving it left also pulls Sell 22px back in. One knob. */
+    --oa-indent: 40px;
+    display: flex; flex-direction: column;
+    margin-bottom: -13px;
+  }
   .nav-oa-benefit {
-    /* `top: 100%` exactly — NOT tucked up into the anchor's padding. The annotation is
-       wider than the Owner Auction anchor and runs on over Sell and Services; pulled up
-       even a few px it intersects THEIR hit boxes, and being later in the DOM they paint
-       over it and would steal clicks aimed at the gold text. Flush at the anchor's bottom
-       edge it clears every sibling box entirely.
-       No `pointer-events: none` either — that would leave the annotation dead to the
-       mouse, and the brief is explicit that the package is ONE hit area. As a descendant
-       of the <a> it activates the link; being out of flow changes layout, never events. */
-    position: absolute; left: 56%; top: 100%;
-    white-space: nowrap;
+    display: block; margin-left: var(--oa-indent); white-space: nowrap;
     font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
     font-style: italic; font-weight: 500; font-size: 11.5px; line-height: 1.1;
     color: var(--brass);
     transition: color .15s ease;
   }
-  /* One hover for the package — the subtitle deepens with the title, it does not
+  /* One hover for the package — the annotation deepens with the title, it does not
      animate on its own. */
   .nav ul a.nav-oa:hover .nav-oa-benefit { color: var(--brass-deep); }
-  /* The underline belongs to the TITLE only, never the annotation — and it already
-     does, because the anchor's box is the title (the subtitle is out of flow). */
+
+  /* The underline belongs to the TITLE, never the annotation. The generic rule pins
+     to the anchor's bottom, which is now below the gold line — so for this tab it is
+     suppressed and redrawn under the title span itself. */
+  .nav ul a.nav-oa.active::after { display: none; }
+  .nav-oa.active .nav-oa-title { position: relative; }
+  .nav-oa.active .nav-oa-title::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -3px;
+    height: 2px; border-radius: 2px; background: var(--burgundy);
+  }
   .nav .auth { display: flex; justify-self: end; gap: 10px; }
   .nav .auth .btn { display: inline-block; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; text-decoration: none; border: 1.5px solid transparent; cursor: pointer; }
   .nav .auth .btn.ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
