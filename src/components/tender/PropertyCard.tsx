@@ -119,11 +119,15 @@ export function PropertyCard({
           {/* 3 — what and where. Type and name share one line, reference format:
               "Condominium · Siti Apartment". The title is still the card's ONE real
               link; its ::after stretches over the whole card. */}
+          {/* TYPE ONLY (Bryan, 6 Aug): the property name is off the card — the type is
+              what a browser scans, the name belongs to the detail page. It stays in the
+              link ACCESSIBLY (sr-only): stripped visually, twelve cards would otherwise
+              all announce as the link "Condominium", indistinguishable in a links list. */}
           <h3 className="pc-title">
             <HomeIcon />
             <a className="pc-link" href={href}>
-              {typeLabel ? `${typeLabel} · ` : ""}
-              {x.name}
+              {typeLabel || x.name}
+              <span className="sr-only"> · {x.name}</span>
             </a>
           </h3>
           <p className="pc-loc">
