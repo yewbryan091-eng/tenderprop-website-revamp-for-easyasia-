@@ -425,7 +425,7 @@ function OwnerAuction() {
                   is the one that gets to be loud. */}
             <div className="search-intro">
               <h2 id="property-search-title">
-                Find a property <span className="hl">up for Owner Auction</span>
+                Find a property up for <span className="hl">Owner Auction</span>
               </h2>
             </div>
             <form
