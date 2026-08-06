@@ -3,17 +3,18 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
-import { TaHome, TaPin } from "@/components/tender/icons";
+import { CalendarIcon, TaHome, TaPin } from "@/components/tender/icons";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
   MS_DAY,
-  daysLeft,
+  auctionStartAtMs,
+  daysUntil,
   fmtDate,
   fmtRM,
-  isFinalDay,
+  isFinalDayUntil,
   matchesTaxonomy,
-  remainingMs,
+  remainingMsUntil,
 } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 
@@ -42,9 +43,24 @@ import "@/styles/tender-listings.css";
 
 export const Route = createFileRoute("/owner-auction/")({ component: OwnerAuction });
 
-/* Same derivation as /tender, and the same placeholder problem: this is the next
-   E-TENDER closing date, not an auction date. Replaced when auction data exists. */
-const NEXT_DATE = TENDERS.map((t) => t.closingDate).sort()[0];
+/* ── THE AUCTION EVENT — one config object, not a scatter of literals ──────────
+   ⚠️ PLACEHOLDER DATA. The repo holds NO Owner Auction records: every one of the 36
+   listings is `tenderMethod: "E-Tender"`, and there is no `auctionTime` field, no
+   auctioneer and no auctioneer licence anywhere in the model. Until EasyAsia supplies
+   them, the hero reads from this one object so the placeholder is visible in a single
+   place and swapping it for real data is a one-line change — rather than a date
+   quietly derived from the E-TENDER cycle, which is what this page did before.
+
+   `time24` is the source of truth; `timeLabel` is its display form. Two fields, not a
+   parse, because 24-hour is what a backend stores and "9:00 AM" is what a buyer reads. */
+const OWNER_AUCTION = {
+  date: "2026-12-12",
+  time24: "09:00:00",
+  timeLabel: "9:00 AM",
+};
+
+const AUCTION_START_MS = auctionStartAtMs(OWNER_AUCTION.date, OWNER_AUCTION.time24);
+
 const MONTH_NAMES = [
   "January",
   "February",
@@ -60,7 +76,7 @@ const MONTH_NAMES = [
   "December",
 ];
 const HERO_DATE = (() => {
-  const [year, month, day] = NEXT_DATE.split("-").map(Number);
+  const [year, month, day] = OWNER_AUCTION.date.split("-").map(Number);
   const lastTwo = day % 100;
   const suffix =
     lastTwo >= 11 && lastTwo <= 13
@@ -68,6 +84,9 @@ const HERO_DATE = (() => {
       : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
   return { day, suffix, month: MONTH_NAMES[month - 1], year };
 })();
+/* "12 December 2026" — the confirmation line reads as a sentence, so it takes the
+   plain form rather than the ordinal display treatment above it. */
+const AUCTION_DATE_PLAIN = `${HERO_DATE.day} ${HERO_DATE.month} ${HERO_DATE.year}`;
 
 /* Null until mount so SSR and first paint never show a flash of zeros. */
 type Remaining = {
@@ -78,23 +97,23 @@ type Remaining = {
   finalDay: boolean;
 };
 
-function useCountdown(iso: string): Remaining | null {
+function useCountdown(atMs: number): Remaining | null {
   const [left, setLeft] = useState<Remaining | null>(null);
   useEffect(() => {
     const compute = (): Remaining => {
-      const ms = remainingMs(iso);
+      const ms = remainingMsUntil(atMs);
       return {
-        days: daysLeft(iso),
+        days: daysUntil(atMs),
         hours: Math.floor((ms % MS_DAY) / 3600000),
         minutes: Math.floor((ms % 3600000) / 60000),
         seconds: Math.floor((ms % 60000) / 1000),
-        finalDay: isFinalDay(iso),
+        finalDay: isFinalDayUntil(atMs),
       };
     };
     setLeft(compute());
     const id = window.setInterval(() => setLeft(compute()), 1000);
     return () => window.clearInterval(id);
-  }, [iso]);
+  }, [atMs]);
   return left;
 }
 
@@ -165,7 +184,7 @@ function inSizeRange(value: string, selected: string, options: SizeRange[]) {
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
 function OwnerAuction() {
-  const left = useCountdown(NEXT_DATE);
+  const left = useCountdown(AUCTION_START_MS);
   const timerUnits = [
     { label: "d", value: left ? String(left.days) : "" },
     { label: "h", value: left ? pad2(left.hours) : "" },
@@ -188,10 +207,10 @@ function OwnerAuction() {
   /* The spoken form of the visible label — it moves with it, or a screen reader is
      told the auction "closes" while the page says it starts. */
   const countdownLabel = !left
-    ? "Auction starts soon"
+    ? "Next Owner Auction soon"
     : FINAL_DAY
-      ? `Auction starts in ${left.hours} hours and ${left.minutes} minutes`
-      : `Auction starts in ${left.days} ${left.days === 1 ? "day" : "days"}`;
+      ? `Next Owner Auction in ${left.hours} hours and ${left.minutes} minutes`
+      : `Next Owner Auction in ${left.days} ${left.days === 1 ? "day" : "days"}`;
 
   /* ---- Search-band state, lifted from /tender ---- */
   const [query, setQuery] = useState("");
@@ -342,7 +361,7 @@ function OwnerAuction() {
             <div className="hero-panel-inner">
               <div className="hero-timer" aria-live="off" aria-label={countdownLabel}>
                 <span className="hero-timer-heading" aria-hidden="true">
-                  <span className="hero-timer-label">Auction starts in</span>
+                  <span className="hero-timer-label">Next Owner Auction in</span>
                 </span>
                 <span className="hero-timer-days" aria-hidden="true">
                   <span className="hero-timer-value">{countdownValue}</span>
@@ -359,14 +378,31 @@ function OwnerAuction() {
                   <span className="hero-timer-unit">{countdownUnit}</span>
                 </span>
               </div>
-              <p className="hero-eyebrow">Next Owner Auction</p>
+              {/* The eyebrow that used to sit here ("Next Owner Auction") is gone: the
+                  countdown's own label already names the event, so a second heading
+                  above the date was the same fact twice. The date stands alone. */}
               <p className="hero-date">
-                <time dateTime={NEXT_DATE}>
+                <time dateTime={`${OWNER_AUCTION.date}T${OWNER_AUCTION.time24}+08:00`}>
                   {HERO_DATE.day}
                   <sup>{HERO_DATE.suffix}</sup> {HERO_DATE.month} {HERO_DATE.year}
                 </time>
               </p>
-              <p className="hero-foot">Offers close at the end of the closing date</p>
+              {/* An auction has a START TIME — the single fact that most separates this
+                  product from a tender, so it is real information in brass, not
+                  microcopy. Inside the same <time> semantics via the date above. */}
+              <p className="oa-time">{OWNER_AUCTION.timeLabel}</p>
+              <p className="oa-cal" aria-hidden="true">
+                <CalendarIcon />
+              </p>
+              <p className="hero-foot">
+                Auction starts {AUCTION_DATE_PLAIN}
+                <span className="oa-left">
+                  ·{" "}
+                  {left
+                    ? `${left.days.toLocaleString("en-MY")} ${left.days === 1 ? "day" : "days"} left`
+                    : "\u00a0"}
+                </span>
+              </p>
             </div>
           </div>
 

@@ -1505,9 +1505,31 @@
    hue, which lets a photograph read as a photograph instead of being tinted. Both
    the base colour and the wash move together; if only the ::before changed, the
    burgundy base would still show through wherever the image is dark. */
-.oa-page { --oa-charcoal: #332A26; }
+/* --oa-brass is LIGHTER than the #9A7837 Bryan suggested, and deliberately: that
+   value measures 3.41:1 on this espresso wash, and the auction TIME is real
+   information, not decoration. #B8944A is the nearest tone in the same aged-brass
+   family that clears AA at 4.92:1. Note this is the mirror of the nav's brass
+   (#836A33) — that one had to go DARKER for a cream ground, this one LIGHTER for a
+   dark one. Same family, opposite directions; neither is reusable on the other. */
+.oa-page { --oa-charcoal: #332A26; --oa-brass: #B8944A; }
 .oa-page .hero-panel-left { background-color: var(--oa-charcoal); }
-.oa-page .hero-panel-left::before { background: var(--oa-charcoal); }
+/* GRADED, not flat. A single espresso layer over this photograph read grey and
+   lifeless, because the top half of the frame is a grey-blue dusk sky — wash it
+   evenly and you get desaturated grey. Denser at the top kills that sky; lighter
+   toward the bottom lets the warm timber and the lit soffit through, which is the
+   "charcoal + warm architectural light" the brief asks for.
+   Alpha now lives in the gradient, so the base rule's `opacity: .72` must be
+   neutralised or the two multiply. Effective 0.86 → 0.66, averaging ~0.75 — inside
+   the 0.68–0.78 band. */
+.oa-page .hero-panel-left::before {
+  background: linear-gradient(
+    172deg,
+    rgba(51, 42, 38, .88) 0%,
+    rgba(51, 42, 38, .76) 46%,
+    rgba(51, 42, 38, .64) 100%
+  );
+  opacity: 1;
+}
 
 /* The panel CTA stays BURGUNDY. Charcoal was tried here on 6 Aug — the argument
    being that a maroon button on a charcoal-washed hero reads as a leftover from the
@@ -1560,4 +1582,28 @@
   background-image: url(/assets/layout/owner-auction-hero.jpg);
   background-size: cover;
   background-position: 50% 22%;
+}
+
+/* ── OWNER AUCTION hero: the event block under the date ───────────────────────
+   The one structural difference from E-Tender's hero. A tender has a closing DATE;
+   an auction has a scheduled date AND TIME, so the time is a fact of its own rather
+   than a qualifier on the date. Brass marks it — the only accent on this panel, and
+   the reason it stays a micro-accent is that the day count must keep first read. */
+.oa-page .oa-time {
+  margin: 4px 0 0;
+  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-weight: 600; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.15;
+  letter-spacing: .04em; color: var(--oa-brass); font-variant-numeric: tabular-nums;
+}
+/* Supporting, not dominant — it separates the date/time pair from the confirmation
+   line so the two do not read as one four-line block. */
+.oa-page .oa-cal { margin: 14px 0 0; line-height: 0; color: var(--oa-brass); }
+.oa-page .oa-cal svg { width: 19px; height: 19px; }
+/* The confirmation sentence sits closer than /tender's footnote (18px) because the
+   calendar glyph above it is already doing the separating. */
+.oa-page .hero-panel-left .hero-foot { margin-top: 10px; font-size: 13px; }
+.oa-page .oa-left {
+  display: block; margin-top: 3px;
+  font-family: "Newsreader", Georgia, serif; font-style: italic; font-weight: 500;
+  font-size: 13.5px; color: var(--oa-brass); font-variant-numeric: tabular-nums;
 }

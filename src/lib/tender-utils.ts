@@ -128,6 +128,34 @@ export function isFinalDay(closingDate: string, now: number = Date.now()) {
   return remainingMs(closingDate, now) < MS_DAY;
 }
 
+/* ── OWNER AUCTION is an EVENT, not a deadline ─────────────────────────────────
+   `closeAtMs()` above hardcodes `23:59:59+08:00` because an e-tender runs to the END
+   of its closing date — founder-confirmed, no intra-day cutoff. An auction is the
+   opposite: it STARTS at a scheduled time. Reusing the tender helpers for it counts
+   to the wrong moment by up to a full day (~15 hours for a 9am auction), which is the
+   885-vs-884 bug again in a new place.
+
+   So auction timing gets its own entry point, and lives HERE rather than in the route
+   for the same reason everything else does: one definition, or the page and the card
+   eventually disagree. Additive only — nothing above is touched. */
+export function auctionStartAtMs(date: string, time24: string) {
+  return new Date(`${date}T${time24}+08:00`).getTime();
+}
+
+export function remainingMsUntil(atMs: number, now: number = Date.now()) {
+  return Math.max(0, atMs - now);
+}
+
+/* Ceil, matching `daysLeft` — with 127 days and 22 hours to run there are 128 days
+   including today, and the final day reads "1 day left" rather than "0". */
+export function daysUntil(atMs: number, now: number = Date.now()) {
+  return Math.ceil(remainingMsUntil(atMs, now) / MS_DAY);
+}
+
+export function isFinalDayUntil(atMs: number, now: number = Date.now()) {
+  return remainingMsUntil(atMs, now) < MS_DAY;
+}
+
 /* Deposit: listings with a published deposit carry `deposit`. Others fall back to
    3% of reserve, the figure published in the live How-To-Tender FAQ.
    Placeholder rule — verify with the agency before go-live. */

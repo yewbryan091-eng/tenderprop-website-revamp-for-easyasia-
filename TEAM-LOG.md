@@ -107,20 +107,23 @@ Everything below is pushed. `main` is clean; the dev server runs on **:8080** fr
   annotation on **Sell** (`.nav-pkg*`, left-aligned).
 - **Homepage** — diagonal hero, iteration 03.
 
-**Active: `/owner-auction`.** Hero and search band are the `/tender` ones copied across, then
-re-worded. **Three things there are still E-Tender's and are known, not overlooked:**
-1. The left panel's foot line still reads *"Offers close at the end of the closing date"* —
-   it contradicts "AUCTION STARTS IN" directly above it and is wrong for an event.
-2. The search band's filter copy ("Refine e-tender properties", "E-Tender closing cycle")
-   **and its dataset** — it searches the 36 E-Tender records.
-3. "See how Owner Auction works" points at `/how-e-tender-works`. There is no Owner Auction
+**Active: `/owner-auction`.** The **HERO IS DONE** (7 Aug, to Bryan's approved mockup): its own
+event semantics — "Next Owner Auction in" → countdown → date → **9:00 AM in brass** → calendar
+glyph → "Auction starts 12 December 2026 · 128 days left". Counting now runs to the real
+auction START via `auctionStartAtMs()`, not to 23:59:59. Espresso wash is graded, not flat.
+The search band below it is still the `/tender` clone. **Two things known, not overlooked:**
+1. The search band's filter copy ("Refine e-tender properties", "E-Tender closing cycle")
+   **and its dataset** — it searches the 36 E-Tender records. Explicitly out of scope so far.
+2. "See how Owner Auction works" points at `/how-e-tender-works`. There is no Owner Auction
    explainer route; a working-but-wrong link beat a 404 until Bryan chooses a destination.
 
 **🔴 The blocker for Owner Auction is DATA, not design.** The repo holds **zero** Owner
 Auction records — all 36 are `tenderMethod: "E-Tender"` — and there are no `auctionTime`,
 auctioneer, or auctioneer-licence fields. Four traps found while planning, all still live:
-- `remainingMs()` hardcodes `23:59:59 MYT`. Correct for a tender that runs to end of day,
-  **~15 hours wrong for an auction that starts at 9:00 AM.**
+- ~~`remainingMs()` hardcodes 23:59:59~~ — **SOLVED 7 Aug.** `auctionStartAtMs()` /
+  `daysUntil()` / `isFinalDayUntil()` are in `tender-utils.ts`, additive, and the Owner
+  Auction hero uses them. Any future auction surface must too — do not reach for the tender
+  helpers.
 - `depositOf()` is 3% of **reserve**; an auction deposit is 3% of the **bidding** price —
   a different base, unknowable before a bid. No deposit figure belongs on an auction card.
 - **`/tender` does not filter by `tenderMethod`.** Harmless today; the moment auction records
