@@ -709,12 +709,16 @@
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
   .prop-card .pc-title a:hover { color: var(--burgundy); }
-  /* The two-line title reserve lived here for a few hours on 6 Aug and came out the
-     same day WITH the property names: a type-only title is single-line by
-     construction (the longest, "3-Storey Semi-Detached House", fits the narrowest
-     2-up card), so the reserve would have been a dead line on EVERY card — dead
-     space with no owner. Row alignment now holds for free; the line-clamp above
-     stays as the guard if a longer type ever appears. */
+  /* GRID RHYTHM — the two-line reserve returns WITH the property names, because it is
+     the names that make this row vary: "Condominium · 222 Residency" is one line where
+     "2-Storey Terrace House · Single Storey Landed @ OUG" is two. Without it, one long
+     name drops that card's address, size, period, agent and CTA ~21px below its
+     neighbours' and the row stops marching in step.
+     Multi-column only. A single-column phone has no row to align with, and a reserved
+     empty line under a short title is the dead space the 28 Jul ruling objected to. */
+  @media (min-width: 681px) {
+    .props-grid.grid-mode .pc-title a { min-height: 2.7em; }
+  }
   /* EMPHASISED (Bryan, 6 Aug): the card now carries the real street, not a suburb,
      and subsale buyers browse by street — so this steps up from 13.5px muted to
      14px ink. Still a clear step below the 15.5px/700 type above it, and the ruler
@@ -823,7 +827,7 @@
      burgundy, so it announces itself the moment a buyer reaches for it. Muted on white
      measures 4.9:1 — AA at this size. Padding + negative margin keep the ≥44px touch
      target without moving a pixel of layout. */
-  .prop-card .pc-tel { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 12px 0; margin: -12px 0; color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: none; font-variant-numeric: tabular-nums; transition: color .15s ease; }
+  .prop-card .pc-tel { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 12px 0; margin: -12px 0; color: color-mix(in srgb, var(--ink) 34%, var(--muted)); font-size: 13px; font-weight: 600; text-decoration: none; font-variant-numeric: tabular-nums; transition: color .15s ease; }
   .prop-card .pc-tel:hover { color: var(--burgundy); }
   .prop-card .pc-tel svg { width: 15px; height: 15px; flex: none; }
   .prop-card .pc-tel:hover span { text-decoration: underline; text-underline-offset: 3px; }
@@ -835,12 +839,15 @@
      says "this card opens" just as clearly for a fraction of the ink, and it
      leaves the price as the only heavy element in the body.
      Icon LEFT, arrow RIGHT, label centred between them: three fixed positions, so
-     the row reads identically on every card whatever the label's width. */
+     the row reads identically on every card whatever the label's width.
+     Border 1px, not 1.5 (Bryan: "perhaps 1px too assertive") — and 1px is the crisper
+     value anyway, landing on a whole device pixel instead of straddling two. The button
+     keeps its full height and hit area; only the line got quieter. */
   .prop-card .pc-cta {
     display: flex; align-items: center; gap: 10px;
     margin-top: 12px; padding: 12px 16px; border-radius: 12px;
     background: transparent;
-    border: 1.5px solid var(--burgundy);
+    border: 1px solid var(--burgundy);
     color: var(--burgundy);
     font-size: 14.5px; font-weight: 700; letter-spacing: -.005em;
     transition: background .16s ease, color .16s ease;
