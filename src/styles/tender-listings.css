@@ -750,7 +750,10 @@
   }
 
   /* 4 — the area a buyer is buying (floor for strata, land for landed). */
-  .prop-card .pc-size { display: flex; align-items: center; gap: 8px; margin: 7px 0 0; min-width: 0; color: var(--muted); font-size: 13.5px; font-weight: 600; line-height: 1.4; font-variant-numeric: tabular-nums; }
+  /* INK, matching the address above it (Bryan, 6 Aug) — the two supporting facts read
+     as one block now. It stays a step under the address on SIZE (13.5 vs 14px), so
+     rank still comes from scale rather than from fading the colour out. */
+  .prop-card .pc-size { display: flex; align-items: center; gap: 8px; margin: 7px 0 0; min-width: 0; color: var(--ink); font-size: 13.5px; font-weight: 600; line-height: 1.4; font-variant-numeric: tabular-nums; }
   .prop-card .pc-size svg { flex: none; width: 15px; height: 15px; color: var(--burgundy); }
 
   /* 5 — the window. Two parallel cells, label / date / qualifier, vertical
