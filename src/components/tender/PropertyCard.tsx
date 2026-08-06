@@ -61,10 +61,15 @@ export function PropertyCard({
      "1,400 sqft"; the reference reads "1,604 sq ft". Display-only normalise. */
   const size = areaSlot(x);
   const sizeTxt = size.value === "—" ? null : size.value.replace(/sqft/i, "sq ft");
-  /* The real street, minus the unit — subsale buyers browse by street, not by
-     suburb (Bryan, 6 Aug). Falls back to area + state if a record has no address,
-     so a listing the agency has not fully filled in still says where it is. */
-  const where = x.address ? streetAddressOf(x.address) : `${x.area}, ${x.stateName}`;
+  /* The development NAME leads the address line (Bryan, 6 Aug): "Idaman Sutera,
+     Jalan Sutera 3, …". It reads as one location string — the name IS how a
+     Malaysian buyer identifies a development — and it buys the name a place on the
+     card without spending a row on it.
+     The street is the real address minus the unit; falls back to area + state if a
+     record has no address, so a half-filled listing still says where it is. */
+  const where = [x.name, x.address ? streetAddressOf(x.address) : `${x.area}, ${x.stateName}`].join(
+    ", ",
+  );
 
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
@@ -121,15 +126,16 @@ export function PropertyCard({
           {/* 3 — what and where. Type and name share one line, reference format:
               "Condominium · Siti Apartment". The title is still the card's ONE real
               link; its ::after stretches over the whole card. */}
-          {/* TYPE · NAME, restored (Bryan, 6 Aug): "buyers get both the property type and
-              recognizable development name without another row." The sr-only duplicate
-              that stood in for the name while it was hidden is gone with it — the name
-              is visible again, so repeating it would announce twice. */}
+          {/* TYPE ONLY — the name moved down into the address line (Bryan, 6 Aug).
+              It stays in the LINK as sr-only text, because the link is what a screen
+              reader lists: twelve cards all announcing "Condominium" are twelve
+              indistinguishable links. The address paragraph is separate content, so
+              the small repetition is the cost of a link that can be told apart. */}
           <h3 className="pc-title">
             <HomeIcon />
             <a className="pc-link" href={href}>
-              {typeLabel ? `${typeLabel} · ` : ""}
-              {x.name}
+              {typeLabel || x.name}
+              {typeLabel && <span className="sr-only"> · {x.name}</span>}
             </a>
           </h3>
           <p className="pc-loc">

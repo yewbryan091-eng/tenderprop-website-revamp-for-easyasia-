@@ -709,16 +709,9 @@
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
   .prop-card .pc-title a:hover { color: var(--burgundy); }
-  /* GRID RHYTHM — the two-line reserve returns WITH the property names, because it is
-     the names that make this row vary: "Condominium · 222 Residency" is one line where
-     "2-Storey Terrace House · Single Storey Landed @ OUG" is two. Without it, one long
-     name drops that card's address, size, period, agent and CTA ~21px below its
-     neighbours' and the row stops marching in step.
-     Multi-column only. A single-column phone has no row to align with, and a reserved
-     empty line under a short title is the dead space the 28 Jul ruling objected to. */
-  @media (min-width: 681px) {
-    .props-grid.grid-mode .pc-title a { min-height: 2.7em; }
-  }
+  /* No title reserve: with the name moved into the address line the title is a bare
+     property type, which is single-line by construction at every card width we ship.
+     The variability moved to the address, and so did the reserve — see .pc-loc. */
   /* EMPHASISED (Bryan, 6 Aug): the card now carries the real street, not a suburb,
      and subsale buyers browse by street — so this steps up from 13.5px muted to
      14px ink. Still a clear step below the 15.5px/700 type above it, and the ruler
@@ -727,17 +720,19 @@
      the first one. */
   .prop-card .pc-loc { display: flex; align-items: flex-start; gap: 8px; margin: 8px 0 0; min-width: 0; color: var(--ink); font-size: 14px; font-weight: 500; line-height: 1.4; }
   .prop-card .pc-loc svg { flex: none; width: 15px; height: 15px; margin-top: 2px; color: var(--burgundy); }
-  /* Two lines, then ellipsis — replaces the old single-line nowrap, which would have
-     cut every one of these addresses mid-street. */
-  .prop-card .pc-loc span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-width: 0; }
-  /* GRID RHYTHM: addresses genuinely vary in length — "Jalan Tun Abdul Razak, 01000
-     Kangar, Perlis" is one line where Setia Eco Park's runs to two — so the multi-column
-     grid reserves both lines and every card's size / period / agent / CTA start at the
-     same y. This is the reserve the type-only title no longer needs, moved to the row
-     that actually varies. Single column gets none: no row to align with, and a reserved
-     empty line under a short address is the dead space the 28 Jul ruling objected to. */
+  /* THREE lines, measured not guessed: with the development name leading the string,
+     10 of the 12 cards on page one need three lines at a 325px card, and 7 of 12 even
+     at 390 single-column. A two-line clamp was cutting the postcode and state off most
+     of the grid — which would defeat the entire point of putting a real address here. */
+  .prop-card .pc-loc span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-width: 0; }
+  /* GRID RHYTHM: the address is now the row that varies (two lines for Kangar, three
+     for most), so it carries the reserve — three lines of it — and every card's size /
+     period / agent / CTA start at the same y regardless. The title gave its reserve up
+     when the name moved down here; the cost is near enough a wash, ~19px gained on this
+     row against ~21px released by the title. Single column gets none: no row to align
+     with, and a reserved empty line is the dead space the 28 Jul ruling objected to. */
   @media (min-width: 681px) {
-    .props-grid.grid-mode .pc-loc span { min-height: 2.8em; }
+    .props-grid.grid-mode .pc-loc span { min-height: 4.2em; }
   }
 
   /* 4 — the area a buyer is buying (floor for strata, land for landed). */
