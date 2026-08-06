@@ -1595,15 +1595,10 @@
   font-weight: 600; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.15;
   letter-spacing: .04em; color: var(--oa-brass); font-variant-numeric: tabular-nums;
 }
-/* Supporting, not dominant — it separates the date/time pair from the confirmation
-   line so the two do not read as one four-line block. */
-.oa-page .oa-cal { margin: 14px 0 0; line-height: 0; color: var(--oa-brass); }
-.oa-page .oa-cal svg { width: 19px; height: 19px; }
-/* The confirmation sentence sits closer than /tender's footnote (18px) because the
-   calendar glyph above it is already doing the separating. */
-.oa-page .hero-panel-left .hero-foot { margin-top: 10px; font-size: 13px; }
-.oa-page .oa-left {
-  display: block; margin-top: 3px;
-  font-family: "Newsreader", Georgia, serif; font-style: italic; font-weight: 500;
-  font-size: 13.5px; color: var(--oa-brass); font-variant-numeric: tabular-nums;
-}
+/* Tightened (Bryan, 7 Aug): 14/10 → 9/5, and the glyph 19px → 17px. It is an
+   editorial full stop between the date-and-time pair and the sentence that explains
+   them, so it wants to sit WITH that group rather than float in its own band —
+   which is what the looser spacing made it do once the days-left line came off. */
+.oa-page .oa-cal { margin: 9px 0 0; line-height: 0; color: var(--oa-brass); }
+.oa-page .oa-cal svg { width: 17px; height: 17px; }
+.oa-page .hero-panel-left .hero-foot { margin-top: 5px; font-size: 13px; }

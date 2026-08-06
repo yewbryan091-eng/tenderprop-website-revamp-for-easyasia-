@@ -84,9 +84,6 @@ const HERO_DATE = (() => {
       : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
   return { day, suffix, month: MONTH_NAMES[month - 1], year };
 })();
-/* "12 December 2026" — the confirmation line reads as a sentence, so it takes the
-   plain form rather than the ordinal display treatment above it. */
-const AUCTION_DATE_PLAIN = `${HERO_DATE.day} ${HERO_DATE.month} ${HERO_DATE.year}`;
 
 /* Null until mount so SSR and first paint never show a flash of zeros. */
 type Remaining = {
@@ -394,15 +391,13 @@ function OwnerAuction() {
               <p className="oa-cal" aria-hidden="true">
                 <CalendarIcon />
               </p>
-              <p className="hero-foot">
-                Auction starts {AUCTION_DATE_PLAIN}
-                <span className="oa-left">
-                  ·{" "}
-                  {left
-                    ? `${left.days.toLocaleString("en-MY")} ${left.days === 1 ? "day" : "days"} left`
-                    : "\u00a0"}
-                </span>
-              </p>
+              {/* The day count is NOT repeated here (Bryan, 7 Aug). It already appears
+                  twice — the 128 and the H/M/S strip — and a third instance made the
+                  panel argue with itself about which reading mattered.
+                  What this line adds that the brass time above cannot is the word
+                  STARTS: a bare "9:00 AM" under a date could as easily be a closing
+                  time, and start-vs-close is the whole distinction from E-Tender. */}
+              <p className="hero-foot">Auction starts at {OWNER_AUCTION.timeLabel}</p>
             </div>
           </div>
 
