@@ -372,41 +372,45 @@ function OwnerAuction() {
 
           <div className="hero-panel hero-panel-right">
             <div className="hero-panel-inner">
-              <p className="hero-eyebrow">New to E-Tender?</p>
+              <p className="hero-eyebrow">New to Owner Auction?</p>
               <h2 className="hero-steps-head">
-                <span>E-Tender in</span>
+                <span>Bid in</span>
                 <span>
                   <em>3 simple steps.</em>
                 </span>
               </h2>
-              <ol className="hero-steps" aria-label="How E-Tender works, in three steps">
+              <ol className="hero-steps" aria-label="How Owner Auction works, in three steps">
                 <li>
                   <p className="hero-step-head">Find</p>
                   <p className="hero-step-body">
-                    Browse properties open for E-Tender and choose one you&rsquo;re interested in.
+                    Browse properties up for Owner Auction and choose one you&rsquo;re interested
+                    in.
                   </p>
                 </li>
                 <li>
-                  <p className="hero-step-head">Offer</p>
+                  <p className="hero-step-head">Register</p>
                   <p className="hero-step-body">
-                    Submit your price privately before the E-Tender closes.
+                    Register to participate and complete the required auction process.
                   </p>
                 </li>
                 <li>
-                  <p className="hero-step-head">Connect</p>
+                  <p className="hero-step-head">Bid</p>
                   <p className="hero-step-body">
-                    The property listing agent follows up with you on viewing, your offer and the
-                    next steps.
+                    Join the auction on auction day and place your bid.
                   </p>
                 </li>
               </ol>
+              {/* ⚠️ DESTINATION IS STILL THE E-TENDER EXPLAINER. There is no Owner
+                  Auction how-it-works route yet, and a CTA that 404s is worse than one
+                  pointing at the wrong product — so this keeps a working link until
+                  Bryan decides where it goes. Flagged, not forgotten. */}
               <a className="hero-steps-cta" href="/how-e-tender-works">
                 <span className="hero-steps-cta-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24">
                     <path d="M5 12h13M13 6l6 6-6 6" />
                   </svg>
                 </span>
-                <span className="hero-steps-cta-label">See how E-Tender works</span>
+                <span className="hero-steps-cta-label">See how Owner Auction works</span>
               </a>
             </div>
           </div>

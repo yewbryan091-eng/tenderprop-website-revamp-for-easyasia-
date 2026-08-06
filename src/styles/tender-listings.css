@@ -1499,8 +1499,18 @@
    hue, which lets a photograph read as a photograph instead of being tinted. Both
    the base colour and the wash move together; if only the ::before changed, the
    burgundy base would still show through wherever the image is dark. */
-.oa-page .hero-panel-left { background-color: #332A26; }
-.oa-page .hero-panel-left::before { background: #332A26; }
+.oa-page { --oa-charcoal: #332A26; }
+.oa-page .hero-panel-left { background-color: var(--oa-charcoal); }
+.oa-page .hero-panel-left::before { background: var(--oa-charcoal); }
+
+/* The panel CTA follows the wash, not the brand accent (Bryan, 6 Aug): on this page
+   the maroon has been replaced by the charcoal, and a burgundy button sitting on a
+   charcoal-washed hero reads as a leftover from the other product. Hover keeps the
+   same move the burgundy one had — lifted 14% toward white — so the state change is
+   identical in feel, just in this page's colour. */
+.oa-page .hero-steps-cta { background: var(--oa-charcoal); }
+.oa-page .hero-steps-cta:hover { background: color-mix(in srgb, var(--oa-charcoal) 86%, #fff); }
+.oa-page .hero-steps-cta:focus-visible { outline-color: var(--oa-charcoal); }
 
 /* HERO IMAGE — Bryan's dusk bungalow, cropped to fit this panel rather than
    positioned into it. The crop was derived, not eyeballed:
