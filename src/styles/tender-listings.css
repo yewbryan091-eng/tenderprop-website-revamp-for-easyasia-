@@ -710,8 +710,28 @@
   /* 3 — type · name is the card's ONE real link; ::after stretches it card-wide. */
   .prop-card .pc-title { display: flex; align-items: flex-start; gap: 8px; margin: 10px 0 0; color: var(--ink); font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.35; }
   .prop-card .pc-title svg { flex: none; width: 17px; height: 17px; margin-top: 2px; color: var(--burgundy); }
-  .prop-card .pc-title a { min-width: 0; color: inherit; text-decoration: none; }
+  /* Hard-capped at two lines. The clamp only bites on names that genuinely exceed two
+     lines at card width — the "absolutely required" case; everything else wraps free.
+     overflow:hidden here does NOT clip the stretched ::after: that pseudo's containing
+     block is .prop-card (position:relative), which bypasses this box's clipping —
+     verified by hit-testing the card after the change, not assumed. */
+  .prop-card .pc-title a {
+    min-width: 0; color: inherit; text-decoration: none;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
   .prop-card .pc-title a:hover { color: var(--burgundy); }
+  /* GRID RHYTHM (Bryan, 6 Aug polish): in the multi-column grid the title region
+     reserves TWO lines — 2 × 1.35 line-height in its own em — so address, size,
+     period, agent and CTA start from the same y on every card in a row, whether the
+     name wraps or not. This knowingly supersedes the 28 Jul "title does not reserve
+     two lines" ruling (ledger row added): that ruling predates the equal-height rows
+     and the period band, and Bryan's polish brief asks for consistent start positions
+     as a system. Scoped to multi-column widths only — a single-column phone gets no
+     reserve, because there is no row to align with and the empty line under short
+     titles was the exact complaint that removed the old reserve. */
+  @media (min-width: 681px) {
+    .props-grid.grid-mode .pc-title a { min-height: 2.7em; }
+  }
   .prop-card .pc-loc { display: flex; align-items: center; gap: 8px; margin: 7px 0 0; min-width: 0; color: var(--muted); font-size: 13.5px; line-height: 1.4; }
   .prop-card .pc-loc svg { flex: none; width: 15px; height: 15px; color: var(--burgundy); }
   .prop-card .pc-loc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -727,8 +747,10 @@
      margin-top:auto alone resolves to 0 on the tallest card of every row (and on every
      single-column card), crashing the seam into the 12px days-left line while the twin
      hairline above this band carries 12px. Auto still absorbs the stretch slack on top. */
-  .prop-card .pc-period { margin-top: 12px; margin-bottom: 12px; padding-top: 11px; border-top: 1px solid var(--line); min-width: 0; }
-  .prop-card .pc-period-kick { display: block; margin-bottom: 8px; color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
+  /* Tightened 6 Aug polish: 11→10 above the kick, 8→6 under it. Two small cuts, not
+     one big one — the band stays a labelled unit, it just breathes a little less. */
+  .prop-card .pc-period { margin-top: 12px; margin-bottom: 12px; padding-top: 10px; border-top: 1px solid var(--line); min-width: 0; }
+  .prop-card .pc-period-kick { display: block; margin-bottom: 6px; color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
   .prop-card .pc-period-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 14px; }
   .prop-card .pc-date { min-width: 0; }
   .prop-card .pc-date + .pc-date { padding-left: 14px; border-left: 1px solid color-mix(in srgb, var(--line) 62%, transparent); }
@@ -744,7 +766,10 @@
   .prop-card .pc-agent { flex: 1; min-width: 0; }
   .prop-card .pc-agent b { display: block; color: var(--ink); font-size: 14.5px; font-weight: 700; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .prop-card .pc-agent span { display: block; margin-top: 1px; color: var(--muted); font-size: 12.5px; font-weight: 500; line-height: 1.3; }
-  .prop-card .pc-tel { flex: none; display: inline-flex; align-items: center; gap: 7px; color: var(--burgundy); font-size: 14px; font-weight: 700; text-decoration: none; font-variant-numeric: tabular-nums; }
+  /* Demoted a step (Bryan, 6 Aug: "phone feels slightly too strong") — 14/700 → 13.5/600,
+     still burgundy so it reads as a route. Demoting is not hiding. The vertical padding +
+     negative margin buys a ≥44px touch target without moving a pixel of layout. */
+  .prop-card .pc-tel { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 12px 0; margin: -12px 0; color: var(--burgundy); font-size: 13.5px; font-weight: 600; text-decoration: none; font-variant-numeric: tabular-nums; }
   .prop-card .pc-tel svg { width: 15px; height: 15px; flex: none; }
   .prop-card .pc-tel:hover span { text-decoration: underline; text-underline-offset: 3px; }
 
