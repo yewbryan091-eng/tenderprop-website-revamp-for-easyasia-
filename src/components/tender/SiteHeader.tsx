@@ -14,17 +14,17 @@ import { LOGO } from "@/lib/images";
    REVOKED and DESIGN-SYSTEM §3c is unconditional again — every front-facing
    reference reads E-Tender. The ROUTE is still /tender; only the label changed.
 
-   ── OWNER AUCTION IS ONE TAB, NOT TWO ─────────────────────────────────────────
-   "Valuation Report Included" is part of the Owner Auction package, so it lives
-   INSIDE the same <Link>: one anchor, one tab stop, one focus target, one active
-   state, and the whole unit is clickable because a click on any descendant of an
-   anchor activates it — absolute positioning changes layout, never event flow.
+   ── THE PACKAGE TAB IS ONE TAB, NOT TWO ───────────────────────────────────────
+   "Valuation Report Included" lives INSIDE the same <Link> as its title: one
+   anchor, one tab stop, one focus target, one active state, and the whole unit is
+   clickable. It hangs on SELL — it is a seller-side benefit, and it sat on Owner
+   Auction by mistake until 6 Aug.
 
-   The subtitle is absolutely positioned (see .nav-oa-benefit). That is what stops
-   it becoming a fifth tab: out of flow, it contributes NOTHING to the anchor's
-   width or height, so the gap between Owner Auction and Sell is identical to every
-   other gap, all four primary labels keep one shared baseline, and the header does
-   not grow. It hangs into the header's existing bottom padding. */
+   The annotation is IN FLOW and sets the tab's width (see .nav-pkg-benefit), so
+   that tab is simply LONGER than its siblings and the next one begins after it.
+   `align-items: flex-start` on the list keeps all four primary labels on one
+   baseline though this anchor is taller, and a negative margin-bottom cancels the
+   annotation's line from the row so the header height does not change. */
 export function SiteHeader() {
   return (
     <header className="site">
@@ -39,22 +39,27 @@ export function SiteHeader() {
             </Link>
           </li>
           <li>
-            {/* No aria-label: the two spans already form the accessible name
-                "Owner Auction Valuation Report Included", which reads sensibly and
-                keeps voice-control matching on the visible words. */}
-            <Link className="nav-oa" to="/owner-auction" activeProps={{ className: "active" }}>
-              <span className="nav-oa-title">Owner Auction</span>
-              {/* Separator for the accessible name only. A literal space would sit in
-                  FLOW after the title and widen the anchor ~4px, which shifts the
-                  Owner Auction ↔ Sell gap — the one thing this tab must not do.
-                  `.sr-only` is absolutely positioned, so it costs zero width. */}
-              <span className="sr-only"> — </span>
-              <span className="nav-oa-benefit">Valuation Report Included</span>
+            <Link to="/owner-auction" activeProps={{ className: "active" }}>
+              Owner Auction
             </Link>
           </li>
           <li>
-            <Link to="/sell" activeProps={{ className: "active" }}>
-              Sell
+            {/* THE PACKAGE TAB. "Valuation Report Included" is a SELLER-side benefit
+                (Bryan, 6 Aug — it sat on Owner Auction by mistake), so it belongs to
+                Sell. Classes are `nav-pkg*`, not `nav-oa*`: the annotation attaches to
+                whichever tab carries the offer, and a name pinned to the old owner
+                would mislead the next reader.
+                No aria-label — the spans already form "Sell — Valuation Report
+                Included", which reads sensibly and keeps voice control matching on the
+                visible words. */}
+            <Link className="nav-pkg" to="/sell" activeProps={{ className: "active" }}>
+              <span className="nav-pkg-title">Sell</span>
+              {/* Separator for the accessible name only. A literal space would sit in
+                  FLOW after the title and widen the anchor ~4px, shifting the gap to
+                  the next tab. `.sr-only` is absolutely positioned, so it costs zero
+                  width. */}
+              <span className="sr-only"> — </span>
+              <span className="nav-pkg-benefit">Valuation Report Included</span>
             </Link>
           </li>
           <li>
