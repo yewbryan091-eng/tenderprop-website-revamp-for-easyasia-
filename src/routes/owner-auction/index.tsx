@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { GavelIcon, TaHome, TaPin } from "@/components/tender/icons";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
-import { TaHome, TaPin } from "@/components/tender/icons";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
@@ -371,6 +371,12 @@ function OwnerAuction() {
           </div>
 
           <div className="hero-panel hero-panel-right">
+            {/* Watermark, not an illustration: it sits BELOW the copy (the inner is
+                z-index 1) and above the paper wash, so it reads as texture in a corner
+                that was otherwise doing nothing. Decorative, hence aria-hidden. */}
+            <span className="oa-gavel" aria-hidden="true">
+              <GavelIcon />
+            </span>
             <div className="hero-panel-inner">
               <p className="hero-eyebrow">New to Owner Auction?</p>
               <h2 className="hero-steps-head">

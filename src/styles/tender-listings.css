@@ -1561,3 +1561,41 @@
   background-size: cover;
   background-position: 50% 22%;
 }
+
+/* ── OWNER AUCTION: the gavel watermark ───────────────────────────────────────
+   Bryan spotted that the right panel's top-right corner was doing nothing, and a
+   gavel is the fastest way to say "auction" — the one thing this page must not be
+   confused with E-Tender on.
+
+   Watermark, deliberately, not an illustration. The brand is flat and restrained
+   and this repo has form for deleting decoration (the glossy pin, the circled
+   glyph), so it goes in at 8% and large: at that weight it reads as texture the
+   corner needed rather than as a sticker competing with the 01/02/03 rhythm.
+
+   Stacking: `.hero-panel-inner` is z-index 1, and the paper wash is the panel's
+   ::before. This span sits between them in DOM order, so the copy stays on top and
+   the gavel stays above the wash — under it, at .84 paper, it would be erased.
+   Clipped by the panel's own clip-path, so it can never cross the seam. */
+.oa-page .oa-gavel {
+  position: absolute;
+  /* FULLY INSIDE the panel. Bled off the right edge first time and only a fragment
+     showed, which reads as a stray shape rather than a gavel — the mark has to be
+     whole to do its one job.
+     Measured, the corner is not actually empty: the copy block runs to within 44px
+     of the panel's right edge. What looks like space is where the text LINES are
+     short, so the watermark sits behind the copy by design and is placed where the
+     glyphs are sparsest — right of the two heading lines, above the step bodies. */
+  top: 10px;
+  right: 30px;
+  width: clamp(140px, 13.5vw, 200px);
+  color: var(--burgundy);
+  /* 11%, not 8%: the panel's photo is bamboo shadow, and against that texture 8%
+     disappeared entirely rather than reading as a quiet mark. */
+  opacity: .11;
+  pointer-events: none;
+  line-height: 0;
+}
+.oa-page .oa-gavel svg { width: 100%; height: auto; display: block; }
+/* Below 860 the hero stacks and the panel is short — the watermark would sit on
+   the copy rather than beside it. */
+@media (max-width: 860px) { .oa-page .oa-gavel { display: none; } }
