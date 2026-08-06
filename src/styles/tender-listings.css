@@ -79,10 +79,16 @@
        not flex. `.nav ul a { display: block }` is (0,1,2) and outranks `.nav-pkg`
        at (0,1,0), so a `display: flex` here never applies — `align-items` sits
        there looking correct while measuring 15px off-axis.) */
-    margin-bottom: -13px;
+    margin-bottom: -16px;
   }
   .nav-pkg-benefit {
-    display: block; white-space: nowrap;
+    /* 6px of air under the title (Bryan, 6 Aug) — it was 3.8px, and on the active tab
+       the underline sits in that gap, which made the annotation look welded to it.
+       Half the cost is absorbed by the tab's negative margin below and half is let
+       through as header height: the annotation already had only 10.2px of clearance
+       to the header's bottom border, so pushing it all downward would have crowded
+       the border instead of the title. Header grows 3px, 71.4 → 74.4. */
+    display: block; margin-top: 6px; white-space: nowrap;
     font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
     font-style: italic; font-weight: 500; font-size: 11.5px; line-height: 1.1;
     color: var(--brass);
