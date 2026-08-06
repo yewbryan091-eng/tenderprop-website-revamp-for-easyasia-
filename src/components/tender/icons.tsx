@@ -359,36 +359,3 @@ export const ArrowRightIcon = () => (
     <path d="M5 12h13M13 6l6 6-6 6" />
   </svg>
 );
-
-/* Gavel — drawn here rather than licensed, so it carries no stock-artwork
-   dependency into the EasyAsia handoff and speaks the same line language as the
-   rest of this file. 64-unit viewBox, not 24: at watermark size a 1.8 stroke in a
-   24 box scales to ~20px of ink, which reads as a thick cartoon. Four times the
-   grid keeps the strokes fine when the glyph is 260px wide.
-   Owner Auction only — a gavel is the one mark E-Tender must NOT carry, since a
-   sealed tender is explicitly not an auction. */
-export const GavelIcon = () => (
-  <svg
-    viewBox="0 0 64 64"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.4"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    {/* Mallet head, squarer than the first attempt — a long thin rotated box read as
-        a bracket, not a hammer. The two face bands are what make it unmistakable; an
-        outlined rectangle at 45 degrees on its own is just a shape. */}
-    <rect x="7.5" y="13" width="27" height="13" rx="3" transform="rotate(-45 21 19.5)" />
-    <path d="M15.2 9.6 24.4 18.8" />
-    <path d="M11.6 13.2 20.8 22.4" />
-    {/* Handle, run longer than the head is wide so it reads as a gavel rather than a
-        mallet with a stub. */}
-    <path d="M29.5 28.5 47 46" />
-    {/* The block it strikes, plus the wider base under it. Both are needed — the cap
-        alone reads as a second, smaller head. */}
-    <rect x="33" y="46.5" width="21" height="8" rx="2.5" />
-    <path d="M29.5 58h28" />
-  </svg>
-);
