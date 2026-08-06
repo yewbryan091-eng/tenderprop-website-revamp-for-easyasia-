@@ -1484,3 +1484,29 @@
 .prop-card .pc-deadline.is-soon .pc-left { color: #FF8578; }
 .prop-card .pc-deadline.is-closed svg,
 .prop-card .pc-deadline.is-closed .pc-left { color: rgba(255, 255, 255, .82); }
+
+/* ── OWNER AUCTION page overrides ─────────────────────────────────────────────
+   Scoped to `.oa-page`, which only /owner-auction carries. Both pages share
+   `.tp-listings`, so that class could not be the hook — and `--burgundy` is a
+   global token used by the header, cards and CTAs everywhere, so recolouring it
+   was never an option either. This is the narrowest surface that does the job:
+   /tender cannot be reached by any selector below. */
+
+/* Bryan, 6 Aug: the maroon wash becomes #332A26 — a warm near-black rather than a
+   hue, which lets a photograph read as a photograph instead of being tinted. Both
+   the base colour and the wash move together; if only the ::before changed, the
+   burgundy base would still show through wherever the image is dark. */
+.oa-page .hero-panel-left { background-color: #332A26; }
+.oa-page .hero-panel-left::before { background: #332A26; }
+
+/* ⚠️ HERO IMAGE — awaiting Bryan's file. Drop it at
+   `public/assets/layout/owner-auction-hero.jpg` and delete the `var(...)` fallback
+   below; the crop is then tuned with `background-position` alone.
+   `cover` + a right-of-centre focal point, not /tender's `auto 100%`: that panel
+   carries a wide panorama, and a single-subject architectural shot needs to fill
+   the wedge and keep its subject clear of the diagonal seam. */
+.oa-page .hero-panel-left {
+  background-image: var(--oa-hero-image, url(/assets/layout/kl-skyline.webp));
+  background-size: cover;
+  background-position: 60% center;
+}
