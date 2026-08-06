@@ -391,13 +391,22 @@ function OwnerAuction() {
               <p className="oa-cal" aria-hidden="true">
                 <CalendarIcon />
               </p>
-              {/* The day count is NOT repeated here (Bryan, 7 Aug). It already appears
-                  twice — the 128 and the H/M/S strip — and a third instance made the
-                  panel argue with itself about which reading mattered.
-                  What this line adds that the brass time above cannot is the word
-                  STARTS: a bare "9:00 AM" under a date could as easily be a closing
-                  time, and start-vs-close is the whole distinction from E-Tender. */}
-              <p className="hero-foot">Auction starts at {OWNER_AUCTION.timeLabel}</p>
+              {/* Bryan, 7 Aug. ⚠️ TWO THINGS ARE FLAGGED TO HIM ABOUT THIS LINE, and
+                  it is written this way on his instruction, not by oversight:
+                  1. His own brief for this hero explicitly listed "Registration Closing
+                     Date" as wording NOT to use, on the grounds that this panel
+                     communicates the scheduled auction START.
+                  2. The date it prints is the AUCTION date — the same string, ~60px
+                     below, where it means something else. A reader can reasonably read
+                     the large date as the registration deadline, or conclude
+                     registration runs until auction morning.
+                  There is also no registration-deadline field in the data model; this
+                  reuses OWNER_AUCTION.date, so if the real deadline is earlier than
+                  auction day the page is asserting a business rule nobody has set. */}
+              <p className="hero-foot">
+                Registration Closing Date: {HERO_DATE.day}
+                {HERO_DATE.suffix} {HERO_DATE.month} {HERO_DATE.year}
+              </p>
             </div>
           </div>
 

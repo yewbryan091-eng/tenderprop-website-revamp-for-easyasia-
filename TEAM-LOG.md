@@ -132,6 +132,20 @@ auctioneer, or auctioneer-licence fields. Four traps found while planning, all s
   genuine **floor** at auction. "Floor/minimum" is a site-wide banned phrase, so auction copy
   needs a founder ruling before it is written.
 
+**🔴 OPEN QUESTION ON THE OWNER AUCTION HERO (7 Aug).** The foot line reads **"Registration
+Closing Date: 12th December 2026"** at Bryan's instruction. Three things about it are
+flagged and unresolved, so do not treat it as settled canon:
+1. His own written brief for this hero, the same day, listed *"Registration Closing Date"*
+   as wording **not** to use — the panel was to communicate the scheduled auction START.
+2. It prints the **auction date**, which appears again ~60px above in 46px type meaning
+   something else. One date string, two meanings, one block.
+3. **There is no registration-deadline field in the data model.** It reuses
+   `OWNER_AUCTION.date`. If the real deadline falls before auction day, the page is
+   asserting a business rule nobody has set — and EasyAsia builds from this.
+Needs a founder answer: **when does Owner Auction registration actually close?** Note the
+1 Aug ledger row killing the registration deadline was an **E-TENDER** ruling; it says
+nothing about auctions, so this is genuinely unanswered rather than contradicted.
+
 **Two long-standing items nobody has picked up:** the mobile header is ~252px tall at 375px
 (deferred to week 4 in `PLAN-AUGUST-DELIVERY.md`), and the Filters button overflows the
 viewport by 2–6px between roughly 880–900px.
