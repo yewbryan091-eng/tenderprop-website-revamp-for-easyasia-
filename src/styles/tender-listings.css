@@ -707,7 +707,11 @@
   .prop-card .pc-money-label { display: block; margin-bottom: 3px; color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
   /* INK (Bryan, 6 Aug, overriding the same-day burgundy): the price still leads on
      size and weight alone — 25px/800 against a 15.5px row. */
-  .prop-card .pc-money-value { display: block; color: var(--ink); font-size: clamp(19px, 7.6cqi, 25px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  /* NOT BOLD (Bryan, 6 Aug) — 800 → 500. The price still leads the card on SCALE
+     alone: 25px against a 15.5px type, a 1.6:1 step that survives losing the weight.
+     Tracking eases -.03 → -.018em with it: negative tracking was compensating for
+     heavy strokes crowding each other, and at 500 it just reads cramped. */
+  .prop-card .pc-money-value { display: block; color: var(--ink); font-size: clamp(19px, 7.6cqi, 25px); font-weight: 500; letter-spacing: -.018em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   /* 3 — type · name is the card's ONE real link; ::after stretches it card-wide. */
   .prop-card .pc-title { display: flex; align-items: flex-start; gap: 8px; margin: 10px 0 0; color: var(--ink); font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.35; }
