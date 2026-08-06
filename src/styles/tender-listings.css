@@ -21,7 +21,13 @@
   .wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
   
   /* Header navigation */
-  header { background: var(--paper); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+  /* Brass is LOCAL to the header — it exists for exactly one string, the Owner
+     Auction package annotation, and does not belong in :root where it would read as
+     a brand colour available to anything.
+     #836A33, not the suggested #9A7837 or #8B713D: those measure 3.79:1 and 4.28:1
+     on --paper, both under the 4.5:1 AA needs at 11.5px. This is the nearest value in
+     the same antique-brass family that passes, at 4.76:1. */
+  header { --brass: #836A33; --brass-deep: #6B5629; background: var(--paper); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
   /* TRUE-CENTRED (Bryan, 6 Aug). It was `margin-left: auto` on the list, which only
      pushes it RIGHT — it landed wherever the logo and auth widths left room, so it was
      never actually centred on the page. `1fr auto 1fr` centres the middle track on the
@@ -30,15 +36,68 @@
   .nav .logo { justify-self: start; }
   .nav .logo img { height: 42px; width: auto; }
   .nav ul { display: flex; justify-content: center; gap: 4px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
-  .nav ul a { display: block; padding: 8px 12px; text-decoration: none; font-weight: 600; font-size: 14.5px; border-radius: 5px; }
-  .nav ul a:hover { background: var(--paper-deep); }
-  .nav ul a.active { background: var(--paper-deep); color: var(--burgundy); }
+  /* Calmer nav (Bryan, 6 Aug): ink, no filled block, and the active state is a thin
+     burgundy rule instead of the beige rectangle. Horizontal padding is kept for the
+     hit area — the underline is inset to match it, so the rule spans the TEXT rather
+     than the padding box. */
+  .nav ul a {
+    position: relative; display: block; padding: 6px 10px;
+    color: var(--ink); text-decoration: none; font-weight: 500; font-size: 15.5px;
+    transition: color .15s ease;
+  }
+  .nav ul a:hover { color: var(--burgundy); }
+  .nav ul a.active { color: var(--burgundy); font-weight: 600; }
+  .nav ul a.active::after {
+    content: ""; position: absolute; left: 10px; right: 10px; bottom: 1px;
+    height: 2px; border-radius: 2px; background: var(--burgundy);
+  }
+
+  /* ── OWNER AUCTION: one tab carrying its package annotation ──────────────────
+     The subtitle is ABSOLUTE, and that is the whole trick. Out of flow it adds
+     nothing to the anchor's width or height, so:
+       · the Owner Auction ↔ Sell gap matches every other gap — no fifth tab
+       · all four primary labels keep one shared baseline
+       · the header does not grow; the subtitle hangs into its existing 14px of
+         bottom padding
+     It stays inside the <a>, so the whole unit is clickable — a click on any
+     descendant of an anchor activates it, absolute or not.
+     `left: 56%` is the founder's offset: the annotation starts past the middle of
+     the title and trails to the lower right, reading as attached to Owner Auction
+     rather than sitting between two tabs. */
+  .nav-oa-benefit {
+    /* `top: 100%` exactly — NOT tucked up into the anchor's padding. The annotation is
+       wider than the Owner Auction anchor and runs on over Sell and Services; pulled up
+       even a few px it intersects THEIR hit boxes, and being later in the DOM they paint
+       over it and would steal clicks aimed at the gold text. Flush at the anchor's bottom
+       edge it clears every sibling box entirely.
+       No `pointer-events: none` either — that would leave the annotation dead to the
+       mouse, and the brief is explicit that the package is ONE hit area. As a descendant
+       of the <a> it activates the link; being out of flow changes layout, never events. */
+    position: absolute; left: 56%; top: 100%;
+    white-space: nowrap;
+    font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+    font-style: italic; font-weight: 500; font-size: 11.5px; line-height: 1.1;
+    color: var(--brass);
+    transition: color .15s ease;
+  }
+  /* One hover for the package — the subtitle deepens with the title, it does not
+     animate on its own. */
+  .nav ul a.nav-oa:hover .nav-oa-benefit { color: var(--brass-deep); }
+  /* The underline belongs to the TITLE only, never the annotation — and it already
+     does, because the anchor's box is the title (the subtitle is out of flow). */
   .nav .auth { display: flex; justify-self: end; gap: 10px; }
   .nav .auth .btn { display: inline-block; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; text-decoration: none; border: 1.5px solid transparent; cursor: pointer; }
   .nav .auth .btn.ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
   .nav .auth .btn.ghost:hover { background: var(--ink); color: var(--paper); }
   .nav .auth .btn.red { background: var(--red); color: #fff; }
   .nav .auth .btn.red:hover { background: #A81F15; }
+  /* Below 560 the annotation is dropped, and that is the brief's option (C) taken on
+     evidence rather than by feel: measured, its box first collides with the auth block
+     at 480px and is still clean at 560, so it is hidden from 559 down — the untested
+     band between the two verified points goes to the safe side. Basic nav usability is
+     not traded for microcopy, and "Owner Auction" survives as the label either way. */
+  @media(max-width: 559px) { .nav-oa-benefit { display: none; } }
+
   /* Below 860 the three tracks cannot share a row: logo + auth take the first row and
      the nav drops to its own, left-aligned. Same shape the flex version produced. */
   @media(max-width: 860px) {

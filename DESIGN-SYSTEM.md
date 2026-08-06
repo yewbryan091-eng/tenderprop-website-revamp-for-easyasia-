@@ -87,11 +87,10 @@ Bryan, 30 Jul: *"all the word tender, must be e-tender."* Every user-facing refe
 reads **E-Tender** (title case in headings, labels and CTAs) or **e-tender** (mid-sentence). There
 is no bare "tender" in rendered copy anywhere: verified 0 across all 8 pages.
 
-⚠️ **ONE founder-made exception, 6 Aug 2026: the top-nav item reads "Tender", not
-"E-Tender"** (Bryan, over the rendered header). It is the only bare "tender" in rendered
-copy on the site, and it has **not** been generalised — every other surface, including the
-`/tender` page's own headings, still reads E-Tender. Read the H11 regression guard as
-"zero bare tender **outside `SiteHeader.tsx`**" until Bryan says otherwise.
+✅ **The 6 Aug "Tender" nav exception is REVOKED** (Bryan, same day). The rule is
+unconditional again — every front-facing reference reads E-Tender, the top-nav label
+included, and H11 is back to plain "zero bare tender in rendered copy". The `/tender`
+ROUTE is unaffected; it never was a copy question.
 
 **Never touched by this rule** — these are code, not copy, and prefixing them breaks the build:
 `TenderProp` (the brand), the `Tender` type, `TENDERS`, `tenderMethod` / `tenderFormat`,
