@@ -2,7 +2,8 @@
    viewBoxes stay identical. */
 export const ClockIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
-    <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
   </svg>
 );
 export const PhoneIcon = () => (
@@ -12,23 +13,52 @@ export const PhoneIcon = () => (
 );
 export const PinIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" />
+    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+    <circle cx="12" cy="10" r="2.5" />
   </svg>
 );
 export const BedIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-    <path d="M3 18V7" /><path d="M3 12h18v6" /><path d="M21 18v-3" /><path d="M7 12V9h5v3" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <path d="M3 18V7" />
+    <path d="M3 12h18v6" />
+    <path d="M21 18v-3" />
+    <path d="M7 12V9h5v3" />
   </svg>
 );
 export const BathIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-    <path d="M3 12h18" /><path d="M5 12v3a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-3" /><path d="M7 12V6a2 2 0 0 1 4 0" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <path d="M3 12h18" />
+    <path d="M5 12v3a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-3" />
+    <path d="M7 12V6a2 2 0 0 1 4 0" />
   </svg>
 );
 export const CarIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-    <path d="M4 16v-3l1.6-4.2A2 2 0 0 1 7.5 7.5h9a2 2 0 0 1 1.9 1.3L20 13v3" /><path d="M4 13h16" />
-    <circle cx="7.5" cy="16.5" r="1.5" /><circle cx="16.5" cy="16.5" r="1.5" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <path d="M4 16v-3l1.6-4.2A2 2 0 0 1 7.5 7.5h9a2 2 0 0 1 1.9 1.3L20 13v3" />
+    <path d="M4 13h16" />
+    <circle cx="7.5" cy="16.5" r="1.5" />
+    <circle cx="16.5" cy="16.5" r="1.5" />
   </svg>
 );
 export const HeartIcon = () => (
@@ -38,91 +68,202 @@ export const HeartIcon = () => (
 );
 export const ChevronIcon = () => (
   <svg className="chevron" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-    <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path
+      d="M3 5l4 4 4-4"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 export const TaPin = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M12 21s-7-5.6-7-11a7 7 0 0114 0c0 5.4-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" />
+    <path d="M12 21s-7-5.6-7-11a7 7 0 0114 0c0 5.4-7 11-7 11z" />
+    <circle cx="12" cy="10" r="2.5" />
   </svg>
 );
 export const TaHome = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6" /><path d="M6 10v9h12v-9" /></svg>
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 11l8-6 8 6" />
+    <path d="M6 10v9h12v-9" />
+  </svg>
 );
 
 /* Hero how-it-works step glyphs — stroke-based, currentColor, same weight family. */
 export const StepSubmitIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" /><path d="M14 3v5h5" />
-    <path d="M9 13h6" /><path d="M9 17h4" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+    <path d="M14 3v5h5" />
+    <path d="M9 13h6" />
+    <path d="M9 17h4" />
   </svg>
 );
 export const StepReviewIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M21 12a8 8 0 0 1-8 8H4l2.1-2.1A8 8 0 1 1 21 12Z" /><path d="M9 11h7" /><path d="M9 15h4" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12a8 8 0 0 1-8 8H4l2.1-2.1A8 8 0 1 1 21 12Z" />
+    <path d="M9 11h7" />
+    <path d="M9 15h4" />
   </svg>
 );
 export const StepRefundIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M4 9a8 8 0 0 1 13.7-4.3L20 7" /><path d="M20 3v4h-4" />
-    <path d="M20 15a8 8 0 0 1-13.7 4.3L4 17" /><path d="M4 21v-4h4" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M4 9a8 8 0 0 1 13.7-4.3L20 7" />
+    <path d="M20 3v4h-4" />
+    <path d="M20 15a8 8 0 0 1-13.7 4.3L4 17" />
+    <path d="M4 21v-4h4" />
   </svg>
 );
 
 /* Reassurance cues for the hero process outcome blocks. */
 export const CheckCircleIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="9" /><path d="M8 12l2.5 2.5L16 10" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="9" />
+    <path d="M8 12l2.5 2.5L16 10" />
   </svg>
 );
 export const ReturnIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M3 12h15a4 4 0 0 1 4 4v0" /><path d="M16 7l-5 5 5 5" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M3 12h15a4 4 0 0 1 4 4v0" />
+    <path d="M16 7l-5 5 5 5" />
   </svg>
 );
 export const LockIcon = () => (
   /* viewBox cropped to the glyph (not 0 0 24 24) so the drawn lock fills its box —
      the hero sizes this by the height of the copy beside it. Hero-only icon. */
-  <svg viewBox="3.2 2.2 17.6 19.6" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    viewBox="3.2 2.2 17.6 19.6"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <rect x="4" y="10" width="16" height="11" rx="2" />
     <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-    <circle cx="12" cy="15" r="1.4" /><path d="M12 16.4V18" />
+    <circle cx="12" cy="15" r="1.4" />
+    <path d="M12 16.4V18" />
   </svg>
 );
 export const CalendarCheckIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <rect x="3.5" y="5" width="17" height="16" rx="2" /><path d="M8 3v4M16 3v4" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3.5" y="5" width="17" height="16" rx="2" />
+    <path d="M8 3v4M16 3v4" />
     <path d="M8.5 13.5l2.5 2.5 4.5-4.5" />
   </svg>
 );
 export const OfferPresentedIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <path d="M4 5.5h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" />
     <path d="M7 9h6M7 12.5h4" />
     <path d="M18 9.5h2.5M19 8l1.5 1.5L19 11" />
   </svg>
 );
 export const DocumentCheckIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
     <path d="M14 3v5h5" />
     <path d="m8.5 14 2.2 2.2 4.8-4.8" />
   </svg>
 );
 export const OutcomePathIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    strokeWidth="1.7"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <path className="outcome-path-stem" d="M3.5 12H8" />
     <g className="outcome-path-accepted" stroke="currentColor">
-      <path d="M8 12c3.5 0 2.7-6 7-6h4.5" /><path d="m17 3.5 3 2.5-3 2.5" />
+      <path d="M8 12c3.5 0 2.7-6 7-6h4.5" />
+      <path d="m17 3.5 3 2.5-3 2.5" />
     </g>
     <g className="outcome-path-refunded" stroke="currentColor">
-      <path d="M8 12c3.5 0 2.7 6 7 6h4.5" /><path d="m17 15.5 3 2.5-3 2.5" />
+      <path d="M8 12c3.5 0 2.7 6 7 6h4.5" />
+      <path d="m17 15.5 3 2.5-3 2.5" />
     </g>
   </svg>
 );
 export const ArrowLeftCircleIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="9" /><path d="M13.5 8.5L10 12l3.5 3.5" /><path d="M10 12h5" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="9" />
+    <path d="M13.5 8.5L10 12l3.5 3.5" />
+    <path d="M10 12h5" />
   </svg>
 );
 
@@ -135,15 +276,52 @@ export const ArrowLeftCircleIcon = () => (
    as texture rather than a building. A pitched roof and a door are two marks and survive the
    downscale, and they say "property" warmly, which is the register this portal wants. */
 export const HomeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <path d="M3.2 10.2 12 3.4l8.8 6.8V19.4a1.6 1.6 0 0 1-1.6 1.6H4.8a1.6 1.6 0 0 1-1.6-1.6Z" />
     <path d="M9.5 21v-6.2h5v6.2" />
   </svg>
 );
 export const RulerIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <path d="M15.2 3.4 3.4 15.2a1.4 1.4 0 0 0 0 2l3.4 3.4a1.4 1.4 0 0 0 2 0L20.6 8.8a1.4 1.4 0 0 0 0-2l-3.4-3.4a1.4 1.4 0 0 0-2 0z" />
     <path d="M8 10.6l1.8 1.8M11 7.6l1.8 1.8M14 4.6l1.8 1.8M5 13.6l1.8 1.8" />
+  </svg>
+);
+/* BUILT-UP AREA (Bryan, 6 Aug: 'looks like an "X" built up icon, like a size icon').
+   The ruler read as "a measuring tool"; every Malaysian portal draws floor area as
+   corner marks with arrows spanning them — the diagonals make the X, and the corner
+   brackets say the X is measuring an AREA rather than pointing at nothing.
+   Stroke 1.7 with the arrowheads on their own heavier 1.9: at the 15px this renders
+   at, a 1.7 hairline draws a ~1.06px arrowhead that turns to mush (the same reason
+   CalendarIcon carries its dots on a thicker stroke). */
+export const AreaIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.7"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M3.6 8.4V3.6h4.8M20.4 8.4V3.6h-4.8M3.6 15.6v4.8h4.8M20.4 15.6v4.8h-4.8" />
+    <path d="M3.6 3.6 10 10M20.4 3.6 14 10M3.6 20.4 10 14M20.4 20.4 14 14" strokeWidth="1.9" />
   </svg>
 );
 /* Date-grid dots, not an empty box — matches the reference crop Bryan sent, and at 17px the
@@ -151,14 +329,33 @@ export const RulerIcon = () => (
    columns by two rows, on their own thicker stroke so they survive the downscale: the 1.8
    hairline that draws the frame renders a 1.3px dot, which turns to mush. */
 export const CalendarIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <rect x="3" y="5" width="18" height="16" rx="2.5" />
     <path d="M8 3v4M16 3v4M3 10h18" />
-    <path d="M7.6 14h.01M12 14h.01M16.4 14h.01M7.6 17.6h.01M12 17.6h.01M16.4 17.6h.01" strokeWidth="2.6" />
+    <path
+      d="M7.6 14h.01M12 14h.01M16.4 14h.01M7.6 17.6h.01M12 17.6h.01M16.4 17.6h.01"
+      strokeWidth="2.6"
+    />
   </svg>
 );
 export const ArrowRightIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.1"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <path d="M5 12h13M13 6l6 6-6 6" />
   </svg>
 );

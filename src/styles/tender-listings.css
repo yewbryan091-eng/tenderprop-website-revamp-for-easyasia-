@@ -728,9 +728,26 @@
      2-up card), so the reserve would have been a dead line on EVERY card — dead
      space with no owner. Row alignment now holds for free; the line-clamp above
      stays as the guard if a longer type ever appears. */
-  .prop-card .pc-loc { display: flex; align-items: center; gap: 8px; margin: 7px 0 0; min-width: 0; color: var(--muted); font-size: 13.5px; line-height: 1.4; }
-  .prop-card .pc-loc svg { flex: none; width: 15px; height: 15px; color: var(--burgundy); }
-  .prop-card .pc-loc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* EMPHASISED (Bryan, 6 Aug): the card now carries the real street, not a suburb,
+     and subsale buyers browse by street — so this steps up from 13.5px muted to
+     14px ink. Still a clear step below the 15.5px/700 type above it, and the ruler
+     row below stays 13.5px muted, so the three lines read as three ranks.
+     flex-start, not center: an address runs to two lines and the pin belongs on
+     the first one. */
+  .prop-card .pc-loc { display: flex; align-items: flex-start; gap: 8px; margin: 8px 0 0; min-width: 0; color: var(--ink); font-size: 14px; font-weight: 500; line-height: 1.4; }
+  .prop-card .pc-loc svg { flex: none; width: 15px; height: 15px; margin-top: 2px; color: var(--burgundy); }
+  /* Two lines, then ellipsis — replaces the old single-line nowrap, which would have
+     cut every one of these addresses mid-street. */
+  .prop-card .pc-loc span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-width: 0; }
+  /* GRID RHYTHM: addresses genuinely vary in length — "Jalan Tun Abdul Razak, 01000
+     Kangar, Perlis" is one line where Setia Eco Park's runs to two — so the multi-column
+     grid reserves both lines and every card's size / period / agent / CTA start at the
+     same y. This is the reserve the type-only title no longer needs, moved to the row
+     that actually varies. Single column gets none: no row to align with, and a reserved
+     empty line under a short address is the dead space the 28 Jul ruling objected to. */
+  @media (min-width: 681px) {
+    .props-grid.grid-mode .pc-loc span { min-height: 2.8em; }
+  }
 
   /* 4 — the area a buyer is buying (floor for strata, land for landed). */
   .prop-card .pc-size { display: flex; align-items: center; gap: 8px; margin: 7px 0 0; min-width: 0; color: var(--muted); font-size: 13.5px; font-weight: 600; line-height: 1.4; font-variant-numeric: tabular-nums; }

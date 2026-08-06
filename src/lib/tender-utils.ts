@@ -1,11 +1,37 @@
 import type { Tender } from "@/data/tenders";
 import { TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export function fmtDate(iso: string) {
   const d = new Date(iso + "T00:00:00");
   return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+/* ── STREET ADDRESS — the full address minus the unit (Bryan, 6 Aug) ───────────
+   Subsale buyers browse by street, not by suburb, so the card shows the real
+   address — but never the exact unit a listing sits in:
+
+     "No. 23A, Jalan Sri Kandi 25/15F, Taman Sri Muda, 40400 Shah Alam"
+   →  "Jalan Sri Kandi 25/15F, Taman Sri Muda, 40400 Shah Alam"
+
+   DERIVED, never stored — the backend keeps ONE address (the full one, unit
+   included, which the detail page and the map need) and this trims it for
+   display. A stored second copy could drift from the first.
+
+   `Lot`/`PT` prefixes are deliberately NOT stripped: on a land parcel or a
+   factory the lot number IS the property's identity, not the private unit
+   Bryan is withholding. And the strip never runs unless two or more segments
+   survive it, so a short address can never be reduced to a fragment. */
+const UNIT_PREFIX = /^(?:no\.?\s*\d|unit\s|[a-z]?-?\d+-\d+)/i;
+
+export function streetAddressOf(address: string) {
+  const parts = address
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (parts.length >= 3 && UNIT_PREFIX.test(parts[0])) return parts.slice(1).join(", ");
+  return parts.join(", ");
 }
 
 export function fmtPrice(p: number) {
@@ -26,15 +52,26 @@ export function fmtRM(n: number) {
 export function ordinalDateParts(closingDate: string) {
   const [year, month, day] = closingDate.split("-").map(Number);
   const lastTwo = day % 100;
-  const suffix = lastTwo >= 11 && lastTwo <= 13
-    ? "th"
-    : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
+  const suffix =
+    lastTwo >= 11 && lastTwo <= 13
+      ? "th"
+      : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
   return { day, suffix, month: MONTHS_FULL[month - 1], year };
 }
 
 const MONTHS_FULL = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export function tenderStartOf(x: Tender) {
@@ -96,11 +133,16 @@ export function isFinalDay(closingDate: string, now: number = Date.now()) {
    Placeholder rule — verify with the agency before go-live. */
 export function depositOf(x: Tender) {
   if (x.deposit) return "RM" + x.deposit.toLocaleString("en-MY");
-  return x.reservePrice ? "RM" + Math.round(x.reservePrice * 0.03).toLocaleString("en-MY") : "On application";
+  return x.reservePrice
+    ? "RM" + Math.round(x.reservePrice * 0.03).toLocaleString("en-MY")
+    : "On application";
 }
 
 export function tenderId(x: Tender) {
-  return (x.name + "-" + x.area).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return (x.name + "-" + x.area)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 export function inPriceRange(price: number, range: string) {
@@ -112,7 +154,9 @@ export function inPriceRange(price: number, range: string) {
 }
 
 const TYPE_BY_VALUE: Record<string, (typeof TYPE_TAXONOMY)[number]> = {};
-TYPE_TAXONOMY.forEach((t) => { TYPE_BY_VALUE[t.value] = t; });
+TYPE_TAXONOMY.forEach((t) => {
+  TYPE_BY_VALUE[t.value] = t;
+});
 export { TYPE_BY_VALUE };
 
 export function matchesTaxonomy(x: Tender, value: string) {
@@ -141,8 +185,15 @@ export function hrefFor(_x: Tender) {
    plus Townhouse — per Bryan, "townhouse is fine" on its own: the name already
    implies the multi-storey stacked form, so "3-Storey Townhouse" is redundant. */
 const NO_STOREY_PREFIX = new Set([
-  "Apartment", "Condominium", "Serviced Residence", "Serviced Apartment",
-  "Flat", "SOHO", "SOVO", "SOFO", "Townhouse",
+  "Apartment",
+  "Condominium",
+  "Serviced Residence",
+  "Serviced Apartment",
+  "Flat",
+  "SOHO",
+  "SOVO",
+  "SOFO",
+  "Townhouse",
 ]);
 
 export function displayType(x: Tender) {
@@ -151,9 +202,13 @@ export function displayType(x: Tender) {
   if (NO_STOREY_PREFIX.has(t) || x.propertyCategory === "land") return t;
   const n = x.storeys ?? null;
   const base =
-    t === "Bungalow" ? "Bungalow House"
-    : t === "Shop" ? (n && n >= 2 ? "Shop-Office" : "Shop Lot")
-    : t;
+    t === "Bungalow"
+      ? "Bungalow House"
+      : t === "Shop"
+        ? n && n >= 2
+          ? "Shop-Office"
+          : "Shop Lot"
+        : t;
   return n ? `${n}-Storey ${base}` : base;
 }
 
@@ -168,8 +223,15 @@ const FLOOR_AREA_TYPES = new Set([
      Bryan) so any record still carrying the old spelling — real inventory, EasyAsia's
      CMS, a stale import — keeps resolving to floor area instead of silently falling
      through to land area. Cheap insurance; both are the same product. */
-  "Apartment", "Condominium", "Serviced Residence", "Serviced Apartment",
-  "Flat", "SOHO", "SOVO", "SOFO", "Townhouse",
+  "Apartment",
+  "Condominium",
+  "Serviced Residence",
+  "Serviced Apartment",
+  "Flat",
+  "SOHO",
+  "SOVO",
+  "SOFO",
+  "Townhouse",
 ]);
 
 export function areaSlot(x: Tender) {
@@ -194,8 +256,15 @@ export type DetailRow = { label: string; value: string; state: "value" | "unstat
 export type DetailGroup = { kick: string; rows: DetailRow[] };
 
 const STRATA_FORMS = new Set([
-  "Apartment", "Condominium", "Serviced Residence", "Serviced Apartment",
-  "Flat", "SOHO", "SOVO", "SOFO", "Townhouse",
+  "Apartment",
+  "Condominium",
+  "Serviced Residence",
+  "Serviced Apartment",
+  "Flat",
+  "SOHO",
+  "SOVO",
+  "SOFO",
+  "Townhouse",
 ]);
 
 export function formOf(x: Tender): "strata" | "landed" | "land" {
@@ -205,20 +274,27 @@ export function formOf(x: Tender): "strata" | "landed" | "land" {
 
 /* Which fields even make sense for each form. Anything not listed renders as "—". */
 const APPLIES: Record<string, Array<"strata" | "landed" | "land">> = {
-  bedrooms: ["strata", "landed"], bathrooms: ["strata", "landed"],
+  bedrooms: ["strata", "landed"],
+  bathrooms: ["strata", "landed"],
   carParks: ["strata", "landed"],
   /* storeys is the one field that does not split cleanly on form: a townhouse is
      strata title but is genuinely multi-storey, which is the whole point of the
      type. Handled as an exception in cell() rather than fudging the form model. */
   storeys: ["landed"],
   floorLevel: ["strata"],
-  builtUp: ["strata", "landed"], landArea: ["landed", "land"],
-  tenure: ["strata", "landed", "land"], titleType: ["strata", "landed", "land"],
-  landTitle: ["landed", "land"], bumiLot: ["strata", "landed", "land"],
+  builtUp: ["strata", "landed"],
+  landArea: ["landed", "land"],
+  tenure: ["strata", "landed", "land"],
+  titleType: ["strata", "landed", "land"],
+  landTitle: ["landed", "land"],
+  bumiLot: ["strata", "landed", "land"],
   zoning: ["land"],
-  propertyType: ["strata", "landed", "land"], yearCompleted: ["strata", "landed"],
-  facing: ["strata", "landed"], powerSupply: ["land"],
-  occupancy: ["strata", "landed"], furnishing: ["strata", "landed"],
+  propertyType: ["strata", "landed", "land"],
+  yearCompleted: ["strata", "landed"],
+  facing: ["strata", "landed"],
+  powerSupply: ["land"],
+  occupancy: ["strata", "landed"],
+  furnishing: ["strata", "landed"],
   maintenanceFee: ["strata"],
 };
 
@@ -239,29 +315,55 @@ export function detailGroups(x: Tender): DetailGroup[] {
     };
   };
   return [
-    { kick: "Layout", rows: [
-      mk("Bedrooms", "bedrooms", x.bedrooms), mk("Bathrooms", "bathrooms", x.bathrooms),
-      mk("Car parks", "carParks", x.carParks), mk("Storeys", "storeys", x.storeys),
-      mk("Floor level", "floorLevel", d.floorLevel)] },
-    { kick: "Size", rows: [
-      mk("Built-up area", "builtUp", x.builtUp), mk("Land area", "landArea", x.landArea)] },
-    { kick: "Ownership & title", rows: [
-      mk("Tenure", "tenure", x.tenure), mk("Title type", "titleType", x.titleType),
-      mk("Land title", "landTitle", d.landTitle), mk("Bumi lot", "bumiLot", d.bumiLot),
-      mk("Zoning", "zoning", d.zoning)] },
-    { kick: "Building", rows: [
-      mk("Property type", "propertyType", displayType(x)),
-      mk("Year completed", "yearCompleted", d.yearCompleted),
-      mk("Facing", "facing", d.facing), mk("Power supply", "powerSupply", d.powerSupply)] },
-    { kick: "Condition & terms", rows: [
-      mk("Occupancy", "occupancy", d.occupancy), mk("Furnishing", "furnishing", d.furnishing),
-      mk("Maintenance fee", "maintenanceFee", d.maintenanceFee)] },
+    {
+      kick: "Layout",
+      rows: [
+        mk("Bedrooms", "bedrooms", x.bedrooms),
+        mk("Bathrooms", "bathrooms", x.bathrooms),
+        mk("Car parks", "carParks", x.carParks),
+        mk("Storeys", "storeys", x.storeys),
+        mk("Floor level", "floorLevel", d.floorLevel),
+      ],
+    },
+    {
+      kick: "Size",
+      rows: [mk("Built-up area", "builtUp", x.builtUp), mk("Land area", "landArea", x.landArea)],
+    },
+    {
+      kick: "Ownership & title",
+      rows: [
+        mk("Tenure", "tenure", x.tenure),
+        mk("Title type", "titleType", x.titleType),
+        mk("Land title", "landTitle", d.landTitle),
+        mk("Bumi lot", "bumiLot", d.bumiLot),
+        mk("Zoning", "zoning", d.zoning),
+      ],
+    },
+    {
+      kick: "Building",
+      rows: [
+        mk("Property type", "propertyType", displayType(x)),
+        mk("Year completed", "yearCompleted", d.yearCompleted),
+        mk("Facing", "facing", d.facing),
+        mk("Power supply", "powerSupply", d.powerSupply),
+      ],
+    },
+    {
+      kick: "Condition & terms",
+      rows: [
+        mk("Occupancy", "occupancy", d.occupancy),
+        mk("Furnishing", "furnishing", d.furnishing),
+        mk("Maintenance fee", "maintenanceFee", d.maintenanceFee),
+      ],
+    },
   ];
 }
 
 /* Honest completeness signal: only counts fields that actually apply, so a landed
    house is never marked down for lacking a floor level. */
 export function detailCompleteness(x: Tender) {
-  const rows = detailGroups(x).flatMap((g) => g.rows).filter((r) => r.state !== "na");
+  const rows = detailGroups(x)
+    .flatMap((g) => g.rows)
+    .filter((r) => r.state !== "na");
   return { known: rows.filter((r) => r.state === "value").length, applicable: rows.length };
 }

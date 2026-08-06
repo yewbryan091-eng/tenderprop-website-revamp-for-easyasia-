@@ -8,7 +8,7 @@ import {
   HomeIcon,
   PhoneIcon,
   PinIcon,
-  RulerIcon,
+  AreaIcon,
 } from "./icons";
 import {
   areaSlot,
@@ -17,6 +17,7 @@ import {
   fmtDate,
   fmtPrice,
   hrefFor,
+  streetAddressOf,
   tenderId,
   tenderStartOf,
 } from "@/lib/tender-utils";
@@ -60,9 +61,10 @@ export function PropertyCard({
      "1,400 sqft"; the reference reads "1,604 sq ft". Display-only normalise. */
   const size = areaSlot(x);
   const sizeTxt = size.value === "—" ? null : size.value.replace(/sqft/i, "sq ft");
-  /* Street address when the agency has supplied one (only Sinaran today),
-     otherwise the honest fallback every record can fill. Never invented. */
-  const where = x.address || `${x.area}, ${x.stateName}`;
+  /* The real street, minus the unit — subsale buyers browse by street, not by
+     suburb (Bryan, 6 Aug). Falls back to area + state if a record has no address,
+     so a listing the agency has not fully filled in still says where it is. */
+  const where = x.address ? streetAddressOf(x.address) : `${x.area}, ${x.stateName}`;
 
   return (
     <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
@@ -138,7 +140,7 @@ export function PropertyCard({
               absence removes a control, it does not add an apology. */}
           {sizeTxt && (
             <p className="pc-size">
-              <RulerIcon />
+              <AreaIcon />
               <span>{sizeTxt}</span>
             </p>
           )}

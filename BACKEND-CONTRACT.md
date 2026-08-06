@@ -213,6 +213,30 @@ records. In production an absent/empty `priceHistory` omits the section entirely
 
 ---
 
+
+### ⚠️ 35 of the 36 addresses in `src/` are FABRICATED demo values (6 Aug 2026)
+
+Bryan asked for every card to carry a street address so the browse grid demos
+realistically. **Only Residensi Sinaran's address is real** (founder-supplied, 3 Aug).
+The other 35 were written to be *plausible for each listing's actual area and state* —
+correct-looking street, precinct and postcode for that town — and they are **not real
+property locations**. Same class of deliberate demo value as `tenderStartOf`, and
+same instruction: **replace every one with the agency's real address before go-live.**
+They are trivially identifiable — everything except the Sinaran record.
+
+**Store ONE address, the full one, unit included.** The card displays it minus the unit
+(`streetAddressOf()` in `src/lib/tender-utils.ts` — DERIVED, do not store a second
+"display address" that could drift):
+
+| Stored | Rendered on the card |
+|---|---|
+| `No. 23A, Jalan Sri Kandi 25/15F, Taman Sri Muda, 40400 Shah Alam, Selangor` | `Jalan Sri Kandi 25/15F, Taman Sri Muda, 40400 Shah Alam, Selangor` |
+| `Lot 4821, Jalan Pulau Carey, 42500 Telok Panglima Garang, Selangor` | *(unchanged — see below)* |
+
+`Lot`/`PT` prefixes are **kept**: on land and factory stock the lot number is the
+property's identity, not the private unit being withheld. The trim also never runs if
+fewer than two segments would survive it.
+
 ## 3f. Address and the map — added 3 Aug 2026
 
 Founder-supplied by Bryan on 3 Aug, **exact unit included**, resolving the open question about
