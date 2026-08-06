@@ -40,6 +40,10 @@ import {
    and under CLOSES (anchored to the date, where the decision is made). Both are
    drawn explicitly in the reference: annotation 5 puts "days left under close
    date" while the Quick Scan Badge stays on the image. */
+/* PILL PROPOSAL SWITCH (6 Aug) — "a" quiet chip · "b" scrim caption · "c" badge
+   twin. One character. Delete the losers and this constant once Bryan picks. */
+const PILL: "a" | "b" | "c" = "a";
+
 export function PropertyCard({
   x,
   saved,
@@ -67,7 +71,7 @@ export function PropertyCard({
   const where = x.address ? streetAddressOf(x.address) : `${x.area}, ${x.stateName}`;
 
   return (
-    <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
+    <article className="prop-card" data-pill={PILL} data-demo={x.demo ? "1" : undefined} data-id={id}>
       <div className="pc-media">
         <span className="pc-media-link">
           <img

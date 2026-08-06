@@ -1315,3 +1315,74 @@
   /* Diagonal is gone below this; centre it with the rest of the stacked panel. */
 }
 
+
+/* ══ DEADLINE PILL — THREE PROPOSALS, 6 Aug 2026 ═══════════════════════════════
+   Bryan: "the design is ugly and its too big". Measured, he is right on both:
+   the pill renders 157×35px = 9.8% of the photo, against its own sibling the
+   E-TENDER badge at 80×22px. It is nearly DOUBLE the badge in both dimensions.
+
+   Diagnosed axis — WEIGHT and CHROME before size:
+     · 16.5px/800 red is the heaviest text on the card after the price, for a
+       SUPPORTING fact.
+     · Three layers of chrome for one number: glass blur + 1px border + a
+       0 2px 10px shadow, on a brand whose rule caps shadow at 0 1px 2px.
+     · REDUNDANT — "129 days left" already renders under CLOSES in the period
+       band. The pill is the loud duplicate of a fact the card states properly.
+
+   Switched by PILL on PropertyCard.tsx (data-pill on the article). Delete the
+   two losing blocks the moment Bryan picks. ═════════════════════════════════ */
+
+/* ── A · QUIET CHIP — the current object, disciplined to badge scale ──────────
+   Same shape and place, all three chrome layers off, sized to MATCH the
+   E-TENDER badge it sits under. Red survives only on the clock, so "red = time"
+   holds without the number shouting. */
+.prop-card[data-pill="a"] .pc-deadline {
+  left: 12px; bottom: 12px; gap: 5px; padding: 4px 10px;
+  background: rgba(255, 255, 255, .94);
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  border: 1px solid rgba(23, 19, 15, .07);
+  box-shadow: 0 1px 2px rgba(23, 19, 15, .12);
+}
+.prop-card[data-pill="a"] .pc-deadline svg { width: 12.5px; height: 12.5px; }
+.prop-card[data-pill="a"] .pc-deadline .pc-left { font-size: 12.5px; font-weight: 700; color: var(--ink); }
+.prop-card[data-pill="a"] .pc-deadline.is-soon .pc-left { color: #fff; }
+
+/* ── B · SCRIM CAPTION — no container at all ─────────────────────────────────
+   The chip exists only to keep the text legible over an arbitrary photo. A
+   bottom scrim does that job with no object: flattest possible answer, and the
+   photo stays a photo. Escalation moves to the TEXT going red-tint. */
+.prop-card[data-pill="b"] .pc-media::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 46%; z-index: 1;
+  background: linear-gradient(to top, rgba(23, 19, 15, .62), rgba(23, 19, 15, 0));
+  pointer-events: none;
+}
+.prop-card[data-pill="b"] .pc-deadline {
+  left: 13px; bottom: 10px; gap: 6px; padding: 0;
+  background: none; border: 0; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.prop-card[data-pill="b"] .pc-deadline svg { width: 13px; height: 13px; color: #fff; }
+.prop-card[data-pill="b"] .pc-deadline .pc-left { font-size: 13px; font-weight: 700; color: #fff; }
+.prop-card[data-pill="b"] .pc-deadline.is-soon { background: none; }
+.prop-card[data-pill="b"] .pc-deadline.is-soon svg,
+.prop-card[data-pill="b"] .pc-deadline.is-soon .pc-left { color: #FF8578; }
+
+/* ── C · BADGE TWIN — mirrors E-TENDER, top-right of the photo ───────────────
+   Treats the two photo marks as ONE system: same 999px radius, same 10px/800
+   uppercase, same height, opposite corners. The clock goes — "DAYS LEFT" is
+   already the label — and the count leads. Smallest of the three. */
+.prop-card[data-pill="c"] .pc-deadline {
+  left: auto; right: 12px; top: 12px; bottom: auto; gap: 5px;
+  padding: 4px 10px; align-items: baseline;
+  background: rgba(255, 255, 255, .94);
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  border: 1px solid rgba(23, 19, 15, .07);
+  box-shadow: 0 1px 2px rgba(23, 19, 15, .12);
+}
+.prop-card[data-pill="c"] .pc-deadline svg { display: none; }
+.prop-card[data-pill="c"] .pc-deadline .pc-left {
+  font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink);
+}
+.prop-card[data-pill="c"] .pc-deadline.is-soon .pc-left { color: #fff; }
+/* The heart moves down out of the way; it is the only thing in that corner today. */
+.prop-card[data-pill="c"] .save-btn { top: 40px; }
