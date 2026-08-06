@@ -25,8 +25,13 @@ import "@/styles/tender-listings.css";
    and the same countdown maths.
 
    ⚠️ EVERYTHING BELOW IS STILL E-TENDER'S, ON PURPOSE, PENDING REFINEMENT:
-     · the copy — "Offers close in", "Next e-tender cycle", "New to E-Tender?",
-       the three steps, and the CTA to /how-e-tender-works
+     · the copy — the right panel's "New to E-Tender?", its three steps, the CTA
+       to /how-e-tender-works, and the left panel's foot line, which still reads
+       "Offers close at the end of the closing date". That last one now CONTRADICTS
+       the two labels above it and is factually wrong for an auction: an auction
+       starts at a set time, it does not run to end of day. Flagged to Bryan.
+       (The countdown label and eyebrow ARE done — "Auction starts in" / "Next
+       Owner Auction", 6 Aug.)
      · the date — the earliest E-Tender closing date, because there is no Owner
        Auction data in the repo at all (zero records, no auctionTime, no
        auctioneer). See the plan in TEAM-LOG.
@@ -180,11 +185,13 @@ function OwnerAuction() {
       : left.days === 1
         ? "day left"
         : "days left";
+  /* The spoken form of the visible label — it moves with it, or a screen reader is
+     told the auction "closes" while the page says it starts. */
   const countdownLabel = !left
-    ? "Offers close soon"
+    ? "Auction starts soon"
     : FINAL_DAY
-      ? `Offers close in ${left.hours} hours and ${left.minutes} minutes`
-      : `Offers close in ${left.days} ${left.days === 1 ? "day" : "days"}`;
+      ? `Auction starts in ${left.hours} hours and ${left.minutes} minutes`
+      : `Auction starts in ${left.days} ${left.days === 1 ? "day" : "days"}`;
 
   /* ---- Search-band state, lifted from /tender ---- */
   const [query, setQuery] = useState("");
@@ -335,7 +342,7 @@ function OwnerAuction() {
             <div className="hero-panel-inner">
               <div className="hero-timer" aria-live="off" aria-label={countdownLabel}>
                 <span className="hero-timer-heading" aria-hidden="true">
-                  <span className="hero-timer-label">Offers close in</span>
+                  <span className="hero-timer-label">Auction starts in</span>
                 </span>
                 <span className="hero-timer-days" aria-hidden="true">
                   <span className="hero-timer-value">{countdownValue}</span>
@@ -352,7 +359,7 @@ function OwnerAuction() {
                   <span className="hero-timer-unit">{countdownUnit}</span>
                 </span>
               </div>
-              <p className="hero-eyebrow">Next e-tender cycle</p>
+              <p className="hero-eyebrow">Next Owner Auction</p>
               <p className="hero-date">
                 <time dateTime={NEXT_DATE}>
                   {HERO_DATE.day}
