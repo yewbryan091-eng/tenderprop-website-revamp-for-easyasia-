@@ -2,13 +2,13 @@ import type { Tender } from "@/data/tenders";
 import { AGENT_PHOTO, PROJECT_IMG } from "@/lib/images";
 import {
   ArrowRightIcon,
-  CalendarIcon,
   ClockIcon,
   HeartIcon,
   HomeIcon,
   PhoneIcon,
   PinIcon,
   AreaIcon,
+  StepSubmitIcon,
 } from "./icons";
 import {
   areaSlot,
@@ -40,10 +40,6 @@ import {
    and under CLOSES (anchored to the date, where the decision is made). Both are
    drawn explicitly in the reference: annotation 5 puts "days left under close
    date" while the Quick Scan Badge stays on the image. */
-/* PILL PROPOSAL SWITCH (6 Aug) — "a" quiet chip · "b" scrim caption · "c" badge
-   twin. One character. Delete the losers and this constant once Bryan picks. */
-const PILL: "a" | "b" | "c" = "a";
-
 export function PropertyCard({
   x,
   saved,
@@ -71,7 +67,7 @@ export function PropertyCard({
   const where = x.address ? streetAddressOf(x.address) : `${x.area}, ${x.stateName}`;
 
   return (
-    <article className="prop-card" data-pill={PILL} data-demo={x.demo ? "1" : undefined} data-id={id}>
+    <article className="prop-card" data-demo={x.demo ? "1" : undefined} data-id={id}>
       <div className="pc-media">
         <span className="pc-media-link">
           <img
@@ -149,26 +145,32 @@ export function PropertyCard({
             </p>
           )}
 
-          {/* 5 — the window. Start date is the founder-approved demo derivation
-              (closing − 3 months, tenderStartOf) until the backend supplies a real
-              per-listing date. Days-left sits under the close, tied to the date. */}
+          {/* 5 — THE WINDOW, as a timeline (Bryan's reference, 6 Aug). Start and close
+              connected by one rail with the days-left riding its centre, so the period
+              reads as a span of time rather than two separate facts. Dates lead, labels
+              sit under them, and the calendar icons and the vertical divider are gone —
+              his sheet: "No extra icons or dividers. Less visual noise, easier to scan."
+
+              The rail and its end dots are drawn with a background and two pseudo
+              elements, so nothing decorative reaches the accessibility tree and no
+              aria-hiding is needed. Screen readers get: "E-Tender period · 129 days
+              left · 12 Sep 2026 Starts · 12 Dec 2026 Closes".
+
+              Start date remains the founder-approved demo derivation (closing − 3
+              months) until the backend supplies a real per-listing date. */}
           <div className="pc-period">
             <span className="pc-period-kick">E-Tender period</span>
+            <div className="pc-timeline">
+              <span className="pc-tl-pill">{open ? leftTxt : "Closed"}</span>
+            </div>
             <div className="pc-period-grid">
               <span className="pc-date">
+                <b>{tenderStartOf(x)}</b>
                 <span className="pc-date-label">Starts</span>
-                <b>
-                  <CalendarIcon />
-                  {tenderStartOf(x)}
-                </b>
               </span>
-              <span className="pc-date">
+              <span className="pc-date is-end">
+                <b>{fmtDate(x.closingDate)}</b>
                 <span className="pc-date-label">Closes</span>
-                <b>
-                  <CalendarIcon />
-                  {fmtDate(x.closingDate)}
-                </b>
-                <span className="pc-date-left">{open ? leftTxt : "Closed"}</span>
               </span>
             </div>
           </div>
@@ -194,10 +196,13 @@ export function PropertyCard({
             </a>
           </div>
 
-          {/* Solid maroon, per the reference — the card's bottom anchor. Decorative:
-              the stretched title link takes the click. */}
+          {/* Outlined, with a document glyph (Bryan's reference). Decorative — the
+              stretched title link takes the click — hence aria-hidden. StepSubmitIcon
+              is reused rather than adding a near-identical glyph: it is already the
+              lined document with a folded corner the reference draws. */}
           <span className="pc-cta" aria-hidden="true">
-            View E-Tender Details
+            <StepSubmitIcon />
+            <span className="pc-cta-txt">View E-Tender Details</span>
             <ArrowRightIcon />
           </span>
         </div>

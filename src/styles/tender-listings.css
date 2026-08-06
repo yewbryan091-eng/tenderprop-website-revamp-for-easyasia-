@@ -665,24 +665,11 @@
      near-black element on a paper/burgundy/red card, which is why it read as generic portal
      chrome, and it forced the numeral onto a third red (#FF8578) that existed purely to survive
      that scrim. On white the brand red works directly: 4.9:1, and one less red on the card. */
-  /* GLASS, not solid white. Solid white at these exact dimensions read LOUDER than the old
-     near-black chip did — light elements advance — which is what made the countdown suddenly
-     look oversized without a pixel changing. The blur puts the quietness back while keeping the
-     16.5px numeral Bryan asked for when he said the day count was too small to see.
-     Contrast is bounded, not photo-dependent like the old .88 scrim: at .82 white the worst
-     possible backdrop (pure black) still resolves the chip to ~#D0D0D0, where the brand red
-     reads 3.9:1 — over the 3:1 that 16.5px/800 needs as large text. */
-  .prop-card .pc-deadline { position: absolute; left: 12px; bottom: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; max-width: calc(100% - 24px); padding: 7px 14px; border-radius: 999px; background: rgba(255,255,255,.82); -webkit-backdrop-filter: blur(14px) saturate(1.5); backdrop-filter: blur(14px) saturate(1.5); border: 1px solid rgba(255,255,255,.6); box-shadow: 0 2px 10px rgba(23,19,15,.16); color: var(--ink); font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
-  .prop-card .pc-deadline svg { flex: none; width: 15px; height: 15px; stroke-width: 2.2; color: var(--red); }
+.prop-card .pc-deadline { position: absolute; z-index: 2; display: inline-flex; align-items: center; max-width: calc(100% - 26px); line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-deadline svg { flex: none; stroke-width: 2.2; }
   /* The day count LEADS and the date supports it. It was 11.5px, inline, and second in the
      sentence — for the one number a normal property listing does not have. */
   .prop-card .pc-when { display: flex; min-width: 0; }
-  /* Now a REAL escalation. White chip -> solid red chip is a jump you catch mid-scroll; the old
-     near-black -> red was two dark chips a shade apart. Under 14 days the whole pill goes red. */
-  .prop-card .pc-deadline.is-soon { background: var(--red); border-color: var(--red); box-shadow: 0 2px 10px rgba(200,40,28,.35); color: #fff; }
-  .prop-card .pc-deadline.is-soon svg { color: #fff; }
-  .prop-card .pc-deadline.is-closed { background: rgba(255,255,255,.82); color: var(--muted); }
-  .prop-card .pc-deadline.is-closed svg { color: var(--muted); }
 
   /* ── CARD BODY — rebuilt to Bryan's Buyer-POV reference, 6 Aug ────────────────
      Scan order fixed by his annotated sheet: RESERVE PRICE leads (the strongest
@@ -765,17 +752,60 @@
      hairline above this band carries 12px. Auto still absorbs the stretch slack on top. */
   /* Tightened 6 Aug polish: 11→10 above the kick, 8→6 under it. Two small cuts, not
      one big one — the band stays a labelled unit, it just breathes a little less. */
+  /* ── 5 · E-TENDER PERIOD, as a TIMELINE (Bryan's reference, 6 Aug) ───────────
+     Start and close joined by one rail with the days-left riding its centre, so
+     the period reads as a SPAN rather than two facts side by side. Replaces the
+     two-cell grid with the vertical divider and the per-cell calendar icons —
+     his sheet is explicit: "No extra icons or dividers."
+
+     The rail is a background stripe on the row and the end dots are its two
+     pseudo elements — three marks, zero extra DOM, and nothing decorative
+     reaches the accessibility tree. */
   .prop-card .pc-period { margin-top: 12px; margin-bottom: 12px; padding-top: 10px; border-top: 1px solid var(--line); min-width: 0; }
-  .prop-card .pc-period-kick { display: block; margin-bottom: 6px; color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
-  .prop-card .pc-period-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 14px; }
-  .prop-card .pc-date { min-width: 0; }
-  .prop-card .pc-date + .pc-date { padding-left: 14px; border-left: 1px solid color-mix(in srgb, var(--line) 62%, transparent); }
-  .prop-card .pc-date-label { display: block; margin-bottom: 3px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase; }
-  .prop-card .pc-date b { display: flex; align-items: center; gap: 7px; color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1.3; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  /* RED (Bryan, 6 Aug) — and it restores the card's colour semantics: red is TIME
-     (the days-left pill, these calendars), burgundy is the platform, ink is money. */
-  .prop-card .pc-date b svg { flex: none; width: 15px; height: 15px; color: var(--red); }
-  .prop-card .pc-date-left { display: block; margin-top: 2px; padding-left: 22px; color: var(--muted); font-size: 12px; line-height: 1.3; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-period-kick { display: block; margin-bottom: 8px; color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
+
+  .prop-card .pc-timeline {
+    position: relative; display: flex; align-items: center; justify-content: center;
+    /* Sized to the pill EXACTLY — every pixel of row height beyond it is dead space
+        sitting between the dot and the date below. */
+    height: 21px; min-width: 0;
+    /* the rail: one 1.5px stripe, centred, drawn as a background so it needs no node */
+    background: linear-gradient(to right, color-mix(in srgb, var(--burgundy) 30%, transparent), color-mix(in srgb, var(--burgundy) 30%, transparent)) center / 100% 1.5px no-repeat;
+  }
+  .prop-card .pc-timeline::before,
+  .prop-card .pc-timeline::after {
+    content: ""; position: absolute; top: 50%; width: 7px; height: 7px;
+    border-radius: 50%; background: var(--burgundy); transform: translateY(-50%);
+  }
+  .prop-card .pc-timeline::before { left: 0; }
+  .prop-card .pc-timeline::after { right: 0; }
+  /* Opaque card-coloured fill is load-bearing: it is what breaks the rail so the
+     pill sits ON the line rather than over it. */
+  .prop-card .pc-tl-pill {
+    position: relative; z-index: 1; max-width: 100%;
+    padding: 2px 10px; border-radius: 999px;
+    background: var(--card);
+    border: 1px solid color-mix(in srgb, var(--burgundy) 34%, transparent);
+    color: var(--burgundy);
+    font-size: 11.5px; font-weight: 700; line-height: 1.3; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums;
+  }
+
+  /* Dates lead, labels sit under them — reversed from the old label-over-value
+     cells, because on a timeline the DATE is the thing being pointed at and
+     "STARTS"/"CLOSES" only names which end of the rail it belongs to. */
+  /* TIGHT TO THE DOTS (Bryan, 6 Aug): 9px → 2px, and the date's leading pulled in with
+     it — a 1.25 line-height on 14px type hides ~3.8px of invisible space above the caps,
+     so the gap you SEE is always larger than the gap you set.
+     Deliberately NOT a negative margin. Measured at the narrowest 2-up card (302px, just
+     above the 681px breakpoint) the centred pill and the date already OVERLAP
+     horizontally by ~6px — harmless while they sit on separate rows, a collision the
+     moment those rows overlap. */
+  .prop-card .pc-period-grid { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-top: 2px; min-width: 0; }
+  .prop-card .pc-date { display: flex; flex-direction: column; min-width: 0; }
+  .prop-card .pc-date.is-end { align-items: flex-end; text-align: right; }
+  .prop-card .pc-date b { color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1.15; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .prop-card .pc-date-label { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase; }
 
   /* 6 — the agent, last, visually smaller than the price. margin-top:auto pins
      agent + CTA to the card's foot, so ragged content above cannot float them. */
@@ -784,30 +814,41 @@
   .prop-card .pc-agent { flex: 1; min-width: 0; }
   .prop-card .pc-agent b { display: block; color: var(--ink); font-size: 14.5px; font-weight: 700; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .prop-card .pc-agent span { display: block; margin-top: 1px; color: var(--muted); font-size: 12.5px; font-weight: 500; line-height: 1.3; }
-  /* Demoted a step (Bryan, 6 Aug: "phone feels slightly too strong") — 14/700 → 13.5/600,
-     still burgundy so it reads as a route. Demoting is not hiding. The vertical padding +
-     negative margin buys a ≥44px touch target without moving a pixel of layout. */
-  .prop-card .pc-tel { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 12px 0; margin: -12px 0; color: var(--burgundy); font-size: 13.5px; font-weight: 600; text-decoration: none; font-variant-numeric: tabular-nums; }
+  /* Demoted TWICE (Bryan, 6 Aug). First 14/700 → 13.5/600, still burgundy: not enough,
+     because the fault was never really the size — it was the ACCENT. Burgundy is the
+     card's "this matters" colour, so a burgundy phone number competes with the property
+     information above it no matter how small it gets. Now 13px/600 MUTED, which drops it
+     below the agent's name and level with the REN beside it.
+     Demoting is not hiding: the glyph still marks it as a route and hover restores the
+     burgundy, so it announces itself the moment a buyer reaches for it. Muted on white
+     measures 4.9:1 — AA at this size. Padding + negative margin keep the ≥44px touch
+     target without moving a pixel of layout. */
+  .prop-card .pc-tel { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 12px 0; margin: -12px 0; color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: none; font-variant-numeric: tabular-nums; transition: color .15s ease; }
+  .prop-card .pc-tel:hover { color: var(--burgundy); }
   .prop-card .pc-tel svg { width: 15px; height: 15px; flex: none; }
   .prop-card .pc-tel:hover span { text-decoration: underline; text-underline-offset: 3px; }
 
-  /* 7 — SOLID maroon, per the reference sheet ("CTA button in brand maroon").
-     This reverses the 4 Aug wash-at-rest ruling — the sheet draws the filled
-     button explicitly, and with the price now carrying the card's only other
-     accent the bottom anchor earns its weight back. Still decorative: the
-     stretched title link takes the click, so hover must answer (rule below). */
+  /* ── 7 · CTA — OUTLINED, per Bryan's reference, 6 Aug ────────────────────────
+     Reverses the solid fill from earlier the same day. Twelve solid burgundy bars
+     down a grid was the heaviest colour on the page spent on an affordance that
+     does not even take the click (the stretched title link does) — the outline
+     says "this card opens" just as clearly for a fraction of the ink, and it
+     leaves the price as the only heavy element in the body.
+     Icon LEFT, arrow RIGHT, label centred between them: three fixed positions, so
+     the row reads identically on every card whatever the label's width. */
   .prop-card .pc-cta {
-    display: flex; align-items: center; justify-content: center; gap: 9px;
-    margin-top: 12px; padding: 12px 16px; border-radius: 9px;
-    background: var(--burgundy);
-    border: 1px solid var(--burgundy);
-    color: var(--burgundy-ink);
-    font-size: 14.5px; font-weight: 700; letter-spacing: -.005em; text-align: center;
-    transition: background .16s ease, border-color .16s ease, color .16s ease;
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 12px; padding: 12px 16px; border-radius: 12px;
+    background: transparent;
+    border: 1.5px solid var(--burgundy);
+    color: var(--burgundy);
+    font-size: 14.5px; font-weight: 700; letter-spacing: -.005em;
+    transition: background .16s ease, color .16s ease;
   }
+  .prop-card .pc-cta-txt { flex: 1; min-width: 0; text-align: center; }
   .prop-card .pc-cta svg { flex: none; width: 17px; height: 17px; }
 
-  @media (prefers-reduced-motion: reduce) { .prop-card .pc-cta, .prop-card .save-btn::before { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .prop-card .pc-cta, .prop-card .pc-tel, .prop-card .save-btn::before { transition: none; } }
 
   /* List mode — media left; description column centre; agent + CTA lift into a
      bordered right rail via .pc-rail (display:contents everywhere else). The
@@ -1175,10 +1216,6 @@
    directly at 4.9:1 — no lightened stand-in needed, so the card is down to two reds (this and
    the calendar) plus burgundy, instead of three. `is-soon`/`is-closed` inherit their state
    colour from the pill. */
-.prop-card .pc-deadline .pc-left { display: block; font-size: 16.5px; font-weight: 800;
-  letter-spacing: -.01em; line-height: 1.15; color: var(--red); white-space: nowrap; }
-.prop-card .pc-deadline.is-soon .pc-left,
-.prop-card .pc-deadline.is-closed .pc-left { color: inherit; }
 
 /* Underline on the PROPERTY TYPE label (Bryan). Offset clears the small-caps
    baseline so it reads as a rule under the label, not a strikethrough. */
@@ -1219,7 +1256,9 @@
 /* The CTA is decorative — the stretched link takes the click — so it must still respond on
    hover or it reads as disabled. Base is solid burgundy (6 Aug reference), so hover goes to
    the documented burgundy hover shade — a real state change, not a repaint of the same value. */
-.prop-card:hover .pc-cta { background: #411322; border-color: #411322; }
+/* The CTA is decorative — the stretched link takes the click — so it must answer on
+   hover or it reads as disabled. Outline → filled is a real state change. */
+.prop-card:hover .pc-cta { background: var(--burgundy); color: var(--burgundy-ink); }
 .prop-card:focus-within { outline: 2px solid var(--red); outline-offset: 3px; }
 .prop-card .pc-link:focus-visible { outline: none; }
 
@@ -1316,73 +1355,42 @@
 }
 
 
-/* ══ DEADLINE PILL — THREE PROPOSALS, 6 Aug 2026 ═══════════════════════════════
-   Bryan: "the design is ugly and its too big". Measured, he is right on both:
-   the pill renders 157×35px = 9.8% of the photo, against its own sibling the
-   E-TENDER badge at 80×22px. It is nearly DOUBLE the badge in both dimensions.
+/* ── DEADLINE PILL — "B", chosen by Bryan 6 Aug ───────────────────────────────
+   He called the old one "ugly and its too big" and both halves measured true:
+   157×35px = 9.8% of the photo, against its own sibling the E-TENDER badge at
+   80×22px — nearly double it. But size was not the whole fault. It was WEIGHT
+   (16.5px/800 red, the heaviest text on the card after the price, for a
+   supporting fact), CHROME (glass blur + border + a 0 2px 10px shadow, three
+   layers for one number on a brand that caps shadow at 0 1px 2px), and
+   REDUNDANCY (the same count already renders under CLOSES in the period band).
 
-   Diagnosed axis — WEIGHT and CHROME before size:
-     · 16.5px/800 red is the heaviest text on the card after the price, for a
-       SUPPORTING fact.
-     · Three layers of chrome for one number: glass blur + 1px border + a
-       0 2px 10px shadow, on a brand whose rule caps shadow at 0 1px 2px.
-     · REDUNDANT — "129 days left" already renders under CLOSES in the period
-       band. The pill is the loud duplicate of a fact the card states properly.
+   So the object goes entirely. The chip only ever existed to keep the text
+   legible over an unpredictable photo — a bottom scrim does that job with
+   nothing to look at, and the photo stays a photo. 101×15px, 2.7% of the
+   image: under a THIRD of what it replaced.
 
-   Switched by PILL on PropertyCard.tsx (data-pill on the article). Delete the
-   two losing blocks the moment Bryan picks. ═════════════════════════════════ */
-
-/* ── A · QUIET CHIP — the current object, disciplined to badge scale ──────────
-   Same shape and place, all three chrome layers off, sized to MATCH the
-   E-TENDER badge it sits under. Red survives only on the clock, so "red = time"
-   holds without the number shouting. */
-.prop-card[data-pill="a"] .pc-deadline {
-  left: 12px; bottom: 12px; gap: 5px; padding: 4px 10px;
-  background: rgba(255, 255, 255, .94);
-  -webkit-backdrop-filter: none; backdrop-filter: none;
-  border: 1px solid rgba(23, 19, 15, .07);
-  box-shadow: 0 1px 2px rgba(23, 19, 15, .12);
-}
-.prop-card[data-pill="a"] .pc-deadline svg { width: 12.5px; height: 12.5px; }
-.prop-card[data-pill="a"] .pc-deadline .pc-left { font-size: 12.5px; font-weight: 700; color: var(--ink); }
-.prop-card[data-pill="a"] .pc-deadline.is-soon .pc-left { color: #fff; }
-
-/* ── B · SCRIM CAPTION — no container at all ─────────────────────────────────
-   The chip exists only to keep the text legible over an arbitrary photo. A
-   bottom scrim does that job with no object: flattest possible answer, and the
-   photo stays a photo. Escalation moves to the TEXT going red-tint. */
-.prop-card[data-pill="b"] .pc-media::after {
+   Stress-tested on a dim interior, a dusk stadium and a bright white condo
+   before shipping, because legibility over arbitrary photography is this
+   treatment's only real risk. Losing proposals A (quiet chip) and C (badge
+   twin) deleted with the switch. ─────────────────────────────────────────── */
+.prop-card .pc-media::after {
   content: ""; position: absolute; inset: auto 0 0 0; height: 46%; z-index: 1;
   background: linear-gradient(to top, rgba(23, 19, 15, .62), rgba(23, 19, 15, 0));
   pointer-events: none;
 }
-.prop-card[data-pill="b"] .pc-deadline {
+.prop-card .pc-deadline {
   left: 13px; bottom: 10px; gap: 6px; padding: 0;
   background: none; border: 0; box-shadow: none;
   -webkit-backdrop-filter: none; backdrop-filter: none;
 }
-.prop-card[data-pill="b"] .pc-deadline svg { width: 13px; height: 13px; color: #fff; }
-.prop-card[data-pill="b"] .pc-deadline .pc-left { font-size: 13px; font-weight: 700; color: #fff; }
-.prop-card[data-pill="b"] .pc-deadline.is-soon { background: none; }
-.prop-card[data-pill="b"] .pc-deadline.is-soon svg,
-.prop-card[data-pill="b"] .pc-deadline.is-soon .pc-left { color: #FF8578; }
-
-/* ── C · BADGE TWIN — mirrors E-TENDER, top-right of the photo ───────────────
-   Treats the two photo marks as ONE system: same 999px radius, same 10px/800
-   uppercase, same height, opposite corners. The clock goes — "DAYS LEFT" is
-   already the label — and the count leads. Smallest of the three. */
-.prop-card[data-pill="c"] .pc-deadline {
-  left: auto; right: 12px; top: 12px; bottom: auto; gap: 5px;
-  padding: 4px 10px; align-items: baseline;
-  background: rgba(255, 255, 255, .94);
-  -webkit-backdrop-filter: none; backdrop-filter: none;
-  border: 1px solid rgba(23, 19, 15, .07);
-  box-shadow: 0 1px 2px rgba(23, 19, 15, .12);
-}
-.prop-card[data-pill="c"] .pc-deadline svg { display: none; }
-.prop-card[data-pill="c"] .pc-deadline .pc-left {
-  font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink);
-}
-.prop-card[data-pill="c"] .pc-deadline.is-soon .pc-left { color: #fff; }
-/* The heart moves down out of the way; it is the only thing in that corner today. */
-.prop-card[data-pill="c"] .save-btn { top: 40px; }
+.prop-card .pc-deadline svg { width: 13px; height: 13px; color: #fff; }
+.prop-card .pc-deadline .pc-left { display: block; font-size: 13px; font-weight: 700; letter-spacing: -.005em; line-height: 1.25; color: #fff; white-space: nowrap; }
+/* Escalation moves from the CHIP to the TEXT — under 14 days the count turns.
+   #FF8578, not --red: the brand red measures ~3.4:1 on a dark scrim and fails
+   AA there, which is exactly what DESIGN-SYSTEM §5.6 reserves this tint for. */
+.prop-card .pc-deadline.is-soon,
+.prop-card .pc-deadline.is-closed { background: none; border: 0; box-shadow: none; }
+.prop-card .pc-deadline.is-soon svg,
+.prop-card .pc-deadline.is-soon .pc-left { color: #FF8578; }
+.prop-card .pc-deadline.is-closed svg,
+.prop-card .pc-deadline.is-closed .pc-left { color: rgba(255, 255, 255, .82); }
