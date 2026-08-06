@@ -508,7 +508,8 @@ function TenderListings() {
                 <li>
                   <p className="hero-step-head">Connect</p>
                   <p className="hero-step-body">
-                    Our team follows up with you on viewing, your offer and the next steps.
+                    The property listing agent follows up with you on viewing, your offer and the
+                    next steps.
                   </p>
                 </li>
               </ol>
