@@ -14,7 +14,9 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| **Homepage — ACTIVE PHASE, controlled loop. See `HOMEPAGE-LOOP-ENGINEERING.md`** | `src/routes/index.tsx`, `loop/**`, and the `.home-*` / `.door` / `.shell-*` rules in `src/styles/site-shell.css` | **Claude** | 5 Aug | **ITERATION 03 — NEW ARCHITECTURE from Bryan's reference.** Diagonal 45/55, "The smarter way to buy property.", maroon fade over a KL image. Structure pass only; **hero image is a placeholder** pending Bryan. Supersedes the 55/45 card of 01–02. **READ-ONLY on the homepage — do not edit `src/routes/index.tsx` or `src/styles/home.css`** |
+| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `loop/**` | *(free)* | — | Iteration 03 shipped: full-bleed diagonal 45/55, "The smarter way to buy property.", maroon fade. **Hero image is still the KL placeholder** — swap at `--hp-hero-image` in `home.css`. Loop system in `HOMEPAGE-LOOP-ENGINEERING.md` is paused, not abandoned |
+| **Owner Auction `/owner-auction` — ACTIVE** | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Hero + search band cloned from `/tender` and re-worded. **Three things still read as E-Tender — see the state-of-play note below** |
+| Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | **Card rebuilt to Bryan's Buyer-POV reference 6 Aug** (`7b672de`), then 3 audit P1s fixed (`8992354`): list-mode price/title inversion, per-row CTA baselines, the period→agent seam minimum |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
@@ -91,6 +93,45 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 6 Aug 2026 — 📍 STATE OF PLAY — start here if you are picking this up cold
+
+Everything below is pushed. `main` is clean; the dev server runs on **:8080** from
+`~/Desktop/Claude.CLI/tenderprop.os/tenderprop-insight` (`npm run dev`).
+
+**Done and stable — treat as settled unless Bryan says otherwise**
+- **`/tender`** — grid, search, filters, card. The **card** was rebuilt to Bryan's annotated
+  Buyer-POV reference and then polished repeatedly; its current form is in the DECISIONS
+  ledger (§2, the 6 Aug rows). The **E-Tender period timeline is LOCKED** — his word.
+- **Global header** — four items, true-centred, About in the footer only, and the package
+  annotation on **Sell** (`.nav-pkg*`, left-aligned).
+- **Homepage** — diagonal hero, iteration 03.
+
+**Active: `/owner-auction`.** Hero and search band are the `/tender` ones copied across, then
+re-worded. **Three things there are still E-Tender's and are known, not overlooked:**
+1. The left panel's foot line still reads *"Offers close at the end of the closing date"* —
+   it contradicts "AUCTION STARTS IN" directly above it and is wrong for an event.
+2. The search band's filter copy ("Refine e-tender properties", "E-Tender closing cycle")
+   **and its dataset** — it searches the 36 E-Tender records.
+3. "See how Owner Auction works" points at `/how-e-tender-works`. There is no Owner Auction
+   explainer route; a working-but-wrong link beat a 404 until Bryan chooses a destination.
+
+**🔴 The blocker for Owner Auction is DATA, not design.** The repo holds **zero** Owner
+Auction records — all 36 are `tenderMethod: "E-Tender"` — and there are no `auctionTime`,
+auctioneer, or auctioneer-licence fields. Four traps found while planning, all still live:
+- `remainingMs()` hardcodes `23:59:59 MYT`. Correct for a tender that runs to end of day,
+  **~15 hours wrong for an auction that starts at 9:00 AM.**
+- `depositOf()` is 3% of **reserve**; an auction deposit is 3% of the **bidding** price —
+  a different base, unknowable before a bid. No deposit figure belongs on an auction card.
+- **`/tender` does not filter by `tenderMethod`.** Harmless today; the moment auction records
+  exist they will appear on the E-Tender page. One-line fix, awaiting Bryan.
+- "Reserve" means different things per product: a **guide** for E-Tender (ledger, 1 Aug), a
+  genuine **floor** at auction. "Floor/minimum" is a site-wide banned phrase, so auction copy
+  needs a founder ruling before it is written.
+
+**Two long-standing items nobody has picked up:** the mobile header is ~252px tall at 375px
+(deferred to week 4 in `PLAN-AUGUST-DELIVERY.md`), and the Filters button overflows the
+viewport by 2–6px between roughly 880–900px.
 
 ### 6 Aug 2026 — Claude · Owner Auction stripped to the E-Tender hero (step 1 of the revamp)
 
