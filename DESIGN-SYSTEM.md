@@ -332,6 +332,7 @@ words where possible. Read this before designing anything new.
 | *"whats the point of showing the hour only?"* | Removing days from a countdown removes its scale | A countdown answers *how long have I got* before *how precise is it*. **Days lead, always** (§3d) |
 | *"remove the circle and make the ? larger"* | A circled glyph is chrome around a mark that can carry itself | Prefer the mark to the container. If the container can go, it should go |
 | Glossy red map pin, removed | Gloss and 3D on a flat brand | The brand is **flat**. Any gradient/gloss is a defect, not a flourish |
+| *"by any chance reserve price dont make it bold"* … *"ok revert haha"* — card price 800 → 500, reverted same minute | **Nothing.** The 800 was right; the ask was worth testing and the answer was no | Some verdicts are only reachable by rendering it. Cheap to try, cheap to revert — but log the ANSWER, so 500 does not get proposed a third time. The card price is **800**: on a browse grid the price is the one figure a buyer scans for, and weight is what makes it findable at a glance, not just large |
 
 **The pattern across all of them:** the fault was almost never the attribute Bryan named. He names
 where his eye landed. Diagnose the axis before fixing — see the `design-critic` agent, step 3.
