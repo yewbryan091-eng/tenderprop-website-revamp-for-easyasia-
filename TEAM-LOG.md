@@ -91,6 +91,41 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 6 Aug 2026 — Claude · Owner Auction stripped to the E-Tender hero (step 1 of the revamp)
+
+Bryan: *"remove everything owner auction page now, and only duplicate the top hero section
+of e-tender page only… just copy paste it, we will refine once you are done."* Done exactly
+that. The five-frame `PageShell` scaffold is gone; the page is now header + the `/tender`
+hero + footer, nothing else.
+
+**`/tender` was NOT touched** — the hero rules in `tender-listings.css` turned out to be
+unscoped (no `.tp-listings` prefix on any of them), so the markup lifts across and the
+stylesheet needed no edit at all. Verified: hero height renders **403px on both pages**,
+identical day count, zero overflow at 1440/1280/1024/860/768/390/375, no console errors,
+`git status` shows one file changed.
+
+⚠️ **The copy and the data are still E-Tender's, deliberately, pending refinement** — "Offers
+close in", "Next e-tender cycle", "New to E-Tender?", the three steps and the CTA to
+`/how-e-tender-works`. The date is the earliest E-TENDER closing date, because **the repo has
+no Owner Auction data whatsoever**.
+
+**Read before refining — the plan turn found these and they still stand:**
+1. **Zero Owner Auction records.** All 36 are `tenderMethod: "E-Tender"`. No `auctionTime`,
+   no auctioneer, no auctioneer licence fields exist.
+2. **`remainingMs()` hardcodes 23:59:59 MYT.** Right for a tender that runs to end of day,
+   **wrong for an auction that starts at 9:00 AM** — reusing it counts ~15 hours late. Same
+   class as the 885-vs-884 bug. It must not survive refinement unchanged.
+3. **`depositOf()` is 3% of RESERVE.** Owner Auction is 3% of **bidding** price — different
+   base, unknowable before a bid. No deposit figure can appear on an auction card.
+4. **`/tender` does not filter by `tenderMethod`.** Invisible today; the moment auction
+   records exist they will appear on the E-Tender page. One-line fix, awaiting Bryan.
+5. **"Reserve" means different things per product.** For E-Tender it is a GUIDE, never a
+   floor (ledger, 1 Aug). At a real auction it genuinely IS a floor. Needs a founder ruling
+   before auction copy is written, since "floor/minimum" is a site-wide banned phrase.
+6. Legacy `/owner-auction` and `/how-to-bid` are unusable as data: prices render `RM-`, one
+   listing is titled "Auction Property 2" at address `test`, and how-to-bid opens with lorem
+   ipsum. The 6-step journey and "3% of bidding price" are the only salvageable facts.
+
 ### 6 Aug 2026 — Claude · Listing card rebuilt to Bryan's Buyer-POV reference
 
 Bryan supplied an annotated reference sheet for the card and said build exactly that. Done, in
