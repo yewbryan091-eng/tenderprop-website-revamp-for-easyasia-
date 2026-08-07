@@ -1831,3 +1831,136 @@
    (the ~252px header at 375px is a known, separately-tracked issue). */
 .oa-page #property-search-title { scroll-margin-top: 132px; }
 @media (max-width: 768px) { .oa-page #property-search-title { scroll-margin-top: 226px; } }
+
+/* ══ THE OWNER AUCTION CARD ════════════════════════════════════════════════════
+   Built to Bryan's annotated reference sheet, 7 Aug. Every selector below is
+   `.apc…` — the class only `AuctionPropertyCard` emits — so none of this can reach
+   /tender's card, the header, or any other CTA.
+
+   The card inherits /tender's whole `.prop-card` / `.pc-*` skeleton on purpose
+   (that is what keeps LIST MODE working here), and overrides only where the two
+   products genuinely differ. What differs is the PALETTE and TWO BLOCKS:
+
+   · Palette — E-Tender's card accent is burgundy. This one is ESPRESSO + BRASS,
+     the Owner Auction hero's own colours. Two products should be distinguishable
+     with the words covered up, and colour does that faster than a badge.
+   · A tender shows a PERIOD (starts → closes). An auction shows a MOMENT.
+   · A tender shows the listing agent. An auction shows the licensed auctioneer. */
+.apc { --apc-espresso: #2A221E; --apc-brass: #8A6A2F; --apc-brass-lit: #B8944A; }
+
+/* ── The pill: espresso ground, brass ink, brass hairline, gavel ─────────────── */
+.apc .pc-status.apc-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px 5px 9px;
+  background: var(--apc-espresso); color: #E8D9B5;
+  border: 1px solid rgba(184, 148, 74, .55);
+}
+.apc .apc-pill svg { width: 13px; height: 13px; flex: none; color: var(--apc-brass-lit); }
+
+/* Brass section labels. On the tender card these are muted grey; here they are the
+   accent that ties the card to the hero. Same size and tracking — this is a colour
+   change, not a hierarchy change. */
+.apc .pc-money-label,
+.apc .pc-period-kick { color: var(--apc-brass); }
+
+/* ── AUCTION DETAILS: two facts, one rule between them ──────────────────────── */
+.apc .apc-when { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 10px; }
+/* The divider is a BORDER on the second cell, not a third element: it can never fall
+   out of vertical alignment with the row and it costs no markup. */
+.apc .apc-when .apc-fact + .apc-fact { padding-left: 10px; border-left: 1px solid var(--line); }
+.apc .apc-fact { display: flex; align-items: center; gap: 8px; min-width: 0; }
+/* The tinted disc is what stops two small glyphs reading as clutter — it gives each
+   fact a fixed optical anchor so the two columns line up whatever the text does. */
+.apc .apc-fact-icon {
+  flex: none; display: grid; place-items: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(138, 106, 47, .10); color: var(--apc-brass);
+}
+.apc .apc-fact-icon svg { width: 14px; height: 14px; }
+.apc .apc-fact-text { min-width: 0; }
+.apc .apc-fact-text b {
+  display: block; color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums;
+}
+.apc .apc-fact-label {
+  display: block; margin-top: 2px; color: var(--muted);
+  font-size: 9.5px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase;
+}
+
+/* ── The registration bar ──────────────────────────────────────────────────────
+   Replaced a countdown that repeated the day count already on the photo (Bryan,
+   7 Aug). It is the loudest thing in the lower card because it is the only line on
+   the card a buyer must ACT on — and unlike a countdown it says what to do.
+
+   Solid espresso, full width. It reads as a deadline rather than a chip, which is
+   the point: a chip is a label, a bar is an instruction. */
+.apc .apc-reg {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin: 12px 0 0; padding: 9px 12px;
+  background: var(--apc-espresso); color: #F2E7CE;
+  border-radius: 9px;
+  font-size: 12.5px; font-weight: 600; letter-spacing: .01em; line-height: 1.2;
+  text-align: center;
+}
+/* A calendar, not the reference's hourglass: an hourglass is a countdown glyph and
+   this stopped being a countdown when the day count came off it. */
+.apc .apc-reg svg { flex: none; width: 14px; height: 14px; color: var(--apc-brass-lit); }
+
+/* ── The auctioneer ───────────────────────────────────────────────────────────
+   Three lines where the tender card has two — the ROLE leads, because at auction the
+   authority is the point and "Licensed Auctioneer" is the whole reason this block
+   replaced the negotiator. */
+.apc .apc-foot { align-items: flex-start; }
+/* Initials, not a headshot. The only photograph in the repo belongs to a real person
+   and must not be attached to a placeholder identity and licence number. Espresso
+   ground so the avatar still reads as the block's anchor at 40px. */
+.apc .apc-avatar {
+  display: grid; place-items: center;
+  background: var(--apc-espresso); color: #E8D9B5;
+  font-size: 14px; font-weight: 700; letter-spacing: .04em;
+  box-shadow: 0 0 0 1px rgba(184, 148, 74, .45);
+}
+/* MEASURED, not chosen. At a 325px card the auctioneer column is ~113px wide, and
+   "Licensed Auctioneer" at 10.5px/.07em needs ~120 — it wrapped to two lines and took
+   the block to five. 9.5px/.05em brings it to ~100. `nowrap` + ellipsis so that if a
+   longer role ever arrives it truncates once instead of silently restacking the card. */
+/* ⚠️ `.apc .apc-agent .apc-role`, not `.apc .apc-role`. The base card sets
+   `.prop-card .pc-agent span { font-size: 12.5px }` — two classes AND an element, which
+   outranks two classes, so the shorter selector silently lost and this rendered at
+   12.5px while claiming 9.5. That is what was ellipsising "Licensed Auctioneer". */
+.apc .apc-agent .apc-role {
+  display: block; margin-bottom: 1px; color: var(--apc-brass);
+  font-size: 9.5px; font-weight: 800; letter-spacing: .05em; line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.apc .apc-agent b { font-size: 13.5px; }
+.apc .apc-agent > span:last-child {
+  font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* The contact column is sized down for the same reason: every px it gives back is a px
+   the auctioneer's name can use, and the name is the more important of the two. */
+.apc .apc-contact { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.apc .apc-contact .pc-tel { font-size: 12px; }
+.apc .apc-contact .pc-tel svg { width: 14px; height: 14px; }
+.apc .pc-tel:hover { color: var(--apc-brass); }
+.apc .apc-profile {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: var(--apc-brass); font-size: 11px; font-weight: 600; text-decoration: none;
+  transition: color .15s ease;
+}
+.apc .apc-profile svg { width: 12px; height: 12px; flex: none; }
+.apc .apc-profile:hover { color: var(--apc-espresso); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── The CTA: same outlined shape as /tender's, brass instead of burgundy ────── */
+.apc .apc-cta { border-color: rgba(138, 106, 47, .45); color: var(--apc-brass); }
+.apc .apc-cta svg:first-child { color: var(--apc-brass-lit); }
+.apc:hover .apc-cta { border-color: var(--apc-brass); background: rgba(138, 106, 47, .07); }
+
+/* LIST MODE — the auction details row would otherwise keep its two columns inside a
+   much narrower description column and squeeze both facts to ellipsis. */
+@media (min-width: 861px) {
+  .props-grid.list-mode .apc .apc-when { grid-template-columns: 1fr; gap: 8px; }
+  .props-grid.list-mode .apc .apc-when .apc-fact + .apc-fact { padding-left: 0; border-left: 0; }
+  .props-grid.list-mode .apc .apc-foot { align-items: center; }
+  .props-grid.list-mode .apc .apc-contact { align-items: flex-start; }
+}

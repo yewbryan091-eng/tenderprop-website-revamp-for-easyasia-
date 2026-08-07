@@ -40,45 +40,15 @@ import {
    and under CLOSES (anchored to the date, where the decision is made). Both are
    drawn explicitly in the reference: annotation 5 puts "days left under close
    date" while the Quick Scan Badge stays on the image. */
-/* The card is shared by /tender and /owner-auction, and the only thing that differs
-   between them is what the product is CALLED. Four strings, in one place, keyed by
-   product — not four conditionals scattered through the markup.
-
-   `e-tender` is the default so /tender renders exactly as it did before this prop
-   existed; nothing on that page passes it.
-
-   ⚠️ The auction labels dress E-TENDER RECORDS. Every listing in the repo is still
-   `tenderMethod: "E-Tender"`, and the two dates in the period block are that record's
-   tender start and closing date. The words change; the data underneath does not. This
-   is fine for the EasyAsia demo and is NOT fine as a source of auction business rules —
-   see the Owner Auction entry in TEAM-LOG. */
-const PRODUCT_LABELS = {
-  "e-tender": {
-    badge: "E-Tender",
-    closed: "E-Tender closed",
-    period: "E-Tender period",
-    cta: "View E-Tender Details",
-  },
-  "owner-auction": {
-    badge: "Owner Auction",
-    closed: "Auction closed",
-    period: "Auction period",
-    cta: "View Auction Details",
-  },
-} as const;
-
 export function PropertyCard({
   x,
   saved,
   onToggleSave,
-  product = "e-tender",
 }: {
   x: Tender;
   saved: boolean;
   onToggleSave: (id: string) => void;
-  product?: keyof typeof PRODUCT_LABELS;
 }) {
-  const label = PRODUCT_LABELS[product];
   const id = tenderId(x);
   const d = daysLeft(x.closingDate);
   const open = d > 0;
@@ -112,7 +82,7 @@ export function PropertyCard({
           />
         </span>
         <div className="pc-tags">
-          <span className="pc-status">{label.badge}</span>
+          <span className="pc-status">E-Tender</span>
           {x.demo && (
             <span className="demo-badge" title="Fabricated sample record — not real inventory">
               DEMO
@@ -135,7 +105,7 @@ export function PropertyCard({
         <span className={"pc-deadline" + (soon ? " is-soon" : "") + (!open ? " is-closed" : "")}>
           <ClockIcon />
           <span className="pc-when">
-            <b className="pc-left">{open ? leftTxt : label.closed}</b>
+            <b className="pc-left">{open ? leftTxt : "E-Tender closed"}</b>
           </span>
         </span>
       </div>
@@ -195,7 +165,7 @@ export function PropertyCard({
               Start date remains the founder-approved demo derivation (closing − 3
               months) until the backend supplies a real per-listing date. */}
           <div className="pc-period">
-            <span className="pc-period-kick">{label.period}</span>
+            <span className="pc-period-kick">E-Tender period</span>
             <div className="pc-timeline">
               <span className="pc-tl-pill">{open ? leftTxt : "Closed"}</span>
             </div>
@@ -238,7 +208,7 @@ export function PropertyCard({
               lined document with a folded corner the reference draws. */}
           <span className="pc-cta" aria-hidden="true">
             <StepSubmitIcon />
-            <span className="pc-cta-txt">{label.cta}</span>
+            <span className="pc-cta-txt">View E-Tender Details</span>
             <ArrowRightIcon />
           </span>
         </div>

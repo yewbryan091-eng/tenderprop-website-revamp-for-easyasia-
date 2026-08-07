@@ -126,6 +126,60 @@ The E-Tender Connect step now reads: **"The property listing agent will follow u
 regarding your offer, arrange a property viewing, and guide you through the next steps."** No
 layout, styling, or interaction changed. Production build passes.
 
+### 7 Aug 2026 — Claude · The Owner Auction CARD, to Bryan's reference sheet
+
+New component `AuctionPropertyCard.tsx`, new module `data/owner-auction.ts`, new
+`.apc-*` CSS block. **`PropertyCard` is byte-identical to its pre-today original** — the
+`product` prop added this morning is gone, because a four-string swap stopped being
+enough once the card diverged structurally.
+
+**Why a separate component and not a branch.** The two cards agree above the address and
+disagree below it: a tender has a PERIOD (starts → closes), an auction has a MOMENT (one
+date, one time); a tender has a listing agent with a REN, an auction has a licensed
+auctioneer with a licence. `/tender`'s card is settled work and this keeps it untouched.
+
+**It reuses `/tender`'s `.pc-*` class names on purpose.** The whole
+`.props-grid.list-mode` layout keys off `.pc-media` / `.pc-body` / `.pc-main` /
+`.pc-rail` / `.pc-foot` / `.pc-cta`. Rename them and list view breaks on this page only,
+silently. New classes exist only where there is no counterpart.
+
+**The event moved to `data/owner-auction.ts`** — it was declared inside the route, and
+the card is rendered 36 times per page needing the same date, time and registration
+deadline the hero prints. Two copies of an event date is how a page disagrees with
+itself. The auctioneer placeholder lives there too.
+
+**Palette is now a product signal.** E-Tender card = burgundy. Auction card = ESPRESSO
+`#2A221E` + BRASS `#8A6A2F`, the Owner Auction hero's own colours. The two are
+distinguishable with the words covered.
+
+**The dark bar carries the registration deadline, not a countdown** (Bryan's call). It
+had been repeating the day count already on the photo. Registration close is the only
+line on the card a buyer must ACT on, and it earns a second date because 11th ≠ 12th.
+Short form — the hero's full "Registration Closing Date: 11th December 2026" wraps at
+325px.
+
+**🔴 Three things on this card are NOT facts yet.**
+1. **"Starting bid" is `reservePrice` relabelled.** There is no `startingBid` field, and
+   the two are different ideas — the 1 Aug ledger says an e-tender reserve is a GUIDE
+   buyers may bid under; a starting bid is a floor. Needs the founder's word.
+2. **The auctioneer is a placeholder, and a more sensitive one than the rest.** "John Tan
+   / Licence No. A12345" are the sample values off Bryan's own sheet. A licence number is
+   a regulated professional CREDENTIAL, not demo dressing like the fabricated street
+   addresses. **Go-live blocker.** Rendered as initials, not a photograph: the only
+   headshot in the repo belongs to a real person and must not be attached to a fabricated
+   identity.
+3. **"View Profile" points at the listing.** No auctioneer-profile route exists; a live
+   wrong link beat a 404, same call as the hero's explainer CTA.
+
+**One shared auction date across all listings** (Bryan, 7 Aug), so every card prints
+12 Dec / 9:00 AM MYT / registration 11 Dec. When per-listing datetimes arrive, the card
+already reads them through one object.
+
+Measured after: nothing clipped, card heights uniform at 624px, zero horizontal overflow.
+One bug worth remembering — `.apc .apc-role` (0,2,0) silently lost to the base card's
+`.prop-card .pc-agent span` (0,2,1), so the role rendered at 12.5px while the rule said
+9.5 and ellipsised. Scoped to `.apc .apc-agent .apc-role`.
+
 ### 7 Aug 2026 — Claude · Owner Auction gets the listings and the state rail
 
 Bryan: *"move all the listings from e-tender to owner auction, including the tender by

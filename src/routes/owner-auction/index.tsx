@@ -1,17 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { PropertyCard } from "@/components/tender/PropertyCard";
+import { AuctionPropertyCard } from "@/components/tender/AuctionPropertyCard";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
 import { StateFilters } from "@/components/tender/StateFilters";
 import { GavelIcon, TaHome, TaPin } from "@/components/tender/icons";
+import {
+  AUCTION_HERO_DATE as HERO_DATE,
+  AUCTION_START_MS,
+  OWNER_AUCTION,
+  REGISTRATION_DATE,
+} from "@/data/owner-auction";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
   MS_DAY,
   TYPE_BY_VALUE,
-  auctionStartAtMs,
   daysUntil,
   fmtDate,
   fmtRM,
@@ -47,78 +52,12 @@ import "@/styles/tender-listings.css";
 
 export const Route = createFileRoute("/owner-auction/")({ component: OwnerAuction });
 
-/* ── THE AUCTION EVENT — one config object, not a scatter of literals ──────────
-   ⚠️ PLACEHOLDER DATA. The repo holds NO Owner Auction records: every one of the 36
-   listings is `tenderMethod: "E-Tender"`, and there is no `auctionTime` field, no
-   auctioneer and no auctioneer licence anywhere in the model. Until EasyAsia supplies
-   them, the hero reads from this one object so the placeholder is visible in a single
-   place and swapping it for real data is a one-line change — rather than a date
-   quietly derived from the E-TENDER cycle, which is what this page did before.
-
-   `time24` is the source of truth; `timeLabel` is its display form. Two fields, not a
-   parse, because 24-hour is what a backend stores and "9:00 AM" is what a buyer reads. */
-const AUCTION_DATE = "2026-12-12";
-
-/* Calendar arithmetic in UTC so a browser's own timezone (or a DST boundary anywhere
-   in the world) can never shift the answer by a day. Dates in, dates out — no clock. */
-function dayBefore(isoDate: string): string {
-  const [year, month, day] = isoDate.split("-").map(Number);
-  return new Date(Date.UTC(year, month - 1, day) - MS_DAY).toISOString().slice(0, 10);
-}
-
-const OWNER_AUCTION = {
-  date: AUCTION_DATE,
-  time24: "09:00:00",
-  timeLabel: "9:00 AM",
-  /* The zone the auction runs in, shown next to the time (Bryan, 7 Aug). It is a
-     separate field, not part of `timeLabel`, for two reasons: it is styled differently
-     (see `.oa-tz`), and it is a real backend fact rather than decoration — every
-     countdown on this page resolves `time24` at +08:00 via `auctionStartAtMs()`, so
-     this string and that offset must always describe the same zone. */
-  timezone: "MYT",
-  /* ✅ FOUNDER RULE, 7 Aug (Bryan, from his father): registration closes **one day
-     before** the auction — so 11 December for a 12 December auction. This closes the
-     open question logged 7 Aug in TEAM-LOG.
-
-     DERIVED from the auction date, not typed as a second literal, so the two can never
-     drift apart when the auction date moves. If a future auction ever sets its own
-     deadline independent of this rule, this becomes a stored backend field — flagged
-     in BACKEND-CONTRACT.md. Note the 1 Aug "no registration deadline" ruling was an
-     E-TENDER decision; it does not apply here. */
-  registrationClosesDate: dayBefore(AUCTION_DATE),
-};
-
-const AUCTION_START_MS = auctionStartAtMs(OWNER_AUCTION.date, OWNER_AUCTION.time24);
-
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-/* "2026-12-12" → { day: 12, suffix: "th", month: "December", year: 2026 }. Shared by
-   the hero date and the registration line so the ordinal rule lives in one place. */
-function ordinalDate(isoDate: string) {
-  const [year, month, day] = isoDate.split("-").map(Number);
-  const lastTwo = day % 100;
-  const suffix =
-    lastTwo >= 11 && lastTwo <= 13
-      ? "th"
-      : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
-  return { day, suffix, month: MONTH_NAMES[month - 1], year };
-}
-
-const HERO_DATE = ordinalDate(OWNER_AUCTION.date);
-const REGISTRATION_DATE = ordinalDate(OWNER_AUCTION.registrationClosesDate);
+/* ── THE AUCTION EVENT lives in `data/owner-auction.ts` ───────────────────────
+   It used to be declared here. It moved on 7 Aug when the auction CARD started needing
+   the same date, time and registration deadline this hero prints — the card is rendered
+   36 times on this page, and a second copy of the event is how a page ends up
+   disagreeing with itself one date at a time. The comments explaining the placeholder
+   status, the UTC arithmetic and the founder's registration rule moved with it. */
 
 /* Null until mount so SSR and first paint never show a flash of zeros. */
 type Remaining = {
@@ -1244,12 +1183,11 @@ function OwnerAuction() {
               <div className={"props-grid " + (view === "grid" ? "grid-mode" : "list-mode")}>
                 {slice.length ? (
                   slice.map((x) => (
-                    <PropertyCard
+                    <AuctionPropertyCard
                       key={tenderId(x) + x._i}
                       x={x}
                       saved={saved.has(tenderId(x))}
                       onToggleSave={toggleSave}
-                      product="owner-auction"
                     />
                   ))
                 ) : (
