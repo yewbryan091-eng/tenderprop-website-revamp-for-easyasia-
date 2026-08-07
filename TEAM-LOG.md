@@ -98,11 +98,14 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
-### 7 Aug 2026 — Codex · Owner Auction registration step copy clarified
+### 7 Aug 2026 — Codex · Member instructions clarified in both product heroes
 
-At Bryan's direction, Step 02 now reads: **"Register a member account to participate and complete
-the required auction process."** No layout, styling, interaction, or other copy changed. Production
-build passes; the live SSR output on `:8080/owner-auction` contains the new sentence.
+At Bryan's direction, Owner Auction Step 02 now reads: **"Register and log in as a member to
+participate and complete the required auction process."** The E-Tender hero foot now reads:
+**"Register and log in as a member and submit your price privately before the E-Tender closes."**
+The E-Tender Connect step now reads: **"The property listing agent follows up with you with your
+offer, viewing on the property and the next steps."** No layout, styling, or interaction changed.
+Production build passes.
 
 ### 7 Aug 2026 — Claude · Both heroes reworded; OA gets its button; registration date closed
 

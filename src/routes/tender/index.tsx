@@ -528,14 +528,14 @@ function TenderListings() {
                 <li>
                   <p className="hero-step-head">Offer</p>
                   <p className="hero-step-body">
-                    Submit your price privately before the E-Tender closes.
+                    Register and log in as a member and submit your price privately before the E-Tender closes.
                   </p>
                 </li>
                 <li>
                   <p className="hero-step-head">Connect</p>
                   <p className="hero-step-body">
-                    The property listing agent follows up with you on viewing, your offer and the
-                    next steps.
+                    The property listing agent follows up with you with your offer, viewing on the
+                    property and the next steps.
                   </p>
                 </li>
               </ol>

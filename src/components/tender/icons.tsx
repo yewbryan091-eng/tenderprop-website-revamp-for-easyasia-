@@ -348,43 +348,58 @@ export const CalendarIcon = () => (
 );
 /* Auction gavel — the Owner Auction "View Listings" CTA only.
 
-   Drawn in its STRUCK position, head down-left of the pivot, so CSS can hold it raised
-   at rest and rotate to 0deg on hover. Head up-RIGHT of the handle is deliberate: it
-   makes "raised" a NEGATIVE rotation, which is the direction the interaction is
-   specified in. Mirror the geometry and every rotation value inverts.
+   Built against the reference Bryan supplied, and it is a TURNED gavel, not a mallet:
+   flared rings at both ends of the barrel with grooves between them, a proud centre
+   band, a tapered handle with a ferrule where it meets the head and a knob at the grip,
+   and a two-step plinth. That detail is the point — an undetailed silhouette is what
+   the first four attempts were, and they read as a flag, a lollipop and a hammer.
 
-   Head is a rounded rect rather than a thick stroked line so one stroke weight carries
-   the whole glyph, matching the icons above it. It reads as a gavel and not a claw
-   hammer because the head is symmetric — a cylinder, rounded at both ends.
+   FILLED, not stroked, unlike every other icon in this file. At 26px an outlined head
+   is mostly hollow: a 7-unit-deep rect leaves ~3 units of interior, and the eye reads
+   the hole rather than the shape. Solid mass is the only thing that survives here.
+   The grooves are negative space between filled parts for the same reason — they read
+   as turning at 200px and blur harmlessly to a soft edge at 26px.
 
-   No base/anvil: the whole SVG rotates as one piece, so a base would swing with it. It
-   is also not needed for the read, and this file's icons are line glyphs, not scenes. */
+   Geometry lives in TWO nested frames on purpose. The head's four parts are drawn in a
+   local frame centred on the barrel and tilted once by the wrapping `rotate(-30)`, so
+   its proportions can be tuned in flat, readable numbers instead of pre-rotated
+   coordinates. Everything else is in viewBox space.
+
+   Head up-LEFT, grip down-RIGHT, matching the reference. That makes "raised" a POSITIVE
+   rotation — the head is up-left of the pivot, so CLOCKWISE lifts it. Mirror the
+   geometry and every value in the CSS inverts.
+
+   Drawn in its STRUCK pose, so 0deg is where it lands. Only `.oa-gavel-mallet` swings;
+   the plinth is its sibling and holds still, which is the entire reason to have one. */
 export const GavelIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    {/* HEAD — 13 long by 5.5 deep, `rx` 1.6, and drawn LEVEL. Three things were wrong
-        before and all three are fixed here:
-          · rx ≈ half the height (2.6, then 3.2) turned the rect into a capsule, and a
-            short capsule at 26px is a blob — it read as a lollipop. 1.6 keeps flat
-            faces, so it reads as a BAR, and a bar on a stick is a gavel.
-          · a 2.4:1 ratio. Shorter and it stops reading as a cylinder.
-          · LEVEL, not drawn at 45°. This is the one that matters for the interaction:
-            the SVG is drawn in its STRUCK pose, so at 0deg the head must lie flat as
-            though it has landed. Drawn at 45° it read as a wind-up, and the hover made
-            the gavel look like it was cocking BACK rather than coming down. */}
-    <rect x="8" y="4.75" width="13" height="5.5" rx="1.6" />
-    {/* HANDLE — leaves the head's underside at (13.5, 10.25) and runs down-left to the
-        pivot at (6.5, 18). Down-LEFT with the head up-RIGHT is what makes "raised" a
-        NEGATIVE rotation: the head is up-right of the pivot, so counter-clockwise
-        lifts it. Mirror this and every rotation value in the CSS inverts. */}
-    <path d="M13.5 10.25 6.5 18" />
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <g className="oa-gavel-mallet">
+      {/* THE BARREL — local frame, tilted -30°. Left ring · body · centre band · right
+          ring, with 0.35 of groove either side of the body. Rings are 8 deep against
+          the body's 6.9: the flare is what says "turned on a lathe" rather than
+          "rounded rectangle". */}
+      <g transform="translate(8.6 9) rotate(-30)">
+        <rect x="-6.6" y="-4" width="2" height="8" rx=".9" fill="currentColor" />
+        <rect x="-4.25" y="-3.45" width="8.5" height="6.9" rx="1" fill="currentColor" />
+        <rect x="-1.2" y="-3.85" width="2.4" height="7.7" rx=".8" fill="currentColor" />
+        <rect x="4.6" y="-4" width="2" height="8" rx=".9" fill="currentColor" />
+      </g>
+      {/* FERRULE — the collar over the handle's root, square to the handle's 30° */}
+      <g transform="translate(11 11.9) rotate(30)">
+        <rect x="-1.8" y="-1.6" width="3.6" height="3.2" rx="1.1" fill="currentColor" />
+      </g>
+      {/* HANDLE — a tapered quad, not a stroked line: 2.4 deep at the head, 2.1 at the
+          grip. A constant-width stroke is exactly what made the earlier drafts look
+          machine-made. */}
+      <path d="M11.4 10.8 L21.3 16.5 L20.1 18.6 L10.2 12.9 Z" fill="currentColor" />
+      {/* GRIP KNOB — also the pivot. Keep in step with `transform-origin` in the CSS. */}
+      <circle cx="20.7" cy="17.55" r="1.5" fill="currentColor" />
+    </g>
+    {/* THE PLINTH — two slabs, the lower one wider, so it reads as a turned block and
+        not a dash. OUTSIDE the swinging group: it must not move. This is the element
+        that separates a gavel from a hammer at a glance. */}
+    <rect x="1.6" y="18.5" width="11.4" height="1.8" rx=".8" fill="currentColor" />
+    <rect x=".7" y="20.3" width="13.2" height="1.9" rx=".85" fill="currentColor" />
   </svg>
 );
 export const ArrowRightIcon = () => (

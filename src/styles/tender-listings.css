@@ -1721,35 +1721,51 @@
   display: block; width: 26px; height: 26px; color: inherit;
   margin-block: -4.5px;
 }
-.oa-page .oa-jump-gavel svg { display: block; width: 100%; height: 100%; }
+/* `overflow: visible` because the raised pose swings the head ~1.5 units past the top
+   of the viewBox. An SVG clips to its viewBox by default, which would shave the head
+   at rest — the one frame that is on screen most of the time. It overflows into 12px
+   of button padding, so nothing else is touched. */
+.oa-page .oa-jump-gavel svg { display: block; width: 100%; height: 100%; overflow: visible; }
 /* REST: raised, ready. HOVER/FOCUS: one fall to the struck position the glyph is
    actually drawn in — which is why the hover value is a plain 0 and not a number.
-   200ms with an ease-out curve that has no overshoot: a gavel does not bounce back
-   up off the block, and anything springy reads as a toy. The origin is the end of the
-   handle at (6.5, 18) in the 24-unit viewBox — 27%/75% of the box — so it swings from
-   the wrist instead of spinning about its middle. Keep this in step with the handle's
-   end point in `GavelIcon`; move one without the other and it pivots off its own grip. */
-.oa-page .oa-jump-gavel svg {
-  transform: rotate(-24deg);
-  transform-origin: 27% 75%;
+   200ms with an ease-out curve that has no overshoot: a gavel does not bounce back up
+   off the block, and anything springy reads as a toy.
+
+   ⚠️ THE SIGN IS POSITIVE. The gavel is drawn to the reference — head up-LEFT, grip
+   down-RIGHT — so the head sits up-left of the pivot and CLOCKWISE is what lifts it.
+   An earlier mirrored draft used -24deg. If the icon is ever flipped, flip these too,
+   or the "strike" becomes a wind-up.
+
+   ⚠️ The target is `.oa-gavel-mallet`, the <g> holding the barrel, ferrule, handle and
+   grip — NOT the whole <svg>. The plinth is a sibling outside that group and must not
+   move; if the block swings with the gavel the whole illusion goes.
+
+   `transform-box: view-box` makes the percentages resolve against the 24-unit viewBox
+   rather than the group's own tight bounding box, so 86.2%/73.1% is (20.7, 17.55) — the
+   grip knob. Without it the origin lands inside the head and the gavel spins about its
+   own middle. Keep these two numbers in step with the knob's centre in `GavelIcon`. */
+.oa-page .oa-jump-gavel .oa-gavel-mallet {
+  transform: rotate(24deg);
+  transform-box: view-box;
+  transform-origin: 86.2% 73.1%;
   transition: transform 200ms cubic-bezier(.22, .61, .36, 1);
 }
-.oa-page .oa-jump:hover .oa-jump-gavel svg,
-.oa-page .oa-jump:focus-visible .oa-jump-gavel svg { transform: rotate(0deg); }
-/* Active: the strike lands 1px deeper. Below the threshold of noticing, which is the
-   point — it is felt on click, not seen. */
-.oa-page .oa-jump:active .oa-jump-gavel svg { transform: rotate(0deg) translateY(1px); }
+.oa-page .oa-jump:hover .oa-gavel-mallet,
+.oa-page .oa-jump:focus-visible .oa-gavel-mallet { transform: rotate(0deg); }
+/* Active: the strike lands a touch deeper. Below the threshold of noticing, which is
+   the point — it is felt on click, not seen. In viewBox units, so it scales. */
+.oa-page .oa-jump:active .oa-gavel-mallet { transform: rotate(0deg) translateY(0.9px); }
 
 @media (prefers-reduced-motion: reduce) {
   .oa-page .oa-jump { transition: none; }
   /* Pinned to rest in every state: no transition AND no rotation change, so there is
      no movement to soften rather than a fast one. The colour/border hover still
      confirms the hit. */
-  .oa-page .oa-jump-gavel svg,
-  .oa-page .oa-jump:hover .oa-jump-gavel svg,
-  .oa-page .oa-jump:focus-visible .oa-jump-gavel svg,
-  .oa-page .oa-jump:active .oa-jump-gavel svg {
-    transform: rotate(-24deg); transition: none;
+  .oa-page .oa-jump-gavel .oa-gavel-mallet,
+  .oa-page .oa-jump:hover .oa-gavel-mallet,
+  .oa-page .oa-jump:focus-visible .oa-gavel-mallet,
+  .oa-page .oa-jump:active .oa-gavel-mallet {
+    transform: rotate(24deg); transition: none;
   }
 }
 /* ── "Bid on a property online / 3 simple steps." — the indent ───────────────────
