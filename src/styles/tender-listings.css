@@ -1942,9 +1942,16 @@
    damaged logo. Cream ground so the dark wordmark reads, brass ring to tie it to the
    section label. `object-fit: contain` plus padding is what keeps the roof device and
    the wordmark whole at 44px. */
+/* 36 → 44px, and the inner padding 4 → 3 (Bryan, 7 Aug: "make the tenderprop image logo
+   larger"). Both levers matter: the disc grew 22%, but shaving the padding is what grows
+   the MARK itself — 28px of wordmark inside a 36px disc becomes 38px inside a 44px one,
+   a 36% larger logo rather than a 22% larger circle around the same small logo.
+
+   Paid for out of the row gaps (8 → 6), not out of the company name. MEASURED:
+   44 + 6 + name 126 + 6 + phone 103.9 = 285.9 in a 291.3px row, ~5px of slack. */
 .apc .apc-co-logo {
-  flex: none; width: 36px; height: 36px; border-radius: 50%;
-  object-fit: contain; padding: 4px;
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  object-fit: contain; padding: 3px;
   background: #FBF7F1; border: 1px solid rgba(138, 106, 47, .45);
 }
 .apc .apc-agent b { font-size: 13px; letter-spacing: -.008em; }
@@ -1969,13 +1976,13 @@
    which is exactly what Bryan flagged. So the row is now hard single-line, and the
    space it needs was bought by MEASURING each part rather than shrinking all of them:
 
-     row 291.3 = logo 36 + gap 8 + name 126 + gap 8 + phone ~104, leaving ~9px of slack.
+     row 291.3 = logo 44 + gap 6 + name 126 + gap 6 + phone ~104, leaving ~5px of slack.
 
    "TenderProp Auction" needs 126px at 13px — it is the string that must never be cut,
    so it gets `flex: 1` and everything else is `flex: none` around it. The phone's ink is
    wider than it looks because `.pc-tel` sets tabular numerals, which is why 11.5px and a
    13px glyph are load-bearing and not arbitrary. */
-.apc .apc-foot { flex-wrap: nowrap; gap: 8px; }
+.apc .apc-foot { flex-wrap: nowrap; gap: 6px; }
 .apc .apc-agent { flex: 1 1 auto; min-width: 0; }
 .apc .apc-co-tel { flex: none; margin-left: auto; font-size: 11.5px; gap: 6px; }
 .apc .apc-co-tel svg { width: 13px; height: 13px; }
@@ -1993,4 +2000,8 @@
      description column and each fact needs ~130, so stacking only made the card taller
      and wasted the width the layout exists to provide. */
   .props-grid.list-mode .apc .apc-co { margin-top: 0; }
+  /* List mode turns `.pc-foot` into /tender's `40px minmax(0,1fr)` grid, and a 44px mark
+     does not fit a 40px column — it would be clipped by the grid, not by any rule of
+     ours. Widen the track to match the logo. */
+  .props-grid.list-mode .apc .apc-foot { grid-template-columns: 44px minmax(0, 1fr); }
 }
