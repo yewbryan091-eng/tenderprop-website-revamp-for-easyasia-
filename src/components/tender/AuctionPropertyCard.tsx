@@ -78,7 +78,8 @@ export function AuctionPropertyCard({
   /* `soon` follows registration too — a red-hot pill counting to an auction nobody can
      still register for is urgency pointed at the wrong thing. */
   const soon = registrationOpen && d <= 14;
-  const leftTxt = `${d} ${d === 1 ? "day" : "days"} left to register`;
+  const leftCount = `${d} ${d === 1 ? "day" : "days"} left`;
+  const leftTxt = `${leftCount} to register`;
   /* THREE states, not two. Between registration closing and the auction starting there
      is a real ~9-hour window where registration is shut but the auction has not
      happened — "Auction closed" would be false there, and it is the one moment on this
@@ -197,20 +198,54 @@ export function AuctionPropertyCard({
           <div className="pc-period apc-details">
             <span className="pc-period-kick">Auction details</span>
 
-            {/* The registration panel. Tinted, not filled: it has to outrank the two
-                facts below it without competing with the price at the top of the card. */}
-            <p className="apc-reg">
-              <span className="apc-reg-icon" aria-hidden="true">
-                <CalendarIcon />
+            {/* THE REGISTRATION PANEL — two cells, Bryan's third reference sheet.
+                LEFT: the deadline date. RIGHT: how long is left to meet it.
+
+                The two cells are deliberately mirrored — left is label-over-value
+                ("Registration closes" / "11 Dec 2026"), right is value-over-label
+                ("127 days left" / "to register"). Each puts its OWN most important word
+                first: on the left that is what the date means, on the right it is the
+                number. Flipping the right cell to match the left would bury the count
+                under a caption.
+
+                RED, not brass. This is the only red on the card, and it is the site's
+                `--red` — the same colour Register and Search wear — because this panel
+                is the one thing here a buyer must ACT on before a date. Brass is the
+                card's decorative accent; red is its imperative.
+
+                ⚠️ The count is `d`, the SAME value the photo pill shows, measured to
+                REGISTRATION_CLOSE_MS. It is therefore the same fact in two places on one
+                card — flagged to Bryan; if the pill goes back to counting the auction
+                the duplication resolves itself. */}
+            <div className="apc-reg">
+              <span className="apc-reg-cell">
+                <span className="apc-reg-icon" aria-hidden="true">
+                  <CalendarIcon />
+                </span>
+                <span className="apc-reg-text">
+                  <span className="apc-fact-label">Registration closes</span>
+                  <b>
+                    {REGISTRATION_DATE.day} {REGISTRATION_DATE.month.slice(0, 3)}{" "}
+                    {REGISTRATION_DATE.year}
+                  </b>
+                </span>
               </span>
-              <span className="apc-reg-text">
-                <span className="apc-fact-label">Registration closes</span>
-                <b>
-                  {REGISTRATION_DATE.day} {REGISTRATION_DATE.month.slice(0, 3)}{" "}
-                  {REGISTRATION_DATE.year}
-                </b>
+              <span className="apc-reg-cell">
+                <span className="apc-reg-icon" aria-hidden="true">
+                  <ClockIcon />
+                </span>
+                <span className="apc-reg-text">
+                  {/* Terminal state handled here too, not just on the pill: once
+                      registration shuts, a panel still counting "0 days left to
+                      register" would be the one place on the card actively misleading
+                      someone who could no longer enter. */}
+                  <b>{registrationOpen ? leftCount : "Closed"}</b>
+                  <span className="apc-reg-sub">
+                    {registrationOpen ? "to register" : "registration ended"}
+                  </span>
+                </span>
               </span>
-            </p>
+            </div>
 
             <div className="apc-when">
               <span className="apc-fact">
