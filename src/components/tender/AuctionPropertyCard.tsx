@@ -177,21 +177,49 @@ export function AuctionPropertyCard({
           )}
 
           {/* ── AUCTION DETAILS — a MOMENT, where the tender card shows a PERIOD ──
-              Two facts side by side with a rule between them, then the one deadline a
-              buyer has to act on. This is NOT a redesign of the locked E-Tender
-              timeline (6 Aug): different product, different component, different fact.
-              The vertical divider that ruling removed is fine here for the same reason
-              — it was a ruling about that timeline, not about all dividers. */}
+              Restructured to Bryan's second reference sheet, 7 Aug. Three changes, and
+              each one is a hierarchy decision rather than a coat of paint:
+
+              1. REGISTRATION LEADS, in a soft tinted panel. It was a solid espresso bar
+                 at the BOTTOM of this block. Bottom-and-loudest made it shout after the
+                 reader had already passed the thing it qualifies; first-and-quiet makes
+                 it the frame the two auction facts hang off. It is still the only line
+                 here a buyer must act on — it no longer has to bellow to say so.
+              2. LABEL ABOVE VALUE, all three. Reading order now matches visual order,
+                 and the DOM order matches both, so a screen reader hears "Auction date,
+                 12 Dec 2026" rather than the value arriving before its name.
+              3. Labels are brass SENTENCE CASE, not uppercase micro-caps. At 10px the
+                 old tracking-heavy caps were texture; at 11px sentence case they are
+                 readable words.
+
+              Not a redesign of the locked E-Tender timeline (6 Aug) — different product,
+              different component, different fact. */}
           <div className="pc-period apc-details">
             <span className="pc-period-kick">Auction details</span>
+
+            {/* The registration panel. Tinted, not filled: it has to outrank the two
+                facts below it without competing with the price at the top of the card. */}
+            <p className="apc-reg">
+              <span className="apc-reg-icon" aria-hidden="true">
+                <CalendarIcon />
+              </span>
+              <span className="apc-reg-text">
+                <span className="apc-fact-label">Registration closes</span>
+                <b>
+                  {REGISTRATION_DATE.day} {REGISTRATION_DATE.month.slice(0, 3)}{" "}
+                  {REGISTRATION_DATE.year}
+                </b>
+              </span>
+            </p>
+
             <div className="apc-when">
               <span className="apc-fact">
                 <span className="apc-fact-icon" aria-hidden="true">
                   <CalendarIcon />
                 </span>
                 <span className="apc-fact-text">
-                  <b>{fmtDate(OWNER_AUCTION.date)}</b>
                   <span className="apc-fact-label">Auction date</span>
+                  <b>{fmtDate(OWNER_AUCTION.date)}</b>
                 </span>
               </span>
               <span className="apc-fact">
@@ -199,26 +227,11 @@ export function AuctionPropertyCard({
                   <ClockIcon />
                 </span>
                 <span className="apc-fact-text">
-                  <b>{AUCTION_TIME_LABEL}</b>
                   <span className="apc-fact-label">Auction time</span>
+                  <b>{AUCTION_TIME_LABEL}</b>
                 </span>
               </span>
             </div>
-            {/* THE BAR. It replaced a countdown that repeated the day count already on
-                the photo (Bryan, 7 Aug). Registration closing is the only thing on this
-                card a buyer must ACT on, and it carries its own urgency — so the loudest
-                element in the lower card now says what to do, not how long is left.
-                It earns a second date because 11th ≠ 12th; a bar repeating the auction
-                date under the auction date would be the hero's one-date-two-meanings
-                fault again. Short form, not the hero's full sentence: that string wraps
-                at card width. */}
-            <p className="apc-reg">
-              <CalendarIcon />
-              <span>
-                Registration closes {REGISTRATION_DATE.day} {REGISTRATION_DATE.month.slice(0, 3)}{" "}
-                {REGISTRATION_DATE.year}
-              </span>
-            </p>
           </div>
         </div>
 

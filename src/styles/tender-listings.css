@@ -1863,7 +1863,35 @@
 .apc .pc-money-label,
 .apc .pc-period-kick { color: var(--apc-brass); }
 
-/* ── AUCTION DETAILS: two facts, one rule between them ──────────────────────── */
+/* ── AUCTION DETAILS: the registration panel, then two facts split by a rule ───
+   Bryan's second reference sheet, 7 Aug. Label ABOVE value throughout — reading order,
+   visual order and DOM order finally agree. */
+
+/* THE REGISTRATION PANEL — leads the block, tinted rather than filled.
+   It was a solid espresso bar at the BOTTOM. Loudest-and-last made it shout after the
+   reader had passed the facts it qualifies; first-and-quiet makes it the frame those
+   facts hang off. The brass wash reads as "this is the deadline" without spending the
+   card's heaviest ink on it — the price at the top is still the loudest thing here,
+   which is correct. */
+.apc .apc-reg {
+  display: flex; align-items: center; gap: 11px;
+  margin: 0 0 11px; padding: 10px 12px;
+  background: rgba(138, 106, 47, .07);
+  border: 1px solid rgba(138, 106, 47, .16);
+  border-radius: 10px;
+}
+/* Bare glyph, no disc — the two facts below wear discs, and giving this one a disc too
+   would flatten the very hierarchy the panel exists to create. Larger instead. */
+.apc .apc-reg-icon { flex: none; display: grid; place-items: center; color: var(--apc-brass); }
+.apc .apc-reg-icon svg { width: 22px; height: 22px; }
+.apc .apc-reg-text { min-width: 0; }
+.apc .apc-reg-text b {
+  display: block; margin-top: 1px; color: var(--ink);
+  font-size: 15px; font-weight: 800; line-height: 1.15; letter-spacing: -.01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+
 .apc .apc-when { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 10px; }
 /* The divider is a BORDER on the second cell, not a third element: it can never fall
    out of vertical alignment with the row and it costs no markup. */
@@ -1873,7 +1901,7 @@
    fact a fixed optical anchor so the two columns line up whatever the text does. */
 .apc .apc-fact-icon {
   flex: none; display: grid; place-items: center;
-  width: 24px; height: 24px; border-radius: 50%;
+  width: 26px; height: 26px; border-radius: 50%;
   background: rgba(138, 106, 47, .10); color: var(--apc-brass);
 }
 .apc .apc-fact-icon svg { width: 14px; height: 14px; }
@@ -1882,29 +1910,14 @@
   display: block; color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.2;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums;
 }
+/* Brass, SENTENCE CASE, and now above the value it names. The old treatment was 9.5px
+   uppercase at .1em tracking — at that size caps stop being words and become texture. */
 .apc .apc-fact-label {
-  display: block; margin-top: 2px; color: var(--muted);
-  font-size: 9.5px; font-weight: 800; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase;
+  display: block; color: var(--apc-brass);
+  font-size: 11px; font-weight: 700; letter-spacing: 0; line-height: 1.25;
+  text-transform: none;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-
-/* ── The registration bar ──────────────────────────────────────────────────────
-   Replaced a countdown that repeated the day count already on the photo (Bryan,
-   7 Aug). It is the loudest thing in the lower card because it is the only line on
-   the card a buyer must ACT on — and unlike a countdown it says what to do.
-
-   Solid espresso, full width. It reads as a deadline rather than a chip, which is
-   the point: a chip is a label, a bar is an instruction. */
-.apc .apc-reg {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin: 12px 0 0; padding: 9px 12px;
-  background: var(--apc-espresso); color: #F2E7CE;
-  border-radius: 9px;
-  font-size: 12.5px; font-weight: 600; letter-spacing: .01em; line-height: 1.2;
-  text-align: center;
-}
-/* A calendar, not the reference's hourglass: an hourglass is a countdown glyph and
-   this stopped being a countdown when the day count came off it. */
-.apc .apc-reg svg { flex: none; width: 14px; height: 14px; color: var(--apc-brass-lit); }
 
 /* ── The auction company ──────────────────────────────────────────────────────
    Replaced a named auctioneer block (Bryan, 7 Aug). Laid out as a KICKER over a ROW,
@@ -1916,8 +1929,11 @@
    /tender's `.props-grid.list-mode .pc-foot` grid keys off it; it just stops being the
    element that owns the spacing. */
 .apc .apc-co { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); }
+/* BLACK, not brass (Bryan, 7 Aug). Every other kicker on this card is brass; this one
+   sits directly above the company's own name and logo, and brass there read as a third
+   accent stacked on the two it introduces. */
 .apc .apc-co-kick {
-  display: block; margin-bottom: 9px; color: var(--apc-brass);
+  display: block; margin-bottom: 9px; color: var(--ink);
   font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25;
   text-transform: uppercase;
 }
@@ -1927,41 +1943,42 @@
    section label. `object-fit: contain` plus padding is what keeps the roof device and
    the wordmark whole at 44px. */
 .apc .apc-co-logo {
-  flex: none; width: 44px; height: 44px; border-radius: 50%;
-  object-fit: contain; padding: 6px;
+  flex: none; width: 36px; height: 36px; border-radius: 50%;
+  object-fit: contain; padding: 4px;
   background: #FBF7F1; border: 1px solid rgba(138, 106, 47, .45);
 }
-.apc .apc-agent b { font-size: 13.5px; letter-spacing: -.005em; }
-.apc .apc-agent b, .apc .apc-agent > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.apc .apc-agent b { font-size: 13px; letter-spacing: -.008em; }
+/* The company's own NAME wraps rather than truncates; the SSM number, being short and
+   fixed, keeps the ellipsis. This is the one rule that makes the block safe in every
+   layout: in grid the name has 135.4px and needs 126, so it never wraps; in LIST mode
+   `.pc-foot` becomes a `40px 117px` grid (that layout is /tender's and is not ours to
+   change), the name needs 126 of 117, and it takes a second line instead of rendering
+   "TenderProp Auct…". A wrapped brand name is untidy; a cut one is wrong. */
+.apc .apc-agent b { white-space: normal; overflow-wrap: break-word; }
+.apc .apc-agent > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* The SSM number is identity, not emphasis — it sits in the same muted register the
    detail page uses for it, in brackets, under the name. */
 .apc .apc-agent > span:last-child {
   font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.apc .apc-co-tel { flex: none; font-size: 12px; }
-.apc .apc-co-tel svg { width: 14px; height: 14px; }
 .apc .pc-tel:hover { color: var(--apc-brass); }
 
-/* ── The row WRAPS when it must, rather than being shrunk to fit ──────────────
-   MEASURED at the 3-column grid: the row is 291.3px, and logo 44 + gaps 20 + phone
-   109.6 leaves 117.7 for a name that needs 131. "TenderProp Auction" was ellipsising —
-   and the company's own name is the one string in this block that must not be cut.
-   (The phone's ink is wider than it looks: `.pc-tel` sets tabular numerals.)
+/* ── ONE LINE: logo · name · phone (Bryan, 7 Aug: "what is this?? phone number??") ──
+   An earlier build let the phone wrap to its own line, right-aligned. It was measured
+   and it fitted, but it read as a stranded fragment rather than the company's contact —
+   which is exactly what Bryan flagged. So the row is now hard single-line, and the
+   space it needs was bought by MEASURING each part rather than shrinking all of them:
 
-   Two wrong answers were tried first, and both are worth naming:
-   · Micro-shrinking the logo, the name and the phone until it squeezed in — degrading
-     the whole block to rescue one line.
-   · A `@container (max-width: 360px)` rule. That measures `.prop-card`, and in LIST
-     mode the card is 1020px wide while the rail holding this block is narrow, so the
-     query said "plenty of room" and the name clipped anyway.
+     row 291.3 = logo 36 + gap 8 + name 126 + gap 8 + phone ~104, leaving ~9px of slack.
 
-   `min-width` on the name is the signal that cannot be fooled: the name declares the
-   space it needs, and whatever cannot fit beside it wraps — in grid, in list, at any
-   viewport, with no breakpoint to keep in sync. `margin-left: auto` right-aligns the
-   phone whether it lands on line one or line two. */
-.apc .apc-foot { flex-wrap: wrap; row-gap: 7px; }
-.apc .apc-agent { flex: 1 1 auto; min-width: 138px; }
-.apc .apc-co-tel { flex: none; margin-left: auto; }
+   "TenderProp Auction" needs 126px at 13px — it is the string that must never be cut,
+   so it gets `flex: 1` and everything else is `flex: none` around it. The phone's ink is
+   wider than it looks because `.pc-tel` sets tabular numerals, which is why 11.5px and a
+   13px glyph are load-bearing and not arbitrary. */
+.apc .apc-foot { flex-wrap: nowrap; gap: 8px; }
+.apc .apc-agent { flex: 1 1 auto; min-width: 0; }
+.apc .apc-co-tel { flex: none; margin-left: auto; font-size: 11.5px; gap: 6px; }
+.apc .apc-co-tel svg { width: 13px; height: 13px; }
 
 /* ── The CTA: same outlined shape as /tender's, brass instead of burgundy ────── */
 .apc .apc-cta { border-color: rgba(138, 106, 47, .45); color: var(--apc-brass); }
@@ -1971,7 +1988,9 @@
 /* LIST MODE — the auction details row would otherwise keep its two columns inside a
    much narrower description column and squeeze both facts to ellipsis. */
 @media (min-width: 861px) {
-  .props-grid.list-mode .apc .apc-when { grid-template-columns: 1fr; gap: 8px; }
-  .props-grid.list-mode .apc .apc-when .apc-fact + .apc-fact { padding-left: 0; border-left: 0; }
+  /* The two facts STAY side by side here. They were stacked when this block still had
+     28px discs and a wider footprint; measured now, list mode gives them a ~450px
+     description column and each fact needs ~130, so stacking only made the card taller
+     and wasted the width the layout exists to provide. */
   .props-grid.list-mode .apc .apc-co { margin-top: 0; }
 }
