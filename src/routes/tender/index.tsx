@@ -506,7 +506,11 @@ function TenderListings() {
             <div className="hero-panel-inner">
               <p className="hero-eyebrow">New to E-Tender?</p>
               <h2 className="hero-steps-head">
-                <span>E-Tender in</span>
+                {/* "E-Tender on a property in" (Bryan, 7 Aug) — was "E-Tender in", now
+                    parallel to Owner Auction's "Bid on a property online in".
+                    ⚠️ Line two's indent is MEASURED off this string; see the
+                    `.hero-steps-head span + span` rule before editing this wording. */}
+                <span>E-Tender on a property in</span>
                 <span><em>3 simple steps.</em></span>
               </h2>
               {/* Stacked heads, not run-in (Bryan, 4 Aug). The "01 — " is a CSS counter on the

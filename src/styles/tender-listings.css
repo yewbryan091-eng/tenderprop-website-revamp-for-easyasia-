@@ -287,7 +287,14 @@
   .hero-panel-left .hero-cycle-count { max-width: 30ch; }
   /* The footnote now hangs off the date directly — 8px was spacing for a button, and
      reads as cramped under 46px type. */
-  .hero-panel-left .hero-foot { max-width: 46ch; margin-top: 18px; }
+  /* 12px/400 → 15px/500 (Bryan, 7 Aug). He read the old size as "13–14px" and asked for
+     "around 15–16px, with slightly more weight"; it was actually 12px, so this is a 25%
+     step rather than the 15–20% he estimated — his named TARGET is what it is tuned to,
+     not his percentage. 15 over 16 because the line sits under 46px type and this is
+     still the footnote of that block, not a second statement.
+     Owner Auction is NOT affected: `.oa-page .hero-panel-left .hero-foot` sets its own
+     13px at higher specificity, and its line is a labelled date rather than a sentence. */
+  .hero-panel-left .hero-foot { max-width: 46ch; margin-top: 18px; font-size: 15px; font-weight: 500; }
   .hero-panel-left .hero-eyebrow { margin-bottom: 9px; }
   /* Light-text modifier for the future background photograph */
   .hero-panel-left.is-dark .hero-eyebrow { color: var(--burgundy-ink); }
@@ -330,12 +337,21 @@
     letter-spacing: -.015em; text-wrap: normal; color: var(--ink);
   }
   .hero-steps-head span { display: block; }   /* the break is content, never a wrap */
-  /* Second line starts at the MIDPOINT of the first (Bryan). Measured: "E-Tender in" is
-     4.815em wide, so half is 2.4em — set in em, not px, so the offset tracks the fluid
-     headline instead of drifting as the type scales. At 1470 that puts the indented line's
-     right edge at 252.4px inside a 372.1px column, so it cannot wrap; the tightest band
-     (821px) still clears by ~80px. */
-  .hero-steps-head span + span { margin-left: 2.4em; }
+  /* Second line starts at the SECOND-TO-LAST WORD of the first — here "property" in
+     "E-Tender on a property in" (Bryan, 7 Aug). The same rule now governs Owner
+     Auction, where it lands on "online" in "Bid on a property online in", so the two
+     heroes stagger identically even though the strings differ.
+
+     Superseded the old midpoint rule (2.4em, half of the then-shorter "E-Tender in").
+     Midpoint and second-to-last word happened to be close for that string; they are not
+     for this one, and the word is what Bryan is aligning to.
+
+     MEASURED in-browser with a Range, not estimated: "E-Tender on a " renders 164.5px at
+     the 28px size — 5.876em. In em so it tracks the fluid headline. Line two then ends
+     at 319px inside a 372.1px column, clearing by 53px; anchoring at the LAST word
+     ("in", 271.4px) would have ended at 425.9px and wrapped, which is why the rule
+     names the second-to-last word rather than simply "the end". */
+  .hero-steps-head span + span { margin-left: 5.876em; }
   .hero-steps-head em { font-style: italic; font-weight: inherit; color: var(--burgundy); }
 
   /* NO icon circles, no connector, no rules, no spine. A 56px circle per step costs 168px
@@ -557,6 +573,13 @@
     /* The panel is static and min-height:0 down here, so nothing can clip. Give it room
        and take the bar to a 48px touch target. */
     .hero-steps-head { font-size: 28px; }
+    /* Indent dropped on phones, both heroes. The panel goes full-width, the headline
+       goes back UP to 28px, and the column lands near 335px at 375 — 164.5px of indent
+       plus a 154.5px line clears by only 16px here, and Owner Auction's longer indent
+       does not fit at all. The staircase was always a wide-canvas gesture; stacked on a
+       phone the two lines read as one headline without it. (Owner Auction needs its own
+       copy of this below — `.oa-page …` outbids this selector at any viewport.) */
+    .hero-steps-head span + span { margin-left: 0; }
     .hero-step-head { font-size: 17px; }
     .hero-step-body { font-size: 13.5px; }
     .hero-steps { row-gap: 13px; }
