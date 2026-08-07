@@ -1595,10 +1595,113 @@
   font-weight: 600; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.15;
   letter-spacing: .04em; color: var(--oa-brass); font-variant-numeric: tabular-nums;
 }
-/* Tightened (Bryan, 7 Aug): 14/10 → 9/5, and the glyph 19px → 17px. It is an
-   editorial full stop between the date-and-time pair and the sentence that explains
-   them, so it wants to sit WITH that group rather than float in its own band —
-   which is what the looser spacing made it do once the days-left line came off. */
-.oa-page .oa-cal { margin: 9px 0 0; line-height: 0; color: var(--oa-brass); }
-.oa-page .oa-cal svg { width: 17px; height: 17px; }
-.oa-page .hero-panel-left .hero-foot { margin-top: 5px; font-size: 13px; }
+/* 5px → 15px (Bryan, 7 Aug). The 5px was tuned when a brass calendar glyph sat between
+   the time and this line and supplied the separation itself. With the glyph gone the
+   registration note collided with 9:00 AM — three tight lines above, empty panel below.
+   These are two different facts (when the auction runs / when you must be registered by),
+   so the gap is doing real work, not decoration. */
+.oa-page .hero-panel-left .hero-foot { margin-top: 15px; font-size: 13px; }
+
+/* ── "View Listings" — the hero's ONE control (Bryan, 7 Aug, to his reference) ──
+   Replaces the brass calendar glyph that sat between the time and the foot line.
+
+   Outlined, never filled. The panel already carries the page's loudest element (a
+   128px day count) and the header carries a solid-red Register; a third solid mass
+   here would fight both. A hairline brass rule reads as "there is more below"
+   without competing for the first look — and it is the reason this button can sit
+   over a photograph at all: a fill would need a shadow to survive the image.
+
+   Serif, not the UI sans, because everything else on this panel is Newsreader — the
+   date, the time, the numerals. A sans button would be the only foreign object in
+   an otherwise editorial column.
+
+   `28px` clears the foot line properly: this is a new intention (go somewhere), not
+   another line of the same sentence, so it gets a gap the text block never uses. */
+.oa-page .oa-jump {
+  display: inline-flex; align-items: center; justify-content: center; gap: 16px;
+  /* SIZED DOWN 7 Aug (Bryan: "too big", spacing awkward). It was 260px min-width /
+     18px / 26px gap / 14px 30px padding — a 260×46 slab that took the same optical
+     weight as the 46px date above it and left the panel bottom-heavy. The min-width
+     is gone entirely: padding now defines the width, so the button is as wide as its
+     own content needs and no wider (~190px), which reads as secondary to the date
+     rather than competing with it. */
+  margin: 24px 0 0; padding: 12px 30px;
+  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-weight: 500; font-size: 16px; line-height: 1; letter-spacing: .03em;
+  /* WARM white, not #fff (Bryan, 7 Aug): pure white goes cold-grey against a warm
+     lamplit photograph — the panel's own paper tone reads as the brighter of the two
+     even though it is technically darker. */
+  color: #FAF3E8; text-decoration: none;
+  /* The border was `rgba(brass, .85)` at 1px and vanished wherever the house behind it
+     is bright. Now a lifted brass at full opacity, and the hairline shadow does the
+     rest: it is not a fill (the panel stays a photograph) but it keeps the top and
+     right edges legible where they cross the lit roofline. */
+  border: 1px solid #C6A257; border-radius: 2px;
+  background: transparent;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, .28);
+  transition: background-color .18s ease, border-color .18s ease;
+}
+.oa-page .oa-jump:hover,
+.oa-page .oa-jump:focus-visible {
+  border-color: var(--oa-brass);
+  /* A wash, not a fill — enough to confirm the hit without becoming a solid button. */
+  background: rgba(184, 148, 74, .16);
+}
+.oa-page .oa-jump:focus-visible { outline: 2px solid var(--oa-brass); outline-offset: 3px; }
+/* The arrow is WHITE, matching the label, because that is what Bryan's reference
+   shows. (A brass arrow was tried — it marks the direction the words don't carry —
+   but it turns a quiet control into a second accent on a panel whose only accent is
+   the 9:00 AM time. The reference is the better call; noted here so it isn't
+   "improved" back later.) It is a text glyph, not an SVG: at 18px in a serif column
+   an icon file would sit on a different baseline for no gain. */
+.oa-page .oa-jump-arrow {
+  font-size: 17px; line-height: 1; color: inherit;
+  /* OPTICALLY centred, not box-centred (Bryan, 7 Aug: "the down arrow is a bit
+     unaligned"). `align-items: center` lines up the two BOXES, which is not the same
+     as lining up the two INKS: letters sit on a baseline with their mass above it,
+     while "↓" is drawn centred on the em box, so a box-aligned arrow reads low next
+     to text. -1px puts the ink on the label's optical centre.
+     `top`, not `transform` — the hover nudge owns transform, and the two would
+     otherwise overwrite each other. */
+  position: relative; top: -1px;
+  transition: transform .18s ease;
+}
+.oa-page .oa-jump:hover .oa-jump-arrow { transform: translateY(2px); }
+@media (prefers-reduced-motion: reduce) {
+  .oa-page .oa-jump, .oa-page .oa-jump-arrow { transition: none; }
+  .oa-page .oa-jump:hover .oa-jump-arrow { transform: none; }
+}
+/* ── "Bid on a property online / 3 simple steps." — the indent ───────────────────
+   Bryan, 7 Aug: line two starts **at the word "online"**, not at the midpoint the
+   /tender rule uses. So this is a different rule from the base one, not a different
+   number for the same rule.
+
+   MEASURED in the browser, not estimated: a Range over "Bid on a property " renders
+   206.4px at the 28px size — 7.37em. In em, so it tracks the fluid headline exactly
+   as the text it is aligning to does.
+
+   ⚠️ It is TIGHT by construction, because it is pinned to a word rather than chosen
+   for fit: at 28px, line two ends 11.2px inside a 372.1px column. Any of these will
+   wrap it — re-measure if you change one: the wording of EITHER line, the headline
+   size, or the right panel's `max-width`. The breakpoint overrides below exist for
+   exactly this reason. */
+.oa-page .hero-steps-head span + span { margin-left: 7.37em; }
+
+/* ...and below 820px the indent CANNOT hold, so it is dropped rather than left to
+   wrap. Measured at 375px: the panel goes full-width and the headline goes back up to
+   28px, which leaves a ~335px column; the indent alone is 206px, and "3 simple steps."
+   needs 154px. 360 into 335 does not go. Flush left is the honest answer at this size —
+   the staircase was always a wide-canvas gesture, and stacked on a phone the two lines
+   already read as one headline without it. */
+@media (max-width: 820px) {
+  .oa-page .hero-steps-head span + span { margin-left: 0; }
+}
+
+/* The header is sticky, so an un-offset jump parks the heading UNDERNEATH it. Same
+   convention as `#results-top` / `.listings-section` above; the value is larger than
+   theirs on purpose — it counts the search band's own top padding as well as the
+   header, so the jump lands the band's top edge at the header's bottom rather than
+   slicing the cream band in half. The mobile figure tracks the taller mobile header
+   (the ~252px header at 375px is a known, separately-tracked issue). */
+.oa-page #property-search-title { scroll-margin-top: 132px; }
+@media (max-width: 768px) { .oa-page #property-search-title { scroll-margin-top: 226px; } }

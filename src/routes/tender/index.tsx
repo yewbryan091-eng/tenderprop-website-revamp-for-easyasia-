@@ -158,11 +158,15 @@ function TenderListings() {
   /* "days left", not "days" — the founder's framing, and Bryan's. I shortened it once on
      a redundancy argument; it was not mine to change. Leave this wording alone. */
   const countdownUnit = !left ? "" : FINAL_DAY ? "left today" : left.days === 1 ? "day left" : "days left";
+  /* The screen-reader label for the timer, whose visual is aria-hidden — so this string
+     IS the heading for anyone not looking at it. Tracks the visible wording (Bryan,
+     7 Aug: "Offers close in" → "E-Tender closes in"); if one changes, so does the other,
+     or sighted and non-sighted visitors are read two different headings. */
   const countdownLabel = !left
-    ? "Offers close soon"
+    ? "E-Tender closes soon"
     : FINAL_DAY
-      ? `Offers close in ${left.hours} hours and ${left.minutes} minutes`
-      : `Offers close in ${left.days} ${left.days === 1 ? "day" : "days"}`;
+      ? `E-Tender closes in ${left.hours} hours and ${left.minutes} minutes`
+      : `E-Tender closes in ${left.days} ${left.days === 1 ? "day" : "days"}`;
 
   const [query, setQuery] = useState("");
   const [typeValue, setTypeValue] = useState("all");
@@ -431,7 +435,12 @@ function TenderListings() {
                     the icon+text as a unit pushed the LABEL 10px off the axis every other
                     element in this panel sits on. */}
                 <span className="hero-timer-heading" aria-hidden="true">
-                  <span className="hero-timer-label">Offers close in</span>
+                  {/* "E-Tender closes in" (Bryan, 7 Aug) — was "Offers close in", was
+                      briefly "Next E-Tender closes in". Names the product rather than
+                      describing an action the visitor has not taken yet. Sentence case in
+                      the source; the CSS sets it uppercase, so edit the words here and
+                      leave the casing to the stylesheet. */}
+                  <span className="hero-timer-label">E-Tender closes in</span>
                 </span>
                 {/* Bryan's idea, 31 Jul: the corner pill is gone and its H/M/S hangs off the
                     day count instead. One instrument, not two countdowns — and "134" is no
@@ -454,7 +463,11 @@ function TenderListings() {
                   <span className="hero-timer-unit">{countdownUnit}</span>
                 </span>
               </div>
-              <p className="hero-eyebrow">Next e-tender cycle</p>
+              {/* The "Next e-tender cycle" eyebrow was removed 7 Aug (Bryan). The timer
+                  label above now says "E-Tender closes in", so the eyebrow was naming the
+                  same event a second time, six lines apart — the identical redundancy that
+                  removed the Owner Auction hero's eyebrow on the same day. The date stands
+                  alone on both heroes now. */}
               <p className="hero-date">
                 <time dateTime={NEXT_BATCH.date}>
                   {HERO_DATE.day}<sup>{HERO_DATE.suffix}</sup> {HERO_DATE.month} {HERO_DATE.year}
@@ -465,7 +478,16 @@ function TenderListings() {
                   scroll, and it competed with the search bar immediately below, which is the
                   real entry point. The left panel is now purely the deadline; the closing-date
                   line is its footnote, not a caption under a button. */}
-              <p className="hero-foot">Offers close at the end of the closing date</p>
+              {/* Bryan, 7 Aug, third and final wording for this line. It briefly read
+                  "E-Tender Closing Date: 12th December 2026" and he pulled it back — with
+                  the date already set 46px above in the same block, a labelled repeat of
+                  that same string printed one date twice for no new information.
+
+                  What replaced it is not another label but the ACTION: the panel now says
+                  when the cycle closes (the date) and what to do about it (this line). The
+                  Owner Auction hero's foot line stays a labelled date because there the two
+                  dates genuinely differ — auction 12th, registration 11th. */}
+              <p className="hero-foot">Submit your offer before the E-Tender closes</p>
             </div>
           </div>
           {/* RIGHT PANEL — orientation, not reassurance (Bryan, 4 Aug). It used to hold three

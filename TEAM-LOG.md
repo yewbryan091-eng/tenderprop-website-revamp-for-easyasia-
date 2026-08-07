@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `loop/**` | *(free)* | — | Iteration 03 shipped: full-bleed diagonal 45/55, "The smarter way to buy property.", maroon fade. **Hero image is still the KL placeholder** — swap at `--hp-hero-image` in `home.css`. Loop system in `HOMEPAGE-LOOP-ENGINEERING.md` is paused, not abandoned |
-| **Owner Auction `/owner-auction` — ACTIVE** | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Hero + search band cloned from `/tender` and re-worded. **Three things still read as E-Tender — see the state-of-play note below** |
+| **Owner Auction `/owner-auction` — ACTIVE** | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | **Hero DONE 7 Aug**: registration deadline closed (11 Dec, derived), "View Listings ↓" added, headline = "Bid on a property online in / 3 simple steps." with a **measured** 7.37em indent. Below the hero it is still the `/tender` clone searching E-Tender records — **Bryan parked the listings deliberately** 7 Aug ("chill for now, i will duplicate e-tender listings onto owner auction later"), so this is a decision, not an oversight |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | **Card rebuilt to Bryan's Buyer-POV reference 6 Aug** (`7b672de`), then 3 audit P1s fixed (`8992354`): list-mode price/title inversion, per-row CTA baselines, the period→agent seam minimum |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
@@ -71,6 +71,10 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 6 Aug | **Card, final form (same day, three rulings in one):** reserve price in **INK**; the title shows the **property TYPE only** — the name is off the card visually and kept `sr-only` inside the link so twelve "Condominium" cards stay distinguishable to a screen reader; period **calendar icons in RED** | Bryan, explicitly, over the rendered page. The type-only title made every title single-line, so the two-line reserve from earlier the same day came out with the names — row alignment holds without it, and a reserve would have been a dead line on EVERY card | Bryan |
 | 6 Aug | **GRID title region reserves two lines again** (`min-height: 2.7em` on the title link, multi-column widths only), and titles hard-cap at two lines via line-clamp | Bryan's polish brief: long names were desynchronising the row — address, size, period, agent and CTA now start at ONE y on every card in a row (measured identical at 1440/1280/1024/768). **Supersedes the 28 Jul "title does not reserve two lines" row** for the grid; single-column phones keep NO reserve, which preserves what that ruling was protecting (no dead line under short titles where there is no row to align with) | Bryan |
 | 6 Aug | **The listing card follows Bryan's annotated Buyer-POV reference**: image → reserve price (strongest text, **burgundy**) → type · name → address → built-up → E-TENDER PERIOD (starts/closes, days left under the close) → agent → **solid maroon** "View E-Tender Details" CTA | Bryan supplied the reference sheet explicitly ("this image looks very clear what i want to achieve"). **Knowingly reverses two 4-Aug rulings** — price to ink, and CTA as a wash-at-rest — and restores built-up via `areaSlot()`. The day count renders twice (photo pill + under CLOSES) because the sheet draws both | Bryan |
+| 7 Aug | ✅ **OWNER AUCTION REGISTRATION CLOSES ONE DAY BEFORE THE AUCTION** — 11 Dec for a 12 Dec auction. Closes the open question raised 7 Aug. Implemented as `OWNER_AUCTION.registrationClosesDate`, **derived** from the auction date via `dayBefore()` (UTC arithmetic) so the two can never drift; it is NOT a second hardcoded literal. ⚠️ This is an **auction** rule — the 1 Aug "there is no registration deadline" row is an **E-TENDER** ruling and still stands for E-Tender | Bryan, from his father | Bryan (from his father) |
+| 7 Aug | **Owner Auction hero gets ONE control: "View Listings ↓"**, an outlined brass anchor jumping to the search band. Outlined, never filled — the panel already holds a 128px day count and the header a solid-red Register. Calendar glyph removed to make room. Sized down the same day on Bryan's call (260×46 → 191×43, gap 26→16, font 18→16): as a slab it took the same optical weight as the 46px date and left the panel bottom-heavy | Bryan supplied a reference image, then corrected size, border contrast and arrow alignment over the render | Bryan |
+| 7 Aug | **The two heroes now label their own event.** `/tender`: "Offers close in" → **"E-Tender closes in"**, the "Next e-tender cycle" eyebrow **deleted** (the timer label already named the event six lines above), foot line → **"Submit your offer before the E-Tender closes"**. `/owner-auction` keeps a labelled-date foot line because its two dates genuinely differ (auction 12th, registration 11th); `/tender`'s would have printed one date twice, which is why Bryan pulled back his own "E-Tender Closing Date: 12 December 2026" wording within the hour | Bryan, four iterations over the render | Bryan |
+| 7 Aug | **Owner Auction step headline = "Bid on a property online in / 3 simple steps."**, line two indented to start **at the word "online"** (`7.37em`, measured in-browser with a Range, not estimated). This is a DIFFERENT rule from `/tender`'s, which indents to the midpoint of line one — do not unify them. Dropped to `0` below 820px, where 360px of content cannot fit a 335px column | Bryan: *"position it on the right side, starting at online"* | Bryan |
 | 3 Aug | Price History returns as a **clearly labelled layout preview**: Buy/Rent comparable-evidence ledger with masked rows, no repeated subject-property strip, no dead `More` column and no gross yield until its basis is defined | Bryan wants buyers to reach the nearby evidence immediately; repeating the subject's price and specs added no decision value. The structure must remain reviewable without turning sample values into property claims | Bryan + Codex |
 
 ---
@@ -93,6 +97,39 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 7 Aug 2026 — Claude · Both heroes reworded; OA gets its button; registration date closed
+
+Bryan drove this over the render in ~10 short instructions. Everything is in the ledger; the
+three things worth knowing here:
+
+**1. The Owner Auction headline indent is measured, and it is fragile by design.**
+"Bid on a property online in / 3 simple steps." — line two starts **at the word "online"**,
+which is `7.37em`, taken with a `Range` in the browser rather than estimated. At 28px that
+leaves **11.2px** of clearance inside a 372.1px column. Changing the wording of *either* line,
+the headline size, or the right panel's `max-width` will wrap it. Verified single-line at
+1440 / 1280 / 1024 / 900 / 821; zeroed below 820px, where the indent (206px) plus the line
+(154px) cannot fit a ~335px column. **`/tender` uses a different rule** — midpoint of line
+one, `2.4em` — and the two must not be unified.
+
+**2. A tender-vs-auction asymmetry now sits in the foot lines, deliberately.** Owner Auction
+prints a labelled date ("Registration Closing Date: 11th December 2026") because its two
+dates differ. `/tender` does **not**: Bryan asked for "E-Tender Closing Date: 12 December
+2026", saw it repeat the 46px date directly above, and replaced it with the action —
+"Submit your offer before the E-Tender closes". Don't "fix" the inconsistency; it is the
+answer to a real problem.
+
+**3. 🔴 PRE-EXISTING, NOT FROM THIS WORK — the site overflows horizontally on phones.**
+Rendered at 375px and 390px, the *whole document* is roughly **480px wide**: the header's
+auth block is cut, and every centred element in both heroes (the date, the registration line,
+the step bodies) is sliced at the right edge. This is bigger than the "mobile header is ~252px
+tall" note already carried below and it is not the 880–900px Filters overflow either — it is a
+third, worse thing. Confirmed on `/tender` as well, so it is global, not Owner Auction's.
+**Nobody has been asked to fix it yet.** Flagged to Bryan 7 Aug.
+
+Also: `remainingMs`-family helpers untouched; no data model changes beyond the additive
+`registrationClosesDate`; `/tender` still does not filter by `tenderMethod` (unchanged, still
+awaiting Bryan). `npx tsc --noEmit` clean after every step.
 
 ### 6 Aug 2026 — 📍 STATE OF PLAY — start here if you are picking this up cold
 
@@ -132,19 +169,13 @@ auctioneer, or auctioneer-licence fields. Four traps found while planning, all s
   genuine **floor** at auction. "Floor/minimum" is a site-wide banned phrase, so auction copy
   needs a founder ruling before it is written.
 
-**🔴 OPEN QUESTION ON THE OWNER AUCTION HERO (7 Aug).** The foot line reads **"Registration
-Closing Date: 12th December 2026"** at Bryan's instruction. Three things about it are
-flagged and unresolved, so do not treat it as settled canon:
-1. His own written brief for this hero, the same day, listed *"Registration Closing Date"*
-   as wording **not** to use — the panel was to communicate the scheduled auction START.
-2. It prints the **auction date**, which appears again ~60px above in 46px type meaning
-   something else. One date string, two meanings, one block.
-3. **There is no registration-deadline field in the data model.** It reuses
-   `OWNER_AUCTION.date`. If the real deadline falls before auction day, the page is
-   asserting a business rule nobody has set — and EasyAsia builds from this.
-Needs a founder answer: **when does Owner Auction registration actually close?** Note the
-1 Aug ledger row killing the registration deadline was an **E-TENDER** ruling; it says
-nothing about auctions, so this is genuinely unanswered rather than contradicted.
+**✅ CLOSED 7 Aug — the Owner Auction registration deadline.** This was the hero's one open
+question: the foot line printed the AUCTION date under a label meaning something else, off a
+field that did not exist. Bryan's father has now set the rule — **registration closes one day
+before the auction**, so 11 December against a 12 December auction. Two dates that differ, which
+is what makes the line worth printing at all. Implemented as a derived
+`OWNER_AUCTION.registrationClosesDate`; see the 7 Aug ledger row for why it is derived and not
+typed twice. The 1 Aug "no registration deadline" row remains E-Tender-only.
 
 **Two long-standing items nobody has picked up:** the mobile header is ~252px tall at 375px
 (deferred to week 4 in `PLAN-AUGUST-DELIVERY.md`), and the Filters button overflows the

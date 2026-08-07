@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
-import { CalendarIcon, TaHome, TaPin } from "@/components/tender/icons";
+import { TaHome, TaPin } from "@/components/tender/icons";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
@@ -53,10 +53,29 @@ export const Route = createFileRoute("/owner-auction/")({ component: OwnerAuctio
 
    `time24` is the source of truth; `timeLabel` is its display form. Two fields, not a
    parse, because 24-hour is what a backend stores and "9:00 AM" is what a buyer reads. */
+const AUCTION_DATE = "2026-12-12";
+
+/* Calendar arithmetic in UTC so a browser's own timezone (or a DST boundary anywhere
+   in the world) can never shift the answer by a day. Dates in, dates out — no clock. */
+function dayBefore(isoDate: string): string {
+  const [year, month, day] = isoDate.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day) - MS_DAY).toISOString().slice(0, 10);
+}
+
 const OWNER_AUCTION = {
-  date: "2026-12-12",
+  date: AUCTION_DATE,
   time24: "09:00:00",
   timeLabel: "9:00 AM",
+  /* ✅ FOUNDER RULE, 7 Aug (Bryan, from his father): registration closes **one day
+     before** the auction — so 11 December for a 12 December auction. This closes the
+     open question logged 7 Aug in TEAM-LOG.
+
+     DERIVED from the auction date, not typed as a second literal, so the two can never
+     drift apart when the auction date moves. If a future auction ever sets its own
+     deadline independent of this rule, this becomes a stored backend field — flagged
+     in BACKEND-CONTRACT.md. Note the 1 Aug "no registration deadline" ruling was an
+     E-TENDER decision; it does not apply here. */
+  registrationClosesDate: dayBefore(AUCTION_DATE),
 };
 
 const AUCTION_START_MS = auctionStartAtMs(OWNER_AUCTION.date, OWNER_AUCTION.time24);
@@ -75,15 +94,21 @@ const MONTH_NAMES = [
   "November",
   "December",
 ];
-const HERO_DATE = (() => {
-  const [year, month, day] = OWNER_AUCTION.date.split("-").map(Number);
+
+/* "2026-12-12" → { day: 12, suffix: "th", month: "December", year: 2026 }. Shared by
+   the hero date and the registration line so the ordinal rule lives in one place. */
+function ordinalDate(isoDate: string) {
+  const [year, month, day] = isoDate.split("-").map(Number);
   const lastTwo = day % 100;
   const suffix =
     lastTwo >= 11 && lastTwo <= 13
       ? "th"
       : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
   return { day, suffix, month: MONTH_NAMES[month - 1], year };
-})();
+}
+
+const HERO_DATE = ordinalDate(OWNER_AUCTION.date);
+const REGISTRATION_DATE = ordinalDate(OWNER_AUCTION.registrationClosesDate);
 
 /* Null until mount so SSR and first paint never show a flash of zeros. */
 type Remaining = {
@@ -388,25 +413,37 @@ function OwnerAuction() {
                   product from a tender, so it is real information in brass, not
                   microcopy. Inside the same <time> semantics via the date above. */}
               <p className="oa-time">{OWNER_AUCTION.timeLabel}</p>
-              <p className="oa-cal" aria-hidden="true">
-                <CalendarIcon />
-              </p>
-              {/* Bryan, 7 Aug. ⚠️ TWO THINGS ARE FLAGGED TO HIM ABOUT THIS LINE, and
-                  it is written this way on his instruction, not by oversight:
-                  1. His own brief for this hero explicitly listed "Registration Closing
-                     Date" as wording NOT to use, on the grounds that this panel
-                     communicates the scheduled auction START.
-                  2. The date it prints is the AUCTION date — the same string, ~60px
-                     below, where it means something else. A reader can reasonably read
-                     the large date as the registration deadline, or conclude
-                     registration runs until auction morning.
-                  There is also no registration-deadline field in the data model; this
-                  reuses OWNER_AUCTION.date, so if the real deadline is earlier than
-                  auction day the page is asserting a business rule nobody has set. */}
+              {/* The brass calendar glyph that sat here was removed 7 Aug (Bryan): the
+                  button below now occupies that space, and a decorative icon competing
+                  with a real control weakens both. */}
+              {/* ✅ RESOLVED 7 Aug. This line used to print the AUCTION date — the same
+                  string as the 46px date ~60px above, meaning something else — because
+                  no registration deadline existed anywhere in the model. Bryan's father
+                  has now set the rule: registration closes ONE DAY BEFORE the auction.
+                  So it reads 11th December against a 12th December auction: two dates
+                  that now differ, which is exactly what makes the line worth printing.
+                  The value is derived in OWNER_AUCTION.registrationClosesDate.
+                  WORDING IS BRYAN'S ("Registration Closing Date") and is left as he
+                  instructed — do not quietly reword it. */}
               <p className="hero-foot">
-                Registration Closing Date: {HERO_DATE.day}
-                {HERO_DATE.suffix} {HERO_DATE.month} {HERO_DATE.year}
+                <time dateTime={OWNER_AUCTION.registrationClosesDate}>
+                  Registration Closing Date: {REGISTRATION_DATE.day}
+                  {REGISTRATION_DATE.suffix} {REGISTRATION_DATE.month}{" "}
+                  {REGISTRATION_DATE.year}
+                </time>
               </p>
+              {/* Bryan, 7 Aug — the hero's one control, to his reference: an outlined
+                  brass button, no fill, with a downward arrow. It is a same-page jump to
+                  the search band directly below, so it is an <a href="#…"> and not a
+                  <button>: middle-click and "copy link" behave, and it still works if
+                  the JS never boots. The arrow is decorative — the label already says
+                  where it goes — so it is aria-hidden. */}
+              <a className="oa-jump" href="#property-search-title">
+                View Listings
+                <span className="oa-jump-arrow" aria-hidden="true">
+                  ↓
+                </span>
+              </a>
             </div>
           </div>
 
@@ -414,7 +451,12 @@ function OwnerAuction() {
             <div className="hero-panel-inner">
               <p className="hero-eyebrow">New to Owner Auction?</p>
               <h2 className="hero-steps-head">
-                <span>Bid in</span>
+                {/* "Bid on a property online in" (Bryan, 7 Aug) — was "Bid in". The two
+                    lines now read as one sentence: "…online in / 3 simple steps."
+                    ⚠️ Line two is indented to start at the word "online" in THIS string,
+                    a measured value — see `.oa-page .hero-steps-head span + span` before
+                    editing this wording. Text before "online" is what sets the indent. */}
+                <span>Bid on a property online in</span>
                 <span>
                   <em>3 simple steps.</em>
                 </span>
