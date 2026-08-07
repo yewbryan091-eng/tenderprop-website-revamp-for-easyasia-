@@ -74,7 +74,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 | 7 Aug | ✅ **OWNER AUCTION REGISTRATION CLOSES ONE DAY BEFORE THE AUCTION** — 11 Dec for a 12 Dec auction. Closes the open question raised 7 Aug. Implemented as `OWNER_AUCTION.registrationClosesDate`, **derived** from the auction date via `dayBefore()` (UTC arithmetic) so the two can never drift; it is NOT a second hardcoded literal. ⚠️ This is an **auction** rule — the 1 Aug "there is no registration deadline" row is an **E-TENDER** ruling and still stands for E-Tender | Bryan, from his father | Bryan (from his father) |
 | 7 Aug | **Owner Auction hero gets ONE control: "View Listings ↓"**, an outlined brass anchor jumping to the search band. Outlined, never filled — the panel already holds a 128px day count and the header a solid-red Register. Calendar glyph removed to make room. Sized down the same day on Bryan's call (260×46 → 191×43, gap 26→16, font 18→16): as a slab it took the same optical weight as the 46px date and left the panel bottom-heavy | Bryan supplied a reference image, then corrected size, border contrast and arrow alignment over the render | Bryan |
 | 7 Aug | **The two heroes now label their own event.** `/tender`: "Offers close in" → **"E-Tender closes in"**, the "Next e-tender cycle" eyebrow **deleted** (the timer label already named the event six lines above), foot line → **"Submit your offer before the E-Tender closes"**. `/owner-auction` keeps a labelled-date foot line because its two dates genuinely differ (auction 12th, registration 11th); `/tender`'s would have printed one date twice, which is why Bryan pulled back his own "E-Tender Closing Date: 12 December 2026" wording within the hour | Bryan, four iterations over the render | Bryan |
-| 7 Aug | **Both step headlines stagger on the SECOND-TO-LAST WORD of line one.** Owner Auction: "Bid on a property online in / 3 simple steps." anchored at *online* (`7.37em`). `/tender`: "E-Tender on a property in / 3 simple steps." anchored at *property* (`5.876em`) — this **replaced** the old midpoint rule (`2.4em`), which was calibrated for the shorter "E-Tender in". Both values MEASURED in-browser with a Range, never estimated; both drop to `0` below 820px where the indent cannot fit the column. The last word does not work on either page — it overflows | Bryan: *"position it on the right side, starting at online"*, then *"same allignement with 3 simple steps"* for `/tender` | Bryan |
+| 7 Aug | **"3 simple steps." sits at ONE indent across both heroes: `7.37em`.** Not a word anchor — a shared x. It arrived as one (Owner Auction at *online*, `/tender` at *property*, `5.876em`), and Bryan then asked for `/tender` to move further right; matching Owner Auction exactly is what "further right" resolves to, and it aligns the two pages instead of letting each page's wording decide. Retires `/tender`'s original midpoint rule (`2.4em`). MEASURED in-browser with a Range, never estimated. **`7.37em` is the practical ceiling** — line two ends at 360.9px inside 372.1px, 11.2px clear; the true limit is 7.77em (zero clearance), which is not shippable. Drops to `0` below 820px on both | Bryan: *"position it on the right side, starting at online"* → *"same allignement"* → *"move to more right"* | Bryan |
 | 3 Aug | Price History returns as a **clearly labelled layout preview**: Buy/Rent comparable-evidence ledger with masked rows, no repeated subject-property strip, no dead `More` column and no gross yield until its basis is defined | Bryan wants buyers to reach the nearby evidence immediately; repeating the subject's price and specs added no decision value. The structure must remain reviewable without turning sample values into property claims | Bryan + Codex |
 
 ---
@@ -106,17 +106,20 @@ three things worth knowing here:
 **1. Both headline indents are measured, and one of them is fragile.** The rule is now the
 same on both heroes — line two starts at the **second-to-last word** of line one:
 
-| Page | Line one | Anchor | Indent | Clearance at 28px |
-|---|---|---|---|---|
-| `/owner-auction` | "Bid on a property online in" | *online* | `7.37em` | **11.2px** ⚠️ |
-| `/tender` | "E-Tender on a property in" | *property* | `5.876em` | 53px |
+**1. Both headline indents are `7.37em`, and that is the ceiling.** Line two sits at the
+same x on both heroes:
 
-Both taken with a `Range` in the browser, never estimated. Owner Auction's 11.2px means
-changing the wording of *either* of its lines, the headline size, or the right panel's
-`max-width` **will wrap it** — re-measure, don't nudge. Anchoring on the LAST word overflows
-on both pages, which is why the rule names the second-to-last. Verified single-line at
-1440 / 1280 / 1024 / 900 / 821; zeroed below 820px on both, where the indent plus the line
-cannot fit a ~335px column. `/tender`'s old midpoint rule (`2.4em`) is gone.
+| Page | Line one | Indent | Line two ends at | Clear |
+|---|---|---|---|---|
+| `/owner-auction` | "Bid on a property online in" | `7.37em` | 360.9px | 11.2px |
+| `/tender` | "E-Tender on a property in" | `7.37em` | 360.9px | 11.2px |
+
+Column is 372.1px on both. **11.2px of clearance means changing the wording of ANY of the
+four lines, the headline size, or the right panel's `max-width` will wrap it** — re-measure
+with a `Range`, don't nudge the number. The absolute limit is `7.77em` (zero clearance).
+Verified single-line at 1440 / 1280 / 1024 / 900 / 821; zeroed below 820px on both, where
+the indent plus the line cannot fit a ~335px column. `/tender`'s old midpoint rule (`2.4em`)
+and the brief second-to-last-word rule are both gone.
 
 **2. A tender-vs-auction asymmetry now sits in the foot lines, deliberately.** Owner Auction
 prints a labelled date ("Registration Closing Date: 11th December 2026") because its two

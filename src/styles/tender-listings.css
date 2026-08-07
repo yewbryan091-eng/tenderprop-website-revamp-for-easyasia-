@@ -350,8 +350,15 @@
      the 28px size — 5.876em. In em so it tracks the fluid headline. Line two then ends
      at 319px inside a 372.1px column, clearing by 53px; anchoring at the LAST word
      ("in", 271.4px) would have ended at 425.9px and wrapped, which is why the rule
-     names the second-to-last word rather than simply "the end". */
-  .hero-steps-head span + span { margin-left: 5.876em; }
+     names the second-to-last word rather than simply "the end".
+
+     ⚠️ SUPERSEDED the same day — Bryan: "move to more right for 3 simple steps." The word
+     anchor is gone; both heroes now sit at the SAME indent, 7.37em, so "3 simple steps."
+     lands on one x across the two pages instead of wherever each page's own wording
+     happened to put it. That is Owner Auction's measured value, and it is the practical
+     ceiling here too: line two ends at 360.9px inside 372.1px, clearing by 11.2px. The
+     column's true limit is 7.77em (zero clearance), which is not a number to ship. */
+  .hero-steps-head span + span { margin-left: 7.37em; }
   .hero-steps-head em { font-style: italic; font-weight: inherit; color: var(--burgundy); }
 
   /* NO icon circles, no connector, no rules, no spine. A 56px circle per step costs 168px
