@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
-import { TaHome, TaPin } from "@/components/tender/icons";
+import { GavelIcon, TaHome, TaPin } from "@/components/tender/icons";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
@@ -439,20 +439,25 @@ function OwnerAuction() {
               <p className="hero-foot">
                 <time dateTime={OWNER_AUCTION.registrationClosesDate}>
                   Registration Closing Date: {REGISTRATION_DATE.day}
-                  {REGISTRATION_DATE.suffix} {REGISTRATION_DATE.month}{" "}
-                  {REGISTRATION_DATE.year}
+                  {REGISTRATION_DATE.suffix} {REGISTRATION_DATE.month} {REGISTRATION_DATE.year}
                 </time>
               </p>
               {/* Bryan, 7 Aug — the hero's one control, to his reference: an outlined
-                  brass button, no fill, with a downward arrow. It is a same-page jump to
-                  the search band directly below, so it is an <a href="#…"> and not a
-                  <button>: middle-click and "copy link" behave, and it still works if
-                  the JS never boots. The arrow is decorative — the label already says
-                  where it goes — so it is aria-hidden. */}
+                  brass button, no fill. It is a same-page jump to the search band
+                  directly below, so it is an <a href="#…"> and not a <button>:
+                  middle-click and "copy link" behave, and it still works if the JS never
+                  boots.
+
+                  The trailing glyph started as a "↓" text character and became a
+                  GavelIcon later the same day — an icon swap and nothing else: href,
+                  label, jump behaviour and the button's own box are all untouched. The
+                  icon is decorative (the label already says where it goes) and carries
+                  its own aria-hidden, so this link's accessible name stays exactly
+                  "View Listings". Its rest/strike animation lives in `.oa-jump-gavel`. */}
               <a className="oa-jump" href="#property-search-title">
                 View Listings
-                <span className="oa-jump-arrow" aria-hidden="true">
-                  ↓
+                <span className="oa-jump-gavel">
+                  <GavelIcon />
                 </span>
               </a>
             </div>
@@ -483,7 +488,8 @@ function OwnerAuction() {
                 <li>
                   <p className="hero-step-head">Register</p>
                   <p className="hero-step-body">
-                    Register a member account to participate and complete the required auction process.
+                    Register a member account to participate and complete the required auction
+                    process.
                   </p>
                 </li>
                 <li>

@@ -346,6 +346,47 @@ export const CalendarIcon = () => (
     />
   </svg>
 );
+/* Auction gavel — the Owner Auction "View Listings" CTA only.
+
+   Drawn in its STRUCK position, head down-left of the pivot, so CSS can hold it raised
+   at rest and rotate to 0deg on hover. Head up-RIGHT of the handle is deliberate: it
+   makes "raised" a NEGATIVE rotation, which is the direction the interaction is
+   specified in. Mirror the geometry and every rotation value inverts.
+
+   Head is a rounded rect rather than a thick stroked line so one stroke weight carries
+   the whole glyph, matching the icons above it. It reads as a gavel and not a claw
+   hammer because the head is symmetric — a cylinder, rounded at both ends.
+
+   No base/anvil: the whole SVG rotates as one piece, so a base would swing with it. It
+   is also not needed for the read, and this file's icons are line glyphs, not scenes. */
+export const GavelIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    {/* HEAD — 13 long by 5.5 deep, `rx` 1.6, and drawn LEVEL. Three things were wrong
+        before and all three are fixed here:
+          · rx ≈ half the height (2.6, then 3.2) turned the rect into a capsule, and a
+            short capsule at 26px is a blob — it read as a lollipop. 1.6 keeps flat
+            faces, so it reads as a BAR, and a bar on a stick is a gavel.
+          · a 2.4:1 ratio. Shorter and it stops reading as a cylinder.
+          · LEVEL, not drawn at 45°. This is the one that matters for the interaction:
+            the SVG is drawn in its STRUCK pose, so at 0deg the head must lie flat as
+            though it has landed. Drawn at 45° it read as a wind-up, and the hover made
+            the gavel look like it was cocking BACK rather than coming down. */}
+    <rect x="8" y="4.75" width="13" height="5.5" rx="1.6" />
+    {/* HANDLE — leaves the head's underside at (13.5, 10.25) and runs down-left to the
+        pivot at (6.5, 18). Down-LEFT with the head up-RIGHT is what makes "raised" a
+        NEGATIVE rotation: the head is up-right of the pivot, so counter-clockwise
+        lifts it. Mirror this and every rotation value in the CSS inverts. */}
+    <path d="M13.5 10.25 6.5 18" />
+  </svg>
+);
 export const ArrowRightIcon = () => (
   <svg
     viewBox="0 0 24 24"

@@ -1698,28 +1698,59 @@
   background: rgba(184, 148, 74, .16);
 }
 .oa-page .oa-jump:focus-visible { outline: 2px solid var(--oa-brass); outline-offset: 3px; }
-/* The arrow is WHITE, matching the label, because that is what Bryan's reference
-   shows. (A brass arrow was tried — it marks the direction the words don't carry —
-   but it turns a quiet control into a second accent on a panel whose only accent is
-   the 9:00 AM time. The reference is the better call; noted here so it isn't
-   "improved" back later.) It is a text glyph, not an SVG: at 18px in a serif column
-   an icon file would sit on a different baseline for no gain. */
-.oa-page .oa-jump-arrow {
-  font-size: 17px; line-height: 1; color: inherit;
-  /* OPTICALLY centred, not box-centred (Bryan, 7 Aug: "the down arrow is a bit
-     unaligned"). `align-items: center` lines up the two BOXES, which is not the same
-     as lining up the two INKS: letters sit on a baseline with their mass above it,
-     while "↓" is drawn centred on the em box, so a box-aligned arrow reads low next
-     to text. -1px puts the ink on the label's optical centre.
-     `top`, not `transform` — the hover nudge owns transform, and the two would
-     otherwise overwrite each other. */
-  position: relative; top: -1px;
-  transition: transform .18s ease;
+/* ── The gavel (Bryan, 7 Aug) — replaces the "↓" text glyph, THIS CTA ONLY ────────
+   Every selector below is `.oa-page .oa-jump…`. Nothing here can reach the E-Tender
+   CTA, "See how Owner Auction works", the card buttons or the header.
+
+   It stays WHITE, inheriting the label's colour. A brass icon was tried on the arrow
+   and rejected for the same reason it would be wrong here: this panel's only accent
+   is the 9:00 AM time, and a second gold mark competes with it.
+
+   ⚠️ THE HEIGHT LOCK. The button measures 43px (12px padding ×2 + 17px content + 2px
+   border), and that 17px was set by the old arrow's 17px em box — the label is only
+   16px. A 26px icon would therefore grow the button by 9px. `margin-block: -4.5px`
+   pulls its LAYOUT contribution back to 17px while it still DRAWS at 26px, so the box
+   is unchanged and the glyph overflows 4.5px into 12px of padding. Height verified
+   identical before and after. Width does grow — 26px of icon cannot occupy 12.8px of
+   arrow — and that is the one dimension this change could not preserve.
+
+   26px, not the 22px first tried: below ~24px the head loses the length that makes it
+   read as a gavel rather than a mallet or a magnifier. It is the low end of the
+   suggested 23–27px, chosen because the label beside it is only 16px. */
+.oa-page .oa-jump-gavel {
+  display: block; width: 26px; height: 26px; color: inherit;
+  margin-block: -4.5px;
 }
-.oa-page .oa-jump:hover .oa-jump-arrow { transform: translateY(2px); }
+.oa-page .oa-jump-gavel svg { display: block; width: 100%; height: 100%; }
+/* REST: raised, ready. HOVER/FOCUS: one fall to the struck position the glyph is
+   actually drawn in — which is why the hover value is a plain 0 and not a number.
+   200ms with an ease-out curve that has no overshoot: a gavel does not bounce back
+   up off the block, and anything springy reads as a toy. The origin is the end of the
+   handle at (6.5, 18) in the 24-unit viewBox — 27%/75% of the box — so it swings from
+   the wrist instead of spinning about its middle. Keep this in step with the handle's
+   end point in `GavelIcon`; move one without the other and it pivots off its own grip. */
+.oa-page .oa-jump-gavel svg {
+  transform: rotate(-24deg);
+  transform-origin: 27% 75%;
+  transition: transform 200ms cubic-bezier(.22, .61, .36, 1);
+}
+.oa-page .oa-jump:hover .oa-jump-gavel svg,
+.oa-page .oa-jump:focus-visible .oa-jump-gavel svg { transform: rotate(0deg); }
+/* Active: the strike lands 1px deeper. Below the threshold of noticing, which is the
+   point — it is felt on click, not seen. */
+.oa-page .oa-jump:active .oa-jump-gavel svg { transform: rotate(0deg) translateY(1px); }
+
 @media (prefers-reduced-motion: reduce) {
-  .oa-page .oa-jump, .oa-page .oa-jump-arrow { transition: none; }
-  .oa-page .oa-jump:hover .oa-jump-arrow { transform: none; }
+  .oa-page .oa-jump { transition: none; }
+  /* Pinned to rest in every state: no transition AND no rotation change, so there is
+     no movement to soften rather than a fast one. The colour/border hover still
+     confirms the hit. */
+  .oa-page .oa-jump-gavel svg,
+  .oa-page .oa-jump:hover .oa-jump-gavel svg,
+  .oa-page .oa-jump:focus-visible .oa-jump-gavel svg,
+  .oa-page .oa-jump:active .oa-jump-gavel svg {
+    transform: rotate(-24deg); transition: none;
+  }
 }
 /* ── "Bid on a property online / 3 simple steps." — the indent ───────────────────
    Bryan, 7 Aug: line two starts **at the word "online"**, not at the midpoint the
