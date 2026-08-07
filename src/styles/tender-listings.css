@@ -1875,81 +1875,76 @@
    Bryan's second reference sheet, 7 Aug. Label ABOVE value throughout — reading order,
    visual order and DOM order finally agree. */
 
-/* THE REGISTRATION PANEL — leads the block, and is the only RED on this card.
-   The deadline DATE, then the time LEFT to meet it.
+/* THE REGISTRATION PANEL — Bryan's reference, side by side, at the width it has ─────
+   The deadline DATE, a hairline, then the time LEFT to meet it.
 
-   ⚠️ STACKED, not side by side, and that is arithmetic rather than preference. Bryan's
-   reference draws the two cells in one row; at the card width they actually have, that
-   row cannot be made to look like the reference. MEASURED, with the real ink widths:
+   NEUTRAL ground with RED marks, per his sheet: the panel is a warm grey card, and only
+   the two glyphs and the word "Registration closes" carry `--red` — the site's own token,
+   what Register and Search wear. A red-tinted panel was tried and it shouted; the red
+   belongs on the two things that must be noticed, not on the box holding them.
 
-     reference-quality (22px icons, 14px air)   needs 293.0   has 261.3   OVER by 31.7
-     shipped attempt   (18px icons, trimmed)    needs 271.0   has 269.3   OVER by  1.7
-     absolute floor    (16px icons, no air)     needs 257.0   has 273.3   fits, airless
+   ⚠️ SIZES ARE SOLVED, NOT CHOSEN. His mockup is drawn ~2.7× the real card. Run its type
+   at the actual 291.3px body and the two cells need 293.2 of 249.3 — over by 43.9, which
+   is why forcing it once produced a panel with no air in it. Solved against the measured
+   ink instead:
 
-   That is the whole story of why the one-row version read as cramped: the only way to
-   fit it was to spend every pixel of air, so it arrived with none. The card body is
-   291.3px; the reference is drawn at roughly 480. Stacked, each row needs 136 of 261 —
-   125px of SLACK — and that slack is spent on size (24px icons, 17px values) rather than
-   left empty. Same cells, same colours, same label-over-value as the reference; only the
-   arrangement adapts to the width that exists.
+     his mockup sizes (label 12.5, values 18/15)   293.2 of 249.3   OVER 43.9
+     THIS  (label 10.5, values 15/13, icons 22/18) 247.8 of 255.3   AIR   7.5
 
-   Red, not brass, and it is the site's `--red` — what Register and Search wear. Brass is
-   this card's decorative accent; red is its imperative, and this is the one thing here a
-   buyer must act on before a date. Tinted, never filled: it outranks the two facts below
-   without competing with the price above, which is still correctly the loudest thing. */
+   The two cells are deliberately UNEQUAL, which is what buys the fit and is also what his
+   sheet draws: the date is the fact (22px glyph, 15px value), the countdown is its
+   qualifier (18px glyph, 13px value). Sizing them as equals is what made the earlier
+   attempt impossible. */
 .apc .apc-reg {
-  display: block;
-  margin: 0 0 11px; padding: 13px 14px;
-  background: rgba(200, 40, 28, .045);
-  border: 1px solid rgba(200, 40, 28, .14);
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px;
+  margin: 0 0 11px; padding: 11px 12px;
+  background: #F7F4EF;
+  border: 1px solid var(--line);
   border-radius: 12px;
 }
-.apc .apc-reg-cell { display: flex; align-items: center; gap: 12px; min-width: 0; }
-/* A hairline BETWEEN the rows, echoing the divider the reference draws between its
-   cells — turned through 90° with the layout. Border on the second row, so it can never
-   fall out of step with the row it separates. */
+.apc .apc-reg-cell { display: flex; align-items: center; gap: 9px; min-width: 0; }
 .apc .apc-reg-cell + .apc-reg-cell {
-  margin-top: 11px; padding-top: 11px; border-top: 1px solid rgba(200, 40, 28, .15);
+  margin-top: 0; padding-top: 0; border-top: 0;
+  padding-left: 10px; border-left: 1px solid var(--line);
+  gap: 8px;
 }
-/* Bare glyphs, no discs. The two facts BELOW wear tinted discs; giving these the same
-   treatment would flatten the hierarchy this panel exists to create. Larger instead —
-   24px against their 14px, which is where a good part of the slack went. */
+/* Bare glyphs, no discs — the two facts BELOW wear tinted discs, and repeating that
+   treatment here would flatten the hierarchy this panel exists to create. */
 .apc .apc-reg-icon { flex: none; display: grid; place-items: center; color: var(--red); }
-.apc .apc-reg-icon svg { width: 24px; height: 24px; }
+.apc .apc-reg-icon svg { width: 22px; height: 22px; }
+.apc .apc-reg-cell + .apc-reg-cell .apc-reg-icon svg { width: 18px; height: 18px; }
 .apc .apc-reg-text { min-width: 0; }
 .apc .apc-reg-text b {
   display: block; color: var(--ink);
-  font-size: 17px; font-weight: 800; line-height: 1.2; letter-spacing: -.015em;
+  font-size: 15px; font-weight: 800; line-height: 1.2; letter-spacing: -.015em;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   font-variant-numeric: tabular-nums;
 }
-/* The right-hand cell inverts the left: value first, caption under — each cell leads
-   with its own most important word, the meaning on one, the number on the other. */
+.apc .apc-reg-cell + .apc-reg-cell .apc-reg-text b { font-size: 13px; }
+/* The right cell inverts the left — value first, caption under. Each leads with its own
+   most important word: the meaning on one side, the number on the other. */
 .apc .apc-reg-sub {
   display: block; margin-top: 1px; color: var(--muted);
-  font-size: 11.5px; font-weight: 500; line-height: 1.25;
+  font-size: 10.5px; font-weight: 500; line-height: 1.25;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-/* The labels inside the panel are red; every other value label on the card stays brass.
-   Scoped so it cannot reach the facts row below. */
-.apc .apc-reg .apc-fact-label { color: var(--red); font-size: 11.5px; }
+.apc .apc-reg .apc-fact-label { color: var(--red); font-size: 10.5px; }
 
-/* ── …and WHERE THERE IS ROOM, it becomes the reference's single row ──────────
-   The stack above is a response to 291px of card body, not a rejection of Bryan's
-   layout. A container query restores the one-row version the moment the card is wide
-   enough to render it properly — which is list mode, where the panel gets ~450px.
-
+/* ── WHERE THERE IS ROOM, the panel grows into the mockup's own sizes ──────────
    `container-type: inline-size` is already on `.prop-card`, so this measures the CARD.
-   Threshold: the row needs a 323px panel box (293 of content + its own 30 of padding
-   and border), and the body is roughly the card minus 34, so the card must clear ~357.
-   380 is that with a margin, so the row only ever appears with air to spare — which was
-   the entire problem with forcing it at 325. */
+   At the 450px panel list mode gives it, the mockup's 293.2 sits in 420 — 113px of air —
+   so above a 380px card the type and glyphs go up to what he drew. Same layout either
+   way; only the scale follows the space. */
 @container (min-width: 380px) {
-  .apc .apc-reg { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; }
-  .apc .apc-reg-cell + .apc-reg-cell {
-    margin-top: 0; padding-top: 0; border-top: 0;
-    padding-left: 16px; border-left: 1px solid rgba(200, 40, 28, .15);
-  }
+  .apc .apc-reg { gap: 14px; padding: 13px 15px; }
+  .apc .apc-reg-cell { gap: 11px; }
+  .apc .apc-reg-cell + .apc-reg-cell { padding-left: 15px; gap: 10px; }
+  .apc .apc-reg-icon svg { width: 27px; height: 27px; }
+  .apc .apc-reg-cell + .apc-reg-cell .apc-reg-icon svg { width: 22px; height: 22px; }
+  .apc .apc-reg-text b { font-size: 18px; }
+  .apc .apc-reg-cell + .apc-reg-cell .apc-reg-text b { font-size: 15px; }
+  .apc .apc-reg .apc-fact-label { font-size: 12.5px; }
+  .apc .apc-reg-sub { font-size: 12px; }
 }
 
 .apc .apc-when { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 10px; }
