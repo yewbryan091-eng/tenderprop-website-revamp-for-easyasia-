@@ -1857,11 +1857,19 @@
 }
 .apc .apc-pill svg { width: 13px; height: 13px; flex: none; color: var(--apc-brass-lit); }
 
-/* Brass section labels. On the tender card these are muted grey; here they are the
-   accent that ties the card to the hero. Same size and tracking — this is a colour
-   change, not a hierarchy change. */
-.apc .pc-money-label,
-.apc .pc-period-kick { color: var(--apc-brass); }
+/* TWO REGISTERS, and the split is now meaningful rather than incidental (Bryan, 7 Aug,
+   taking "Auction details" black after "Auction company"):
+
+   · SECTION HEADERS — "Auction details", "Auction company" — are INK. They name a region
+     of the card, so they behave like structure.
+   · VALUE LABELS — "Starting bid", "Registration closes", "Auction date/time" — are
+     BRASS. They name a single number, so they behave like the accent that ties this card
+     to the Owner Auction hero.
+
+   Before this they were all brass, which made three levels of the card compete at the
+   same colour. Size and tracking are untouched; only the colour carries the distinction. */
+.apc .pc-money-label { color: var(--apc-brass); }
+.apc .pc-period-kick { color: var(--ink); }
 
 /* ── AUCTION DETAILS: the registration panel, then two facts split by a rule ───
    Bryan's second reference sheet, 7 Aug. Label ABOVE value throughout — reading order,
