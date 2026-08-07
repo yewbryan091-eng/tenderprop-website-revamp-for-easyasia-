@@ -126,6 +126,61 @@ The E-Tender Connect step now reads: **"The property listing agent will follow u
 regarding your offer, arrange a property viewing, and guide you through the next steps."** No
 layout, styling, or interaction changed. Production build passes.
 
+### 7 Aug 2026 — Claude · Card pill counts to REGISTRATION; the auctioneer becomes the COMPANY
+
+Two changes to the auction card, both Bryan's.
+
+**1. "127 days left" → "127 days left to register", and the maths moved with it.**
+The pill counted to the AUCTION START. Naming a different deadline in the label means
+measuring to that deadline, so it now counts to `REGISTRATION_CLOSE_MS` —
+`closeAtMs(11 Dec)` = 23:59:59 MYT, the same end-of-day rule every tender closing date
+uses, because "closes on the 11th" means the buyer has the whole of the 11th.
+
+**This was not cosmetic.** The two instants are ~9 hours apart, and their ceil'd day
+counts disagree **37.5% of every 24 hours** — measured across 960 hourly samples, with
+the first divergence 8 hours after the change. Changing only the words would have shipped
+a number that is right most of the time, which is the worst kind of wrong. Same class as
+885-vs-884.
+
+Also now THREE pill states, not two. Between registration closing and the auction
+starting there is a real ~9-hour window where registration is shut but the auction has
+not happened: `Registration closed` fills it. `is-soon` follows registration too — urgency
+pointed at an auction nobody can still enter is urgency pointed at the wrong thing.
+
+Division of labour on the page: the HERO counts to the event, the CARD counts to what a
+buyer must DO.
+
+**2. The "Licensed Auctioneer" block is gone; it is the AUCTION COMPANY.**
+This retires the one genuinely unsafe thing on the card. An individual's auctioneer
+licence is a regulated professional credential and there was no real one to print —
+"John Tan / Licence No. A12345" was placeholder. **A company identity has no such
+problem and every value is real:**
+- `TenderProp Auction`, SSM **966357-V** — Bryan supplied that number on 3 Aug and it is
+  already live on the Residensi Sinaran detail page. Not invented.
+- The logo is the shipped `LOGO` asset, in a contained disc (never cropped).
+- No "View Profile" — which also removes the dead link that pointed at the listing.
+
+⚠️ **One thing to check:** `03-8011 6768` is NEW. Everywhere else the office line is
+`(+603) 8021 6468` (SiteFooter, /about, PLAN-site-architecture). A separate auction line
+is entirely plausible — but the pairs differ in two places each (8021/8011, 6468/6768),
+so it is worth one glance before go-live. Still not a BOVAEP agency registration
+(`E(1)xxxx`), which Act 242 disclosure normally cites — already tracked in
+PLAN-AUGUST-DELIVERY.
+
+**A CSS lesson that bit twice, recorded so it does not bite a third time.** The base card
+sets `.prop-card .pc-agent span` — two classes AND an element — which outranks a
+two-class `.apc .apc-role`. The rule looked applied and was not. Auction-card overrides on
+anything inside `.pc-agent` need three classes.
+
+**And the layout signal that fooled a `@container` query.** The company row is
+logo + name + phone; at the 3-column grid it is 291.3px and the name needs 131 of the
+117.7 left over. A `@container (max-width: 360px)` rule looked right and was wrong: it
+measures `.prop-card`, and in LIST mode the card is 1020px while the rail holding this
+block is narrow — so the query said "plenty of room" and the name clipped anyway. The fix
+is `min-width: 138px` on the name plus `flex-wrap`: the name declares what it needs and
+whatever cannot fit beside it wraps, in grid, in list, at any viewport, with no breakpoint
+to keep in sync. Verified unclipped in both modes.
+
 ### 7 Aug 2026 — Claude · The Owner Auction CARD, to Bryan's reference sheet
 
 New component `AuctionPropertyCard.tsx`, new module `data/owner-auction.ts`, new

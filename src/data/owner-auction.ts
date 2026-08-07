@@ -1,4 +1,4 @@
-import { MS_DAY, auctionStartAtMs } from "@/lib/tender-utils";
+import { MS_DAY, auctionStartAtMs, closeAtMs } from "@/lib/tender-utils";
 
 /* ── THE OWNER AUCTION EVENT — one object, read by the hero AND every card ─────
    Lifted out of `routes/owner-auction/index.tsx` on 7 Aug when the auction CARD
@@ -46,6 +46,18 @@ export const OWNER_AUCTION = {
 
 export const AUCTION_START_MS = auctionStartAtMs(OWNER_AUCTION.date, OWNER_AUCTION.time24);
 
+/* ── TWO DEADLINES, NINE HOURS APART, AND THEY ARE NOT INTERCHANGEABLE ─────────
+   The auction STARTS at a scheduled time (12 Dec, 09:00 MYT) — `auctionStartAtMs`.
+   Registration CLOSES at the end of its date (11 Dec, 23:59:59 MYT) — `closeAtMs`,
+   the same end-of-day rule every tender closing date uses, because "closes on the
+   11th" means a buyer has the whole of the 11th.
+
+   Anything labelled "to register" MUST count to this and not to the auction. They
+   currently round to the same day count, which is exactly what makes the mistake
+   invisible: the gap is ~9 hours, so the two answers agree on most days and quietly
+   differ on the rest. Same class of bug as 885-vs-884. */
+export const REGISTRATION_CLOSE_MS = closeAtMs(OWNER_AUCTION.registrationClosesDate);
+
 const MONTH_NAMES = [
   "January",
   "February",
@@ -81,30 +93,29 @@ export const REGISTRATION_DATE = ordinalDate(OWNER_AUCTION.registrationClosesDat
    one line. */
 export const AUCTION_TIME_LABEL = `${OWNER_AUCTION.timeLabel} ${OWNER_AUCTION.timezone}`;
 
-/* ── THE AUCTIONEER ────────────────────────────────────────────────────────────
-   ⚠️ PLACEHOLDER, AND A MORE SENSITIVE ONE THAN THE OTHERS. A licensed auctioneer is a
-   regulated role, so a name and licence number here is a professional CREDENTIAL, not
-   demo dressing like the fabricated street addresses. These are the sample values off
-   Bryan's own reference sheet, kept in one object so replacing them with the real
-   auctioneer is a one-line change — and so nobody has to hunt for what is invented.
-   `A12345` follows the same obviously-placeholder pattern as the approved REN 123456.
-   MUST be replaced before go-live; listed with the other go-live blockers in TEAM-LOG.
+/* ── THE AUCTION COMPANY ───────────────────────────────────────────────────────
+   Bryan, 7 Aug: the card names the COMPANY, not a named auctioneer. That replaced a
+   "Licensed Auctioneer / John Tan / Licence No. A12345" block, and it solves the one
+   genuinely unsafe thing on this card — an individual's auctioneer licence number is a
+   regulated professional credential, and there was no real one to print. A company
+   identity has no such problem, and every value below is REAL:
 
-   No photograph on purpose. The only headshot in the repo is Stephen Yew's, and putting
-   a real person's face against a fabricated identity and licence number is a different
-   kind of wrong from a placeholder string. The card draws initials instead, which also
-   reads honestly as "no photo yet". */
-export const AUCTIONEER = {
-  role: "Licensed Auctioneer",
-  name: "John Tan",
-  licence: "A12345",
-  phone: "012-345 6789",
-  phoneHref: "tel:+60123456789",
+   · `966357-V` is TenderProp's SSM company registration, supplied by Bryan on 3 Aug and
+     already rendering on the Residensi Sinaran detail page. Not a placeholder.
+   · The logo is the existing shipped asset, not a new upload.
+
+   ⚠️ ONE THING TO CONFIRM: `03-8011 6768` is a NEW number. Everywhere else on the site
+   (SiteFooter, /about, PLAN-site-architecture) the office line is `(+603) 8021 6468`.
+   Two different numbers is entirely plausible — a dedicated auction line — but the pairs
+   differ in two places each (8021/8011, 6468/6768), so it is worth one glance before
+   go-live rather than assuming either is a typo for the other.
+
+   NOTE this is still not a BOVAEP agency registration (`E(1)xxxx`), which is what Act
+   242 disclosure normally cites — the open item already tracked in PLAN-AUGUST-DELIVERY. */
+export const AUCTION_COMPANY = {
+  kicker: "Auction company",
+  name: "TenderProp Auction",
+  ssmNo: "966357-V",
+  phone: "03-8011 6768",
+  phoneHref: "tel:+60380116768",
 };
-
-export const AUCTIONEER_INITIALS = AUCTIONEER.name
-  .split(/\s+/)
-  .map((part) => part[0])
-  .join("")
-  .slice(0, 2)
-  .toUpperCase();

@@ -1906,50 +1906,62 @@
    this stopped being a countdown when the day count came off it. */
 .apc .apc-reg svg { flex: none; width: 14px; height: 14px; color: var(--apc-brass-lit); }
 
-/* ── The auctioneer ───────────────────────────────────────────────────────────
-   Three lines where the tender card has two — the ROLE leads, because at auction the
-   authority is the point and "Licensed Auctioneer" is the whole reason this block
-   replaced the negotiator. */
-.apc .apc-foot { align-items: flex-start; }
-/* Initials, not a headshot. The only photograph in the repo belongs to a real person
-   and must not be attached to a placeholder identity and licence number. Espresso
-   ground so the avatar still reads as the block's anchor at 40px. */
-.apc .apc-avatar {
-  display: grid; place-items: center;
-  background: var(--apc-espresso); color: #E8D9B5;
-  font-size: 14px; font-weight: 700; letter-spacing: .04em;
-  box-shadow: 0 0 0 1px rgba(184, 148, 74, .45);
+/* ── The auction company ──────────────────────────────────────────────────────
+   Replaced a named auctioneer block (Bryan, 7 Aug). Laid out as a KICKER over a ROW,
+   matching the AUCTION DETAILS block above it, so the lower half of the card reads as
+   two labelled sections rather than one section and one loose strip.
+
+   `.apc-co` — not `.pc-foot` — carries the hairline and the `margin-top: auto` that
+   pins the block to the bottom of a ragged card. `.pc-foot` keeps its class because
+   /tender's `.props-grid.list-mode .pc-foot` grid keys off it; it just stops being the
+   element that owns the spacing. */
+.apc .apc-co { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); }
+.apc .apc-co-kick {
+  display: block; margin-bottom: 9px; color: var(--apc-brass);
+  font-size: 10.5px; font-weight: 800; letter-spacing: .11em; line-height: 1.25;
+  text-transform: uppercase;
 }
-/* MEASURED, not chosen. At a 325px card the auctioneer column is ~113px wide, and
-   "Licensed Auctioneer" at 10.5px/.07em needs ~120 — it wrapped to two lines and took
-   the block to five. 9.5px/.05em brings it to ~100. `nowrap` + ellipsis so that if a
-   longer role ever arrives it truncates once instead of silently restacking the card. */
-/* ⚠️ `.apc .apc-agent .apc-role`, not `.apc .apc-role`. The base card sets
-   `.prop-card .pc-agent span { font-size: 12.5px }` — two classes AND an element, which
-   outranks two classes, so the shorter selector silently lost and this rendered at
-   12.5px while claiming 9.5. That is what was ellipsising "Licensed Auctioneer". */
-.apc .apc-agent .apc-role {
-  display: block; margin-bottom: 1px; color: var(--apc-brass);
-  font-size: 9.5px; font-weight: 800; letter-spacing: .05em; line-height: 1.2;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+.apc .apc-foot { margin-top: 0; padding-top: 0; border-top: 0; align-items: center; }
+/* The mark is CONTAINED in its disc, never cropped — a logo cut by a circle is a
+   damaged logo. Cream ground so the dark wordmark reads, brass ring to tie it to the
+   section label. `object-fit: contain` plus padding is what keeps the roof device and
+   the wordmark whole at 44px. */
+.apc .apc-co-logo {
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  object-fit: contain; padding: 6px;
+  background: #FBF7F1; border: 1px solid rgba(138, 106, 47, .45);
 }
-.apc .apc-agent b { font-size: 13.5px; }
+.apc .apc-agent b { font-size: 13.5px; letter-spacing: -.005em; }
+.apc .apc-agent b, .apc .apc-agent > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* The SSM number is identity, not emphasis — it sits in the same muted register the
+   detail page uses for it, in brackets, under the name. */
 .apc .apc-agent > span:last-child {
-  font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-/* The contact column is sized down for the same reason: every px it gives back is a px
-   the auctioneer's name can use, and the name is the more important of the two. */
-.apc .apc-contact { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
-.apc .apc-contact .pc-tel { font-size: 12px; }
-.apc .apc-contact .pc-tel svg { width: 14px; height: 14px; }
+.apc .apc-co-tel { flex: none; font-size: 12px; }
+.apc .apc-co-tel svg { width: 14px; height: 14px; }
 .apc .pc-tel:hover { color: var(--apc-brass); }
-.apc .apc-profile {
-  display: inline-flex; align-items: center; gap: 4px;
-  color: var(--apc-brass); font-size: 11px; font-weight: 600; text-decoration: none;
-  transition: color .15s ease;
-}
-.apc .apc-profile svg { width: 12px; height: 12px; flex: none; }
-.apc .apc-profile:hover { color: var(--apc-espresso); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── The row WRAPS when it must, rather than being shrunk to fit ──────────────
+   MEASURED at the 3-column grid: the row is 291.3px, and logo 44 + gaps 20 + phone
+   109.6 leaves 117.7 for a name that needs 131. "TenderProp Auction" was ellipsising —
+   and the company's own name is the one string in this block that must not be cut.
+   (The phone's ink is wider than it looks: `.pc-tel` sets tabular numerals.)
+
+   Two wrong answers were tried first, and both are worth naming:
+   · Micro-shrinking the logo, the name and the phone until it squeezed in — degrading
+     the whole block to rescue one line.
+   · A `@container (max-width: 360px)` rule. That measures `.prop-card`, and in LIST
+     mode the card is 1020px wide while the rail holding this block is narrow, so the
+     query said "plenty of room" and the name clipped anyway.
+
+   `min-width` on the name is the signal that cannot be fooled: the name declares the
+   space it needs, and whatever cannot fit beside it wraps — in grid, in list, at any
+   viewport, with no breakpoint to keep in sync. `margin-left: auto` right-aligns the
+   phone whether it lands on line one or line two. */
+.apc .apc-foot { flex-wrap: wrap; row-gap: 7px; }
+.apc .apc-agent { flex: 1 1 auto; min-width: 138px; }
+.apc .apc-co-tel { flex: none; margin-left: auto; }
 
 /* ── The CTA: same outlined shape as /tender's, brass instead of burgundy ────── */
 .apc .apc-cta { border-color: rgba(138, 106, 47, .45); color: var(--apc-brass); }
@@ -1961,6 +1973,5 @@
 @media (min-width: 861px) {
   .props-grid.list-mode .apc .apc-when { grid-template-columns: 1fr; gap: 8px; }
   .props-grid.list-mode .apc .apc-when .apc-fact + .apc-fact { padding-left: 0; border-left: 0; }
-  .props-grid.list-mode .apc .apc-foot { align-items: center; }
-  .props-grid.list-mode .apc .apc-contact { align-items: flex-start; }
+  .props-grid.list-mode .apc .apc-co { margin-top: 0; }
 }

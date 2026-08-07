@@ -1,13 +1,13 @@
 import {
-  AUCTIONEER,
-  AUCTIONEER_INITIALS,
+  AUCTION_COMPANY,
   AUCTION_START_MS,
   AUCTION_TIME_LABEL,
   OWNER_AUCTION,
+  REGISTRATION_CLOSE_MS,
   REGISTRATION_DATE,
 } from "@/data/owner-auction";
 import type { Tender } from "@/data/tenders";
-import { PROJECT_IMG } from "@/lib/images";
+import { LOGO, PROJECT_IMG } from "@/lib/images";
 import {
   areaSlot,
   daysUntil,
@@ -61,14 +61,33 @@ export function AuctionPropertyCard({
   onToggleSave: (id: string) => void;
 }) {
   const id = tenderId(x);
-  /* Counts to the shared auction START (9:00 AM), not to the end of a closing date —
-     `daysUntil` + `AUCTION_START_MS` are the auction-side helpers. Reaching for
-     `daysLeft(x.closingDate)` here would count to a TENDER deadline this card no
-     longer shows, and land ~15 hours out. */
-  const d = daysUntil(AUCTION_START_MS);
-  const open = d > 0;
-  const soon = open && d <= 14;
-  const leftTxt = `${d} ${d === 1 ? "day" : "days"} left`;
+  /* ⚠️ THE PHOTO PILL COUNTS TO REGISTRATION, NOT TO THE AUCTION (Bryan, 7 Aug:
+     "127 days left" → "127 days left to register"). That is a semantic change, not a
+     wording one: the label names the deadline, so the number has to be measured to the
+     same deadline or the card lies. Registration closes at the END of 11 Dec; the
+     auction starts 09:00 on the 12th — about nine hours apart, which means the two
+     counts agree on most days and silently differ on the rest. Changing the words
+     without changing `atMs` would have shipped a number that is right most of the time.
+
+     Division of labour on this page: the HERO counts to the event ("Next Owner Auction
+     in"), the CARD counts to the thing a buyer must DO. Neither is the other's spare. */
+  const now = Date.now();
+  const registrationOpen = now < REGISTRATION_CLOSE_MS;
+  const auctionUpcoming = now < AUCTION_START_MS;
+  const d = daysUntil(REGISTRATION_CLOSE_MS, now);
+  /* `soon` follows registration too — a red-hot pill counting to an auction nobody can
+     still register for is urgency pointed at the wrong thing. */
+  const soon = registrationOpen && d <= 14;
+  const leftTxt = `${d} ${d === 1 ? "day" : "days"} left to register`;
+  /* THREE states, not two. Between registration closing and the auction starting there
+     is a real ~9-hour window where registration is shut but the auction has not
+     happened — "Auction closed" would be false there, and it is the one moment on this
+     card where a buyer most needs to be told the truth. */
+  const pillText = registrationOpen
+    ? leftTxt
+    : auctionUpcoming
+      ? "Registration closed"
+      : "Auction closed";
   const href = hrefFor(x);
   const typeLabel = displayType(x);
   const size = areaSlot(x);
@@ -114,10 +133,14 @@ export function AuctionPropertyCard({
         >
           <HeartIcon />
         </button>
-        <span className={"pc-deadline" + (soon ? " is-soon" : "") + (!open ? " is-closed" : "")}>
+        <span
+          className={
+            "pc-deadline" + (soon ? " is-soon" : "") + (!registrationOpen ? " is-closed" : "")
+          }
+        >
           <ClockIcon />
           <span className="pc-when">
-            <b className="pc-left">{open ? leftTxt : "Auction closed"}</b>
+            <b className="pc-left">{pillText}</b>
           </span>
         </span>
       </div>
@@ -200,34 +223,32 @@ export function AuctionPropertyCard({
         </div>
 
         <div className="pc-rail">
-          {/* ── THE AUCTIONEER, where the tender card carries the listing agent ──
-              Authority is the point: at auction the person running the room is the
-              licensed auctioneer, not the listing negotiator.
-              ⚠️ Name and licence are PLACEHOLDERS from Bryan's reference sheet, and a
-              licence number is a regulated credential rather than demo dressing — see
-              `AUCTIONEER` in data/owner-auction.ts. Initials, not a photograph: the only
-              headshot in the repo belongs to a real person and must not be attached to a
-              fabricated identity. */}
-          <div className="pc-foot apc-foot">
-            <span className="pc-avatar apc-avatar" aria-hidden="true">
-              {AUCTIONEER_INITIALS}
-            </span>
-            <span className="pc-agent apc-agent">
-              <span className="apc-role">{AUCTIONEER.role}</span>
-              <b>{AUCTIONEER.name}</b>
-              <span>Licence No. {AUCTIONEER.licence}</span>
-            </span>
-            <span className="apc-contact">
-              <a className="pc-tel" href={AUCTIONEER.phoneHref}>
+          {/* ── THE AUCTION COMPANY, where the tender card carries the listing agent ──
+              Bryan, 7 Aug — it replaced a named "Licensed Auctioneer" with a licence
+              number, which was the one genuinely unsafe thing on this card: an
+              individual's auctioneer licence is a regulated credential and there was no
+              real one to print. A company identity has none of that problem and every
+              value here is real — `966357-V` is the SSM number already live on the
+              detail page, and the logo is the shipped asset.
+
+              The kicker sits OUTSIDE `.pc-foot` because `.pc-foot` is the row, and
+              /tender's list-mode grid keys off that exact class. Wrapping it instead of
+              restructuring it keeps list view working on this page. */}
+          <div className="apc-co">
+            <span className="apc-co-kick">{AUCTION_COMPANY.kicker}</span>
+            <div className="pc-foot apc-foot">
+              {/* Decorative: the company name sits right beside it in text, so an alt
+                  string here would make a screen reader say it twice. */}
+              <img className="apc-co-logo" src={LOGO} alt="" loading="lazy" />
+              <span className="pc-agent apc-agent">
+                <b>{AUCTION_COMPANY.name}</b>
+                <span>({AUCTION_COMPANY.ssmNo})</span>
+              </span>
+              <a className="pc-tel apc-co-tel" href={AUCTION_COMPANY.phoneHref}>
                 <PhoneIcon />
-                <span>{AUCTIONEER.phone}</span>
+                <span>{AUCTION_COMPANY.phone}</span>
               </a>
-              {/* No route for an auctioneer profile exists yet. Pointing at the listing
-                  keeps it live rather than shipping a 404, and it is flagged. */}
-              <a className="apc-profile" href={href}>
-                View Profile <ArrowRightIcon />
-              </a>
-            </span>
+            </div>
           </div>
 
           <span className="pc-cta apc-cta" aria-hidden="true">
