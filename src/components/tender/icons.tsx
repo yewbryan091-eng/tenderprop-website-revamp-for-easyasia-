@@ -374,11 +374,18 @@ export const CalendarIcon = () => (
 export const GavelIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
     <g className="oa-gavel-mallet">
-      {/* THE BARREL — local frame, tilted -30°. Left ring · body · centre band · right
+      {/* THE BARREL — local frame, tilted -60°. Left ring · body · centre band · right
           ring, with 0.35 of groove either side of the body. Rings are 8 deep against
           the body's 6.9: the flare is what says "turned on a lathe" rather than
-          "rounded rectangle". */}
-      <g transform="translate(8.6 9) rotate(-30)">
+          "rounded rectangle".
+
+          ⚠️ -60° IS NOT A LOOK, IT IS AN ALIGNMENT. The handle runs at +30°, so the
+          barrel has to sit at 30 − 90 = -60° to be square to it. It was drawn at -30°
+          first, which left the head 60° off its own handle — Bryan caught it
+          immediately: "why the gavel head looks so weird and not aligned with the
+          stick". Both parts rotate together, so perpendicularity holds in the raised
+          and struck poses alike. Change the handle's angle and this must follow it. */}
+      <g transform="translate(8.4 9.6) rotate(-60)">
         <rect x="-6.6" y="-4" width="2" height="8" rx=".9" fill="currentColor" />
         <rect x="-4.25" y="-3.45" width="8.5" height="6.9" rx="1" fill="currentColor" />
         <rect x="-1.2" y="-3.85" width="2.4" height="7.7" rx=".8" fill="currentColor" />
