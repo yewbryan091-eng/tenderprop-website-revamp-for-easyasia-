@@ -1595,6 +1595,26 @@
   font-weight: 600; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.15;
   letter-spacing: .04em; color: var(--oa-brass); font-variant-numeric: tabular-nums;
 }
+/* ── "MYT" — the zone qualifier beside the time (Bryan, 7 Aug) ────────────────────
+   Every value here exists to make it read as an ANNOTATION on the time rather than a
+   second piece of the time itself. The brass serif "9:00 AM" is untouched.
+
+   · `.55em` — a bit under half, sized in em so it tracks the fluid time above it.
+   · the UI sans against the serif: the sharpest available signal that this is a
+     different KIND of thing, and it costs no colour or weight to say it.
+   · uppercase + `.12em` tracking, because a 3-letter abbreviation at ~10px collapses
+     into a smudge without the extra air; tracking is what makes an initialism read as
+     an initialism.
+   · `#D3C3A2`, a muted brass rather than the full `--oa-brass`. At this size full gold
+     would be the brighter of the two elements — the smaller text winning the accent it
+     is meant to be subordinate to.
+   · `.62em` of space: wider than a word space so the two do not read as one string,
+     narrower than a gap that would orphan it. */
+.oa-page .oa-tz {
+  margin-left: .62em;
+  font-family: var(--sans); font-size: .55em; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: #D3C3A2;
+}
 /* 5px → 15px (Bryan, 7 Aug). The 5px was tuned when a brass calendar glyph sat between
    the time and this line and supplied the separation itself. With the glyph gone the
    registration note collided with 9:00 AM — three tight lines above, empty panel below.

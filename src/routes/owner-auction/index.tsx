@@ -66,6 +66,12 @@ const OWNER_AUCTION = {
   date: AUCTION_DATE,
   time24: "09:00:00",
   timeLabel: "9:00 AM",
+  /* The zone the auction runs in, shown next to the time (Bryan, 7 Aug). It is a
+     separate field, not part of `timeLabel`, for two reasons: it is styled differently
+     (see `.oa-tz`), and it is a real backend fact rather than decoration — every
+     countdown on this page resolves `time24` at +08:00 via `auctionStartAtMs()`, so
+     this string and that offset must always describe the same zone. */
+  timezone: "MYT",
   /* ✅ FOUNDER RULE, 7 Aug (Bryan, from his father): registration closes **one day
      before** the auction — so 11 December for a 12 December auction. This closes the
      open question logged 7 Aug in TEAM-LOG.
@@ -412,7 +418,12 @@ function OwnerAuction() {
               {/* An auction has a START TIME — the single fact that most separates this
                   product from a tender, so it is real information in brass, not
                   microcopy. Inside the same <time> semantics via the date above. */}
-              <p className="oa-time">{OWNER_AUCTION.timeLabel}</p>
+              <p className="oa-time">
+                {OWNER_AUCTION.timeLabel}
+                {/* Deliberately NOT inside the brass serif run: the time is the fact, the
+                    zone is the qualifier on it, and the type change is what says so. */}
+                <span className="oa-tz">{OWNER_AUCTION.timezone}</span>
+              </p>
               {/* The brass calendar glyph that sat here was removed 7 Aug (Bryan): the
                   button below now occupies that space, and a decorative icon competing
                   with a real control weakens both. */}
