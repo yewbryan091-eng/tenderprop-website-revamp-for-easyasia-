@@ -483,7 +483,7 @@ function OwnerAuction() {
                 <li>
                   <p className="hero-step-head">Register</p>
                   <p className="hero-step-body">
-                    Register to participate and complete the required auction process.
+                    Register a member account to participate and complete the required auction process.
                   </p>
                 </li>
                 <li>

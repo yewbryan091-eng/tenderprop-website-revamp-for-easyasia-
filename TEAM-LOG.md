@@ -98,6 +98,12 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 7 Aug 2026 — Codex · Owner Auction registration step copy clarified
+
+At Bryan's direction, Step 02 now reads: **"Register a member account to participate and complete
+the required auction process."** No layout, styling, interaction, or other copy changed. Production
+build passes; the live SSR output on `:8080/owner-auction` contains the new sentence.
+
 ### 7 Aug 2026 — Claude · Both heroes reworded; OA gets its button; registration date closed
 
 Bryan drove this over the render in ~10 short instructions. Everything is in the ledger; the
