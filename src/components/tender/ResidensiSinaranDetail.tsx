@@ -610,7 +610,7 @@ export function ResidensiSinaranDetail() {
                     {/* aria-live so the confirmation is announced, not just seen. */}
                     <span aria-live="polite">{shareNote ?? "Share"}</span>
                   </button>
-                  <a className="btn red" href="#tender">Submit your offer</a>
+                  <a className="btn red" href="#tender">Submit your e-tender</a>
                 </div>
               </div>
             </div>
@@ -845,7 +845,7 @@ export function ResidensiSinaranDetail() {
                         it in one glance. Safe to move off the closing position because the sticky
                         bar carries the same CTA the whole way down the page. */}
                     <div className="v1-act">
-                      <a className="btn-red" href="#">Submit your offer</a>
+                      <a className="btn-red" href="#">Submit your e-tender</a>
                       {/* Same treatment as "See how e-tender works" (Bryan) — both are ways out
                           that are not the action, so they share `.v1-textlink`. Points at the
                           Listing Agent SECTION rather than straight at WhatsApp: that section
@@ -1541,7 +1541,7 @@ export function ResidensiSinaranDetail() {
         <div className="wrap in">
           <div className="identity"><span className="nm">Residensi Sinaran</span><span className="meta">E-Tender closes {TENDER_CLOSE_LABEL}</span></div>
           <div className="pr"><div className="k">Reserve price</div><div className="v num">RM517,000</div><span className="closes">Closes {TENDER_CLOSE_LABEL}</span></div>
-          <a className="btn red" href="#tender">Submit your offer</a>
+          <a className="btn red" href="#tender">Submit your e-tender</a>
         </div>
       </div>
 

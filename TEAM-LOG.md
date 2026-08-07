@@ -98,6 +98,12 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 7 Aug 2026 — Codex · Residensi Sinaran submission actions renamed
+
+At Bryan's direction, all three listing-detail actions now read **"Submit your e-tender"**: the
+price-area CTA, the Tender Information CTA, and the sticky action bar. Links, layout and behaviour
+are unchanged. Production build and `git diff --check` pass.
+
 ### 7 Aug 2026 — Codex · Tender list cards standardised
 
 Fixed the `/tender` list rows as one shared system rather than patching individual records. Portrait
