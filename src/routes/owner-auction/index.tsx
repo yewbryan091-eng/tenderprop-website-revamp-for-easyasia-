@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { PropertyCard } from "@/components/tender/PropertyCard";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
+import { StateFilters } from "@/components/tender/StateFilters";
 import { GavelIcon, TaHome, TaPin } from "@/components/tender/icons";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
   MS_DAY,
+  TYPE_BY_VALUE,
   auctionStartAtMs,
   daysUntil,
   fmtDate,
@@ -15,6 +18,7 @@ import {
   isFinalDayUntil,
   matchesTaxonomy,
   remainingMsUntil,
+  tenderId,
 } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 
@@ -211,6 +215,20 @@ function inSizeRange(value: string, selected: string, options: SizeRange[]) {
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
+/* ── LISTINGS (Bryan, 7 Aug: put the E-Tender listings on this page too) ───────
+   Same 12-per-page, same shortlist key as /tender — one shortlist across the site, so
+   a property saved on either page is saved on both. `INDEXED` carries each record's
+   original position so "Latest listed" has something to sort by. */
+const PER_PAGE = 12;
+const SAVE_KEY = "tp_shortlist";
+const CAT_CHIP: Record<string, string> = {
+  residential: "Residential",
+  commercial: "Commercial",
+  industrial: "Industrial",
+  land: "Land",
+};
+const INDEXED = TENDERS.map((x, i) => ({ ...x, _i: i })) as (Tender & { _i: number })[];
+
 function OwnerAuction() {
   const left = useCountdown(AUCTION_START_MS);
   const timerUnits = [
@@ -253,6 +271,48 @@ function OwnerAuction() {
   const [propertyFiltersOpen, setPropertyFiltersOpen] = useState(false);
   const [taOpen, setTaOpen] = useState(false);
   const [taActive, setTaActive] = useState(-1);
+  /* ---- Listings state (7 Aug) ---- */
+  const [state, setState] = useState("all");
+  const [area, setArea] = useState("");
+  const [areaLabel, setAreaLabel] = useState("");
+  const [sortMode, setSortMode] = useState("closing");
+  const [view, setView] = useState<"grid" | "list">("grid");
+  const [page, setPage] = useState(1);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [saved, setSaved] = useState<Set<string>>(new Set());
+  const resultsTop = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    try {
+      setSaved(new Set(JSON.parse(localStorage.getItem(SAVE_KEY) || "[]")));
+    } catch {
+      /* shortlist is best-effort */
+    }
+  }, []);
+
+  /* Escape closes the state drawer without losing the selection. */
+  useEffect(() => {
+    if (!sheetOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSheetOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [sheetOpen]);
+
+  function toggleSave(id: string) {
+    setSaved((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      try {
+        localStorage.setItem(SAVE_KEY, JSON.stringify(Array.from(next)));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }
 
   /* Escape closes the drawer without losing selections. */
   useEffect(() => {
@@ -264,8 +324,7 @@ function OwnerAuction() {
     return () => window.removeEventListener("keydown", onKey);
   }, [propertyFiltersOpen]);
 
-  /* Grouped so each facet's counts can exclude its own group. /tender's `location`
-     group is dropped — it is driven by the state rail, which this page has not got. */
+  /* Grouped so each facet's counts can exclude its own group. */
   const groups = useMemo(() => {
     const q = query.toLowerCase().trim();
     const mn = priceMin ? parseInt(priceMin) : null;
@@ -287,6 +346,10 @@ function OwnerAuction() {
       builtUp: (x: Tender) => inSizeRange(x.builtUp, builtUpRange, BUILT_UP_RANGES),
       landArea: (x: Tender) => inSizeRange(x.landArea, landAreaRange, LAND_AREA_RANGES),
       tenure: (x: Tender) => tenure === "all" || x.tenure.toLowerCase() === tenure,
+      /* Added 7 Aug with the state rail. It was absent while this page had no rail to
+         drive it — the comment above used to say so. */
+      location: (x: Tender) =>
+        (state === "all" || x.stateKey === state) && (area === "" || x.area.toLowerCase() === area),
     };
   }, [
     query,
@@ -298,6 +361,8 @@ function OwnerAuction() {
     builtUpRange,
     landAreaRange,
     tenure,
+    state,
+    area,
   ]);
 
   const passesExcept = useCallback(
@@ -306,18 +371,77 @@ function OwnerAuction() {
     [groups],
   );
 
-  const matched = useMemo(() => TENDERS.filter((x) => passesExcept(x, null)), [passesExcept]);
+  const matched = useMemo(() => INDEXED.filter((x) => passesExcept(x, null)), [passesExcept]);
+
+  const sorted = useMemo(() => {
+    const list = matched.slice();
+    if (sortMode === "closing")
+      list.sort((a, b) => +new Date(a.closingDate) - +new Date(b.closingDate));
+    else if (sortMode === "latest") list.sort((a, b) => b._i - a._i);
+    else if (sortMode === "price-asc")
+      list.sort((a, b) => (a.reservePrice || Infinity) - (b.reservePrice || Infinity));
+    else if (sortMode === "price-desc")
+      list.sort((a, b) => (b.reservePrice || 0) - (a.reservePrice || 0));
+    return list;
+  }, [matched, sortMode]);
+
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PER_PAGE));
+  const currentPage = Math.min(page, totalPages);
+  const slice = sorted.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+  const from = sorted.length ? (currentPage - 1) * PER_PAGE + 1 : 0;
+  const to = Math.min(currentPage * PER_PAGE, sorted.length);
+
+  const pageWindow: number[] = [];
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) pageWindow.push(i);
+  }
+  function goPage(n: number) {
+    setPage(n);
+    const el = document.getElementById("listings");
+    if (el)
+      window.scrollTo({
+        top: el.getBoundingClientRect().top + window.pageYOffset - 70,
+        behavior: "smooth",
+      });
+  }
+
+  /* The rail's own counts must ignore the rail's own selection, or picking a state
+     collapses every other state to zero and the rail becomes a dead end. */
+  const locationPool = useMemo(
+    () => INDEXED.filter((x) => passesExcept(x, "location")),
+    [passesExcept],
+  );
+
+  /* ANY filter change returns to page 1. /tender does this with a setPage(1) beside
+     every single onChange — a dozen call sites, and a silent bug the first time one is
+     missed (filter down to 4 results while on page 3 and the grid renders empty). One
+     effect on the filter values cannot be forgotten. */
+  useEffect(() => {
+    setPage(1);
+  }, [
+    query,
+    typeValue,
+    category,
+    priceMin,
+    priceMax,
+    closingCycle,
+    builtUpRange,
+    landAreaRange,
+    tenure,
+    state,
+    area,
+  ]);
 
   const catCount = (c: string) =>
-    TENDERS.filter((x) => passesExcept(x, "category") && (c === "all" || x.propertyCategory === c))
+    INDEXED.filter((x) => passesExcept(x, "category") && (c === "all" || x.propertyCategory === c))
       .length;
   const closingCount = (date: string) =>
-    TENDERS.filter((x) => passesExcept(x, "closing") && x.closingDate === date).length;
+    INDEXED.filter((x) => passesExcept(x, "closing") && x.closingDate === date).length;
   const tenureCount = (value: string) =>
-    TENDERS.filter((x) => passesExcept(x, "tenure") && x.tenure.toLowerCase() === value).length;
+    INDEXED.filter((x) => passesExcept(x, "tenure") && x.tenure.toLowerCase() === value).length;
 
   const typeOptions = useMemo(() => {
-    const pool = TENDERS.filter((x) => category === "all" || x.propertyCategory === category);
+    const pool = INDEXED.filter((x) => category === "all" || x.propertyCategory === category);
     return TYPE_TAXONOMY.map((t) => ({
       ...t,
       n: t.value === "all" ? pool.length : pool.filter((x) => matchesTaxonomy(x, t.value)).length,
@@ -340,6 +464,93 @@ function OwnerAuction() {
     landAreaRange !== "all",
     tenure !== "all",
   ].filter(Boolean).length;
+
+  function reset() {
+    setQuery("");
+    setTypeValue("all");
+    setCategory("all");
+    setPriceMin("");
+    setPriceMax("");
+    setClosingCycle("all");
+    setBuiltUpRange("all");
+    setLandAreaRange("all");
+    setTenure("all");
+    setState("all");
+    setArea("");
+    setAreaLabel("");
+    setPropertyFiltersOpen(false);
+  }
+
+  /* ---- Active filter chips ---- */
+  const chips: { label: string; clear: () => void }[] = [];
+  if (state !== "all") {
+    const st = STATES.find((sx) => sx.key === state);
+    chips.push({
+      label: st ? st.name : state,
+      clear: () => {
+        setState("all");
+        setArea("");
+      },
+    });
+    if (area)
+      chips.push({
+        label: areaLabel || area,
+        clear: () => {
+          setArea("");
+          setAreaLabel("");
+        },
+      });
+  }
+  if (category !== "all")
+    chips.push({ label: CAT_CHIP[category] || category, clear: () => setCategory("all") });
+  if (typeValue !== "all") {
+    const t = TYPE_BY_VALUE[typeValue];
+    chips.push({
+      label: t ? t.label.replace(/^-+|-+$/g, "") : typeValue,
+      clear: () => setTypeValue("all"),
+    });
+  }
+  if (priceMin || priceMax) {
+    const mn = priceMin ? parseInt(priceMin) : null;
+    const mx = priceMax ? parseInt(priceMax) : null;
+    const label =
+      mn !== null && mx !== null
+        ? `${fmtRM(mn)} – ${fmtRM(mx)}`
+        : mn !== null
+          ? `From ${fmtRM(mn)}`
+          : mx !== null
+            ? `Up to ${fmtRM(mx)}`
+            : "Custom";
+    chips.push({
+      label,
+      clear: () => {
+        setPriceMin("");
+        setPriceMax("");
+      },
+    });
+  }
+  if (closingCycle !== "all")
+    chips.push({ label: `Closes ${fmtDate(closingCycle)}`, clear: () => setClosingCycle("all") });
+  if (builtUpRange !== "all") {
+    const selected = BUILT_UP_RANGES.find((option) => option.value === builtUpRange);
+    chips.push({
+      label: `Built-up: ${selected?.label || builtUpRange}`,
+      clear: () => setBuiltUpRange("all"),
+    });
+  }
+  if (landAreaRange !== "all") {
+    const selected = LAND_AREA_RANGES.find((option) => option.value === landAreaRange);
+    chips.push({
+      label: `Land area: ${selected?.label || landAreaRange}`,
+      clear: () => setLandAreaRange("all"),
+    });
+  }
+  if (tenure !== "all")
+    chips.push({
+      label: tenure === "freehold" ? "Freehold" : "Leasehold",
+      clear: () => setTenure("all"),
+    });
+  if (query.trim()) chips.push({ label: `“${query.trim()}”`, clear: () => setQuery("") });
 
   /* ---- Location typeahead ---- */
   const taPool = useMemo(() => {
@@ -884,6 +1095,267 @@ function OwnerAuction() {
                 );
               })}
             </div>
+          </div>
+        </section>
+
+        {/* ── MAIN LISTINGS AREA (Bryan, 7 Aug: "move all the listings from e-tender to
+            owner auction, including the tender by state") ──────────────────────────
+            Read as COPY, not cut: /tender keeps its grid. Emptying the E-Tender page
+            would have deleted the site's main product, and his earlier wording for this
+            same job was "duplicate e-tender listings onto owner auction".
+
+            ⚠️ The records are E-Tender's. All 36 are still `tenderMethod: "E-Tender"`;
+            there is no auction data in the repo. The cards are relabelled through
+            PropertyCard's `product` prop, so a buyer reads "Owner Auction" — but the
+            two dates in each card's period block are that listing's TENDER start and
+            closing date, and the reserve price is a tender reserve. Dressed E-Tender
+            data. Fine for the EasyAsia demo, not a source of auction business rules.
+
+            ⚠️ ~140 lines duplicated from /tender, on top of the ~310 already duplicated
+            for the search band. The two pages now diverge the moment either one's
+            results toolbar changes. Consolidation was already the flagged follow-up;
+            this doubles the reason. */}
+        <section className="listings-section" id="listings">
+          <div className="wrap main-layout">
+            <div className="results-column">
+              <div className="results-header" ref={resultsTop}>
+                <span className="results-count">
+                  {sorted.length
+                    ? `${sorted.length} ${sorted.length === 1 ? "property" : "properties"} up for Owner Auction · showing ${from}–${to}`
+                    : "No properties match your filters"}
+                </span>
+                <div className="results-tools">
+                  <button
+                    type="button"
+                    className="filters-open-btn"
+                    aria-expanded={sheetOpen}
+                    onClick={() => setSheetOpen(true)}
+                  >
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.9"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z" />
+                      <circle cx="12" cy="10" r="2.5" />
+                    </svg>
+                    <span>Owner Auction by State</span>
+                    {state !== "all" && <span className="tool-badge">{area ? 2 : 1}</span>}
+                  </button>
+                  <div className="sort-field">
+                    <label htmlFor="sort-by">Sort</label>
+                    <select
+                      id="sort-by"
+                      value={sortMode}
+                      onChange={(e) => {
+                        setSortMode(e.target.value);
+                        setPage(1);
+                      }}
+                    >
+                      <option value="closing">Closing soonest</option>
+                      <option value="latest">Latest listed</option>
+                      <option value="price-asc">Reserve price: low to high</option>
+                      <option value="price-desc">Reserve price: high to low</option>
+                    </select>
+                  </div>
+                  <div className="view-toggle" role="group" aria-label="Result layout">
+                    <button
+                      type="button"
+                      className={"toggle-btn" + (view === "grid" ? " active" : "")}
+                      title="Grid View"
+                      aria-pressed={view === "grid"}
+                      onClick={() => setView("grid")}
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                      </svg>
+                      <span>Grid</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={"toggle-btn" + (view === "list" ? " active" : "")}
+                      title="List View"
+                      aria-pressed={view === "list"}
+                      onClick={() => setView("list")}
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="8" y1="6" x2="21" y2="6" />
+                        <line x1="8" y1="12" x2="21" y2="12" />
+                        <line x1="8" y1="18" x2="21" y2="18" />
+                        <line x1="3" y1="6" x2="3.01" y2="6" />
+                        <line x1="3" y1="12" x2="3.01" y2="12" />
+                        <line x1="3" y1="18" x2="3.01" y2="18" />
+                      </svg>
+                      <span>List</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="chips">
+                {chips.map((c) => (
+                  <button
+                    key={c.label}
+                    type="button"
+                    className="chip"
+                    aria-label={`Remove filter: ${c.label}`}
+                    onClick={c.clear}
+                  >
+                    <span>{c.label}</span>
+                    <span className="x" aria-hidden="true">
+                      ×
+                    </span>
+                  </button>
+                ))}
+                {chips.length > 0 && (
+                  <button type="button" className="chip clear" onClick={reset}>
+                    Clear all
+                  </button>
+                )}
+              </div>
+
+              <div className={"props-grid " + (view === "grid" ? "grid-mode" : "list-mode")}>
+                {slice.length ? (
+                  slice.map((x) => (
+                    <PropertyCard
+                      key={tenderId(x) + x._i}
+                      x={x}
+                      saved={saved.has(tenderId(x))}
+                      onToggleSave={toggleSave}
+                      product="owner-auction"
+                    />
+                  ))
+                ) : (
+                  <div className="no-results">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="M21 21l-4.3-4.3" />
+                    </svg>
+                    <b>No auction properties match your filters</b>
+                    <span>
+                      Try widening your search &mdash; remove a filter or pick another state.
+                    </span>
+                    <button type="button" className="btn red" onClick={reset}>
+                      Clear all filters
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {totalPages > 1 && (
+                <nav className="pagination" aria-label="Listing pages">
+                  {pageWindow.map((i, idx) => (
+                    <span key={i}>
+                      {idx > 0 && i - pageWindow[idx - 1] > 1 && <span className="gap">…</span>}
+                      <button
+                        type="button"
+                        className={"page-btn" + (i === currentPage ? " on" : "")}
+                        aria-current={i === currentPage ? "page" : undefined}
+                        onClick={() => goPage(i)}
+                      >
+                        {i}
+                      </button>
+                    </span>
+                  ))}
+                  <button
+                    type="button"
+                    aria-label="Next page"
+                    disabled={currentPage >= totalPages}
+                    onClick={() => goPage(currentPage + 1)}
+                  >
+                    &raquo;
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Last page"
+                    disabled={currentPage >= totalPages}
+                    onClick={() => goPage(totalPages)}
+                  >
+                    Last
+                  </button>
+                </nav>
+              )}
+            </div>
+
+            {/* The state rail — a sidebar on desktop, a drawer on mobile. */}
+            <div
+              className={"filters-backdrop" + (sheetOpen ? " show" : "")}
+              onClick={() => setSheetOpen(false)}
+            />
+            <aside
+              className={"sidebar-filters" + (sheetOpen ? " open" : "")}
+              aria-label="Owner Auction by state"
+            >
+              <div className="rail-head">
+                <h2 className="rail-title">
+                  Owner Auction <span>by State</span>
+                </h2>
+                <button
+                  type="button"
+                  className="sheet-close"
+                  aria-label="Close Owner Auction by state"
+                  onClick={() => setSheetOpen(false)}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M6 6l12 12M18 6L6 18" />
+                  </svg>
+                </button>
+              </div>
+              <div className="filters-scroll">
+                <div className="state-panel">
+                  <StateFilters
+                    pool={locationPool}
+                    activeState={state}
+                    activeArea={area}
+                    onSelect={(k, a, label) => {
+                      setState(k);
+                      setArea(a);
+                      setAreaLabel(label);
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="sheet-actions">
+                <button type="button" className="btn red" onClick={() => setSheetOpen(false)}>
+                  Show <span>{sorted.length}</span> properties
+                </button>
+              </div>
+            </aside>
           </div>
         </section>
       </main>

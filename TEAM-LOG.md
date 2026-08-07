@@ -15,7 +15,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
 | Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `loop/**` | *(free)* | — | Iteration 03 shipped: full-bleed diagonal 45/55, "The smarter way to buy property.", maroon fade. **Hero image is still the KL placeholder** — swap at `--hp-hero-image` in `home.css`. Loop system in `HOMEPAGE-LOOP-ENGINEERING.md` is paused, not abandoned |
-| **Owner Auction `/owner-auction` — ACTIVE** | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | **Hero DONE 7 Aug**: registration deadline closed (11 Dec, derived), "View Listings ↓" added, headline = "Bid on a property online in / 3 simple steps." with a **measured** 7.37em indent. Below the hero it is still the `/tender` clone searching E-Tender records — **Bryan parked the listings deliberately** 7 Aug ("chill for now, i will duplicate e-tender listings onto owner auction later"), so this is a decision, not an oversight |
+| **Owner Auction `/owner-auction` — ACTIVE** | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | **Hero + LISTINGS DONE 7 Aug.** The page is now a full product page: grid, sort, grid/list, pagination and an "Owner Auction by State" rail, all copied from `/tender` (copied, NOT moved — `/tender` keeps its grid). Cards relabel via `PropertyCard`'s new `product` prop. ⚠️ **The records are still E-Tender's** — the words say auction, the data does not. Hero DONE: registration deadline closed (11 Dec, derived), "View Listings ↓" added, headline = "Bid on a property online in / 3 simple steps." with a **measured** 7.37em indent. Below the hero it is still the `/tender` clone searching E-Tender records — **Bryan parked the listings deliberately** 7 Aug ("chill for now, i will duplicate e-tender listings onto owner auction later"), so this is a decision, not an oversight |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | **Card rebuilt to Bryan's Buyer-POV reference 6 Aug** (`7b672de`), then 3 audit P1s fixed (`8992354`): list-mode price/title inversion, per-row CTA baselines, the period→agent seam minimum |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
@@ -98,6 +98,19 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 Short entries. What you did, anything the other agent needs to know.
 
+### 7 Aug 2026 — Codex · Tender list cards standardised
+
+Fixed the `/tender` list rows as one shared system rather than patching individual records. Portrait
+uploads no longer set the grid-row height: list media is now an absolute cover inside a content-sized
+330px minimum row, so Idaman Sutera and every later portrait image follow 222 Residency's geometry.
+The list address reserves three lines, followed by a fixed 22px gap before the locked E-Tender
+timeline; this puts the divider consistently below built-up area. The right-rail CTA is now a compact
+52px action with independently positioned icons, so `View E-Tender Details` cannot be squeezed into
+the oversized three-line slab shown in the 7 Aug screenshot. The full list treatment begins at an
+880px container width as one unit; narrower widths retain the stacked card instead of mixing desktop
+type with mobile structure. Production build and `git diff --check` pass. Project-wide lint still
+fails on the repository's pre-existing Prettier backlog (597 findings).
+
 ### 7 Aug 2026 — Codex · Member instructions clarified in both product heroes
 
 At Bryan's direction, Owner Auction Step 02 now reads: **"Register and log in as a member to
@@ -106,6 +119,39 @@ participate and complete the required auction process."** The E-Tender hero foot
 The E-Tender Connect step now reads: **"The property listing agent will follow up with you
 regarding your offer, arrange a property viewing, and guide you through the next steps."** No
 layout, styling, or interaction changed. Production build passes.
+
+### 7 Aug 2026 — Claude · Owner Auction gets the listings and the state rail
+
+Bryan: *"move all the listings from e-tender to owner auction, including the tender by
+state."* Read as **copy, not cut** — his earlier wording for the same job was "duplicate
+e-tender listings onto owner auction", and emptying `/tender` would have deleted the
+site's main product. `/tender` is untouched and verified: still 36 records, still
+"E-Tender" on every label, pagination still works.
+
+**`PropertyCard` is now product-aware.** One `PRODUCT_LABELS` table, four strings
+(`badge` / `closed` / `period` / `cta`), keyed by an optional `product` prop that
+DEFAULTS to `"e-tender"` — so `/tender` passes nothing and renders exactly as before.
+Owner Auction passes `product="owner-auction"` and gets "Owner Auction" / "Auction
+closed" / "Auction period" / "View Auction Details".
+
+**🔴 THE WORDS SAY AUCTION; THE DATA DOES NOT.** All 36 records are still
+`tenderMethod: "E-Tender"`. Each card's period block prints that listing's TENDER start
+and closing date under the heading "Auction period", and the reserve is a tender
+reserve. This is dressed E-Tender data — right for the EasyAsia demo, **wrong as a
+source of auction business rules**, and the deposit trap still stands: `depositOf()` is
+3% of *reserve*, an auction deposit is 3% of the *bidding* price, so no deposit figure
+belongs on an auction card. The `/tender`-does-not-filter-by-`tenderMethod` note is now
+moot in the other direction too: both pages render the same 36 rows.
+
+**One deliberate divergence from `/tender`'s implementation.** `/tender` resets to page 1
+with a `setPage(1)` beside every one of a dozen `onChange` handlers. Owner Auction does it
+with a single effect on the filter values. Same behaviour, and it cannot be forgotten —
+miss one call site on `/tender` and filtering down to 4 results while on page 3 renders an
+empty grid. Tested here: state-pick while on page 2 → page 1, 4 results, no empty grid.
+
+**Duplication is now ~450 lines** between the two routes (≈310 search band + ≈140
+listings). They diverge the moment either page's toolbar changes. Consolidation was
+already the flagged follow-up; this doubles the reason to do it.
 
 ### 7 Aug 2026 — Claude · Both heroes reworded; OA gets its button; registration date closed
 

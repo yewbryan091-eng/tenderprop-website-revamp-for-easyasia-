@@ -979,26 +979,55 @@
 
   @media (prefers-reduced-motion: reduce) { .prop-card .pc-cta, .prop-card .pc-tel, .prop-card .save-btn::before { transition: none; } }
 
-  /* List mode — media left; description column centre; agent + CTA lift into a
-     bordered right rail via .pc-rail (display:contents everywhere else). The
-     description column pins the PERIOD band to its foot so it lines up with the
-     CTA opposite — the same move that fixed the old dead-space fault here. */
-  @container (min-width: 700px) {
-    .props-grid.list-mode .prop-card { display: grid; grid-template-columns: clamp(268px, 31cqi, 392px) minmax(0, 1fr); }
-    .props-grid.list-mode .pc-media { height: 100%; }
-    .props-grid.list-mode .pc-media-link { aspect-ratio: auto; height: 100%; min-height: 280px; }
-    .props-grid.list-mode .pc-body { display: flex; flex-direction: row; align-items: stretch; gap: 18px; padding: 18px 20px; }
+  /* List mode — media left; description column centre; agent + CTA in a bordered
+     right rail. The row is content-sized, never image-sized: uploaded photos range
+     from landscape interiors to portrait signboards, and letting their intrinsic
+     ratio participate in grid sizing produced the broken, extra-tall later rows. */
+  @container (min-width: 880px) {
+    .props-grid.list-mode .prop-card {
+      display: grid;
+      grid-template-columns: clamp(268px, 31cqi, 392px) minmax(0, 1fr);
+      min-height: 330px;
+    }
+    .props-grid.list-mode .pc-media { min-height: 330px; }
+    .props-grid.list-mode .pc-media-link {
+      position: absolute; inset: 0;
+      aspect-ratio: auto; height: auto; min-height: 0;
+    }
+    .props-grid.list-mode .pc-body {
+      display: flex; flex-direction: row; align-items: stretch;
+      gap: 20px; padding: 20px 22px;
+    }
     .props-grid.list-mode .pc-main { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
-    /* Bottom-pinned, and margin-bottom zeroed: the grid card's 12px minimum would end
-       the description column 12px above the rail's CTA baseline opposite. */
-    .props-grid.list-mode .pc-main .pc-period { margin-top: auto; margin-bottom: 0; }
-    .props-grid.list-mode .pc-rail { display: flex; flex-direction: column; flex: 0 0 clamp(196px, 20cqi, 250px); min-width: 0; padding-left: 18px; border-left: 1px solid var(--line); }
+    /* Reserve the longest normal address so every row reaches the area and period
+       on the same baseline. The explicit 22px gap puts the divider comfortably
+       below the area instead of letting margin:auto vary with each card. */
+    .props-grid.list-mode .pc-loc span { min-height: 4.2em; }
+    .props-grid.list-mode .pc-main .pc-period { margin-top: 22px; margin-bottom: 0; }
+    .props-grid.list-mode .pc-rail {
+      display: flex; flex-direction: column;
+      flex: 0 0 clamp(188px, 18cqi, 224px);
+      min-width: 0; padding-left: 20px; border-left: 1px solid var(--line);
+    }
     /* The rail owns its edges: the grid-mode hairline above the agent would double
        the rail's own left border into a T-junction. */
     .props-grid.list-mode .pc-foot { margin-top: 0; padding-top: 0; border-top: 0; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 3px 10px; align-items: center; }
     .props-grid.list-mode .pc-avatar { grid-row: span 2; }
     .props-grid.list-mode .pc-tel { grid-column: 2; justify-self: start; }
-    .props-grid.list-mode .pc-cta { margin-top: auto; }
+    .props-grid.list-mode .pc-cta {
+      position: relative;
+      justify-content: center;
+      min-height: 52px;
+      margin-top: auto;
+      padding: 10px 38px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      line-height: 1.2;
+    }
+    .props-grid.list-mode .pc-cta-txt { flex: 0 1 auto; text-wrap: balance; }
+    .props-grid.list-mode .pc-cta > svg { position: absolute; top: 50%; transform: translateY(-50%); }
+    .props-grid.list-mode .pc-cta > svg:first-child { left: 14px; }
+    .props-grid.list-mode .pc-cta > svg:last-child { right: 14px; }
   }
 
   /* One-column phones: the period cells keep their two-up shape — "12 Aug 2026"
@@ -1333,7 +1362,7 @@
    .pc-type/.pc-detail, classes the rebuild removed. Caught by the audit, both lenses.
    The scale below keeps the grid card's 1.6:1 price-over-title ratio at list size,
    and .pc-size rides with .pc-loc — same rank, same size, never split. ── */
-@container (min-width: 700px) {
+@container (min-width: 880px) {
   .props-grid.list-mode .pc-money-label { font-size: 11.5px; }
   .props-grid.list-mode .pc-money-value { font-size: 30px; }
   .props-grid.list-mode .pc-title { font-size: 19px; letter-spacing: -.015em; }
