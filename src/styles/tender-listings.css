@@ -1911,8 +1911,8 @@
    `stretch`, not `start`: it equalises the two cells so the divider spans the full row
    rather than only the height of the cell it is attached to — which is what keeps the
    two columns reading as balanced. `.apc-fact` centres its own content inside that. */
-.apc .apc-when { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 13px; }
-.apc .apc-when .apc-fact + .apc-fact { padding-left: 14px; border-left: 1px solid var(--line); }
+.apc .apc-when { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 11px; }
+.apc .apc-when .apc-fact + .apc-fact { padding-left: 12px; border-left: 1px solid var(--line); }
 .apc .apc-fact { display: flex; align-items: center; gap: 9px; min-width: 0; }
 
 /* Bare glyphs, large. The tinted discs went with the panel — with only two marks left on
@@ -1920,7 +1920,7 @@
    perfectly well on their own. COLOUR does the pairing instead: red for the deadline you
    act on, brass for the event. */
 .apc .apc-fact-icon { flex: none; display: grid; place-items: center; }
-.apc .apc-fact-icon svg { width: 22px; height: 22px; }
+.apc .apc-fact-icon svg { width: 24px; height: 24px; }
 .apc .apc-fact-reg .apc-fact-icon { color: var(--red); }
 .apc .apc-fact-auction .apc-fact-icon { color: var(--apc-brass); }
 
@@ -1928,7 +1928,12 @@
 /* Three lines per cell: LABEL over DATE over qualifier. */
 .apc .apc-fact-label {
   display: block; margin-bottom: 3px;
-  font-size: 8.5px; font-weight: 800; letter-spacing: .05em; line-height: 1.2;
+  /* Tracking eased .05em → .02em, and it is doing real work. MEASURED: at .05em the
+     19-character "Registration closes" inks 107.4px — the SMALLEST type in the cell is
+     its WIDEST string, wider than the 14.5px date beside it — and 8px of that is pure
+     letter-spacing. Freeing ~5px of it is what pays for the larger glyphs and dates
+     below; the label keeps enough tracking to still read as caps. */
+  font-size: 8.5px; font-weight: 800; letter-spacing: .02em; line-height: 1.2;
   text-transform: uppercase;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
@@ -1936,13 +1941,13 @@
 .apc .apc-fact-auction .apc-fact-label { color: var(--apc-brass); }
 .apc .apc-fact-text b {
   display: block; color: var(--ink);
-  font-size: 14.5px; font-weight: 800; line-height: 1.2; letter-spacing: -.015em;
+  font-size: 15.5px; font-weight: 800; line-height: 1.2; letter-spacing: -.015em;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   font-variant-numeric: tabular-nums;
 }
 .apc .apc-fact-sub {
   display: block; margin-top: 3px; color: var(--muted);
-  font-size: 11px; font-weight: 500; line-height: 1.25;
+  font-size: 11.5px; font-weight: 500; line-height: 1.25;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   font-variant-numeric: tabular-nums;
 }
@@ -1963,10 +1968,10 @@
   .apc .apc-fact-label { margin-bottom: 4px; }
   .apc .apc-fact-sub { margin-top: 4px; }
   .apc .apc-details .pc-period-kick { margin-bottom: 14px; }
-  .apc .apc-fact-icon svg { width: 34px; height: 34px; }
-  .apc .apc-fact-label { font-size: 11px; letter-spacing: .07em; }
-  .apc .apc-fact-text b { font-size: 19px; }
-  .apc .apc-fact-sub { font-size: 13px; }
+  .apc .apc-fact-icon svg { width: 38px; height: 38px; }
+  .apc .apc-fact-label { font-size: 11.5px; letter-spacing: .06em; }
+  .apc .apc-fact-text b { font-size: 21px; }
+  .apc .apc-fact-sub { font-size: 14px; }
 }
 
 /* ── The auction company ──────────────────────────────────────────────────────
