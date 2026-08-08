@@ -1857,18 +1857,20 @@
 }
 .apc .apc-pill svg { width: 13px; height: 13px; flex: none; color: var(--apc-brass-lit); }
 
-/* TWO REGISTERS, and the split is now meaningful rather than incidental (Bryan, 7 Aug,
-   taking "Auction details" black after "Auction company"):
+/* THE LABEL COLOURS, and what each one now means. This settled over three passes: all
+   brass first, then the section headers went ink (7 Aug), then "Starting bid" followed
+   them (9 Aug). Where it landed:
 
-   · SECTION HEADERS — "Auction details", "Auction company" — are INK. They name a region
-     of the card, so they behave like structure.
-   · VALUE LABELS — "Starting bid", "Registration closes", "Auction date/time" — are
-     BRASS. They name a single number, so they behave like the accent that ties this card
-     to the Owner Auction hero.
+   · INK — "Starting bid", "Auction details", "Auction company". Each heads one of the
+     three blocks the card body is built from, so they read as STRUCTURE. "Starting bid"
+     belongs with them: it heads the price block exactly as the other two head theirs.
+   · BRASS — "Auction date", "Auction time", and nothing else. Brass now marks precisely
+     one thing, the pair of facts that define the event, which is what lets it register as
+     an accent at all. Spread across every label it was just the card's default colour.
+   · RED — "Registration closes", inside the panel. The one imperative on the card.
 
-   Before this they were all brass, which made three levels of the card compete at the
-   same colour. Size and tracking are untouched; only the colour carries the distinction. */
-.apc .pc-money-label { color: var(--apc-brass); }
+   Size and tracking are untouched throughout; colour alone carries the distinction. */
+.apc .pc-money-label,
 .apc .pc-period-kick { color: var(--ink); }
 
 /* ── AUCTION DETAILS: the registration panel, then two facts split by a rule ───
