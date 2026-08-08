@@ -1877,103 +1877,75 @@
    Bryan's second reference sheet, 7 Aug. Label ABOVE value throughout — reading order,
    visual order and DOM order finally agree. */
 
-/* THE REGISTRATION PANEL — Bryan's reference, side by side, at the width it has ─────
-   The deadline DATE, a hairline, then the time LEFT to meet it.
+/* ── AUCTION DETAILS: two facts, one row, no container (Bryan's sheet, 9 Aug) ──
+   The tinted panel is gone. It was a box drawn around two facts the kicker above already
+   grouped — a second grouping doing the first one's job — and dropping it hands the block
+   back the 28px of panel padding, which is most of what pays for the larger type below.
 
-   NEUTRAL ground with RED marks, per his sheet: the panel is a warm grey card, and only
-   the two glyphs and the word "Registration closes" carry `--red` — the site's own token,
-   what Register and Search wear. A red-tinted panel was tried and it shouted; the red
-   belongs on the two things that must be noticed, not on the box holding them.
+   MEASURED against the 291.3px card body, which the block now gets in full:
+     left cell   icon 22 + gap 8 + text 109 (the LABEL is the widest string)  = 139
+     right cell  inset 9 + icon 22 + gap 8 + text 89 (the date)                = 128
+   against 291.3 − 8 (cell gap) = 283.3, so ~16px of air. First pass ran 24px glyphs, a
+   9px label and 15px dates and came out with 1.3px — fitting, but airless, which is the
+   same mistake the registration panel made twice. The label is the binding string here,
+   not the date: "Registration closes" in tracked caps is wider than "11 Dec 2026".
 
-   ⚠️ SIZES ARE SOLVED, NOT CHOSEN. His mockup is drawn ~2.7× the real card. Run its type
-   at the actual 291.3px body and the two cells need 293.2 of 249.3 — over by 43.9, which
-   is why forcing it once produced a panel with no air in it. Solved against the measured
-   ink instead:
+   The cells are UNEQUAL by design and by content: the left one carries the longest string
+   on the row ("Registration closes"), the right one the shortest label. `1fr auto` gives
+   the leftover to the left, which is where it is needed. */
+.apc .apc-when { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 8px; }
+.apc .apc-when .apc-fact + .apc-fact { padding-left: 9px; border-left: 1px solid var(--line); }
+.apc .apc-fact { display: flex; align-items: center; gap: 8px; min-width: 0; }
 
-     his mockup sizes (label 12.5, values 18/15)   293.2 of 249.3   OVER 43.9
-     THIS  (label 10.5, values 15/13, icons 22/18) 247.8 of 255.3   AIR   7.5
+/* Bare glyphs, large. The tinted discs went with the panel — with only two marks left on
+   the row and one of them a gavel, a disc apiece was scaffolding around shapes that read
+   perfectly well on their own. COLOUR does the pairing instead: red for the deadline you
+   act on, brass for the event. */
+.apc .apc-fact-icon { flex: none; display: grid; place-items: center; }
+.apc .apc-fact-icon svg { width: 22px; height: 22px; }
+.apc .apc-fact-reg .apc-fact-icon { color: var(--red); }
+.apc .apc-fact-auction .apc-fact-icon { color: var(--apc-brass); }
 
-   The two cells are deliberately UNEQUAL, which is what buys the fit and is also what his
-   sheet draws: the date is the fact (22px glyph, 15px value), the countdown is its
-   qualifier (18px glyph, 13px value). Sizing them as equals is what made the earlier
-   attempt impossible. */
-.apc .apc-reg {
-  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px;
-  margin: 0 0 11px; padding: 11px 12px;
-  background: #F7F4EF;
-  border: 1px solid var(--line);
-  border-radius: 12px;
+.apc .apc-fact-text { min-width: 0; }
+/* Three lines per cell: LABEL over DATE over qualifier. */
+.apc .apc-fact-label {
+  display: block; margin-bottom: 1px;
+  font-size: 8.5px; font-weight: 800; letter-spacing: .05em; line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.apc .apc-reg-cell { display: flex; align-items: center; gap: 9px; min-width: 0; }
-.apc .apc-reg-cell + .apc-reg-cell {
-  margin-top: 0; padding-top: 0; border-top: 0;
-  padding-left: 10px; border-left: 1px solid var(--line);
-  gap: 8px;
-}
-/* Bare glyphs, no discs — the two facts BELOW wear tinted discs, and repeating that
-   treatment here would flatten the hierarchy this panel exists to create. */
-.apc .apc-reg-icon { flex: none; display: grid; place-items: center; color: var(--red); }
-.apc .apc-reg-icon svg { width: 22px; height: 22px; }
-.apc .apc-reg-cell + .apc-reg-cell .apc-reg-icon svg { width: 18px; height: 18px; }
-.apc .apc-reg-text { min-width: 0; }
-.apc .apc-reg-text b {
+.apc .apc-fact-reg .apc-fact-label { color: var(--red); }
+.apc .apc-fact-auction .apc-fact-label { color: var(--apc-brass); }
+.apc .apc-fact-text b {
   display: block; color: var(--ink);
-  font-size: 15px; font-weight: 800; line-height: 1.2; letter-spacing: -.015em;
+  font-size: 14.5px; font-weight: 800; line-height: 1.2; letter-spacing: -.015em;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   font-variant-numeric: tabular-nums;
 }
-.apc .apc-reg-cell + .apc-reg-cell .apc-reg-text b { font-size: 13px; }
-/* The right cell inverts the left — value first, caption under. Each leads with its own
-   most important word: the meaning on one side, the number on the other. */
-.apc .apc-reg-sub {
+.apc .apc-fact-sub {
   display: block; margin-top: 1px; color: var(--muted);
-  font-size: 10.5px; font-weight: 500; line-height: 1.25;
+  font-size: 11px; font-weight: 500; line-height: 1.25;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
 }
-.apc .apc-reg .apc-fact-label { color: var(--red); font-size: 10.5px; }
+/* Only the NUMBER is red inside "(125 days left)" — the parenthetical stays quiet, the
+   count does not. <em> carries no italics here; it is the semantic element for a stressed
+   run of text, which is precisely what this is. */
+.apc .apc-fact-sub em { font-style: normal; font-weight: 700; color: var(--red); }
 
-/* ── WHERE THERE IS ROOM, the panel grows into the mockup's own sizes ──────────
+/* ── WHERE THERE IS ROOM, the row grows into the mockup's own sizes ────────────
    `container-type: inline-size` is already on `.prop-card`, so this measures the CARD.
-   At the 450px panel list mode gives it, the mockup's 293.2 sits in 420 — 113px of air —
-   so above a 380px card the type and glyphs go up to what he drew. Same layout either
-   way; only the scale follows the space. */
+   List mode gives this block ~450px against the ~272 it needs at these sizes, so above a
+   380px card the glyphs and type go up to what the sheet draws. Same layout at both
+   scales; only the size follows the space. */
 @container (min-width: 380px) {
-  .apc .apc-reg { gap: 14px; padding: 13px 15px; }
-  .apc .apc-reg-cell { gap: 11px; }
-  .apc .apc-reg-cell + .apc-reg-cell { padding-left: 15px; gap: 10px; }
-  .apc .apc-reg-icon svg { width: 27px; height: 27px; }
-  .apc .apc-reg-cell + .apc-reg-cell .apc-reg-icon svg { width: 22px; height: 22px; }
-  .apc .apc-reg-text b { font-size: 18px; }
-  .apc .apc-reg-cell + .apc-reg-cell .apc-reg-text b { font-size: 15px; }
-  .apc .apc-reg .apc-fact-label { font-size: 12.5px; }
-  .apc .apc-reg-sub { font-size: 12px; }
-}
-
-.apc .apc-when { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 10px; }
-/* The divider is a BORDER on the second cell, not a third element: it can never fall
-   out of vertical alignment with the row and it costs no markup. */
-.apc .apc-when .apc-fact + .apc-fact { padding-left: 10px; border-left: 1px solid var(--line); }
-.apc .apc-fact { display: flex; align-items: center; gap: 8px; min-width: 0; }
-/* The tinted disc is what stops two small glyphs reading as clutter — it gives each
-   fact a fixed optical anchor so the two columns line up whatever the text does. */
-.apc .apc-fact-icon {
-  flex: none; display: grid; place-items: center;
-  width: 26px; height: 26px; border-radius: 50%;
-  background: rgba(138, 106, 47, .10); color: var(--apc-brass);
-}
-.apc .apc-fact-icon svg { width: 14px; height: 14px; }
-.apc .apc-fact-text { min-width: 0; }
-.apc .apc-fact-text b {
-  display: block; color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.2;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums;
-}
-/* Brass, SENTENCE CASE, and now above the value it names. The old treatment was 9.5px
-   uppercase at .1em tracking — at that size caps stop being words and become texture. */
-.apc .apc-fact-label {
-  display: block; color: var(--apc-brass);
-  font-size: 11px; font-weight: 700; letter-spacing: 0; line-height: 1.25;
-  text-transform: none;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  .apc .apc-when { gap: 16px; }
+  .apc .apc-when .apc-fact + .apc-fact { padding-left: 16px; }
+  .apc .apc-fact { gap: 11px; }
+  .apc .apc-fact-icon svg { width: 34px; height: 34px; }
+  .apc .apc-fact-label { font-size: 11px; letter-spacing: .07em; }
+  .apc .apc-fact-text b { font-size: 19px; }
+  .apc .apc-fact-sub { font-size: 13px; }
 }
 
 /* ── The auction company ──────────────────────────────────────────────────────

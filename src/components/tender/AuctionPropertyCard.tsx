@@ -177,93 +177,64 @@ export function AuctionPropertyCard({
             </p>
           )}
 
-          {/* ── AUCTION DETAILS — a MOMENT, where the tender card shows a PERIOD ──
-              Restructured to Bryan's second reference sheet, 7 Aug. Three changes, and
-              each one is a hierarchy decision rather than a coat of paint:
+          {/* ── AUCTION DETAILS — two facts, one row (Bryan's sheet, 9 Aug) ──────
+              A consolidation, not a restyle. What used to be a tinted registration panel
+              stacked on top of a separate date|time row is now ONE row of two cells:
 
-              1. REGISTRATION LEADS, in a soft tinted panel. It was a solid espresso bar
-                 at the BOTTOM of this block. Bottom-and-loudest made it shout after the
-                 reader had already passed the thing it qualifies; first-and-quiet makes
-                 it the frame the two auction facts hang off. It is still the only line
-                 here a buyer must act on — it no longer has to bellow to say so.
-              2. LABEL ABOVE VALUE, all three. Reading order now matches visual order,
-                 and the DOM order matches both, so a screen reader hears "Auction date,
-                 12 Dec 2026" rather than the value arriving before its name.
-              3. Labels are brass SENTENCE CASE, not uppercase micro-caps. At 10px the
-                 old tracking-heavy caps were texture; at 11px sentence case they are
-                 readable words.
+                REGISTRATION CLOSES · 11 Dec 2026 · (125 days left)
+                AUCTION             · 12 Dec 2026 · 9:00 AM MYT
 
-              Not a redesign of the locked E-Tender timeline (6 Aug) — different product,
-              different component, different fact. */}
+              Three things fall out of that and all three are improvements:
+              · The tinted box is gone. It was a container drawn around two facts that
+                were already grouped by the kicker above them — a second grouping doing
+                the first one's job. Without it the block also reclaims the 28px of panel
+                padding, which is most of what pays for the larger type here.
+              · Auction date and auction time stop being two cells. They are one event;
+                the date leads and the time is its qualifier underneath.
+              · The countdown stops being its own cell. "(125 days left)" belongs to the
+                registration date it counts to, and reads as a parenthetical because that
+                is exactly what it is.
+
+              Colour does the pairing: RED calendar and RED label for the deadline you act
+              on, BRASS gavel and BRASS label for the event itself.
+
+              Still not a redesign of the locked E-Tender timeline (6 Aug) — different
+              product, different component, different fact. */}
           <div className="pc-period apc-details">
             <span className="pc-period-kick">Auction details</span>
-
-            {/* THE REGISTRATION PANEL — two cells, Bryan's third reference sheet.
-                LEFT: the deadline date. RIGHT: how long is left to meet it.
-
-                The two cells are deliberately mirrored — left is label-over-value
-                ("Registration closes" / "11 Dec 2026"), right is value-over-label
-                ("127 days left" / "to register"). Each puts its OWN most important word
-                first: on the left that is what the date means, on the right it is the
-                number. Flipping the right cell to match the left would bury the count
-                under a caption.
-
-                RED, not brass. This is the only red on the card, and it is the site's
-                `--red` — the same colour Register and Search wear — because this panel
-                is the one thing here a buyer must ACT on before a date. Brass is the
-                card's decorative accent; red is its imperative.
-
-                ⚠️ The count is `d`, the SAME value the photo pill shows, measured to
-                REGISTRATION_CLOSE_MS. It is therefore the same fact in two places on one
-                card — flagged to Bryan; if the pill goes back to counting the auction
-                the duplication resolves itself. */}
-            <div className="apc-reg">
-              <span className="apc-reg-cell">
-                <span className="apc-reg-icon" aria-hidden="true">
+            <div className="apc-when">
+              <span className="apc-fact apc-fact-reg">
+                <span className="apc-fact-icon" aria-hidden="true">
                   <CalendarIcon />
                 </span>
-                <span className="apc-reg-text">
+                <span className="apc-fact-text">
                   <span className="apc-fact-label">Registration closes</span>
                   <b>
                     {REGISTRATION_DATE.day} {REGISTRATION_DATE.month.slice(0, 3)}{" "}
                     {REGISTRATION_DATE.year}
                   </b>
-                </span>
-              </span>
-              <span className="apc-reg-cell">
-                <span className="apc-reg-icon" aria-hidden="true">
-                  <ClockIcon />
-                </span>
-                <span className="apc-reg-text">
-                  {/* Terminal state handled here too, not just on the pill: once
-                      registration shuts, a panel still counting "0 days left to
-                      register" would be the one place on the card actively misleading
-                      someone who could no longer enter. */}
-                  <b>{registrationOpen ? leftCount : "Closed"}</b>
-                  <span className="apc-reg-sub">
-                    {registrationOpen ? "to register" : "registration ended"}
+                  {/* Terminal state kept here too: once registration shuts, a card still
+                      counting days left to do something nobody can still do is the one
+                      place it would actively mislead. */}
+                  <span className="apc-fact-sub">
+                    {registrationOpen ? (
+                      <>
+                        (<em>{d}</em> {d === 1 ? "day" : "days"} left)
+                      </>
+                    ) : (
+                      "(closed)"
+                    )}
                   </span>
                 </span>
               </span>
-            </div>
-
-            <div className="apc-when">
-              <span className="apc-fact">
+              <span className="apc-fact apc-fact-auction">
                 <span className="apc-fact-icon" aria-hidden="true">
-                  <CalendarIcon />
+                  <GavelIcon />
                 </span>
                 <span className="apc-fact-text">
-                  <span className="apc-fact-label">Auction date</span>
+                  <span className="apc-fact-label">Auction</span>
                   <b>{fmtDate(OWNER_AUCTION.date)}</b>
-                </span>
-              </span>
-              <span className="apc-fact">
-                <span className="apc-fact-icon" aria-hidden="true">
-                  <ClockIcon />
-                </span>
-                <span className="apc-fact-text">
-                  <span className="apc-fact-label">Auction time</span>
-                  <b>{AUCTION_TIME_LABEL}</b>
+                  <span className="apc-fact-sub">{AUCTION_TIME_LABEL}</span>
                 </span>
               </span>
             </div>
