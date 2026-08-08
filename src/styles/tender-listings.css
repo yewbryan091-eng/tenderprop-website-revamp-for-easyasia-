@@ -1870,6 +1870,12 @@
    Size and tracking are untouched throughout; colour alone carries the distinction. */
 .apc .pc-money-label,
 .apc .pc-period-kick { color: var(--apc-brass); }
+/* The block's own head and foot. 8 → 12 below the kicker, 12 → 16 before the rule that
+   leads into AUCTION COMPANY, so the two-column content is not pinched between its own
+   heading and the next section. Scoped to `.apc-details` rather than `.pc-period` so
+   /tender's card keeps its own rhythm untouched. */
+.apc .apc-details .pc-period-kick { margin-bottom: 12px; }
+.apc .apc-details { margin-bottom: 16px; }
 
 /* ── AUCTION DETAILS: the registration panel, then two facts split by a rule ───
    Bryan's second reference sheet, 7 Aug. Label ABOVE value throughout — reading order,
@@ -1891,9 +1897,23 @@
    The cells are UNEQUAL by design and by content: the left one carries the longest string
    on the row ("Registration closes"), the right one the shortest label. `1fr auto` gives
    the leftover to the left, which is where it is needed. */
-.apc .apc-when { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 8px; }
-.apc .apc-when .apc-fact + .apc-fact { padding-left: 9px; border-left: 1px solid var(--line); }
-.apc .apc-fact { display: flex; align-items: center; gap: 8px; min-width: 0; }
+/* SPACING PASS (Bryan, 9 Aug — spacing only, nothing else touched). Every px of room
+   around the divider is bought from the 18.3px of air the row had, so it was budgeted
+   rather than guessed:
+
+     now        gap  8  icon-gap  8  inset  9   cells 137+128+8  = 273   air  18.3
+     SHIPPED    gap 13  icon-gap  9  inset 14   cells 138+134+13 = 285   air   6.3
+     greedier   gap 16  icon-gap 11  inset 16   cells 140+138+16 = 294   air  -2.7  ✗
+
+   So 13/14 is the practical maximum: the divider gets 13px of clearance on its left and
+   14px on its right, near enough symmetric, and neither column touches it.
+
+   `stretch`, not `start`: it equalises the two cells so the divider spans the full row
+   rather than only the height of the cell it is attached to — which is what keeps the
+   two columns reading as balanced. `.apc-fact` centres its own content inside that. */
+.apc .apc-when { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 13px; }
+.apc .apc-when .apc-fact + .apc-fact { padding-left: 14px; border-left: 1px solid var(--line); }
+.apc .apc-fact { display: flex; align-items: center; gap: 9px; min-width: 0; }
 
 /* Bare glyphs, large. The tinted discs went with the panel — with only two marks left on
    the row and one of them a gavel, a disc apiece was scaffolding around shapes that read
@@ -1907,7 +1927,7 @@
 .apc .apc-fact-text { min-width: 0; }
 /* Three lines per cell: LABEL over DATE over qualifier. */
 .apc .apc-fact-label {
-  display: block; margin-bottom: 1px;
+  display: block; margin-bottom: 3px;
   font-size: 8.5px; font-weight: 800; letter-spacing: .05em; line-height: 1.2;
   text-transform: uppercase;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -1921,7 +1941,7 @@
   font-variant-numeric: tabular-nums;
 }
 .apc .apc-fact-sub {
-  display: block; margin-top: 1px; color: var(--muted);
+  display: block; margin-top: 3px; color: var(--muted);
   font-size: 11px; font-weight: 500; line-height: 1.25;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   font-variant-numeric: tabular-nums;
@@ -1937,9 +1957,12 @@
    380px card the glyphs and type go up to what the sheet draws. Same layout at both
    scales; only the size follows the space. */
 @container (min-width: 380px) {
-  .apc .apc-when { gap: 16px; }
-  .apc .apc-when .apc-fact + .apc-fact { padding-left: 16px; }
-  .apc .apc-fact { gap: 11px; }
+  .apc .apc-when { gap: 22px; }
+  .apc .apc-when .apc-fact + .apc-fact { padding-left: 22px; }
+  .apc .apc-fact { gap: 13px; }
+  .apc .apc-fact-label { margin-bottom: 4px; }
+  .apc .apc-fact-sub { margin-top: 4px; }
+  .apc .apc-details .pc-period-kick { margin-bottom: 14px; }
   .apc .apc-fact-icon svg { width: 34px; height: 34px; }
   .apc .apc-fact-label { font-size: 11px; letter-spacing: .07em; }
   .apc .apc-fact-text b { font-size: 19px; }
