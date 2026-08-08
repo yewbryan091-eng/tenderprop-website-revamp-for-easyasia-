@@ -232,7 +232,10 @@ export function AuctionPropertyCard({
                   <GavelIcon />
                 </span>
                 <span className="apc-fact-text">
-                  <span className="apc-fact-label">Auction</span>
+                  {/* "Auction date", not "Auction" (Bryan, 9 Aug). It names the value it
+                      sits directly above; the time below is that date's qualifier, the
+                      same shape as the left cell's "(125 days left)". */}
+                  <span className="apc-fact-label">Auction date</span>
                   <b>{fmtDate(OWNER_AUCTION.date)}</b>
                   <span className="apc-fact-sub">{AUCTION_TIME_LABEL}</span>
                 </span>
