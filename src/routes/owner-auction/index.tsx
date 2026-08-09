@@ -653,14 +653,23 @@ function OwnerAuction() {
                   Auction how-it-works route yet, and a CTA that 404s is worse than one
                   pointing at the wrong product — so this keeps a working link until
                   Bryan decides where it goes. Flagged, not forgotten. */}
-              <a className="hero-steps-cta" href="/how-e-tender-works">
-                <span className="hero-steps-cta-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M5 12h13M13 6l6 6-6 6" />
-                  </svg>
-                </span>
-                <span className="hero-steps-cta-label">See how Owner Auction works</span>
-              </a>
+              {/* The attention dot is a SIBLING wrapper, not a child of the link, and it
+                  is absolutely positioned — so it costs the CTA no width, no padding and
+                  no shift. `.hero-steps-cta` is a full-width bar here: its left edge IS
+                  the panel's inner edge, so "beside the button" can only mean outside
+                  that edge, which absolute positioning is the only way to get without
+                  resizing the button. Decorative, aria-hidden, pointer-events: none. */}
+              <div className="hero-cta-attention">
+                <span className="hero-cta-attention-dot" aria-hidden="true" />
+                <a className="hero-steps-cta" href="/how-e-tender-works">
+                  <span className="hero-steps-cta-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 12h13M13 6l6 6-6 6" />
+                    </svg>
+                  </span>
+                  <span className="hero-steps-cta-label">See how Owner Auction works</span>
+                </a>
+              </div>
             </div>
           </div>
         </section>

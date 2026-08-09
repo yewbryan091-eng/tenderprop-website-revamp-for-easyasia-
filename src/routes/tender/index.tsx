@@ -12,8 +12,15 @@ import { TaHome, TaPin } from "@/components/tender/icons";
 import { STATES, TYPE_TAXONOMY } from "@/data/tender-taxonomy";
 import { TENDERS, type Tender } from "@/data/tenders";
 import {
-  MS_DAY, TYPE_BY_VALUE, daysLeft, fmtDate, fmtRM, isFinalDay, matchesTaxonomy,
-  remainingMs, tenderId,
+  MS_DAY,
+  TYPE_BY_VALUE,
+  daysLeft,
+  fmtDate,
+  fmtRM,
+  isFinalDay,
+  matchesTaxonomy,
+  remainingMs,
+  tenderId,
 } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 
@@ -52,25 +59,36 @@ const BATCHES = (() => {
 })();
 const NEXT_BATCH = BATCHES[0];
 const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 const HERO_DATE = (() => {
   const [year, month, day] = NEXT_BATCH.date.split("-").map(Number);
   const lastTwo = day % 100;
-  const suffix = lastTwo >= 11 && lastTwo <= 13
-    ? "th"
-    : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
+  const suffix =
+    lastTwo >= 11 && lastTwo <= 13
+      ? "th"
+      : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] || "th";
   return { day, suffix, month: MONTH_NAMES[month - 1], year };
 })();
 
 const PRICE_MIN_OPTIONS = [
-  100000, 200000, 300000, 400000, 500000, 750000, 1000000, 1500000,
-  2000000, 3000000, 5000000, 10000000, 20000000, 50000000,
+  100000, 200000, 300000, 400000, 500000, 750000, 1000000, 1500000, 2000000, 3000000, 5000000,
+  10000000, 20000000, 50000000,
 ];
 const PRICE_MAX_OPTIONS = [
-  300000, 500000, 750000, 1000000, 1500000, 2000000, 3000000, 5000000,
-  10000000, 20000000, 50000000, 70000000,
+  300000, 500000, 750000, 1000000, 1500000, 2000000, 3000000, 5000000, 10000000, 20000000, 50000000,
+  70000000,
 ];
 type SizeRange = { value: string; label: string; min?: number; max?: number };
 const BUILT_UP_RANGES: SizeRange[] = [
@@ -89,7 +107,10 @@ const LAND_AREA_RANGES: SizeRange[] = [
   { value: "1-acre-plus", label: "1 acre and above", min: 43560 },
 ];
 const CAT_CHIP: Record<string, string> = {
-  residential: "Residential", commercial: "Commercial", industrial: "Industrial", land: "Land",
+  residential: "Residential",
+  commercial: "Commercial",
+  industrial: "Industrial",
+  land: "Land",
 };
 
 const INDEXED = TENDERS.map((x, i) => ({ ...x, _i: i })) as (Tender & { _i: number })[];
@@ -107,14 +128,21 @@ function inSizeRange(value: string, selected: string, options: SizeRange[]) {
   const sqft = areaInSqft(value);
   const range = options.find((option) => option.value === selected);
   if (sqft === null || !range) return false;
-  return (range.min === undefined || sqft >= range.min) &&
-    (range.max === undefined || sqft <= range.max);
+  return (
+    (range.min === undefined || sqft >= range.min) && (range.max === undefined || sqft <= range.max)
+  );
 }
 
 /* Null until mount so SSR and first paint never show a flash of zeros.
    FOUNDER-CONFIRMED 30 Jul: there is no intra-day cutoff. A tender runs to the end
    of its closing date and the listing simply leaves the site — 23:59:59 MYT, not 17:00. */
-type Remaining = { days: number; hours: number; minutes: number; seconds: number; finalDay: boolean };
+type Remaining = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  finalDay: boolean;
+};
 function useCountdown(iso: string): Remaining | null {
   const [left, setLeft] = useState<Remaining | null>(null);
   useEffect(() => {
@@ -154,10 +182,20 @@ function TenderListings() {
     { label: "s", value: left ? pad2(left.seconds) : "" },
   ];
   const FINAL_DAY = Boolean(left) && left!.finalDay;
-  const countdownValue = !left ? "\u00a0" : FINAL_DAY ? `${left.hours}h ${pad2(left.minutes)}m` : left.days.toLocaleString("en-MY");
+  const countdownValue = !left
+    ? "\u00a0"
+    : FINAL_DAY
+      ? `${left.hours}h ${pad2(left.minutes)}m`
+      : left.days.toLocaleString("en-MY");
   /* "days left", not "days" — the founder's framing, and Bryan's. I shortened it once on
      a redundancy argument; it was not mine to change. Leave this wording alone. */
-  const countdownUnit = !left ? "" : FINAL_DAY ? "left today" : left.days === 1 ? "day left" : "days left";
+  const countdownUnit = !left
+    ? ""
+    : FINAL_DAY
+      ? "left today"
+      : left.days === 1
+        ? "day left"
+        : "days left";
   /* The screen-reader label for the timer, whose visual is aria-hidden — so this string
      IS the heading for anyone not looking at it. Tracks the visible wording (Bryan,
      7 Aug: "Offers close in" → "E-Tender closes in"); if one changes, so does the other,
@@ -193,13 +231,17 @@ function TenderListings() {
   useEffect(() => {
     try {
       setSaved(new Set(JSON.parse(localStorage.getItem(SAVE_KEY) || "[]")));
-    } catch { /* shortlist is best-effort */ }
+    } catch {
+      /* shortlist is best-effort */
+    }
   }, []);
 
   /* Escape closes the filter drawer without losing the selected filters. */
   useEffect(() => {
     if (!sheetOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setSheetOpen(false); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSheetOpen(false);
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [sheetOpen]);
@@ -217,8 +259,13 @@ function TenderListings() {
   function toggleSave(id: string) {
     setSaved((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      try { localStorage.setItem(SAVE_KEY, JSON.stringify(Array.from(next))); } catch { /* ignore */ }
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      try {
+        localStorage.setItem(SAVE_KEY, JSON.stringify(Array.from(next)));
+      } catch {
+        /* ignore */
+      }
       return next;
     });
   }
@@ -249,8 +296,17 @@ function TenderListings() {
         (state === "all" || x.stateKey === state) && (area === "" || x.area.toLowerCase() === area),
     };
   }, [
-    query, category, typeValue, priceMin, priceMax, closingCycle, builtUpRange,
-    landAreaRange, tenure, state, area,
+    query,
+    category,
+    typeValue,
+    priceMin,
+    priceMax,
+    closingCycle,
+    builtUpRange,
+    landAreaRange,
+    tenure,
+    state,
+    area,
   ]);
 
   const passesExcept = useCallback(
@@ -259,17 +315,17 @@ function TenderListings() {
     [groups],
   );
 
-  const matched = useMemo(
-    () => INDEXED.filter((x) => passesExcept(x, null)),
-    [passesExcept],
-  );
+  const matched = useMemo(() => INDEXED.filter((x) => passesExcept(x, null)), [passesExcept]);
 
   const sorted = useMemo(() => {
     const list = matched.slice();
-    if (sortMode === "closing") list.sort((a, b) => +new Date(a.closingDate) - +new Date(b.closingDate));
+    if (sortMode === "closing")
+      list.sort((a, b) => +new Date(a.closingDate) - +new Date(b.closingDate));
     else if (sortMode === "latest") list.sort((a, b) => b._i - a._i);
-    else if (sortMode === "price-asc") list.sort((a, b) => (a.reservePrice || Infinity) - (b.reservePrice || Infinity));
-    else if (sortMode === "price-desc") list.sort((a, b) => (b.reservePrice || 0) - (a.reservePrice || 0));
+    else if (sortMode === "price-asc")
+      list.sort((a, b) => (a.reservePrice || Infinity) - (b.reservePrice || Infinity));
+    else if (sortMode === "price-desc")
+      list.sort((a, b) => (b.reservePrice || 0) - (a.reservePrice || 0));
     return list;
   }, [matched, sortMode]);
 
@@ -282,7 +338,8 @@ function TenderListings() {
     [passesExcept],
   );
   const catCount = (c: string) =>
-    INDEXED.filter((x) => passesExcept(x, "category") && (c === "all" || x.propertyCategory === c)).length;
+    INDEXED.filter((x) => passesExcept(x, "category") && (c === "all" || x.propertyCategory === c))
+      .length;
   const closingCount = (date: string) =>
     INDEXED.filter((x) => passesExcept(x, "closing") && x.closingDate === date).length;
   const tenureCount = (value: string) =>
@@ -299,16 +356,29 @@ function TenderListings() {
   }, [category]);
 
   function reset() {
-    setQuery(""); setTypeValue("all"); setCategory("all");
-    setPriceMin(""); setPriceMax(""); setClosingCycle("all");
-    setBuiltUpRange("all"); setLandAreaRange("all"); setTenure("all");
-    setState("all"); setArea(""); setAreaLabel("");
-    setPropertyFiltersOpen(false); setPage(1);
+    setQuery("");
+    setTypeValue("all");
+    setCategory("all");
+    setPriceMin("");
+    setPriceMax("");
+    setClosingCycle("all");
+    setBuiltUpRange("all");
+    setLandAreaRange("all");
+    setTenure("all");
+    setState("all");
+    setArea("");
+    setAreaLabel("");
+    setPropertyFiltersOpen(false);
+    setPage(1);
   }
 
   function clearPropertyFilters() {
-    setPriceMin(""); setPriceMax(""); setClosingCycle("all");
-    setBuiltUpRange("all"); setLandAreaRange("all"); setTenure("all");
+    setPriceMin("");
+    setPriceMax("");
+    setClosingCycle("all");
+    setBuiltUpRange("all");
+    setLandAreaRange("all");
+    setTenure("all");
     setPage(1);
   }
 
@@ -324,68 +394,130 @@ function TenderListings() {
   const chips: { label: string; clear: () => void }[] = [];
   if (state !== "all") {
     const st = STATES.find((s) => s.key === state);
-    chips.push({ label: st ? st.name : state, clear: () => { setState("all"); setArea(""); setPage(1); } });
-    if (area) chips.push({ label: areaLabel || area, clear: () => { setArea(""); setAreaLabel(""); setPage(1); } });
+    chips.push({
+      label: st ? st.name : state,
+      clear: () => {
+        setState("all");
+        setArea("");
+        setPage(1);
+      },
+    });
+    if (area)
+      chips.push({
+        label: areaLabel || area,
+        clear: () => {
+          setArea("");
+          setAreaLabel("");
+          setPage(1);
+        },
+      });
   }
-  if (category !== "all") chips.push({ label: CAT_CHIP[category] || category, clear: () => { setCategory("all"); setPage(1); } });
+  if (category !== "all")
+    chips.push({
+      label: CAT_CHIP[category] || category,
+      clear: () => {
+        setCategory("all");
+        setPage(1);
+      },
+    });
   if (typeValue !== "all") {
     const t = TYPE_BY_VALUE[typeValue];
     chips.push({
       label: t ? t.label.replace(/^-+|-+$/g, "") : typeValue,
-      clear: () => { setTypeValue("all"); setPage(1); },
+      clear: () => {
+        setTypeValue("all");
+        setPage(1);
+      },
     });
   }
   if (priceMin || priceMax) {
     const mn = priceMin ? parseInt(priceMin) : null;
     const mx = priceMax ? parseInt(priceMax) : null;
     const label =
-      mn !== null && mx !== null ? `${fmtRM(mn)} – ${fmtRM(mx)}`
-        : mn !== null ? `From ${fmtRM(mn)}`
-        : mx !== null ? `Up to ${fmtRM(mx)}` : "Custom";
-    chips.push({ label, clear: () => { setPriceMin(""); setPriceMax(""); setPage(1); } });
+      mn !== null && mx !== null
+        ? `${fmtRM(mn)} – ${fmtRM(mx)}`
+        : mn !== null
+          ? `From ${fmtRM(mn)}`
+          : mx !== null
+            ? `Up to ${fmtRM(mx)}`
+            : "Custom";
+    chips.push({
+      label,
+      clear: () => {
+        setPriceMin("");
+        setPriceMax("");
+        setPage(1);
+      },
+    });
   }
   if (closingCycle !== "all") {
     chips.push({
       label: `Closes ${fmtDate(closingCycle)}`,
-      clear: () => { setClosingCycle("all"); setPage(1); },
+      clear: () => {
+        setClosingCycle("all");
+        setPage(1);
+      },
     });
   }
   if (builtUpRange !== "all") {
     const selected = BUILT_UP_RANGES.find((option) => option.value === builtUpRange);
     chips.push({
       label: `Built-up: ${selected?.label || builtUpRange}`,
-      clear: () => { setBuiltUpRange("all"); setPage(1); },
+      clear: () => {
+        setBuiltUpRange("all");
+        setPage(1);
+      },
     });
   }
   if (landAreaRange !== "all") {
     const selected = LAND_AREA_RANGES.find((option) => option.value === landAreaRange);
     chips.push({
       label: `Land area: ${selected?.label || landAreaRange}`,
-      clear: () => { setLandAreaRange("all"); setPage(1); },
+      clear: () => {
+        setLandAreaRange("all");
+        setPage(1);
+      },
     });
   }
   if (tenure !== "all") {
     chips.push({
       label: tenure === "freehold" ? "Freehold" : "Leasehold",
-      clear: () => { setTenure("all"); setPage(1); },
+      clear: () => {
+        setTenure("all");
+        setPage(1);
+      },
     });
   }
-  if (query.trim()) chips.push({ label: `“${query.trim()}”`, clear: () => { setQuery(""); setPage(1); } });
+  if (query.trim())
+    chips.push({
+      label: `“${query.trim()}”`,
+      clear: () => {
+        setQuery("");
+        setPage(1);
+      },
+    });
 
   /* ---- Location typeahead ---- */
   const taPool = useMemo(() => {
     const pool: { label: string; term?: string; kind: string; type: string }[] = [];
     const seen: Record<string, boolean> = {};
     STATES.forEach((s) => {
-      if (TENDERS.some((t) => t.stateKey === s.key)) pool.push({ label: s.name, kind: "State", type: "state" });
+      if (TENDERS.some((t) => t.stateKey === s.key))
+        pool.push({ label: s.name, kind: "State", type: "state" });
     });
     TENDERS.forEach((t) => {
       const k = `${t.stateKey}|${t.area}`.toLowerCase();
-      if (!seen[k]) { seen[k] = true; pool.push({ label: `${t.area}, ${t.stateName}`, term: t.area, kind: "Area", type: "area" }); }
+      if (!seen[k]) {
+        seen[k] = true;
+        pool.push({ label: `${t.area}, ${t.stateName}`, term: t.area, kind: "Area", type: "area" });
+      }
     });
     TENDERS.forEach((t) => {
       const k = "n" + t.name.toLowerCase();
-      if (!seen[k]) { seen[k] = true; pool.push({ label: t.name, kind: "Property", type: "name" }); }
+      if (!seen[k]) {
+        seen[k] = true;
+        pool.push({ label: t.name, kind: "Property", type: "name" });
+      }
     });
     return pool;
   }, []);
@@ -403,7 +535,9 @@ function TenderListings() {
 
   function pick(m: { label: string; term?: string }) {
     setQuery(m.term || m.label.split(",")[0]);
-    setTaOpen(false); setTaActive(-1); setPage(1);
+    setTaOpen(false);
+    setTaActive(-1);
+    setPage(1);
   }
 
   const pageWindow: number[] = [];
@@ -413,7 +547,11 @@ function TenderListings() {
   function goPage(n: number) {
     setPage(n);
     const el = document.getElementById("listings");
-    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 70, behavior: "smooth" });
+    if (el)
+      window.scrollTo({
+        top: el.getBoundingClientRect().top + window.pageYOffset - 70,
+        behavior: "smooth",
+      });
   }
 
   const from = sorted.length ? (currentPage - 1) * PER_PAGE + 1 : 0;
@@ -421,7 +559,9 @@ function TenderListings() {
 
   return (
     <div className="tp-listings">
-      <a className="skip-link" href="#listings">Skip to listings</a>
+      <a className="skip-link" href="#listings">
+        Skip to listings
+      </a>
       <SiteHeader />
 
       <main>
@@ -470,7 +610,8 @@ function TenderListings() {
                   alone on both heroes now. */}
               <p className="hero-date">
                 <time dateTime={NEXT_BATCH.date}>
-                  {HERO_DATE.day}<sup>{HERO_DATE.suffix}</sup> {HERO_DATE.month} {HERO_DATE.year}
+                  {HERO_DATE.day}
+                  <sup>{HERO_DATE.suffix}</sup> {HERO_DATE.month} {HERO_DATE.year}
                 </time>
               </p>
               {/* No CTA here by design (Bryan, 31 Jul). A button whose destination is the
@@ -511,7 +652,9 @@ function TenderListings() {
                     ⚠️ Line two's indent is MEASURED off this string; see the
                     `.hero-steps-head span + span` rule before editing this wording. */}
                 <span>E-Tender on a property in</span>
-                <span><em>3 simple steps.</em></span>
+                <span>
+                  <em>3 simple steps.</em>
+                </span>
               </h2>
               {/* Stacked heads, not run-in (Bryan, 4 Aug). The "01 — " is a CSS counter on the
                   head, so the ordinal is still never DOM text and a screen reader hears the
@@ -528,7 +671,8 @@ function TenderListings() {
                 <li>
                   <p className="hero-step-head">Offer</p>
                   <p className="hero-step-body">
-                    Register and log in as a member and submit your price privately before the E-Tender closes.
+                    Register and log in as a member and submit your price privately before the
+                    E-Tender closes.
                   </p>
                 </li>
                 <li>
@@ -539,12 +683,23 @@ function TenderListings() {
                   </p>
                 </li>
               </ol>
-              <a className="hero-steps-cta" href="/how-e-tender-works">
-                <span className="hero-steps-cta-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                </span>
-                <span className="hero-steps-cta-label">See how E-Tender works</span>
-              </a>
+              {/* The attention dot is a SIBLING wrapper, not a child of the link, and it
+                  is absolutely positioned — so it costs the CTA no width, no padding and
+                  no shift. `.hero-steps-cta` is a full-width bar here: its left edge IS
+                  the panel's inner edge, so "beside the button" can only mean outside
+                  that edge, which absolute positioning is the only way to get without
+                  resizing the button. Decorative, aria-hidden, pointer-events: none. */}
+              <div className="hero-cta-attention">
+                <span className="hero-cta-attention-dot" aria-hidden="true" />
+                <a className="hero-steps-cta" href="/how-e-tender-works">
+                  <span className="hero-steps-cta-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 12h13M13 6l6 6-6 6" />
+                    </svg>
+                  </span>
+                  <span className="hero-steps-cta-label">See how E-Tender works</span>
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -558,7 +713,9 @@ function TenderListings() {
                 destination inside one screen is not emphasis, it is a split signal — the panel
                 is the one that gets to be loud. */}
             <div className="search-intro">
-              <h2 id="property-search-title">Find a property <span className="hl">open for e-tender</span></h2>
+              <h2 id="property-search-title">
+                Find a property <span className="hl">open for e-tender</span>
+              </h2>
             </div>
             <form
               className="search-form"
@@ -583,21 +740,37 @@ function TenderListings() {
                     aria-expanded={taOpen && taMatches.length > 0}
                     aria-controls="ta-list"
                     value={query}
-                    onChange={(e) => { setQuery(e.target.value); setPage(1); setTaOpen(true); setTaActive(-1); }}
+                    onChange={(e) => {
+                      setQuery(e.target.value);
+                      setPage(1);
+                      setTaOpen(true);
+                      setTaActive(-1);
+                    }}
                     /* The list only ever opened on keystroke, so clicking the field did
                        nothing — the whole point of the empty state. */
-                    onFocus={() => { setTaOpen(true); setTaActive(-1); }}
+                    onFocus={() => {
+                      setTaOpen(true);
+                      setTaActive(-1);
+                    }}
                     onBlur={() => window.setTimeout(() => setTaOpen(false), 120)}
                     onKeyDown={(e) => {
                       if (!taOpen || !taMatches.length) return;
-                      if (e.key === "ArrowDown") { e.preventDefault(); setTaActive((i) => Math.min(i + 1, taMatches.length - 1)); }
-                      else if (e.key === "ArrowUp") { e.preventDefault(); setTaActive((i) => Math.max(i - 1, 0)); }
-                      else if (e.key === "Enter" && taActive >= 0) { e.preventDefault(); pick(taMatches[taActive]); }
-                      else if (e.key === "Escape") setTaOpen(false);
+                      if (e.key === "ArrowDown") {
+                        e.preventDefault();
+                        setTaActive((i) => Math.min(i + 1, taMatches.length - 1));
+                      } else if (e.key === "ArrowUp") {
+                        e.preventDefault();
+                        setTaActive((i) => Math.max(i - 1, 0));
+                      } else if (e.key === "Enter" && taActive >= 0) {
+                        e.preventDefault();
+                        pick(taMatches[taActive]);
+                      } else if (e.key === "Escape") setTaOpen(false);
                     }}
                   />
                   <div
-                    className={"ta-list" + (taOpen && (taMatches.length || query.trim()) ? " show" : "")}
+                    className={
+                      "ta-list" + (taOpen && (taMatches.length || query.trim()) ? " show" : "")
+                    }
                     id="ta-list"
                     role="listbox"
                   >
@@ -607,7 +780,10 @@ function TenderListings() {
                         className={"ta-item" + (i === taActive ? " active" : "")}
                         role="option"
                         aria-selected={i === taActive}
-                        onMouseDown={(e) => { e.preventDefault(); pick(m); }}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          pick(m);
+                        }}
                       >
                         <span>{m.type === "name" ? <TaHome /> : <TaPin />}</span>
                         <span>{m.label}</span>
@@ -619,7 +795,14 @@ function TenderListings() {
                     {Boolean(query.trim()) && taMatches.length === 0 && (
                       <p className="ta-empty">
                         No e-tenders match &ldquo;{query.trim()}&rdquo;.{" "}
-                        <button type="button" onMouseDown={(e) => { e.preventDefault(); setQuery(""); setPage(1); }}>
+                        <button
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setQuery("");
+                            setPage(1);
+                          }}
+                        >
                           Browse all {TENDERS.length}
                         </button>
                       </p>
@@ -631,11 +814,19 @@ function TenderListings() {
                   <select
                     id="search-type"
                     value={typeValue}
-                    onChange={(e) => { setTypeValue(e.target.value); setPage(1); }}
+                    onChange={(e) => {
+                      setTypeValue(e.target.value);
+                      setPage(1);
+                    }}
                   >
                     {typeOptions.map((t) => (
-                      <option key={t.value} value={t.value} disabled={t.value !== "all" && t.n === 0}>
-                        {t.label}{t.value !== "all" && t.n ? ` (${t.n})` : ""}
+                      <option
+                        key={t.value}
+                        value={t.value}
+                        disabled={t.value !== "all" && t.n === 0}
+                      >
+                        {t.label}
+                        {t.value !== "all" && t.n ? ` (${t.n})` : ""}
                       </option>
                     ))}
                   </select>
@@ -643,10 +834,14 @@ function TenderListings() {
                 <div className="search-actions">
                   {/* One row, not a stack: a stacked Search+Filters is ~90px against a
                       66px label+input, which is what pushed Search above the label line. */}
-                  <button type="submit" className="btn red btn-search">Search</button>
+                  <button type="submit" className="btn red btn-search">
+                    Search
+                  </button>
                   <button
                     type="button"
-                    className={"btn-property-filters" + (activePropertyFilterCount ? " is-active" : "")}
+                    className={
+                      "btn-property-filters" + (activePropertyFilterCount ? " is-active" : "")
+                    }
                     aria-expanded={propertyFiltersOpen}
                     aria-controls="property-filters"
                     onClick={() => setPropertyFiltersOpen((open) => !open)}
@@ -702,117 +897,139 @@ function TenderListings() {
                 </div>
 
                 <div className="property-filter-body">
+                  <div className="property-filter-grid">
+                    <label className="property-filter-field is-closing">
+                      <span>E-Tender closing cycle</span>
+                      <select
+                        value={closingCycle}
+                        onChange={(e) => {
+                          setClosingCycle(e.target.value);
+                          setPage(1);
+                        }}
+                      >
+                        <option value="all">Any closing date</option>
+                        {BATCHES.map((batch) => {
+                          const count = closingCount(batch.date);
+                          return (
+                            <option
+                              key={batch.date}
+                              value={batch.date}
+                              disabled={count === 0 && closingCycle !== batch.date}
+                            >
+                              {fmtDate(batch.date)} · {count}{" "}
+                              {count === 1 ? "property" : "properties"}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </label>
 
-                <div className="property-filter-grid">
-                  <label className="property-filter-field is-closing">
-                    <span>E-Tender closing cycle</span>
-                    <select
-                      value={closingCycle}
-                      onChange={(e) => { setClosingCycle(e.target.value); setPage(1); }}
-                    >
-                      <option value="all">Any closing date</option>
-                      {BATCHES.map((batch) => {
-                        const count = closingCount(batch.date);
-                        return (
-                          <option
-                            key={batch.date}
-                            value={batch.date}
-                            disabled={count === 0 && closingCycle !== batch.date}
+                    <div className="property-filter-field is-price">
+                      <span>Reserve price (RM)</span>
+                      <div className="property-filter-pair">
+                        <label>
+                          <span className="sr-only">Minimum reserve price</span>
+                          <select
+                            aria-label="Minimum reserve price"
+                            value={priceMin}
+                            onChange={(e) => {
+                              setPriceMin(e.target.value);
+                              setPage(1);
+                            }}
                           >
-                            {fmtDate(batch.date)} · {count} {count === 1 ? "property" : "properties"}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </label>
-
-                  <div className="property-filter-field is-price">
-                    <span>Reserve price (RM)</span>
-                    <div className="property-filter-pair">
-                      <label>
-                        <span className="sr-only">Minimum reserve price</span>
-                        <select
-                          aria-label="Minimum reserve price"
-                          value={priceMin}
-                          onChange={(e) => { setPriceMin(e.target.value); setPage(1); }}
-                        >
-                          <option value="">No minimum</option>
-                          {PRICE_MIN_OPTIONS.map((value) => (
-                            <option
-                              key={value}
-                              value={value}
-                              disabled={Boolean(priceMax) && value > parseInt(priceMax)}
-                            >
-                              {fmtRM(value)}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                      <span aria-hidden="true">to</span>
-                      <label>
-                        <span className="sr-only">Maximum reserve price</span>
-                        <select
-                          aria-label="Maximum reserve price"
-                          value={priceMax}
-                          onChange={(e) => { setPriceMax(e.target.value); setPage(1); }}
-                        >
-                          <option value="">No maximum</option>
-                          {PRICE_MAX_OPTIONS.map((value) => (
-                            <option
-                              key={value}
-                              value={value}
-                              disabled={Boolean(priceMin) && value < parseInt(priceMin)}
-                            >
-                              {fmtRM(value)}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
+                            <option value="">No minimum</option>
+                            {PRICE_MIN_OPTIONS.map((value) => (
+                              <option
+                                key={value}
+                                value={value}
+                                disabled={Boolean(priceMax) && value > parseInt(priceMax)}
+                              >
+                                {fmtRM(value)}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        <span aria-hidden="true">to</span>
+                        <label>
+                          <span className="sr-only">Maximum reserve price</span>
+                          <select
+                            aria-label="Maximum reserve price"
+                            value={priceMax}
+                            onChange={(e) => {
+                              setPriceMax(e.target.value);
+                              setPage(1);
+                            }}
+                          >
+                            <option value="">No maximum</option>
+                            {PRICE_MAX_OPTIONS.map((value) => (
+                              <option
+                                key={value}
+                                value={value}
+                                disabled={Boolean(priceMin) && value < parseInt(priceMin)}
+                              >
+                                {fmtRM(value)}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      </div>
                     </div>
+
+                    <label className="property-filter-field is-tenure">
+                      <span>Tenure</span>
+                      <select
+                        value={tenure}
+                        onChange={(e) => {
+                          setTenure(e.target.value);
+                          setPage(1);
+                        }}
+                      >
+                        <option value="all">Any tenure</option>
+                        <option value="freehold" disabled={tenureCount("freehold") === 0}>
+                          Freehold ({tenureCount("freehold")})
+                        </option>
+                        <option value="leasehold" disabled={tenureCount("leasehold") === 0}>
+                          Leasehold ({tenureCount("leasehold")})
+                        </option>
+                      </select>
+                    </label>
+
+                    <label className="property-filter-field is-built-up">
+                      <span>Built-up area</span>
+                      <select
+                        value={builtUpRange}
+                        onChange={(e) => {
+                          setBuiltUpRange(e.target.value);
+                          setPage(1);
+                        }}
+                      >
+                        <option value="all">Any built-up size</option>
+                        {BUILT_UP_RANGES.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label className="property-filter-field is-land-area">
+                      <span>Land area</span>
+                      <select
+                        value={landAreaRange}
+                        onChange={(e) => {
+                          setLandAreaRange(e.target.value);
+                          setPage(1);
+                        }}
+                      >
+                        <option value="all">Any land size</option>
+                        {LAND_AREA_RANGES.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
                   </div>
-
-                  <label className="property-filter-field is-tenure">
-                    <span>Tenure</span>
-                    <select
-                      value={tenure}
-                      onChange={(e) => { setTenure(e.target.value); setPage(1); }}
-                    >
-                      <option value="all">Any tenure</option>
-                      <option value="freehold" disabled={tenureCount("freehold") === 0}>
-                        Freehold ({tenureCount("freehold")})
-                      </option>
-                      <option value="leasehold" disabled={tenureCount("leasehold") === 0}>
-                        Leasehold ({tenureCount("leasehold")})
-                      </option>
-                    </select>
-                  </label>
-
-                  <label className="property-filter-field is-built-up">
-                    <span>Built-up area</span>
-                    <select
-                      value={builtUpRange}
-                      onChange={(e) => { setBuiltUpRange(e.target.value); setPage(1); }}
-                    >
-                      <option value="all">Any built-up size</option>
-                      {BUILT_UP_RANGES.map((option) => (
-                        <option key={option.value} value={option.value}>{option.label}</option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label className="property-filter-field is-land-area">
-                    <span>Land area</span>
-                    <select
-                      value={landAreaRange}
-                      onChange={(e) => { setLandAreaRange(e.target.value); setPage(1); }}
-                    >
-                      <option value="all">Any land size</option>
-                      {LAND_AREA_RANGES.map((option) => (
-                        <option key={option.value} value={option.value}>{option.label}</option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
                 </div>
 
                 {/* Footer states the outcome — "Show 12 properties" beats a bare
@@ -852,10 +1069,16 @@ function TenderListings() {
                   <button
                     key={c.key}
                     type="button"
-                    className={"cat-tab" + (active ? " active" : "") + (n === 0 && !active ? " dim" : "")}
+                    className={
+                      "cat-tab" + (active ? " active" : "") + (n === 0 && !active ? " dim" : "")
+                    }
                     role="tab"
                     aria-selected={active}
-                    onClick={() => { setCategory(c.key); setTypeValue("all"); setPage(1); }}
+                    onClick={() => {
+                      setCategory(c.key);
+                      setTypeValue("all");
+                      setPage(1);
+                    }}
                   >
                     {c.label} <span className="c">{n}</span>
                   </button>
@@ -882,17 +1105,33 @@ function TenderListings() {
                     aria-expanded={sheetOpen}
                     onClick={() => setSheetOpen(true)}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" />
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.9"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z" />
+                      <circle cx="12" cy="10" r="2.5" />
                     </svg>
                     <span>E-Tender by State</span>
-                    {state !== "all" && (
-                      <span className="tool-badge">{area ? 2 : 1}</span>
-                    )}
+                    {state !== "all" && <span className="tool-badge">{area ? 2 : 1}</span>}
                   </button>
                   <div className="sort-field">
                     <label htmlFor="sort-by">Sort</label>
-                    <select id="sort-by" value={sortMode} onChange={(e) => { setSortMode(e.target.value); setPage(1); }}>
+                    <select
+                      id="sort-by"
+                      value={sortMode}
+                      onChange={(e) => {
+                        setSortMode(e.target.value);
+                        setPage(1);
+                      }}
+                    >
                       <option value="closing">Closing soonest</option>
                       <option value="latest">Latest listed</option>
                       <option value="price-asc">Reserve price: low to high</option>
@@ -900,17 +1139,53 @@ function TenderListings() {
                     </select>
                   </div>
                   <div className="view-toggle" role="group" aria-label="Result layout">
-                    <button type="button" className={"toggle-btn" + (view === "grid" ? " active" : "")} title="Grid View" aria-pressed={view === "grid"} onClick={() => setView("grid")}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-                        <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+                    <button
+                      type="button"
+                      className={"toggle-btn" + (view === "grid" ? " active" : "")}
+                      title="Grid View"
+                      aria-pressed={view === "grid"}
+                      onClick={() => setView("grid")}
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
                       </svg>
                       <span>Grid</span>
                     </button>
-                    <button type="button" className={"toggle-btn" + (view === "list" ? " active" : "")} title="List View" aria-pressed={view === "list"} onClick={() => setView("list")}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" />
-                        <line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" />
+                    <button
+                      type="button"
+                      className={"toggle-btn" + (view === "list" ? " active" : "")}
+                      title="List View"
+                      aria-pressed={view === "list"}
+                      onClick={() => setView("list")}
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="8" y1="6" x2="21" y2="6" />
+                        <line x1="8" y1="12" x2="21" y2="12" />
+                        <line x1="8" y1="18" x2="21" y2="18" />
+                        <line x1="3" y1="6" x2="3.01" y2="6" />
+                        <line x1="3" y1="12" x2="3.01" y2="12" />
+                        <line x1="3" y1="18" x2="3.01" y2="18" />
                       </svg>
                       <span>List</span>
                     </button>
@@ -927,25 +1202,42 @@ function TenderListings() {
                     aria-label={`Remove filter: ${c.label}`}
                     onClick={c.clear}
                   >
-                    <span>{c.label}</span><span className="x" aria-hidden="true">×</span>
+                    <span>{c.label}</span>
+                    <span className="x" aria-hidden="true">
+                      ×
+                    </span>
                   </button>
                 ))}
                 {chips.length > 0 && (
-                  <button type="button" className="chip clear" onClick={reset}>Clear all</button>
+                  <button type="button" className="chip clear" onClick={reset}>
+                    Clear all
+                  </button>
                 )}
               </div>
 
               <div className={"props-grid " + (view === "grid" ? "grid-mode" : "list-mode")}>
                 {slice.length ? (
                   slice.map((x) => (
-                    <PropertyCard key={tenderId(x) + x._i} x={x} saved={saved.has(tenderId(x))} onToggleSave={toggleSave} />
+                    <PropertyCard
+                      key={tenderId(x) + x._i}
+                      x={x}
+                      saved={saved.has(tenderId(x))}
+                      onToggleSave={toggleSave}
+                    />
                   ))
                 ) : (
                   <div className="no-results">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" /></svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="M21 21l-4.3-4.3" />
+                    </svg>
                     <b>No e-tenders match your filters</b>
-                    <span>Try widening your search &mdash; remove a filter or pick another state.</span>
-                    <button type="button" className="btn red" onClick={reset}>Clear all filters</button>
+                    <span>
+                      Try widening your search &mdash; remove a filter or pick another state.
+                    </span>
+                    <button type="button" className="btn red" onClick={reset}>
+                      Clear all filters
+                    </button>
                   </div>
                 )}
               </div>
@@ -965,27 +1257,53 @@ function TenderListings() {
                       </button>
                     </span>
                   ))}
-                  <button type="button" aria-label="Next page" disabled={currentPage >= totalPages} onClick={() => goPage(currentPage + 1)}>&raquo;</button>
-                  <button type="button" aria-label="Last page" disabled={currentPage >= totalPages} onClick={() => goPage(totalPages)}>Last</button>
+                  <button
+                    type="button"
+                    aria-label="Next page"
+                    disabled={currentPage >= totalPages}
+                    onClick={() => goPage(currentPage + 1)}
+                  >
+                    &raquo;
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Last page"
+                    disabled={currentPage >= totalPages}
+                    onClick={() => goPage(totalPages)}
+                  >
+                    Last
+                  </button>
                 </nav>
               )}
             </div>
 
             {/* Sidebar filters (drawer on mobile) */}
-            <div className={"filters-backdrop" + (sheetOpen ? " show" : "")} onClick={() => setSheetOpen(false)} />
+            <div
+              className={"filters-backdrop" + (sheetOpen ? " show" : "")}
+              onClick={() => setSheetOpen(false)}
+            />
             <aside
               className={"sidebar-filters" + (sheetOpen ? " open" : "")}
               aria-label="E-Tender by state"
             >
               <div className="rail-head">
-                <h2 className="rail-title">E-Tender <span>by State</span></h2>
+                <h2 className="rail-title">
+                  E-Tender <span>by State</span>
+                </h2>
                 <button
                   type="button"
                   className="sheet-close"
                   aria-label="Close e-tender by state"
                   onClick={() => setSheetOpen(false)}
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    aria-hidden="true"
+                  >
                     <path d="M6 6l12 12M18 6L6 18" />
                   </svg>
                 </button>
@@ -996,7 +1314,12 @@ function TenderListings() {
                     pool={locationPool}
                     activeState={state}
                     activeArea={area}
-                    onSelect={(k, a, label) => { setState(k); setArea(a); setAreaLabel(label); setPage(1); }}
+                    onSelect={(k, a, label) => {
+                      setState(k);
+                      setArea(a);
+                      setAreaLabel(label);
+                      setPage(1);
+                    }}
                   />
                 </div>
               </div>
