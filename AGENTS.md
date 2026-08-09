@@ -124,6 +124,38 @@ there is nothing to hold an agent with.
 
 Horizon: **3–5 years** of patient, constant building.
 
+### Why E-Tender and Owner Auction specifically — and the THIRD option nobody wrote down
+
+Founder answers, 10 Aug 2026. **Why e-tender:** *"a method we want to enforce to public to buy
+property, it is very usual in other foreign countries... we want to make it into a trend in
+Malaysia."* **Why owner auction:** *"same concept, people are already doing it, we want to be the
+first in Malaysia to popularize it."*
+
+So this is a **category-creation bet, not feature differentiation.** Not a better portal than
+PropertyGuru — a transaction *method* that is normal overseas, made normal here, first.
+
+And the part that is new: **"buyer can choose to buy normal sale, owner auction or e-tender, their
+choice."** The buyer's real choice set is **three**, and normal sale is one of them. The exclusive
+mandate is what makes that free — whichever route the buyer picks, the deal still runs through the
+firm.
+
+**⚠️ The code currently says the opposite.** `src/routes/buy/index.tsx` redirects `/buy` → `/tender`
+with the comment *"buy/rent are gone — tender and owner auction are the only ways to buy"* (30 Jul).
+Both can be true at different layers — the platform carries two, the agency transacts all three
+off-platform — but **do not "fix" either side unilaterally. Ask Bryan.**
+
+**What actually follows for the build:** if the goal is to make e-tender a trend, the competitor is
+**normal sale**, not another portal. You cannot win that fight by deleting the incumbent default
+from the page — a buyer who does not know what an e-tender is has nothing to compare it against.
+The fix is a **three-way comparison** (normal sale vs owner auction vs e-tender) on
+`/how-e-tender-works`, which already carries a planned "E-Tender vs Owner Auction" frame needing
+only a third column. **Not** a restored `/buy` listings page.
+
+Two copy consequences, effective now:
+- **Never write "the only way to buy."** The founder says it is a choice.
+- Naming normal sale as a comparison anchor is fine and does not breach the VOICE RULE — it is a
+  method, not the agency.
+
 ### 🔴 What this changes about your job: nothing. Read this before acting on it.
 
 Bryan, explicitly: *"our and your focus should remain, completing and refining our platforms
