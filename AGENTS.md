@@ -100,6 +100,49 @@ new design decision. This file holds the *behaviour* rules below; that file hold
 > palette or type changes, change it in both.** Keep both in sync when canon changes: a second
 > source of truth that drifts is worse than none.
 
+## 🧭 WHY THIS EXISTS AT ALL (founder strategy, Bryan, 10 Aug 2026)
+
+One level above everything below: **iNewProject and TenderProp are how the family agency gets
+rebuilt.** The platforms are not side projects that feed the agency — the agency is the reason
+they are being built.
+
+Bryan's father's diagnosis is about **retention, not recruitment**. Building an agency the
+conventional way is close to impossible now: hundreds of established firms — The Roof Realty,
+PropNex, IQI — compete for the same agents, splits are comparable everywhere, and a conventional
+firm *"has nothing to offer, so agents can simply and easily abandon you."* The firm never
+compounds.
+
+A platform is the offer. It gives the firm a channel an agent cannot get anywhere else, and at
+scale recruitment inverts — **when the platform becomes famous, agents come to you.** TenderProp's
+specific agent offer: the ability to run a property as E-Tender or private sale (an extra buyer
+route) at a smaller commission on the deal, traded for **exclusivity** — only our firm may sell it
+— and 3% commission max instead of 2%.
+
+This is also **why exclusivity is a hard condition** on every E-Tender listing. It is not just a
+listing term; it is what makes the agent offer economically real. Without a protected channel
+there is nothing to hold an agent with.
+
+Horizon: **3–5 years** of patient, constant building.
+
+### 🔴 What this changes about your job: nothing. Read this before acting on it.
+
+Bryan, explicitly: *"our and your focus should remain, completing and refining our platforms
+(tenderprop website)."*
+
+- **Context, not a work item.** Do not start agent-recruitment work, agent-facing tooling, or
+  commission design off the back of this. There is no agent surface in this build and none is
+  scoped.
+- **Never in buyer-facing copy.** The VOICE RULE above still governs. Agent-recruitment framing
+  has no place on a buyer page.
+- **Use it as a tie-breaker only.** When two build options are otherwise equal, prefer the one
+  that makes the platform more credible to the market — market credibility is what pulls agents in.
+- The 2%-vs-3% commission wording is compressed and **unconfirmed** (see the flags in the canon).
+  Do not put either number on a page.
+
+Full canon: `tenderprop.os/Vision/agency_rebuild_thesis.md`.
+
+---
+
 ## 🏢 WHAT TENDERPROP ACTUALLY IS (founder briefing, Bryan, 1 Aug 2026) — READ THIS FIRST
 
 Bryan: *"i feel like you and codex building this like you dont know what tenderprop is."* He was
