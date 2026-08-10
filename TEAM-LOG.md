@@ -126,6 +126,56 @@ The E-Tender Connect step now reads: **"The property listing agent will follow u
 regarding your offer, arrange a property viewing, and guide you through the next steps."** No
 layout, styling, or interaction changed. Production build passes.
 
+### 10 Aug 2026 — Claude · Price History rebuilt and EXTRACTED to one component
+
+Bryan: *"the current structure is lacking and ugly, it needs a revamp in terms of
+structure and design wise"* — structure first, data later, ROI parked.
+
+**New: `components/tender/PriceHistory.tsx` + `styles/price-history.css`.** Mounted on
+BOTH listing pages, so the section stops being two copies that drift.
+
+**⚠️ HOW CODEX'S CLAIM WAS HANDLED.** The section lived in `ResidensiSinaranDetail.tsx`,
+which §1 claims for Codex. Extracting instead of rebuilding in place kept the edit to his
+file at **7 insertions / 100 deletions** — an import, one tag, a note, and the removal of
+the dead markup, type, constant and state that only that markup used. It is NOT prettier
+formatted: a first pass ran `eslint --fix` on it and reformatted the whole file to 789
+insertions, which was reverted immediately. **Do not run `--fix` on that file** — it is not
+prettier-clean at HEAD and any fix rewrites all of it.
+
+**The four structural faults fixed:**
+1. **No sense of scale.** Three prices told a buyer nothing about whether this listing is
+   cheap or dear. A summary strip now leads — median psf, the range, the sample size and
+   period. NOT a subject-property strip; the 3 Aug ledger removed that on purpose. This
+   summarises the COMPARABLES, which is a different job.
+2. **The eye had to travel.** A four-column table put the property at the left edge and
+   its price ~1,200px away. Rows are cards now, with psf directly under the price.
+3. **The switch was weak.** Buy/Rent were small underlined links at the far right of the
+   heading. Now a segmented control directly above the rows — the one idea worth taking
+   from the iProperty/Brickz reference. Arrow-key support carried over.
+4. **No provenance.** A footer now carries the selection basis, the source (JPPH/NAPIC)
+   and an "as at" stamp.
+
+**New: per-row disclosure.** Five rows on the surface (Bryan: "4-5 is fine"), with tenure,
+distance, land area and the registry reference one click away. One row open at a time.
+
+**Deliberately NOT copied from the reference:** its grey blocks and its "Source: Brickz.my"
+credit. PropertyGuru is quoting a third-party aggregator; TenderProp is a licensed
+valuation firm citing the registry directly. That difference is the section's whole claim,
+so it is set in TenderProp's own register, not a portal's.
+
+**🔴 STILL MASKED, and must stay so.** Every figure is Xs. The 3 Aug ruling — reviewable
+structure without turning sample values into property claims — is unchanged. Swap the
+`PREVIEW` constant for the JPPH feed and nothing else in the file changes.
+
+**🔴 OPEN, from the brainstorm:** what Dad means by ROI (rental yield / capital growth /
+below-market margin — the last one edges into investment advice and needs his sign-off);
+whether JPPH data can be republished publicly and at what granularity; and whether rental
+evidence is obtainable at the same quality as sales. JPPH also does not supply BEDROOMS —
+the reference's "4 Bed" column is Brickz enrichment, so it is not in this structure.
+
+Verified: both pages 200; disclosure opens/closes with correct `aria-expanded`; one row
+open at a time; Rent swaps rows, units and summary; badge clear of the switch; no overflow.
+
 ### 10 Aug 2026 — Claude · TWO listing pages: E-Tender and Owner Auction split
 
 Bryan: *"we are remaining with residensi sinaran, but seperate those 2 pages from e-tender

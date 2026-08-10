@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { TENDERS } from "@/data/tenders";
+import { PriceHistory } from "@/components/tender/PriceHistory";
 import { PropertyCard } from "@/components/tender/PropertyCard";
 import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
@@ -351,34 +352,11 @@ const ABOUT_PARAS: string[] = [
   `That the township is older is the point. Everything around it already exists, and          nothing about living here depends on a masterplan being finished or a neighbouring          phase being sold.`,
 ];
 
-/* PRICE HISTORY — structure-only preview.
-   Bryan's 3 Aug brief restores this section so EasyAsia can see the final Buy / Rent
-   architecture, but the project still has no verified JPPH or agency transaction rows.
-   These deliberately masked values demonstrate rhythm and hierarchy without publishing
-   made-up market evidence. Replace the whole object with backend data; do not unmask it. */
-type PriceHistoryMode = "buy" | "rent";
-type PriceHistoryPreviewRow = {
-  id: string;
-  date: string;
-  comparable: string;
-  context: string;
-  builtUp: string;
-  amount: string;
-  evidence: string;
-};
-
-const PRICE_HISTORY_PREVIEW: Record<PriceHistoryMode, PriceHistoryPreviewRow[]> = {
-  buy: [
-    { id: "buy-a", date: "DD MMM YYYY", comparable: "Nearby comparable A", context: "Townhouse · same locality", builtUp: "1,4XX sq ft", amount: "RM XXX,XXX", evidence: "RM XXX psf" },
-    { id: "buy-b", date: "DD MMM YYYY", comparable: "Nearby comparable B", context: "Townhouse · nearby project", builtUp: "1,4XX sq ft", amount: "RM XXX,XXX", evidence: "RM XXX psf" },
-    { id: "buy-c", date: "DD MMM YYYY", comparable: "Nearby comparable C", context: "Townhouse · same locality", builtUp: "1,3XX sq ft", amount: "RM XXX,XXX", evidence: "RM XXX psf" },
-  ],
-  rent: [
-    { id: "rent-a", date: "MMM YYYY", comparable: "Nearby rental A", context: "Townhouse · tenancy evidence", builtUp: "1,4XX sq ft", amount: "RM X,XXX / mo", evidence: "Verified tenancy" },
-    { id: "rent-b", date: "MMM YYYY", comparable: "Nearby rental B", context: "Townhouse · asking evidence", builtUp: "1,4XX sq ft", amount: "RM X,XXX / mo", evidence: "Asking rent" },
-    { id: "rent-c", date: "MMM YYYY", comparable: "Nearby rental C", context: "Townhouse · tenancy evidence", builtUp: "1,3XX sq ft", amount: "RM X,XXX / mo", evidence: "Verified tenancy" },
-  ],
-};
+/* PRICE HISTORY moved to `components/tender/PriceHistory.tsx` on 10 Aug — its data, its
+   state and its markup went with it, so this file no longer carries any of the three.
+   Extracted rather than rebuilt in place so BOTH listing pages share one component, and
+   so the edit to this file — which TEAM-LOG claims for Codex — stayed at an import, one
+   tag and this note. Still a masked structure-only preview; the 3 Aug ruling holds. */
 
 export function ResidensiSinaranDetail() {
   useEffect(() => initDetailPage(), []);
@@ -466,7 +444,6 @@ export function ResidensiSinaranDetail() {
      worked and a reloaded page was dead, which is exactly the "sometimes broken" Bryan saw.
      Anything React renders should be driven by React state. */
   const [aboutOpen, setAboutOpen] = useState(false);
-  const [priceHistoryMode, setPriceHistoryMode] = useState<PriceHistoryMode>("buy");
   /* Mortgage is React state, not an imperative listener. Outputs now exist on the first
      render (no RM0 flash), survive hot reloads, and are announced when inputs change. */
   const [mortgagePrice, setMortgagePrice] = useState(String(RESERVE));
@@ -1184,77 +1161,7 @@ export function ResidensiSinaranDetail() {
         <section className="blk band-card" id="history">
           <div className="wrap">
             <div className="blkcard price-history">
-              <div className="ph-heading">
-                <div>
-                  <h2 className="sec-title">Price <span>History</span></h2>
-                  <p className="sec-note">Comparable sale price transaction and rental evidence for similar properties near {LISTING_NAME}.</p>
-                </div>
-                <div className="ph-tabs" role="tablist" aria-label="Price history type">
-                  {(["buy", "rent"] as PriceHistoryMode[]).map((mode) => (
-                    <button
-                      key={mode}
-                      type="button"
-                      id={`ph-tab-${mode}`}
-                      role="tab"
-                      aria-selected={priceHistoryMode === mode}
-                      aria-controls="ph-panel"
-                      tabIndex={priceHistoryMode === mode ? 0 : -1}
-                      className={priceHistoryMode === mode ? "is-active" : ""}
-                      onClick={() => setPriceHistoryMode(mode)}
-                      onKeyDown={(event) => {
-                        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-                        event.preventDefault();
-                        const next: PriceHistoryMode = priceHistoryMode === "buy" ? "rent" : "buy";
-                        setPriceHistoryMode(next);
-                        window.requestAnimationFrame(() => document.getElementById(`ph-tab-${next}`)?.focus());
-                      }}
-                    >
-                      <span>{mode === "buy" ? "Buy" : "Rent"}</span>
-                      <small>{mode === "buy" ? "Past sale transactions" : "Rental evidence"}</small>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div
-                className="ph-panel"
-                id="ph-panel"
-                role="tabpanel"
-                aria-labelledby={`ph-tab-${priceHistoryMode}`}
-              >
-                <div className="ph-ledger-head">
-                  <div>
-                    <strong>{priceHistoryMode === "buy" ? "Comparable sale records" : "Comparable rental records"}</strong>
-                    <span className="ph-preview-inline">Layout preview</span>
-                  </div>
-                  <span>{priceHistoryMode === "buy" ? "Transacted evidence" : "Tenancy / asking evidence"}</span>
-                </div>
-                <div className="ph-table-wrap">
-                  <table className="ph-table">
-                    <caption className="ph-sr">
-                      {priceHistoryMode === "buy" ? "Comparable sale transaction layout" : "Comparable rental evidence layout"}
-                    </caption>
-                    <thead>
-                      <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Comparable property</th>
-                        <th scope="col">Built-up</th>
-                        <th scope="col" className="ph-amount-head">{priceHistoryMode === "buy" ? "Transacted price" : "Monthly rent"}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {PRICE_HISTORY_PREVIEW[priceHistoryMode].map((row) => (
-                        <tr key={row.id}>
-                          <td className="ph-date num"><span>{row.date}</span></td>
-                          <td className="ph-comparable"><strong>{row.comparable}</strong><span>{row.context}</span></td>
-                          <td className="ph-built num"><span>{row.builtUp}</span></td>
-                          <td className="ph-amount num"><strong>{row.amount}</strong><span>{row.evidence}</span></td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <PriceHistory />
             </div>
           </div>
         </section>
