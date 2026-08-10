@@ -434,13 +434,18 @@
        the circle needs a radius to belong to, and a hard-cornered bar around a round badge
        reads as two unrelated shapes. */
     display: flex; align-items: center; justify-content: flex-start;
-    gap: clamp(13px, calc(13px + (100vw - 1280px) * .012), 16px);
-    height: clamp(40px, calc(40px + (100vw - 1280px) * .032), 48px);
-    padding-left: clamp(7px, calc(7px + (100vw - 1280px) * .006), 9px);
-    padding-right: clamp(18px, 1.4vw, 24px);
-    border-radius: 10px;
+    /* SCALED UP ~13% (Bryan, 10 Aug). Height is the constrained axis, not width — the bar
+       is already full-bleed in the panel — and the panel is nearly full: MEASURED 13.3px
+       of slack between its 363.6px content box and the 350.3px stack at 1470. So +6px of
+       bar is most of what is available, and the tight bands (821 and 1024, where the step
+       bodies wrap longest) were re-checked after. Anything more overflows the hero. */
+    gap: clamp(14px, calc(14px + (100vw - 1280px) * .012), 17px);
+    height: clamp(46px, calc(46px + (100vw - 1280px) * .032), 54px);
+    padding-left: clamp(8px, calc(8px + (100vw - 1280px) * .006), 10px);
+    padding-right: clamp(20px, 1.5vw, 26px);
+    border-radius: 12px;
     background: var(--burgundy); color: #fff;
-    font-size: clamp(14px, calc(14px + (100vw - 1280px) * .012), 17px); font-weight: 700; line-height: 1; letter-spacing: .01em;
+    font-size: clamp(15.5px, calc(15.5px + (100vw - 1280px) * .012), 18.5px); font-weight: 700; line-height: 1; letter-spacing: .01em;
     text-decoration: none;
     transition: background .16s ease;
   }
@@ -451,8 +456,8 @@
      step: bar 40->48px, disc 31->38px, a constant ~10px of burgundy around it. */
   .hero-steps-cta-icon {
     flex: none; display: grid; place-items: center;
-    width: clamp(26px, calc(26px + (100vw - 1280px) * .021), 31px);
-    height: clamp(26px, calc(26px + (100vw - 1280px) * .021), 31px);
+    width: clamp(30px, calc(30px + (100vw - 1280px) * .021), 36px);
+    height: clamp(30px, calc(30px + (100vw - 1280px) * .021), 36px);
     border-radius: 50%; background: var(--paper);
     transition: transform .16s ease;
   }
@@ -628,6 +633,11 @@
     /* Split is 58/46 and the column narrows to ~256px. Measured 2/4/2 lines here with
        11.69px of valve at 821 — the step count still reads, the lines just run on. */
     .hero-steps-head { font-size: 21px; margin-bottom: 10px; }
+    /* The CTA scale-up (10 Aug) does not survive this band: the right panel narrows to
+       ~256px here and "See how Owner Auction works" wrapped to two lines at the new
+       15.5px minimum. Type returns to 14px; the BAR still keeps most of the increase
+       (40 -> 46px), which is the part that reads as "larger" anyway. */
+    .hero-steps-cta { font-size: 14px; height: 46px; }
     .hero-step-head { font-size: 14px; }
     .hero-step-body { font-size: 12px; line-height: 1.38; }
     .hero-steps { row-gap: 8px; }
@@ -667,7 +677,7 @@
     .hero-step-head { font-size: 17px; }
     .hero-step-body { font-size: 13.5px; }
     .hero-steps { row-gap: 13px; }
-    .hero-steps-cta { height: 48px; font-size: 15px; }
+    .hero-steps-cta { height: 54px; font-size: 16.5px; }
   }
 
   /* Search band — sits directly below the hero date */
@@ -2081,10 +2091,19 @@
 
    Paid for out of the row gaps (8 → 6), not out of the company name. MEASURED:
    44 + 6 + name 126 + 6 + phone 103.9 = 285.9 in a 291.3px row, ~5px of slack. */
+/* The ring matches the E-TENDER card's agent avatar exactly (Bryan, 10 Aug), which is
+   `2px solid var(--card)` plus a 1px `--line` ring cast as a box-shadow — a neutral
+   hairline, not a brass one. The brass ring made the mark read as a third gold accent
+   on a card that already spends brass on the labels and the gavel.
+
+   Padding drops 3 → 2px to pay for the thicker border, so the MARK stays 36px inside
+   the 44px disc (border-box) and the logo does not shrink with the change. */
 .apc .apc-co-logo {
   flex: none; width: 44px; height: 44px; border-radius: 50%;
-  object-fit: contain; padding: 3px;
-  background: #FBF7F1; border: 1px solid rgba(138, 106, 47, .45);
+  object-fit: contain; padding: 2px;
+  background: #FBF7F1;
+  border: 2px solid var(--card);
+  box-shadow: 0 0 0 1px var(--line);
 }
 .apc .apc-agent b { font-size: 13px; letter-spacing: -.008em; }
 /* The company's own NAME wraps rather than truncates; the SSM number, being short and
@@ -2122,7 +2141,23 @@
 /* ── The CTA: same outlined shape as /tender's, brass instead of burgundy ────── */
 .apc .apc-cta { border-color: rgba(138, 106, 47, .45); color: var(--apc-brass); }
 .apc .apc-cta svg:first-child { color: var(--apc-brass-lit); }
-.apc:hover .apc-cta { border-color: var(--apc-brass); background: rgba(138, 106, 47, .07); }
+/* ⚠️ THE LABEL COLOUR MUST BE SET HERE, and its absence was a real bug (Bryan, 10 Aug:
+   "its ugly fix it"). The base card's hover — `.prop-card:hover .pc-cta`, the SAME
+   (0,2,0) specificity — sets `color: var(--burgundy-ink)`, a pale cream that is correct
+   against the solid burgundy fill that rule also applies. This card overrode the
+   background to a light WASH but not the colour, so the cream survived and painted
+   near-white text on near-white: the label all but disappeared on hover.
+
+   The lesson generalises: overriding `background` on a hover state inherited from
+   another card means owning `color` in the same breath, or the pair goes out of step. */
+.apc:hover .apc-cta {
+  border-color: var(--apc-brass);
+  background: rgba(138, 106, 47, .07);
+  color: var(--apc-espresso);
+}
+/* The gavel darkens with it — `--apc-brass-lit` is tuned for the dark espresso pill and
+   only measures ~2.9:1 on this pale wash. */
+.apc:hover .apc-cta svg:first-child { color: var(--apc-brass); }
 
 /* LIST MODE — the auction details row would otherwise keep its two columns inside a
    much narrower description column and squeeze both facts to ellipsis. */
