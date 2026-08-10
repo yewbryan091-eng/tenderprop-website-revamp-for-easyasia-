@@ -89,7 +89,7 @@ export function AuctionPropertyCard({
     : auctionUpcoming
       ? "Registration closed"
       : "Auction closed";
-  const href = hrefFor(x);
+  const href = hrefFor(x, "owner-auction");
   const typeLabel = displayType(x);
   const size = areaSlot(x);
   const sizeTxt = size.value === "—" ? null : size.value.replace(/sqft/i, "sq ft");

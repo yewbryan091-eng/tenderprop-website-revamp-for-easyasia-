@@ -15,6 +15,7 @@ import { Route as BuyIndexRouteImport } from './routes/buy/index'
 import { Route as HowETenderWorksIndexRouteImport } from './routes/how-e-tender-works/index'
 import { Route as MemberIndexRouteImport } from './routes/member/index'
 import { Route as OwnerAuctionIndexRouteImport } from './routes/owner-auction/index'
+import { Route as OwnerAuctionResidensiSinaranRouteImport } from './routes/owner-auction/residensi-sinaran'
 import { Route as RentIndexRouteImport } from './routes/rent/index'
 import { Route as SellIndexRouteImport } from './routes/sell/index'
 import { Route as ServicesIndexRouteImport } from './routes/services/index'
@@ -51,6 +52,12 @@ const OwnerAuctionIndexRoute = OwnerAuctionIndexRouteImport.update({
   path: '/owner-auction/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerAuctionResidensiSinaranRoute =
+  OwnerAuctionResidensiSinaranRouteImport.update({
+    id: '/owner-auction/residensi-sinaran',
+    path: '/owner-auction/residensi-sinaran',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const RentIndexRoute = RentIndexRouteImport.update({
   id: '/rent/',
   path: '/rent/',
@@ -79,6 +86,7 @@ const TenderResidensiSinaranRoute = TenderResidensiSinaranRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/owner-auction/residensi-sinaran': typeof OwnerAuctionResidensiSinaranRoute
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
   '/about/': typeof AboutIndexRoute
   '/buy/': typeof BuyIndexRoute
@@ -92,6 +100,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/owner-auction/residensi-sinaran': typeof OwnerAuctionResidensiSinaranRoute
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
   '/about': typeof AboutIndexRoute
   '/buy': typeof BuyIndexRoute
@@ -106,6 +115,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/owner-auction/residensi-sinaran': typeof OwnerAuctionResidensiSinaranRoute
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
   '/about/': typeof AboutIndexRoute
   '/buy/': typeof BuyIndexRoute
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/owner-auction/residensi-sinaran'
     | '/tender/residensi-sinaran'
     | '/about/'
     | '/buy/'
@@ -134,6 +145,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/owner-auction/residensi-sinaran'
     | '/tender/residensi-sinaran'
     | '/about'
     | '/buy'
@@ -147,6 +159,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/owner-auction/residensi-sinaran'
     | '/tender/residensi-sinaran'
     | '/about/'
     | '/buy/'
@@ -161,6 +174,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OwnerAuctionResidensiSinaranRoute: typeof OwnerAuctionResidensiSinaranRoute
   TenderResidensiSinaranRoute: typeof TenderResidensiSinaranRoute
   AboutIndexRoute: typeof AboutIndexRoute
   BuyIndexRoute: typeof BuyIndexRoute
@@ -217,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerAuctionIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner-auction/residensi-sinaran': {
+      id: '/owner-auction/residensi-sinaran'
+      path: '/owner-auction/residensi-sinaran'
+      fullPath: '/owner-auction/residensi-sinaran'
+      preLoaderRoute: typeof OwnerAuctionResidensiSinaranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rent/': {
       id: '/rent/'
       path: '/rent'
@@ -257,6 +278,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OwnerAuctionResidensiSinaranRoute: OwnerAuctionResidensiSinaranRoute,
   TenderResidensiSinaranRoute: TenderResidensiSinaranRoute,
   AboutIndexRoute: AboutIndexRoute,
   BuyIndexRoute: BuyIndexRoute,

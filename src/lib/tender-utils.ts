@@ -198,8 +198,18 @@ export function matchesTaxonomy(x: Tender, value: string) {
    Residensi Sinaran is the design canon, and for the EasyAsia demo every click
    should land somewhere real rather than a coming-soon wall. When more detail
    pages exist, route per-listing again (each record's own slug). */
-export function hrefFor(_x: Tender) {
-  return "/tender/residensi-sinaran";
+/* Every card routes to Residensi Sinaran — the logged demo exception (29 Jul): it is the
+   only listing with a real detail page. What changed on 10 Aug is that there are now TWO
+   of them, one per product, so the destination depends on which grid the card is in.
+
+   The PRODUCT is passed in rather than read off the record, and that is deliberate: all 36
+   records are still `tenderMethod: "E-Tender"`, so reading the field would send every
+   Owner Auction card to the E-Tender page — which is exactly the bug this fixes. When real
+   auction records exist, switch this to the record's own method and delete the argument. */
+export function hrefFor(_x: Tender, product: "e-tender" | "owner-auction" = "e-tender") {
+  return product === "owner-auction"
+    ? "/owner-auction/residensi-sinaran"
+    : "/tender/residensi-sinaran";
 }
 
 /* Malaysian listing convention: landed and commercial-landed stock is named by its

@@ -18,7 +18,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | **Owner Auction `/owner-auction` — ACTIVE** | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | **Hero + LISTINGS DONE 7 Aug.** The page is now a full product page: grid, sort, grid/list, pagination and an "Owner Auction by State" rail, all copied from `/tender` (copied, NOT moved — `/tender` keeps its grid). Cards relabel via `PropertyCard`'s new `product` prop. ⚠️ **The records are still E-Tender's** — the words say auction, the data does not. Hero DONE: registration deadline closed (11 Dec, derived), "View Listings ↓" added, headline = "Bid on a property online in / 3 simple steps." with a **measured** 7.37em indent. Below the hero it is still the `/tender` clone searching E-Tender records — **Bryan parked the listings deliberately** 7 Aug ("chill for now, i will duplicate e-tender listings onto owner auction later"), so this is a decision, not an oversight |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | **Card rebuilt to Bryan's Buyer-POV reference 6 Aug** (`7b672de`), then 3 audit P1s fixed (`8992354`): list-mode price/title inversion, per-row CTA baselines, the period→agent seam minimum |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 3 Aug | Rebuilding Mortgage Calculator only; coordinate before touching this section. **Claim RESPECTED 10 Aug** — the new Owner Auction listing page is a separate component (`AuctionSinaranDetail.tsx`), so none of these three files were touched. Verified with an empty diffstat |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -125,6 +125,55 @@ participate and complete the required auction process."** The E-Tender hero foot
 The E-Tender Connect step now reads: **"The property listing agent will follow up with you
 regarding your offer, arrange a property viewing, and guide you through the next steps."** No
 layout, styling, or interaction changed. Production build passes.
+
+### 10 Aug 2026 — Claude · TWO listing pages: E-Tender and Owner Auction split
+
+Bryan: *"we are remaining with residensi sinaran, but seperate those 2 pages from e-tender
+and owner auction, 2 seperate listing pages."*
+
+- `/tender/residensi-sinaran` — unchanged, Codex's.
+- `/owner-auction/residensi-sinaran` — NEW, `AuctionSinaranDetail.tsx`, mine.
+
+**⚠️ CODEX'S CLAIM WAS RESPECTED, NOT WORKED AROUND QUIETLY.** §1 claims the detail page
+for Codex (held 3 Aug, last touched 7 Aug), and the law here is to tell Bryan rather than
+edit a held area. He was told. The new page is a separate component, so
+`ResidensiSinaranDetail.tsx`, `tender-detail.css` and `tender-detail-behaviour.ts` were
+never opened — verified with an empty diffstat. Codex can keep rebuilding the Mortgage
+Calculator with no chance of a collision.
+
+**Copy, not a `product` branch — the same call as the card.** Counted before starting: 8+
+sections genuinely differ. Branching that many through a 1,578-line component makes both
+products harder to read.
+
+**What differs on the auction page:** breadcrumb → Owner Auction · status chip "Going under
+Owner Auction" · countdown measures **REGISTRATION_CLOSE_MS**, not the tender close, so it
+matches its own "Registration closes in" kicker and the cards · Method: Owner Auction /
+Live bidding · CTAs "Register to bid" · sticky bar carries auction date + registration
+date · FAQ rewritten for live bidding · "Similar Owner Auctions" rendering
+`AuctionPropertyCard` · agent Q&A de-tendered.
+
+**🔴 THE DEPOSIT PRINTS NO FIGURE, DELIBERATELY.** The E-Tender page prints 3% of the
+RESERVE, which is knowable up front. An auction deposit is 3% of the BIDDING price — the
+standing trap in this log — and nobody knows that before the room sets it. The page states
+the rule ("3% of your bid", "Payable on a successful bid") and leaves the amount to the
+bid. Do not "fix" this by pasting the tender figure in.
+
+**`hrefFor()` now takes a product** and defaults to `e-tender`, so /tender is untouched.
+It takes an ARGUMENT rather than reading `tenderMethod`, because all 36 records are still
+`tenderMethod: "E-Tender"` — reading the field would have sent every auction card back to
+the E-Tender page, which is the bug this fixes. Switch to the record's own method when
+real auction records exist and delete the argument.
+
+**🔴 DRIFT IS THE COST.** This file and Codex's diverge the moment either changes. When the
+detail page settles and the claim is released, the property-agnostic two-thirds — gallery,
+specs, location, mortgage — should be extracted and shared, leaving only the product blocks
+in each. That is now the single biggest duplication in the repo (~1,600 lines on top of the
+~450 already duplicated between the two listing routes).
+
+Verified: all four routes 200; the auction grid's 12 cards and the new page's 3 "similar"
+cards all link to `/owner-auction/residensi-sinaran`; zero E-Tender wording left in the
+auction page body (the shared SiteFooter still describes both products, correctly); no
+horizontal overflow; tsc and lint clean.
 
 ### 7 Aug 2026 — Claude · Card pill counts to REGISTRATION; the auctioneer becomes the COMPANY
 
