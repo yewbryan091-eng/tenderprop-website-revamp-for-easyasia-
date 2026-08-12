@@ -149,18 +149,23 @@ including today, and the final day reads "1 day left" rather than "0".
 
 ## 4. Established patterns — reuse before inventing
 
-- **Homepage gateway** (v2, 12 Aug — supersedes the cream-finder v1): one seamless Malaysian
-  property panorama as a high-priority `<img>`, under only a flat 10% exposure wash (12% mobile).
-  A centred thesis leads to **the fork**: the two buying routes as full-width translucent washes —
-  E-Tender in burgundy glass, Owner Auction in ink glass — split by the brand's "/" seam with the
-  bare panorama showing through the 1% gap. The seam **leans ~10% toward the selected route**
-  (clip-path transition, killed under reduced-motion); the quiet side narrows to 34% content width
-  at ≥651px so no glyph crosses the diagonal. Below, one property/area/state input and the zone's
-  single red route-aware search action. Each panel carries ONE static courtesy meta line (next
-  close / auction day, derived via `batchesOf()` and `OWNER_AUCTION` — never hand-typed): still
-  **no ticking countdowns, statistics rows or opaque slabs** — the ticking heroes live on the
-  product pages, and the market image stays dominant. ≤650px the fork stacks with 3px of panorama
-  as the divider and icons leading both names.
+- **Homepage gateway** (v3 "the living market", 12 Aug eve — supersedes the same-day fork v2,
+  which itself superseded the cream-finder v1; both live in git): the dusk panorama under the flat
+  10% wash (12% mobile), ANNOTATED. Two dashed ink-glass **field notes** float in the sky band and
+  pin down toward the city (≥1320px only; anchored to the CENTRE — `calc(50% ± (325px + 24px))` —
+  so they track the 650px subcopy column, never the viewport edge): left cycles one REAL listing
+  (name/area/reserve/its own closing date) every 6s, right states the market (count, price span,
+  states — all DERIVED from `TENDERS`; ≥7 states renders "across Malaysia"). **The spotlight swap
+  is a hard cut BY RULE**: keyframe entries freeze at an opacity-0 first frame and
+  `@starting-style` transitions freeze mid-fade in throttled tabs — a card whose resting state is
+  invisible is a bug, verified live. Pulses and pins are warm paper, NEVER red (places, not
+  buttons). Centred thesis (h1 at −10% of v1), then the **heartbeat** — a block-flow route-aware
+  line (dot inline so wraps read as a sentence), day-precision, never ticking — then the
+  **instrument**: one white bar of route tray (v1's paper-deep well, burgundy pressed state) +
+  place input + the zone's single red action. Still no ticking countdowns, statistics rows,
+  opaque slabs, or diagonal panels on the homepage; ticking heroes live on the product pages.
+  ≤650px: notes and pings off, instrument stacks (tray / input / action), heartbeat carries the
+  clock alone.
 - **Label/value list** (`.pd-row`): label column `10.5rem`, `white-space: nowrap`, value 14.5/600,
   `min-height: 46px`, hairline under each row. Two-up via `grid-auto-flow: column`.
 - **Icon band** (`.band .stat`): scannable summary, always **derived** from the same source as the
