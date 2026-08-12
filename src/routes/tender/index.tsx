@@ -14,6 +14,7 @@ import { TENDERS, type Tender } from "@/data/tenders";
 import {
   MS_DAY,
   TYPE_BY_VALUE,
+  batchesOf,
   daysLeft,
   fmtDate,
   fmtRM,
@@ -52,14 +53,9 @@ export const Route = createFileRoute("/tender/")({
 const PER_PAGE = 12;
 const SAVE_KEY = "tp_shortlist";
 
-/* Batches are derived from the listing data — no single national deadline. */
-const BATCHES = (() => {
-  const counts = new Map<string, number>();
-  TENDERS.forEach((t) => counts.set(t.closingDate, (counts.get(t.closingDate) || 0) + 1));
-  return Array.from(counts.entries())
-    .map(([date, count]) => ({ date, count }))
-    .sort((a, b) => a.date.localeCompare(b.date));
-})();
+/* Batches are derived from the listing data — no single national deadline. Shared
+   with the homepage fork via `batchesOf` so the two pages read one cycle list. */
+const BATCHES = batchesOf(TENDERS);
 const NEXT_BATCH = BATCHES[0];
 const MONTH_NAMES = [
   "January",

@@ -84,77 +84,186 @@
   margin: 0;
   font-family: "Newsreader", Georgia, serif;
   font-optical-sizing: auto;
-  font-size: clamp(50px, 5.2vw, 76px);
+  /* −10% from the v1 clamp(50px, 5.2vw, 76px): the fork below is the product
+     decision and earns the ceded visual weight. */
+  font-size: clamp(45px, 4.7vw, 68px);
   font-weight: 600;
   line-height: 0.97;
   letter-spacing: -0.036em;
   text-wrap: balance;
 }
 
-/* ── Shared property finder ────────────────────────────────────────────────── */
+/* ── THE FORK — two buying routes split by the brand's diagonal seam ──────────
+   The chooser is not a form control dropped on the photo; it is the product
+   decision drawn in the site's own geometry. Two translucent washes — E-Tender
+   in burgundy (the sealed, private world), Owner Auction in ink (auction-day
+   graphite) — separated by a "/" seam of BARE PANORAMA: the market itself is
+   the divider. The seam leans ~10% toward the selected route, and the search
+   row below serves that choice with the zone's single red action.
+
+   Both panels span the full band and are cut by clip-path; hit-testing follows
+   the clip, so each slanted half is exactly its own button. */
 .hp-finder {
   width: min(960px, 100%);
-  margin: clamp(34px, 5vh, 48px) auto 0;
-  padding: 20px;
-  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
-  background: color-mix(in srgb, var(--paper) 97%, transparent);
+  margin: clamp(30px, 4.6vh, 44px) auto 0;
   color: var(--ink);
-  box-shadow: 0 1px 2px rgba(23, 19, 15, 0.03);
 }
 
-.hp-method-heading {
-  margin-bottom: 10px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.hp-fork {
+  position: relative;
+  height: 138px;
 }
 
-.hp-methods {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 4px;
-  padding: 4px;
-  background: var(--paper-deep);
-}
-
-.hp-method {
-  min-height: 58px;
-  padding: 10px 18px;
+.hp-fork-panel {
+  position: absolute;
+  inset: 0;
+  padding: 0;
   border: 0;
-  background: transparent;
-  color: color-mix(in srgb, var(--ink) 78%, var(--muted));
+  font: inherit;
+  text-align: left;
   cursor: pointer;
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+  backdrop-filter: blur(10px) saturate(1.05);
+  transition:
+    clip-path 380ms cubic-bezier(0.22, 0.75, 0.25, 1),
+    background-color 240ms ease,
+    color 240ms ease;
+}
+
+/* Seam geometry: the top edge leads the bottom by 13% of the band ("/", same
+   direction as the /tender hero's 57/43 split) and the two clips sit 1% apart —
+   ~10px of skyline showing through at full width. Selected side takes 55% of
+   the midline, unselected 45%. */
+.hp-fork-tender {
+  background: rgba(87, 28, 46, 0.84);
+  color: var(--burgundy-ink);
+  clip-path: polygon(0 0, 61% 0, 48% 100%, 0 100%);
+}
+
+.hp-fork-auction {
+  background: rgba(23, 19, 15, 0.5);
+  color: rgba(255, 255, 255, 0.92);
+  clip-path: polygon(62% 0, 100% 0, 100% 100%, 49% 100%);
+}
+
+[data-selected="owner-auction"] .hp-fork-tender {
+  background: rgba(78, 24, 40, 0.52);
+  color: rgba(255, 255, 255, 0.92);
+  clip-path: polygon(0 0, 51% 0, 38% 100%, 0 100%);
+}
+
+[data-selected="owner-auction"] .hp-fork-auction {
+  background: rgba(23, 19, 15, 0.87);
+  color: var(--paper);
+  clip-path: polygon(52% 0, 100% 0, 100% 100%, 39% 100%);
+}
+
+/* Hover preview on the road not taken: the wash deepens toward its own identity. */
+.hp-fork-tender[aria-pressed="false"]:hover {
+  background: rgba(74, 24, 39, 0.62);
+  color: var(--burgundy-ink);
+}
+
+.hp-fork-auction[aria-pressed="false"]:hover {
+  background: rgba(23, 19, 15, 0.64);
+  color: var(--paper);
+}
+
+.hp-fork-body {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  transition: width 380ms cubic-bezier(0.22, 0.75, 0.25, 1);
+}
+
+/* The quiet side cedes ground to the seam: its content column narrows so no
+   glyph can cross the diagonal at any container width — measured, not hoped.
+   (At 42% the meta line's box crossed the seam between 651–900px.) Desktop
+   only: the stacked mobile fork has no diagonal and needs the full row. */
+@media (min-width: 651px) {
+  [data-selected="owner-auction"] .hp-fork-tender .hp-fork-body,
+  [data-selected="tender"] .hp-fork-auction .hp-fork-body {
+    width: 34%;
+  }
+}
+
+.hp-fork-tender .hp-fork-body {
+  left: 26px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* Mirrored around the seam — the fork reads as a fork. */
+.hp-fork-auction .hp-fork-body {
+  right: 26px;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.hp-fork-auction .hp-fork-meta {
+  justify-content: flex-end;
+}
+
+.hp-fork-name {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font: inherit;
-  transition:
-    background-color 150ms ease,
-    color 150ms ease;
-}
-
-.hp-method > span {
+  gap: 9px;
   font-family: "Newsreader", Georgia, serif;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 650;
   line-height: 1;
 }
 
-.hp-method small {
-  font-size: 12px;
+.hp-fork-name svg {
+  flex: 0 0 auto;
+  opacity: 0.9;
+}
+
+.hp-fork-what {
+  font-size: 13px;
   font-weight: 600;
-  color: inherit;
-  opacity: 0.72;
+  opacity: 0.86;
 }
 
-.hp-method[aria-pressed="true"] {
-  background: var(--burgundy);
-  color: var(--paper);
+.hp-fork-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 7px;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  opacity: 0.82;
 }
 
-.hp-method:focus-visible,
+.hp-fork-meta strong {
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.hp-fork-pair {
+  white-space: nowrap;
+}
+
+.hp-fork-dot {
+  opacity: 0.55;
+}
+
+/* Focus ring around the CONTENT block: an outline on the button itself would
+   trace the un-clipped full-band rectangle and cross the neighbouring panel. */
+.hp-fork-panel:focus-visible {
+  outline: none;
+}
+
+.hp-fork-panel:focus-visible .hp-fork-body {
+  outline: 2px solid currentColor;
+  outline-offset: 10px;
+}
+
 .hp-search-row input:focus-visible {
   outline: 2px solid var(--red);
   outline-offset: 2px;
@@ -167,12 +276,13 @@
 
 .hp-search-row {
   min-height: 66px;
-  margin-top: 12px;
+  margin-top: 10px;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   border: 1px solid var(--line);
   background: var(--card);
+  box-shadow: 0 1px 2px rgba(23, 19, 15, 0.06);
 }
 
 .hp-search-icon {
@@ -233,6 +343,19 @@
   }
 }
 
+@media (max-width: 900px) and (min-width: 651px) {
+  .hp-fork-body {
+    width: 44%;
+  }
+  .hp-fork-name {
+    font-size: 20px;
+  }
+  .hp-fork-meta {
+    font-size: 11.5px;
+    gap: 6px;
+  }
+}
+
 @media (max-width: 650px) {
   .hp-hero {
     min-height: max(690px, calc(100svh - 216px));
@@ -248,7 +371,7 @@
     padding: 44px 0 30px;
   }
   .hp-thesis h1 {
-    font-size: clamp(41px, 12.4vw, 54px);
+    font-size: clamp(38px, 11.5vw, 50px);
     line-height: 0.99;
   }
   .hp-kicker {
@@ -256,27 +379,54 @@
     line-height: 1.4;
   }
   .hp-finder {
-    margin-top: 28px;
-    padding: 14px;
+    margin-top: 26px;
   }
-  .hp-method-heading {
-    margin-bottom: 8px;
-  }
-  .hp-methods {
-    gap: 3px;
-    padding: 3px;
-  }
-  .hp-method {
-    min-height: 61px;
-    padding: 9px 8px;
+  /* The fork stacks: two full-width panels with 3px of panorama as the divider.
+     The diagonal seam is a desktop luxury — at phone width it clips words. */
+  .hp-fork {
+    height: auto;
+    display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
   }
-  .hp-method > span {
-    font-size: 18px;
+  .hp-fork-panel {
+    position: relative;
+    inset: auto;
+    clip-path: none !important;
+    min-height: 92px;
+    padding: 14px 16px;
   }
-  .hp-method small {
-    font-size: 10px;
+  .hp-fork-body {
+    position: static;
+    transform: none;
+    width: 100%;
+    gap: 6px;
+  }
+  /* Both sides read left-to-right when stacked — mirroring needs the seam. */
+  .hp-fork-auction .hp-fork-body {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .hp-fork-auction .hp-fork-meta {
+    justify-content: flex-start;
+  }
+  /* Icon leads on both stacked panels — a trailing gavel reads as an afterthought. */
+  .hp-fork-auction .hp-fork-name {
+    flex-direction: row-reverse;
+  }
+  .hp-fork-name {
+    font-size: 19px;
+  }
+  .hp-fork-what {
+    font-size: 12px;
+  }
+  .hp-fork-meta {
+    font-size: 11.5px;
+    gap: 6px;
+    white-space: normal;
+  }
+  .hp-fork-panel:focus-visible .hp-fork-body {
+    outline-offset: 4px;
   }
   .hp-search-row {
     min-height: 58px;
@@ -300,12 +450,12 @@
 
 @media (max-width: 390px) {
   .hp-thesis h1 {
-    font-size: 40px;
+    font-size: 38px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hp-method,
+  .hp-fork-panel,
   .hp-search-button {
     transition: none;
   }

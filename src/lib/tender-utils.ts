@@ -128,6 +128,19 @@ export function isFinalDay(closingDate: string, now: number = Date.now()) {
   return remainingMs(closingDate, now) < MS_DAY;
 }
 
+/* ── THE TENDER CYCLES, derived from the listings ──────────────────────────────
+   Batches are closing dates that exist in the data — no single national deadline
+   and no hand-typed second copy of a date. `/tender` (the filter dropdown and its
+   hero) and the homepage fork both read THIS list, so the two pages can never
+   disagree about when the next cycle closes or how many properties are in it. */
+export function batchesOf(tenders: readonly Tender[]) {
+  const counts = new Map<string, number>();
+  tenders.forEach((t) => counts.set(t.closingDate, (counts.get(t.closingDate) || 0) + 1));
+  return Array.from(counts.entries())
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
 /* ── OWNER AUCTION is an EVENT, not a deadline ─────────────────────────────────
    `closeAtMs()` above hardcodes `23:59:59+08:00` because an e-tender runs to the END
    of its closing date — founder-confirmed, no intra-day cutoff. An auction is the

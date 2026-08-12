@@ -149,12 +149,18 @@ including today, and the final day reads "1 day left" rather than "0".
 
 ## 4. Established patterns — reuse before inventing
 
-- **Homepage gateway**: one seamless Malaysian property panorama as a high-priority `<img>`, under
-  only a flat 10% exposure wash (12% mobile). A 14px uppercase platform eyebrow and centred thesis
-  lead to one 960px cream finder: paired E-Tender / Owner Auction method buttons, then one
-  property/area/state input and one red route-aware search action. No homepage countdowns,
-  statistics or large product cards — those turn the platform entrance into a campaign dashboard
-  and hide the market image.
+- **Homepage gateway** (v2, 12 Aug — supersedes the cream-finder v1): one seamless Malaysian
+  property panorama as a high-priority `<img>`, under only a flat 10% exposure wash (12% mobile).
+  A centred thesis leads to **the fork**: the two buying routes as full-width translucent washes —
+  E-Tender in burgundy glass, Owner Auction in ink glass — split by the brand's "/" seam with the
+  bare panorama showing through the 1% gap. The seam **leans ~10% toward the selected route**
+  (clip-path transition, killed under reduced-motion); the quiet side narrows to 34% content width
+  at ≥651px so no glyph crosses the diagonal. Below, one property/area/state input and the zone's
+  single red route-aware search action. Each panel carries ONE static courtesy meta line (next
+  close / auction day, derived via `batchesOf()` and `OWNER_AUCTION` — never hand-typed): still
+  **no ticking countdowns, statistics rows or opaque slabs** — the ticking heroes live on the
+  product pages, and the market image stays dominant. ≤650px the fork stacks with 3px of panorama
+  as the divider and icons leading both names.
 - **Label/value list** (`.pd-row`): label column `10.5rem`, `white-space: nowrap`, value 14.5/600,
   `min-height: 46px`, hairline under each row. Two-up via `grid-auto-flow: column`.
 - **Icon band** (`.band .stat`): scannable summary, always **derived** from the same source as the
