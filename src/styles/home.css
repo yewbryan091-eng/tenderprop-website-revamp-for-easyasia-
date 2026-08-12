@@ -1,7 +1,7 @@
 /* ── HOMEPAGE ─────────────────────────────────────────────────────────────────
-   Owned by `/` alone. The hero is the platform gateway: one Malaysian property
-   panorama, then two equal buying-method destinations. It deliberately does not reuse
-   the product-page diagonal — the homepage must introduce BOTH products at once.
+   Owned by `/` alone. The hero is the platform entrance: one Malaysian property
+   panorama and one shared thesis. It deliberately does not reuse the product-page
+   diagonal.
    ──────────────────────────────────────────────────────────────────────────── */
 
 .home {
@@ -91,8 +91,7 @@
   padding: clamp(48px, 6vh, 76px) 0 clamp(26px, 4vh, 42px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(42px, 7vh, 76px);
+  justify-content: center;
 }
 
 /* ── Platform thesis ───────────────────────────────────────────────────────── */
@@ -135,233 +134,21 @@
   text-wrap: balance;
 }
 
-/* ── Two product destinations ──────────────────────────────────────────────── */
-.hp-products {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border: 1px solid rgba(255, 255, 255, 0.34);
-  background: rgba(255, 255, 255, 0.28);
-}
-
-.hp-product {
-  --product-accent: rgba(255, 255, 255, 0.72);
-  min-width: 0;
-  min-height: 278px;
-  padding: clamp(26px, 2.6vw, 36px);
-  border-top: 3px solid var(--product-accent);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "copy deadline"
-    "date action";
-  align-items: end;
-  gap: 22px clamp(22px, 2.8vw, 42px);
-}
-
-.hp-product-tender {
-  --product-accent: #ff8578;
-  background: rgba(23, 19, 15, 0.9);
-}
-.hp-product-auction {
-  --product-accent: #d8bd82;
-  background: rgba(23, 19, 15, 0.9);
-}
-
-.hp-product-copy {
-  grid-area: copy;
-  min-width: 0;
-}
-.hp-product-kicker {
-  margin: 0 0 8px;
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--product-accent);
-}
-
-.hp-product h2 {
-  margin: 0;
-  font-family: "Newsreader", Georgia, serif;
-  font-optical-sizing: auto;
-  font-size: clamp(30px, 2.6vw, 40px);
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.018em;
-}
-
-.hp-product-copy > p:last-child {
-  margin: 10px 0 0;
-  max-width: 320px;
-  font-size: 13.5px;
-  line-height: 1.48;
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.hp-deadline {
-  grid-area: deadline;
-  min-width: 168px;
-}
-.hp-deadline-label {
-  margin: 0 0 7px;
-  font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.74);
-}
-
-.hp-deadline-value {
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
-
-.hp-deadline-value > span {
-  font-family: "Newsreader", Georgia, serif;
-  font-optical-sizing: auto;
-  font-size: clamp(48px, 4.25vw, 66px);
-  font-weight: 600;
-  line-height: 0.82;
-  letter-spacing: -0.025em;
-  font-variant-numeric: tabular-nums;
-}
-
-.hp-deadline-value small {
-  max-width: 54px;
-  font-size: 10px;
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--product-accent);
-}
-
-.hp-mini-clock {
-  margin: 14px 0 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  gap: 18px;
-}
-
-.hp-mini-clock li {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.hp-mini-clock b {
-  font-family: "Newsreader", Georgia, serif;
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.hp-mini-clock span {
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.48);
-}
-
-.hp-event-date {
-  grid-area: date;
-  margin: 0;
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.52);
-}
-
-.hp-event-date time {
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
-  color: rgba(255, 255, 255, 0.9);
-}
-.hp-event-date sup {
-  font-size: 0.62em;
-  vertical-align: super;
-}
-
-.hp-product-link {
-  grid-area: action;
-  min-height: 46px;
-  padding: 12px 15px;
-  border: 1px solid var(--product-accent);
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  color: #fff;
-  font-size: 13.5px;
-  font-weight: 700;
-  line-height: 1.2;
-  text-decoration: none;
-  transition:
-    background-color 0.16s ease,
-    border-color 0.16s ease;
-}
-
-.hp-product-link svg {
-  width: 19px;
-  height: 19px;
-  flex: 0 0 auto;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.hp-product-link:hover {
-  border-color: #fff;
-  background: rgba(255, 255, 255, 0.11);
-}
-
-.hp-product-link:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
-}
-
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 1120px) {
   .hp-hero-inner {
     width: min(100% - 44px, 980px);
   }
-  .hp-product {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "copy"
-      "deadline"
-      "date"
-      "action";
-    align-content: end;
-    gap: 19px;
-  }
-  .hp-deadline {
-    min-width: 0;
-  }
-  .hp-event-date {
-    margin-top: 2px;
-  }
 }
 
 @media (max-width: 760px) {
   .hp-hero {
-    min-height: 0;
+    min-height: clamp(560px, calc(100svh - 216px), 680px);
   }
   .hp-hero-inner {
     width: min(100% - 36px, 560px);
-    min-height: 0;
-    padding: 48px 0 22px;
-    gap: 42px;
+    min-height: inherit;
+    padding: 48px 0;
   }
 
   /* Art-directed mobile crop: three narrow strips would become noise. The dominant
@@ -385,31 +172,6 @@
   .hp-thesis > p:last-child {
     font-size: 15px;
   }
-  .hp-products {
-    grid-template-columns: 1fr;
-  }
-  .hp-product {
-    min-height: 0;
-    padding: 26px 24px;
-    grid-template-columns: minmax(0, 1fr) 132px;
-    grid-template-areas:
-      "copy deadline"
-      "date date"
-      "action action";
-    gap: 22px 18px;
-  }
-  .hp-product + .hp-product {
-    border-top-color: var(--product-accent);
-  }
-  .hp-product h2 {
-    font-size: 31px;
-  }
-  .hp-deadline-value > span {
-    font-size: 48px;
-  }
-  .hp-mini-clock {
-    gap: 12px;
-  }
 }
 
 @media (max-width: 430px) {
@@ -424,40 +186,5 @@
   }
   .hp-thesis h1 {
     font-size: 40px;
-  }
-  .hp-product {
-    grid-template-columns: minmax(0, 1fr) 116px;
-    padding: 24px 20px;
-    gap: 20px 14px;
-  }
-  .hp-product-copy > p:last-child {
-    font-size: 12.75px;
-  }
-  .hp-deadline-label {
-    font-size: 11.5px;
-  }
-  .hp-deadline-value {
-    gap: 7px;
-  }
-  .hp-deadline-value > span {
-    font-size: 43px;
-  }
-  .hp-deadline-value small {
-    font-size: 8.5px;
-  }
-  .hp-mini-clock {
-    gap: 9px;
-  }
-  .hp-mini-clock b {
-    font-size: 15px;
-  }
-  .hp-product-link {
-    width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hp-product-link {
-    transition: none;
   }
 }
