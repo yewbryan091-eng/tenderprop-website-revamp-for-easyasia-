@@ -73,7 +73,7 @@
 
 .hp-kicker {
   margin: 0 0 16px;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -88,15 +88,6 @@
   font-weight: 600;
   line-height: 0.97;
   letter-spacing: -0.036em;
-  text-wrap: balance;
-}
-
-.hp-thesis > p:last-child {
-  width: min(650px, 100%);
-  margin: 17px auto 0;
-  font-size: clamp(15px, 1.25vw, 18px);
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.88);
   text-wrap: balance;
 }
 
@@ -260,10 +251,6 @@
     font-size: clamp(41px, 12.4vw, 54px);
     line-height: 0.99;
   }
-  .hp-thesis > p:last-child {
-    margin-top: 14px;
-    font-size: 15px;
-  }
   .hp-kicker {
     margin-bottom: 13px;
     line-height: 1.4;
@@ -314,9 +301,6 @@
 @media (max-width: 390px) {
   .hp-thesis h1 {
     font-size: 40px;
-  }
-  .hp-thesis > p:last-child {
-    font-size: 14px;
   }
 }
 

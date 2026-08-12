@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | Codex | 12 Aug | Increasing the platform eyebrow, revising the hero thesis to include selling, and removing the supporting sentence; desktop/mobile render QA in progress. |
+| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | *(free)* | — | First fold completed and refined 12 Aug: seamless panorama, 14px platform eyebrow, buy/sell thesis, buying-method selector and functional property search. |
 | Owner Auction `/owner-auction` | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing Owner Auction page architecture/data unchanged. |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing listings UI unchanged. |
@@ -32,7 +32,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 | Date | Decision | Why | Decided by |
 |---|---|---|---|
-| 12 Aug | **Homepage `/` is a full-background property-finding gateway, not a diagonal campaign hero or countdown dashboard.** One seamless generated Malaysian panorama sits behind the centred thesis **“Find a property. Choose how you buy it.”** A compact cream finder asks for E-Tender vs Owner Auction, then a property/area/state query; it passes `q` into the selected listing route. No homepage countdowns or large product cards. The image stays near-natural under one flat 10% exposure wash (12% mobile) | Bryan's father rejected the diagonal; Bryan rejected the heavy dual-product panel and dark background, then asked for a complete first fold using critical judgment. A single coherent camera scene solved the stitched-image problem. Three rendered interface treatments showed that the compact light finder makes the method choice clearest while preserving the panorama; independent criticism removed the redundant active-method instruction | Bryan (from his father) + Codex |
+| 12 Aug | **Homepage `/` is a full-background property-finding gateway, not a diagonal campaign hero or countdown dashboard.** One seamless generated Malaysian panorama sits behind the centred thesis **“Find a property. Choose how you buy and sell it.”** A compact cream finder asks for E-Tender vs Owner Auction, then a property/area/state query; it passes `q` into the selected listing route. No homepage countdowns or large product cards. The image stays near-natural under one flat 10% exposure wash (12% mobile) | Bryan's father rejected the diagonal; Bryan rejected the heavy dual-product panel and dark background, then asked for a complete first fold using critical judgment. A single coherent camera scene solved the stitched-image problem. Three rendered interface treatments showed that the compact light finder makes the method choice clearest while preserving the panorama; independent criticism removed the redundant active-method instruction. Bryan then explicitly expanded the thesis to include selling while keeping the first-fold finder buyer-focused | Bryan (from his father) + Codex |
 | 1 Aug | **The reserve price is a GUIDE, not a floor** — buyers may offer below it | Founder: *"try to push their luck by placing an offer below the reserve price, the seller may agree or counter."* Copy saying "minimum offer considered" / "the floor" was factually wrong AND argued against the product: naming your own number **is** the e-tender | Bryan (from his father) |
 | 1 Aug | **No money moves through TenderProp.** Apply → sign-in → tender form → lead | The 3% is collected afterwards by the agent into the agency's **client account**, as BOVAEP mandates. The platform is a lead engine for a licensed agency, exactly like iNewProject | Bryan |
 | 1 Aug | **There is no registration deadline.** Deleted | An account is needed only at the moment of applying. Our "closing − 14 days" rule was invented | Bryan |
@@ -98,6 +98,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 12 Aug 2026 — Codex · Homepage hero copy refined
+
+At Bryan's direction, increased “Malaysia's E-Tender & Owner Auction platform” from 11px to 14px,
+changed the thesis to **“Find a property. Choose how you buy and sell it.”**, and removed the
+supporting “Search Malaysian properties…” sentence entirely. Rendered 12px, 13px and 14px eyebrow
+treatments; 14px is the first that reads as a confident platform statement while remaining clearly
+subordinate to the headline. It stays one line at 1440px and wraps into a balanced two lines at
+375px. The revised headline remains two lines on desktop and three on mobile; the finder ends at
+748px in the 812px mobile viewport with zero horizontal overflow.
+
+Independent criticism approved the stronger eyebrow and cleaner hierarchy, but correctly noted a
+product-flow tension: “sell” is now in the headline directly above a finder that offers two buying
+methods. Kept Bryan's exact wording rather than silently reversing it; the existing Sell navigation
+remains the seller path and the first-fold finder remains intentionally buyer-focused. Production
+build, focused lint/formatting and local console checks pass.
 
 ### 12 Aug 2026 — Codex · Homepage first fold completed
 

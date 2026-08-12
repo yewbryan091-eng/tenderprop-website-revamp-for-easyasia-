@@ -75,11 +75,7 @@ function HomePage() {
             <div className="hp-content">
               <header className="hp-thesis">
                 <p className="hp-kicker">Malaysia&rsquo;s E-Tender &amp; Owner Auction platform</p>
-                <h1 id="hp-title">Find a property. Choose how you buy it.</h1>
-                <p>
-                  Search Malaysian properties available through private E-Tender or live Owner
-                  Auction.
-                </p>
+                <h1 id="hp-title">Find a property. Choose how you buy and sell it.</h1>
               </header>
 
               <form className="hp-finder" onSubmit={handleSearch}>
