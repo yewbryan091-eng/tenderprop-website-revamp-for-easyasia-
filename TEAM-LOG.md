@@ -14,12 +14,12 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | *(free)* | — | First fold completed and refined 12 Aug: seamless panorama, 14px platform eyebrow, buy/sell thesis, buying-method selector and functional property search. |
+| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | **Claude** | 12 Aug (eve) | ⚠️ PROPOSAL, LOCAL ONLY, NOT PUSHED — commit `7b92a49` "the fork": Bryan directed a same-day rework of the first fold (via a ChatGPT card proposal + "creativity to the max"). It reads as a dual-panel with a diagonal seam and dark washes, i.e. it collides with the 12 Aug ledger row below (father rejected the diagonal; Bryan rejected the dual-panel). Surfaced to Bryan in-chat; awaiting his lock / revert. Do NOT build on this or reverse it without his word. |
 | Owner Auction `/owner-auction` | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing Owner Auction page architecture/data unchanged. |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing listings UI unchanged. |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Agent-section heading now reads “Your Property Representative”; desktop/mobile rendered verification passed 12 Aug. |
-| Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
+| Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | **Claude** | 12 Aug (eve) | Added `batchesOf()` to `tender-utils.ts` and pointed `/tender`'s local BATCHES IIFE at it (same output, one definition). Rides in local commit `7b92a49` with the fork proposal above. |
 
 Release your claim (set back to *free*) when you push your finished work.
 
