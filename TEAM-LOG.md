@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | Codex | 12 Aug | Replacing the rejected diagonal with a full-background Malaysian property triptych and two equal product destinations: E-Tender and Owner Auction. Building three image treatments, then desktop/mobile visual QA. |
+| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | *(free)* | — | Full-background 23/54/23 Malaysian property triptych shipped 12 Aug with one shared platform thesis and equal E-Tender / Owner Auction destinations. Desktop + 375px rendered QA and independent design critique passed. |
 | **Owner Auction `/owner-auction` — ACTIVE** | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | **Hero + LISTINGS DONE 7 Aug.** The page is now a full product page: grid, sort, grid/list, pagination and an "Owner Auction by State" rail, all copied from `/tender` (copied, NOT moved — `/tender` keeps its grid). Cards relabel via `PropertyCard`'s new `product` prop. ⚠️ **The records are still E-Tender's** — the words say auction, the data does not. Hero DONE: registration deadline closed (11 Dec, derived), "View Listings ↓" added, headline = "Bid on a property online in / 3 simple steps." with a **measured** 7.37em indent. Below the hero it is still the `/tender` clone searching E-Tender records — **Bryan parked the listings deliberately** 7 Aug ("chill for now, i will duplicate e-tender listings onto owner auction later"), so this is a decision, not an oversight |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | **Card rebuilt to Bryan's Buyer-POV reference 6 Aug** (`7b672de`), then 3 audit P1s fixed (`8992354`): list-mode price/title inversion, per-row CTA baselines, the period→agent seam minimum |
@@ -32,6 +32,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 | Date | Decision | Why | Decided by |
 |---|---|---|---|
+| 12 Aug | **Homepage `/` is a full-background platform gateway, not a diagonal E-Tender campaign hero.** One 23/54/23 property triptych sits behind a shared thesis and two equal-weight destinations: E-Tender and Owner Auction. At ≤760px the strongest residential image carries the stage alone | Bryan's father rejected the diagonal and asked for a full landing treatment like iNewProject. Three rendered treatments (23/54/23, equal thirds, single-image control) showed that a dominant centre makes the triptych read as one market canvas; equal thirds made the seams compete, while one image lost the breadth Bryan wanted | Bryan (from his father) + Codex |
 | 1 Aug | **The reserve price is a GUIDE, not a floor** — buyers may offer below it | Founder: *"try to push their luck by placing an offer below the reserve price, the seller may agree or counter."* Copy saying "minimum offer considered" / "the floor" was factually wrong AND argued against the product: naming your own number **is** the e-tender | Bryan (from his father) |
 | 1 Aug | **No money moves through TenderProp.** Apply → sign-in → tender form → lead | The 3% is collected afterwards by the agent into the agency's **client account**, as BOVAEP mandates. The platform is a lead engine for a licensed agency, exactly like iNewProject | Bryan |
 | 1 Aug | **There is no registration deadline.** Deleted | An account is needed only at the moment of applying. Our "closing − 14 days" rule was invented | Bryan |
@@ -97,6 +98,24 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 12 Aug 2026 — Codex · Homepage rebuilt as a full platform gateway
+
+Replaced the rejected diagonal homepage hero with one full photographic landing canvas and a
+clear product choice. The background is a clean 23/54/23 triptych: the existing KL skyline, a new
+Malaysian residential-market dusk image (Pexels 2389468, Deva Darshan) as the dominant centre, and
+the existing Owner Auction landed-home scene. Three rendered variants were compared before
+shipping this one: equal thirds made the seams compete with the headline; a single-image control
+was calmer but lost the market breadth Bryan wanted. Mobile intentionally uses only the centre
+crop so three narrow strips do not become noise.
+
+The content now starts with one platform thesis — **“Choose how you want to buy property.”** — and
+then presents E-Tender and Owner Auction as equal-weight destinations. Each explains its mechanism,
+shows the correct event countdown (offer closing vs registration closing), names the event date,
+and links into its product route. The first critic pass caught that a burgundy E-Tender slab made
+that product look preselected; both panels now share the same near-black surface and use restrained
+rose/brass accents instead. Desktop 1440×900 and mobile 375×812 have zero horizontal overflow,
+both 46px actions fit, the three desktop images load, and the production build passes.
 
 ### 12 Aug 2026 — Codex · Listing representative heading renamed
 

@@ -331,6 +331,7 @@ words where possible. Read this before designing anything new.
 
 | Verdict | The real fault | The rule it hides |
 |---|---|---|
+| *"he dont like the diagonal thing, he wants it full"* — former homepage hero | **Shape / architecture, not the angle itself.** The diagonal made one product the page and the other an afterthought; changing its slope would preserve the same mistake | When the homepage introduces two equal buying methods, use one full landing stage and place the choice in the content hierarchy. Product-page hero devices do not automatically belong on the platform entrance |
 | *"i dont like it, its ugly placement"* — full-bleed maroon band between hero and search | **Weight, not placement.** A saturated block on a flat cream page reads as an ad wherever it goes; moving it just moved the ad | On a restrained page, prominence comes from **position and whitespace**, never from saturation. A filled block is the loudest object on the page — spend that on the primary action only |
 | *"the deep/white alternating, its too deep"* | Band contrast set by taste, not by measurement | Derive the alternate band from the **luminance midpoint** of its neighbours, then check the ratio |
 | *"btw tender information background is white colour"* | A full-width white card covering 58% of a band defeats the band | Judge what a section **reads as** — area coverage, not element width. A 0.69-width card still reads as the background |

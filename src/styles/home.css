@@ -1,276 +1,463 @@
 /* ── HOMEPAGE ─────────────────────────────────────────────────────────────────
-   Owned by `/` alone. Tokens, `.wrap`, header/footer chrome, `.btn` and `.skip-link`
-   come from tender-listings.css; nothing here is shared with another route, so the
-   homepage loop never edits a file eight other pages depend on.
-
-   ITERATION 03 — NEW ARCHITECTURE from Bryan's reference, 5 Aug 2026. Full-bleed
-   diagonal, ~45 left / ~55 right. Left is the statement on paper; right is the cycle
-   over a KL image under a maroon fade. Supersedes the 55/45 card of iterations 01–02.
+   Owned by `/` alone. The hero is the platform gateway: one Malaysian property
+   panorama, then two equal buying-method destinations. It deliberately does not reuse
+   the product-page diagonal — the homepage must introduce BOTH products at once.
    ──────────────────────────────────────────────────────────────────────────── */
 
-.home { min-height: 100vh; display: flex; flex-direction: column; }
-.home main { flex: 1; }
-.home #main:focus { outline: none; }
-
-/* ── The diagonal ──────────────────────────────────────────────────────────────
-   Same technique as /tender's hero — two absolutely positioned planes, each clipped
-   to one side of a shared seam, with the split expressed as tokens so the angle is
-   ONE knob. Mirrored: /tender darkens the left, this darkens the right.
-
-   The seam crosses the top edge at 48% and the bottom edge at 40%, so the light plane
-   averages ~45% of the width and leans the way the reference does. Change the angle by
-   editing these two numbers and nothing else — every padding below is derived from them. */
-.hp-hero {
-  position: relative;
-  width: 100%;
-  background: var(--paper);
-  min-height: clamp(430px, 38vw, 580px);
-  overflow: hidden;
-  --hp-top-split: 48%;   /* diagonal crosses the TOP edge here */
-  --hp-bot-split: 40%;   /* ...and the BOTTOM edge here */
-  --hp-seam: .5%;        /* half the seam width, in section-width units */
-  /* Reproduces `.wrap`'s content edge (max-width 1180 + its own padding) so the hero's
-     left and right content edges land on the SAME x as the header, footer and every
-     section below. /tender's hero pads from the viewport instead and sits 114px outside
-     the site's column at 1440 — not repeating that here. */
-  --hp-gutter: calc(max(0px, (100% - 1180px) / 2) + clamp(18px, 4vw, 40px));
-}
-
-.hp-panel {
-  position: absolute;
-  inset: 0;
+.home {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-width: 0;
+}
+.home main {
+  flex: 1;
+}
+.home #main:focus {
+  outline: none;
 }
 
-.hp-panel-left {
-  clip-path: polygon(
-    0 0,
-    calc(var(--hp-top-split) - var(--hp-seam)) 0,
-    calc(var(--hp-bot-split) - var(--hp-seam)) 100%,
-    0 100%
-  );
-  /* Right padding follows the diagonal at its NARROWEST point (the bottom) so no line
-     of copy can ever crowd the seam, whatever the angle. */
-  padding: clamp(30px, 3.4vw, 52px) calc(100% - var(--hp-bot-split) + 2.5%) clamp(30px, 3.4vw, 52px) var(--hp-gutter);
+/* ── Full landing canvas ───────────────────────────────────────────────────── */
+.hp-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(680px, calc(100svh - 71px), 860px);
+  overflow: hidden;
+  background: #17130f;
+  color: #fff;
 }
 
-.hp-panel-right {
-  /* Burgundy base is load-bearing: the panel stays readable if the photo never loads. */
-  background-color: var(--burgundy);
-  /* ⚠️ PLACEHOLDER. Bryan is sourcing the real hero image — swap this one value. */
-  background-image: var(--hp-hero-image, url(/assets/layout/tender-information-kl.jpg));
-  background-size: cover;
-  background-position: 62% center;
-  clip-path: polygon(
-    calc(var(--hp-top-split) + var(--hp-seam)) 0,
-    100% 0,
-    100% 100%,
-    calc(var(--hp-bot-split) + var(--hp-seam)) 100%
-  );
-  /* Left padding clears the seam at its widest point (the top). */
-  padding: clamp(30px, 3.4vw, 52px) var(--hp-gutter) clamp(30px, 3.4vw, 52px) calc(var(--hp-top-split) + 3%);
-}
-
-/* THE MAROON FADE. Dense where the type sits, thinning toward the top right so the
-   skyline reads. Flat colour throughout — this is a wash, not a gloss: the brand bans
-   gradients as decoration, and the exception here is legibility over a photograph,
-   the same job /tender's paper wash does on its own panel. */
-/* ⚠️ THE STOPS ARE KEYED TO THE PANEL BOX, NOT THE VISIBLE SHAPE. `.hp-panel` is
-   `inset: 0`, so this box spans the WHOLE hero and only the clip-path makes it a
-   wedge — 0% here is the hero's LEFT edge, far outside anything you can see. The
-   first build ran dense→thin across 0–100% and put the entire dense half in the
-   clipped-away region, so the visible wedge got only the thin tail and read as a flat
-   mauve tint over a photograph. Everything before ~40% is invisible by construction:
-   the fade has to do all of its work between the seam and the right edge. */
-.hp-panel-right::before {
-  content: "";
+.hp-scenes,
+.hp-hero-wash {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    100deg,
-    var(--burgundy) 0%,
-    var(--burgundy) 55%,
-    color-mix(in srgb, var(--burgundy) 88%, transparent) 70%,
-    color-mix(in srgb, var(--burgundy) 62%, transparent) 86%,
-    color-mix(in srgb, var(--burgundy) 38%, transparent) 100%
-  );
-  pointer-events: none;
 }
 
-.hp-panel-inner { position: relative; z-index: 1; width: 100%; min-width: 0; }
-
-/* ── LEFT: the statement ───────────────────────────────────────────────────── */
-
-.hp-pill {
-  display: inline-block; margin: 0 0 20px;
-  padding: 6px 14px; border-radius: 999px;
-  background: color-mix(in srgb, var(--burgundy) 7%, transparent);
-  border: 1px solid color-mix(in srgb, var(--burgundy) 20%, transparent);
-  font-size: 10.5px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase;
-  color: var(--burgundy);
+.hp-scenes {
+  z-index: -3;
+  display: grid;
+  grid-template-columns: 23% 54% 23%;
 }
 
-/* Overrides the global `h1 { font-weight: 800 }` — Newsreader only loads 400–700 and
-   asking for 800 synthesises a muddy fake bold (DESIGN-SYSTEM §2). 600 is house weight. */
-/* Capped at 47px and measured in its OWN em, so the break lands where the reference
-   puts it — "The smarter way / to buy property." At 54px in this column it ran to
-   three lines and lost the two-beat rhythm the line is built on. `em` is safe here
-   precisely because the measure and the type are the same element and the same face;
-   `ch` would not be — it is font-relative and cannot hold two typefaces to one column. */
-.hp-panel-left h1 {
-  margin: 0 0 16px;
-  max-width: 8.2em;
-  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-weight: 600; font-size: clamp(32px, 3.4vw, 47px);
-  line-height: 1.04; letter-spacing: -.018em;
-}
-.hp-panel-left h1 em { font-style: italic; color: var(--burgundy); }
-
-.hp-lede { margin: 0; font-size: clamp(14.5px, 1.15vw, 16px); line-height: 1.6; color: var(--muted); }
-
-/* ONE mechanism per gap — a flex row/column with a single `gap` and zeroed child
-   margins. A button's inline-block leading plus a margin is how a declared 6px
-   rendered as 21px on the Apply block (AGENTS.md, spacing). */
-.hp-act {
-  margin-top: clamp(22px, 2.4vw, 28px);
-  display: flex; align-items: center; flex-wrap: wrap; gap: 10px 22px;
+.hp-scene {
+  min-width: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(0.72) contrast(1.04) brightness(0.78);
+  transform: scale(1.01);
 }
 
-/* Same KIND of element ⇒ same class. "How E-Tender works" and the seller route are
-   both ways out that are NOT the action, so they share one rule and cannot drift
-   (DESIGN-SYSTEM §5). Ink, not burgundy: the red CTA is the only accent in this zone.
-   Padding (not a min-height) buys the 44px target, and `box-decoration-break: clone`
-   keeps it whole when the seller line wraps to two lines at 375px — an absolutely
-   positioned overlay measured 44px and still failed the hit test there, because an
-   absolute child of a WRAPPED inline resolves against one fragment, not the union. */
-.hp-out {
-  color: var(--ink); font-weight: 600; font-size: 13.5px;
-  padding: 11px 0;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: color-mix(in srgb, var(--ink) 32%, transparent);
-  transition: color .15s ease, text-decoration-color .15s ease;
-}
-.hp-out:hover { color: var(--burgundy); text-decoration-color: var(--burgundy); }
-
-.hp-assure { margin: 22px 0 0; font-size: 12.5px; font-weight: 600; color: var(--ink); }
-.hp-seller { margin: 8px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
-/* Grow the seller target DOWNWARD into space nothing else uses: symmetric padding left
-   only 4px between this hit area and the CTA's, close enough for a mis-tap. */
-.hp-seller .hp-out { padding: 6px 0 16px; }
-
-/* ── RIGHT: the cycle, on maroon ───────────────────────────────────────────── */
-
-.hp-cycle-kick {
-  margin: 0 0 18px;
-  font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
-  color: color-mix(in srgb, var(--burgundy-ink) 80%, transparent);
-}
-.hp-cycle-lab { margin: 0 0 6px; font-size: 13px; color: color-mix(in srgb, var(--burgundy-ink) 78%, transparent); }
-
-.hp-cycle-count { margin: 0; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.hp-cycle-n {
-  font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
-  font-weight: 600; font-size: clamp(44px, 4.6vw, 64px); line-height: 1;
-  letter-spacing: -.02em; color: var(--burgundy-ink); font-variant-numeric: tabular-nums;
-}
-.hp-cycle-u {
-  font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  color: color-mix(in srgb, var(--burgundy-ink) 76%, transparent);
+/* Existing TenderProp KL asset: the national/urban edge of the market. */
+.hp-scene-city {
+  background-image: url("/assets/layout/kl-skyline.webp");
+  background-position: 51% center;
 }
 
-/* The H/M/S strip: the SAME deadline, demoted. Never a peer of the day count. */
-.hp-clock {
-  margin: 16px 0 0; padding: 0; list-style: none;
-  display: flex; gap: 26px;
-}
-.hp-clock li { display: flex; flex-direction: column; gap: 2px; }
-.hp-clock .v {
-  font-family: "Newsreader", Georgia, serif; font-weight: 600; font-size: 19px; line-height: 1;
-  color: var(--burgundy-ink); font-variant-numeric: tabular-nums;
-}
-.hp-clock .k {
-  font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  color: color-mix(in srgb, var(--burgundy-ink) 62%, transparent);
+/* Pexels 2389468, Deva Darshan: Malaysian living stock at dusk. This is the dominant
+   visual because it reads as PROPERTY first, not tourism or one luxury development. */
+.hp-scene-market {
+  background-image: url("/assets/layout/home-residential-dusk.jpg");
+  background-position: 50% 58%;
 }
 
-.hp-cycle-date {
-  margin: 24px 0 0; padding-top: 18px;
-  border-top: 1px solid color-mix(in srgb, var(--burgundy-ink) 24%, transparent);
-  display: flex; flex-direction: column; gap: 5px;
-  font-size: 12.5px; color: color-mix(in srgb, var(--burgundy-ink) 76%, transparent);
-}
-.hp-cycle-date b { font-size: 16px; font-weight: 600; color: var(--burgundy-ink); }
-.hp-cycle-date sup { font-size: .6em; vertical-align: super; letter-spacing: 0; }
-
-/* Secondary on a dark plane. `--red` fails AA on dark scrims (~3.4:1), so the one red
-   action stays on the paper side and this is an outline in the panel's own ink. */
-.hp-ghost {
-  align-self: flex-start;
-  margin-top: 22px;
-  display: inline-block; padding: 11px 20px; border-radius: 8px;
-  border: 1.5px solid color-mix(in srgb, var(--burgundy-ink) 42%, transparent);
-  color: var(--burgundy-ink); font-weight: 600; font-size: 14px; text-decoration: none;
-  transition: background-color .15s ease, border-color .15s ease;
-}
-.hp-ghost:hover {
-  background: color-mix(in srgb, var(--burgundy-ink) 12%, transparent);
-  border-color: var(--burgundy-ink);
+/* Existing TenderProp Owner Auction asset: a real house scale at the right edge. */
+.hp-scene-home {
+  background-image: url("/assets/layout/owner-auction-hero.jpg");
+  background-position: 52% center;
 }
 
-/* ── Focus. Not optional (DESIGN-SYSTEM §6). ──────────────────────────────── */
-.hp-panel-left a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
-.hp-panel-right a:focus-visible { outline: 2px solid var(--burgundy-ink); outline-offset: 3px; border-radius: 4px; }
-
-/* ── Primary CTA — FLAT ────────────────────────────────────────────────────────
-   The shared `.btn.red:hover` lifts 1px and casts `0 4px 12px rgba(200,40,28,.2)`,
-   against a brand rule capping shadow at `0 1px 2px rgba(23,19,15,.03)`. Overridden
-   here, not in tender-listings.css: that file dresses every button on /tender and the
-   detail page, and this loop does not touch those. `transition: all` becomes named
-   properties — `all` animates things nobody intended. */
-.home .btn { transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
-.home .btn.red:hover { background: #A81F15; transform: none; box-shadow: none; }
-.home .btn.red { font-size: 14.5px; }
-
-/* ── Responsive ────────────────────────────────────────────────────────────────
-   The diagonal collapses at 900px into a clean vertical stack — statement first, then
-   the cycle. A deadline only means something once you know what an E-Tender is. */
-@media (max-width: 900px) {
-  .hp-hero { min-height: 0; }
-  /* `relative`, NOT `static`. Both lay out identically in flow — but the maroon fade is
-     an absolutely positioned `::before`, and dropping the panel out of the positioned
-     set reparents that overlay to `.hp-hero`, which stretches the gradient across the
-     WHOLE hero. The statement panel then rendered ink-on-maroon and the burgundy
-     `buy property.` vanished into the background entirely. One keyword, two failures,
-     invisible in the CSS and obvious in the render at 390px. */
-  .hp-panel { position: relative; clip-path: none; }
-  .hp-panel-left { padding: clamp(28px, 6vw, 44px) var(--hp-gutter) clamp(30px, 6vw, 40px); }
-  .hp-panel-right { padding: clamp(30px, 6vw, 44px) var(--hp-gutter); background-position: center; }
-  .hp-panel-right::before {
-    background: linear-gradient(
-      168deg,
-      var(--burgundy) 0%,
-      var(--burgundy) 40%,
-      color-mix(in srgb, var(--burgundy) 78%, transparent) 72%,
-      color-mix(in srgb, var(--burgundy) 46%, transparent) 100%
+/* Legibility wash, not decorative gloss. Two flat brand-toned axes pull three different
+   exposures into one picture and make the lower product planes readable. */
+.hp-hero-wash {
+  z-index: -2;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(14, 11, 10, 0.34) 0%,
+      rgba(14, 11, 10, 0.28) 38%,
+      rgba(14, 11, 10, 0.78) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(87, 28, 46, 0.3) 0%,
+      rgba(23, 19, 15, 0.08) 48%,
+      rgba(23, 19, 15, 0.35) 100%
     );
-  }
-  .hp-act { gap: 8px 18px; }
 }
 
-@media (max-width: 420px) {
-  .hp-clock { gap: 18px; }
-  .hp-act .btn.red { width: 100%; }
+.hp-hero-inner {
+  width: min(1328px, calc(100% - clamp(36px, 7vw, 96px)));
+  min-height: inherit;
+  margin: 0 auto;
+  padding: clamp(48px, 6vh, 76px) 0 clamp(26px, 4vh, 42px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(42px, 7vh, 76px);
+}
+
+/* ── Platform thesis ───────────────────────────────────────────────────────── */
+.hp-thesis {
+  position: static;
+  z-index: auto;
+  align-self: center;
+  width: min(850px, 100%);
+  background: transparent;
+  border: 0;
+  text-align: center;
+}
+
+.hp-kicker {
+  margin: 0 0 18px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.hp-thesis h1 {
+  margin: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: clamp(45px, 5.1vw, 74px);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.033em;
+  text-wrap: balance;
+}
+
+.hp-thesis > p:last-child {
+  width: min(680px, 100%);
+  margin: 18px auto 0;
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.52;
+  color: rgba(255, 255, 255, 0.84);
+  text-wrap: balance;
+}
+
+/* ── Two product destinations ──────────────────────────────────────────────── */
+.hp-products {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.hp-product {
+  --product-accent: rgba(255, 255, 255, 0.72);
+  min-width: 0;
+  min-height: 278px;
+  padding: clamp(26px, 2.6vw, 36px);
+  border-top: 3px solid var(--product-accent);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "copy deadline"
+    "date action";
+  align-items: end;
+  gap: 22px clamp(22px, 2.8vw, 42px);
+}
+
+.hp-product-tender {
+  --product-accent: #ff8578;
+  background: rgba(23, 19, 15, 0.9);
+}
+.hp-product-auction {
+  --product-accent: #d8bd82;
+  background: rgba(23, 19, 15, 0.9);
+}
+
+.hp-product-copy {
+  grid-area: copy;
+  min-width: 0;
+}
+.hp-product-kicker {
+  margin: 0 0 8px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--product-accent);
+}
+
+.hp-product h2 {
+  margin: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: clamp(30px, 2.6vw, 40px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.018em;
+}
+
+.hp-product-copy > p:last-child {
+  margin: 10px 0 0;
+  max-width: 320px;
+  font-size: 13.5px;
+  line-height: 1.48;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.hp-deadline {
+  grid-area: deadline;
+  min-width: 168px;
+}
+.hp-deadline-label {
+  margin: 0 0 7px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.hp-deadline-value {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.hp-deadline-value > span {
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: clamp(48px, 4.25vw, 66px);
+  font-weight: 600;
+  line-height: 0.82;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+}
+
+.hp-deadline-value small {
+  max-width: 54px;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--product-accent);
+}
+
+.hp-mini-clock {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 18px;
+}
+
+.hp-mini-clock li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.hp-mini-clock b {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.hp-mini-clock span {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.hp-event-date {
+  grid-area: date;
+  margin: 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.hp-event-date time {
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.9);
+}
+.hp-event-date sup {
+  font-size: 0.62em;
+  vertical-align: super;
+}
+
+.hp-product-link {
+  grid-area: action;
+  min-height: 46px;
+  padding: 12px 15px;
+  border: 1px solid var(--product-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.hp-product-link svg {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hp-product-link:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.hp-product-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 1120px) {
+  .hp-hero-inner {
+    width: min(100% - 44px, 980px);
+  }
+  .hp-product {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "copy"
+      "deadline"
+      "date"
+      "action";
+    align-content: end;
+    gap: 19px;
+  }
+  .hp-deadline {
+    min-width: 0;
+  }
+  .hp-event-date {
+    margin-top: 2px;
+  }
+}
+
+@media (max-width: 760px) {
+  .hp-hero {
+    min-height: 0;
+  }
+  .hp-hero-inner {
+    width: min(100% - 36px, 560px);
+    min-height: 0;
+    padding: 48px 0 22px;
+    gap: 42px;
+  }
+
+  /* Art-directed mobile crop: three narrow strips would become noise. The dominant
+     residential aerial carries the same idea by itself when the product panels stack. */
+  .hp-scenes {
+    display: block;
+  }
+  .hp-scene-city,
+  .hp-scene-home {
+    display: none;
+  }
+  .hp-scene-market {
+    width: 100%;
+    height: 100%;
+    background-position: 52% center;
+  }
+
+  .hp-thesis h1 {
+    font-size: clamp(40px, 12.2vw, 54px);
+  }
+  .hp-thesis > p:last-child {
+    font-size: 15px;
+  }
+  .hp-products {
+    grid-template-columns: 1fr;
+  }
+  .hp-product {
+    min-height: 0;
+    padding: 26px 24px;
+    grid-template-columns: minmax(0, 1fr) 132px;
+    grid-template-areas:
+      "copy deadline"
+      "date date"
+      "action action";
+    gap: 22px 18px;
+  }
+  .hp-product + .hp-product {
+    border-top-color: var(--product-accent);
+  }
+  .hp-product h2 {
+    font-size: 31px;
+  }
+  .hp-deadline-value > span {
+    font-size: 48px;
+  }
+  .hp-mini-clock {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 430px) {
+  .hp-hero-inner {
+    width: calc(100% - 28px);
+  }
+  .hp-kicker {
+    max-width: 260px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+  .hp-thesis h1 {
+    font-size: 40px;
+  }
+  .hp-product {
+    grid-template-columns: minmax(0, 1fr) 116px;
+    padding: 24px 20px;
+    gap: 20px 14px;
+  }
+  .hp-product-copy > p:last-child {
+    font-size: 12.75px;
+  }
+  .hp-deadline-label {
+    font-size: 11.5px;
+  }
+  .hp-deadline-value {
+    gap: 7px;
+  }
+  .hp-deadline-value > span {
+    font-size: 43px;
+  }
+  .hp-deadline-value small {
+    font-size: 8.5px;
+  }
+  .hp-mini-clock {
+    gap: 9px;
+  }
+  .hp-mini-clock b {
+    font-size: 15px;
+  }
+  .hp-product-link {
+    width: 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home .btn,
-  .hp-out,
-  .hp-ghost { transition: none; }
+  .hp-product-link {
+    transition: none;
+  }
 }
