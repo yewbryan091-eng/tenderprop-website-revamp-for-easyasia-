@@ -1169,7 +1169,7 @@ export function ResidensiSinaranDetail() {
         <section className="blk band-card" id="agent">
           <div className="wrap">
             <div className="blkcard">
-              <h2 className="sec-title">Listing <span>Agent</span></h2>
+              <h2 className="sec-title">Your Property <span>Representative</span></h2>
               <div className="agentcard">
                 {/* LEFT — who. Given real room: the face anchors the card and the name is set
                     at heading scale, because the single most persuasive thing here is that a

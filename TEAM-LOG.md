@@ -18,7 +18,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | **Owner Auction `/owner-auction` — ACTIVE** | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | **Hero + LISTINGS DONE 7 Aug.** The page is now a full product page: grid, sort, grid/list, pagination and an "Owner Auction by State" rail, all copied from `/tender` (copied, NOT moved — `/tender` keeps its grid). Cards relabel via `PropertyCard`'s new `product` prop. ⚠️ **The records are still E-Tender's** — the words say auction, the data does not. Hero DONE: registration deadline closed (11 Dec, derived), "View Listings ↓" added, headline = "Bid on a property online in / 3 simple steps." with a **measured** 7.37em indent. Below the hero it is still the `/tender` clone searching E-Tender records — **Bryan parked the listings deliberately** 7 Aug ("chill for now, i will duplicate e-tender listings onto owner auction later"), so this is a decision, not an oversight |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | **Card rebuilt to Bryan's Buyer-POV reference 6 Aug** (`7b672de`), then 3 audit P1s fixed (`8992354`): list-mode price/title inversion, per-row CTA baselines, the period→agent seam minimum |
-| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | Codex | 12 Aug | Updating the Residensi Sinaran agent-section heading to “Your Property Representative”; copy-only change, then desktop/mobile rendered verification. |
+| Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Agent-section heading now reads “Your Property Representative”; desktop/mobile rendered verification passed 12 Aug. |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
 Release your claim (set back to *free*) when you push your finished work.
@@ -97,6 +97,15 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 12 Aug 2026 — Codex · Listing representative heading renamed
+
+At Bryan's direction, the Residensi Sinaran E-Tender detail section heading now reads
+**“Your Property Representative”** instead of “Listing Agent”. This is copy-only: the Owner
+Auction detail page and all agent disclosure content remain unchanged. Rendered at desktop and
+375px; the heading stays on one line on desktop, wraps into two balanced lines on mobile, and the
+page has zero horizontal overflow. Independent design-critic review passed with no follow-up fix,
+and the production build passes.
 
 ### 7 Aug 2026 — Codex · Residensi Sinaran submission actions renamed
 
