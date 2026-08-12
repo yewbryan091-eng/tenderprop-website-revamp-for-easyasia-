@@ -25,6 +25,9 @@ import {
 import "@/styles/tender-listings.css";
 
 export const Route = createFileRoute("/tender/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" ? search.q.slice(0, 120) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Properties Open for E-Tender in Malaysia | TenderProp" },
@@ -168,6 +171,7 @@ function useCountdown(iso: string): Remaining | null {
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
 function TenderListings() {
+  const { q } = Route.useSearch();
   const left = useCountdown(NEXT_BATCH.date);
   /* FOUNDER GUIDANCE (Bryan's father, 30 Jul): a buyer cares how many DAYS are left, not
      a ticking clock. So days lead, and hours/minutes only appear inside the final 24 hours
@@ -206,7 +210,7 @@ function TenderListings() {
       ? `E-Tender closes in ${left.hours} hours and ${left.minutes} minutes`
       : `E-Tender closes in ${left.days} ${left.days === 1 ? "day" : "days"}`;
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(q ?? "");
   const [typeValue, setTypeValue] = useState("all");
   const [category, setCategory] = useState("all");
   const [priceMin, setPriceMin] = useState("");

@@ -149,6 +149,11 @@ including today, and the final day reads "1 day left" rather than "0".
 
 ## 4. Established patterns — reuse before inventing
 
+- **Homepage gateway**: one seamless Malaysian property panorama as a high-priority `<img>`, under
+  only a flat 10% exposure wash (12% mobile). The centred thesis leads to one 960px cream finder:
+  paired E-Tender / Owner Auction method buttons, then one property/area/state input and one red
+  route-aware search action. No homepage countdowns, statistics or large product cards — those turn
+  the platform entrance into a campaign dashboard and hide the market image.
 - **Label/value list** (`.pd-row`): label column `10.5rem`, `white-space: nowrap`, value 14.5/600,
   `min-height: 46px`, hairline under each row. Two-up via `grid-auto-flow: column`.
 - **Icon band** (`.band .stat`): scannable summary, always **derived** from the same source as the

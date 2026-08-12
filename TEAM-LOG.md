@@ -14,10 +14,10 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | Codex | 12 Aug | Rebuilding the complete first fold around one generated seamless Malaysian property panorama, a clear platform thesis and a compact buying-method search instrument. Three rendered treatments, desktop/mobile QA, then ship one. |
-| **Owner Auction `/owner-auction` — ACTIVE** | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | Codex | 12 Aug | Homepage search handoff only: accepting the homepage `q` query as initial search state. Existing Owner Auction page architecture/data remain untouched. |
+| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | *(free)* | — | First fold completed 12 Aug: one seamless Malaysian market panorama, clear platform thesis, buying-method selector and functional property search. |
+| Owner Auction `/owner-auction` | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing Owner Auction page architecture/data unchanged. |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
-| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | Codex | 12 Aug | Homepage search handoff only: accepting the homepage `q` query as initial search state. Existing listings UI stays unchanged. |
+| Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing listings UI unchanged. |
 | Property detail page — **ACTIVE PHASE, see `PLAN-residensi-sinaran.md`** | `src/components/tender/ResidensiSinaranDetail.tsx`, `tender-detail.css`, `tender-detail-behaviour.ts` | *(free)* | — | Agent-section heading now reads “Your Property Representative”; desktop/mobile rendered verification passed 12 Aug. |
 | Data + shared logic | `src/data/*`, `src/lib/tender-utils.ts`, `src/lib/images.ts` | *(free)* | — | — |
 
@@ -32,7 +32,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 | Date | Decision | Why | Decided by |
 |---|---|---|---|
-| 12 Aug | **Homepage `/` is a full-background platform gateway, not a diagonal E-Tender campaign hero.** One 23/54/23 property triptych sits behind a shared centred thesis. **Do not restore the first full-width dual countdown/product panel** — Bryan removed it after the first render. The images stay near-natural (`saturate(.94) brightness(1.04)`) under only a flat 16% ink veil; do not restore the old heavy gradient. At ≤760px the strongest residential image carries the stage alone | Bryan's father rejected the diagonal and asked for a full landing treatment like iNewProject. Three rendered image treatments showed that a dominant centre makes the triptych read as one market canvas. Bryan then removed the heavy content panel and found the inherited full-stage wash too dark; three exposure comparisons showed the natural terrain behind the thesis already supplies enough contrast without hiding the photographs | Bryan (from his father) + Codex |
+| 12 Aug | **Homepage `/` is a full-background property-finding gateway, not a diagonal campaign hero or countdown dashboard.** One seamless generated Malaysian panorama sits behind the centred thesis **“Find a property. Choose how you buy it.”** A compact cream finder asks for E-Tender vs Owner Auction, then a property/area/state query; it passes `q` into the selected listing route. No homepage countdowns or large product cards. The image stays near-natural under one flat 10% exposure wash (12% mobile) | Bryan's father rejected the diagonal; Bryan rejected the heavy dual-product panel and dark background, then asked for a complete first fold using critical judgment. A single coherent camera scene solved the stitched-image problem. Three rendered interface treatments showed that the compact light finder makes the method choice clearest while preserving the panorama; independent criticism removed the redundant active-method instruction | Bryan (from his father) + Codex |
 | 1 Aug | **The reserve price is a GUIDE, not a floor** — buyers may offer below it | Founder: *"try to push their luck by placing an offer below the reserve price, the seller may agree or counter."* Copy saying "minimum offer considered" / "the floor" was factually wrong AND argued against the product: naming your own number **is** the e-tender | Bryan (from his father) |
 | 1 Aug | **No money moves through TenderProp.** Apply → sign-in → tender form → lead | The 3% is collected afterwards by the agent into the agency's **client account**, as BOVAEP mandates. The platform is a lead engine for a licensed agency, exactly like iNewProject | Bryan |
 | 1 Aug | **There is no registration deadline.** Deleted | An account is needed only at the moment of applying. Our "closing − 14 days" rule was invented | Bryan |
@@ -98,6 +98,27 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 12 Aug 2026 — Codex · Homepage first fold completed
+
+Replaced the visible-seam triptych with one ImageGen-built Malaysian property panorama: KLCC is a
+small urban cue on the left, everyday condominium/mid-rise stock leads the centre and landed homes
+complete the right, all under one coherent blue-hour sky. The image is a 349KB JPEG rendered as a
+real high-priority `<img>` and receives only a flat 10% exposure wash (12% mobile), so the property
+market stays visible instead of becoming a dark wallpaper.
+
+Built and rendered three complete finder treatments: centred cream instrument, left-aligned dark
+instrument and low full-width dock. Shipped the cream treatment because it is the clearest reading
+order: promise → buying method → location → action, without making the form or either product the
+loudest object. Removed the two losing treatments. The independent design critic named the small
+selected-method explainer as redundant with its tab, so it was removed too.
+
+The search is functional: E-Tender is default, Owner Auction is a two-button `aria-pressed` choice,
+the action label follows the choice, and the trimmed query reaches `/tender?q=…` or
+`/owner-auction?q=…` as the destination's initial filter. Verified both flows in Chrome. Desktop
+1440×900 alignment is 960px finder / 918px inner controls with deliberate 45/10/12px vertical gaps;
+mobile 375×812 has zero horizontal overflow and keeps the primary action inside the first viewport.
+Production build and focused formatting checks pass.
 
 ### 12 Aug 2026 — Codex · Homepage triptych brightened
 

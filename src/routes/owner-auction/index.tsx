@@ -50,7 +50,12 @@ import "@/styles/tender-listings.css";
        set time. It must not survive refinement unchanged.
    The old PageShell scaffold (five dashed frames) is gone with this. */
 
-export const Route = createFileRoute("/owner-auction/")({ component: OwnerAuction });
+export const Route = createFileRoute("/owner-auction/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" ? search.q.slice(0, 120) : undefined,
+  }),
+  component: OwnerAuction,
+});
 
 /* ── THE AUCTION EVENT lives in `data/owner-auction.ts` ───────────────────────
    It used to be declared here. It moved on 7 Aug when the auction CARD started needing
@@ -169,6 +174,7 @@ const CAT_CHIP: Record<string, string> = {
 const INDEXED = TENDERS.map((x, i) => ({ ...x, _i: i })) as (Tender & { _i: number })[];
 
 function OwnerAuction() {
+  const { q } = Route.useSearch();
   const left = useCountdown(AUCTION_START_MS);
   const timerUnits = [
     { label: "d", value: left ? String(left.days) : "" },
@@ -198,7 +204,7 @@ function OwnerAuction() {
       : `Next Owner Auction in ${left.days} ${left.days === 1 ? "day" : "days"}`;
 
   /* ---- Search-band state, lifted from /tender ---- */
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(q ?? "");
   const [typeValue, setTypeValue] = useState("all");
   const [category, setCategory] = useState("all");
   const [priceMin, setPriceMin] = useState("");
