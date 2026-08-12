@@ -42,7 +42,7 @@
   min-width: 0;
   background-repeat: no-repeat;
   background-size: cover;
-  filter: saturate(0.72) contrast(1.04) brightness(0.78);
+  filter: saturate(0.94) brightness(1.04);
   transform: scale(1.01);
 }
 
@@ -65,23 +65,11 @@
   background-position: 52% center;
 }
 
-/* Legibility wash, not decorative gloss. Two flat brand-toned axes pull three different
-   exposures into one picture and make the lower product planes readable. */
+/* A light, flat veil is enough: the residential ridge already gives the white thesis a
+   dark natural ground. The earlier heavy gradient hid too much of the photographs. */
 .hp-hero-wash {
   z-index: -2;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(14, 11, 10, 0.34) 0%,
-      rgba(14, 11, 10, 0.28) 38%,
-      rgba(14, 11, 10, 0.78) 100%
-    ),
-    linear-gradient(
-      90deg,
-      rgba(87, 28, 46, 0.3) 0%,
-      rgba(23, 19, 15, 0.08) 48%,
-      rgba(23, 19, 15, 0.35) 100%
-    );
+  background: rgba(14, 11, 10, 0.16);
 }
 
 .hp-hero-inner {
