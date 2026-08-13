@@ -139,7 +139,7 @@ function HomePage() {
           <div className="hp-hero-wash" aria-hidden="true" />
 
           <div className="hp-hero-inner">
-            <p className="hp-eyebrow">Malaysia&rsquo;s E-Tender &amp; Owner Auction Platform</p>
+            <p className="hp-eyebrow">Malaysia&rsquo;s No.1 Property E-Bidding Platform</p>
             <h1 id="hp-title" className="hp-title">
               <span className="hp-title-line hp-title-primary">Find a property.</span>{" "}
               <span className="hp-title-line hp-title-secondary">
