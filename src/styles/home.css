@@ -136,7 +136,9 @@
   isolation: isolate;
   width: min(1120px, 100%);
   min-height: 340px;
-  margin-top: clamp(20px, 2.7vh, 32px);
+  /* A little more air under the thesis. The second line's 0.98 line-height sits
+     its descenders low, so the old 20px read tighter than the number suggests. */
+  margin-top: clamp(32px, 4.2vh, 48px);
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   overflow: hidden;
