@@ -1,7 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-import { HomeSearch } from "@/components/home/HomeSearch";
 import { ScrollCue } from "@/components/home/ScrollCue";
 import { TwoWays } from "@/components/home/TwoWays";
 import { SiteFooter } from "@/components/tender/SiteFooter";
@@ -19,7 +18,6 @@ import {
 import "@/styles/tender-listings.css";
 import "@/styles/home.css";
 import "@/styles/home-scrollcue.css";
-import "@/styles/home-search.css";
 import "@/styles/home-twoways.css";
 
 export const Route = createFileRoute("/")({ component: HomePage });
@@ -84,13 +82,24 @@ function useHeroCountdowns(): HeroCountdowns {
   return remaining;
 }
 
+const pad2 = (value: number | null) => (value === null ? "--" : String(value).padStart(2, "0"));
+
 function CountdownClock({ countdown }: { countdown: EventCountdown }) {
-  /* DAYS ONLY. Bryan's father, 30 Jul: what a buyer cares about is how many
-     days are left, not the timer — a seconds column beside a three-digit day
-     count "advertises that nothing is happening". Two of them side by side
-     also ticked a second out of step with each other, which reads as broken. */
+  /* DAYS LEAD, H:M:S SUPPORTS. The day count stays the anchor — Bryan's father,
+     30 Jul: what a buyer cares about is how many days are left. The clock sits
+     under it as a second tier rather than being fused into one casino-style
+     `122 : 07 : 14 : 32` run.
+
+     No `aria-live` anywhere here, deliberately: the visual clock repaints every
+     second and announcing that every second would make the page unusable with a
+     screen reader. The visual block is aria-hidden and this one static line —
+     days and hours, no seconds — carries the meaning instead. */
   const accessibleCountdown =
-    countdown.days === null ? "Countdown loading" : `${countdown.days} days left`;
+    countdown.days === null
+      ? "Countdown loading"
+      : `${countdown.days} ${countdown.days === 1 ? "day" : "days"} and ${countdown.hours} ${
+          countdown.hours === 1 ? "hour" : "hours"
+        } left`;
 
   return (
     <>
@@ -98,6 +107,22 @@ function CountdownClock({ countdown }: { countdown: EventCountdown }) {
       <div className="hp-product-clock" aria-hidden="true">
         <strong>{countdown.days ?? "\u00a0"}</strong>
         <span>{countdown.days === 1 ? "day" : "days"}</span>
+      </div>
+      <div className="hp-product-hms" aria-hidden="true">
+        <span className="hp-hms-unit">
+          <b>{pad2(countdown.hours)}</b>
+          <small>Hrs</small>
+        </span>
+        <i className="hp-hms-sep">:</i>
+        <span className="hp-hms-unit">
+          <b>{pad2(countdown.minutes)}</b>
+          <small>Min</small>
+        </span>
+        <i className="hp-hms-sep">:</i>
+        <span className="hp-hms-unit">
+          <b>{pad2(countdown.seconds)}</b>
+          <small>Sec</small>
+        </span>
       </div>
     </>
   );
@@ -153,23 +178,28 @@ function HomePage() {
 
               <article className="hp-product hp-product-tender">
                 <h2 className="hp-product-name">E-Tender</h2>
-                <p className="hp-product-what">Sealed offers &mdash; you name the price</p>
                 <div className="hp-product-event">
                   <p className="hp-product-status">E-Tender closes in</p>
                   <CountdownClock countdown={remaining.tender} />
+                  {/* Date only — an E-Tender runs to the end of its closing day,
+                      so the 11:59 PM time adds nothing here. */}
                   <p className="hp-product-date">
                     <EventDate date={TENDER_DATE} dateTime={NEXT_TENDER_DATE} />
-                    <span>11:59 PM MYT</span>
                   </p>
                 </div>
+                <p className="hp-product-note">Submit your offer before the E-Tender closes.</p>
+                <Link className="hp-product-link" to="/tender" search={{ q: undefined }}>
+                  <span>View E-Tender Listings</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </Link>
               </article>
 
               <article className="hp-product hp-product-auction">
                 <h2 className="hp-product-name">Owner Auction</h2>
-                <p className="hp-product-what">Live bidding on auction day</p>
                 <div className="hp-product-event">
                   <p className="hp-product-status">Next Owner Auction in</p>
                   <CountdownClock countdown={remaining.auction} />
+                  {/* The auction STARTS at a stated time, so this one keeps it. */}
                   <p className="hp-product-date">
                     <EventDate
                       date={AUCTION_DATE}
@@ -180,20 +210,21 @@ function HomePage() {
                     </span>
                   </p>
                 </div>
+                <p className="hp-product-note">
+                  Register before the auction and be ready to bid live.
+                </p>
+                <Link className="hp-product-link" to="/owner-auction" search={{ q: undefined }}>
+                  <span>View Owner Auction Listings</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </Link>
               </article>
             </div>
 
-            {/* In the hero's own flow, directly above the search card. It used
-                to be absolutely positioned against the hero, which is exactly
-                how it ended up sitting ON the panel at mobile widths. */}
+            {/* Last item in the hero's own flow. Secondary to the two listing
+                CTAs above it — the education path, not an action. */}
             <ScrollCue />
           </div>
         </section>
-
-        {/* Straddles the seam — pulled up over the hero by `--hs-overlap`. With
-            the scroll cue gone this card IS the signal that the page continues,
-            and the only action at the fold. */}
-        <HomeSearch />
 
         <TwoWays />
       </main>

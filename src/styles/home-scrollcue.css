@@ -7,9 +7,12 @@
    backfired: the hero is content-sized, so the cue and the panel were both
    measured from the hero's bottom edge and slid over each other — on mobile the
    cue rendered ON TOP of the Owner Auction half, 95px deep. In flow it simply
-   cannot overlap its siblings. The hero pays for this by reserving
-   `--hs-overlap` worth of bottom padding, so the search card that pulls itself
-   up over the hero still lands clear BELOW the cue.
+   cannot overlap its siblings.
+
+   It no longer references `--hs-overlap`: the homepage search card it used to
+   dodge has been removed, and that variable is defined in `home-search.css`,
+   which the homepage no longer imports. A `var()` fallback pointing at a card
+   that does not exist would just be phantom space.
    ──────────────────────────────────────────────────────────────────────────── */
 
 .hp-cue {
