@@ -499,13 +499,13 @@
   width: min(272px, 100%);
   margin-bottom: 0;
   padding: 0 16px;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  border: 0;
+  border-radius: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  font: 750 13.5px/1 var(--sans);
+  gap: 16px;
+  font: 750 14px/1 var(--sans);
   text-decoration: none;
   transition:
     background-color 160ms ease,
@@ -513,29 +513,26 @@
     color 160ms ease;
 }
 
-/* E-Tender — warm cream fill, burgundy text. */
+/* BOTH buttons are SOLID fills with no outline — per Bryan's reference. The
+   Owner Auction one was previously a brass outline on transparent graphite;
+   it is now filled brass with dark text, so the two read as one pair of
+   equal-weight actions that differ only in colour. */
 .hp-product-tender .hp-product-link {
-  border-color: rgba(255, 248, 239, 0.9);
-  background: rgba(250, 245, 240, 0.92);
+  background: #faf5f0;
   color: #571c2e;
 }
 
 .hp-product-tender .hp-product-link:hover {
-  border-color: #fff;
-  background: #fff;
+  background: #fffdfa;
 }
 
-/* Owner Auction — transparent over graphite, brass border and text. */
 .hp-product-auction .hp-product-link {
-  border-color: rgba(214, 173, 97, 0.75);
-  background: transparent;
-  color: #e6c98d;
+  background: #d6ad61;
+  color: #1e1915;
 }
 
 .hp-product-auction .hp-product-link:hover {
-  border-color: #d6ad61;
-  background: #d6ad61;
-  color: #1e1915;
+  background: #e3bd77;
 }
 
 .hp-product-link:focus-visible {
