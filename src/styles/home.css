@@ -69,6 +69,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* The hero is capped at 760px, so on any window taller than ~830px the stack
+     is SHORTER than the hero and the leftover height has to go somewhere. Packed
+     from the top (the flex default) it all stranded at the bottom: measured 44px
+     of dead air under the scroll cue at 1440x900, against 31px above the
+     eyebrow. Centring splits it, so the fold reads optically centred at every
+     height instead of riding high with a gap beneath it. This is NOT the
+     panel-to-cue gap, which is set deliberately on `.hp-cue`. */
+  justify-content: center;
 }
 
 .hp-eyebrow {
