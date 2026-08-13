@@ -62,7 +62,12 @@
   width: min(1240px, calc(100% - clamp(40px, 7vw, 104px)));
   min-height: inherit;
   margin: 0 auto;
-  padding: clamp(40px, 5vh, 60px) 0 clamp(34px, 4.4vh, 48px);
+  /* The bottom padding RESERVES the strip the search card pulls itself up into.
+     The card's negative margin is `--hs-overlap`, so anything the hero ends with
+     — now the scroll cue — must have at least that much room beneath it or the
+     card lands on top of it. Keyed to the same variable, so moving the card
+     moves this too. */
+  padding: clamp(40px, 5vh, 60px) 0 calc(var(--hs-overlap, 76px) + clamp(14px, 2vh, 24px));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -382,7 +387,7 @@
   }
   .hp-hero-inner {
     width: calc(100% - 28px);
-    padding: 46px 0 38px;
+    padding: 46px 0 calc(var(--hs-overlap, 44px) + 14px);
   }
   .hp-eyebrow {
     margin-bottom: 14px;

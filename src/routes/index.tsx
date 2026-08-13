@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import { HomeSearch } from "@/components/home/HomeSearch";
+import { ScrollCue } from "@/components/home/ScrollCue";
 import { TwoWays } from "@/components/home/TwoWays";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
@@ -17,6 +18,7 @@ import {
 } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 import "@/styles/home.css";
+import "@/styles/home-scrollcue.css";
 import "@/styles/home-search.css";
 import "@/styles/home-twoways.css";
 
@@ -180,6 +182,11 @@ function HomePage() {
                 </div>
               </article>
             </div>
+
+            {/* In the hero's own flow, directly above the search card. It used
+                to be absolutely positioned against the hero, which is exactly
+                how it ended up sitting ON the panel at mobile widths. */}
+            <ScrollCue />
           </div>
         </section>
 
