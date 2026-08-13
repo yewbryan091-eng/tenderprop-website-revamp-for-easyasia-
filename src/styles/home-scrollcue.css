@@ -18,7 +18,9 @@
 .hp-cue {
   position: relative;
   z-index: 2;
-  margin: clamp(16px, 2.4vh, 26px) auto 0;
+  /* Tightened ~13px on Bryan's read: too much dead air between the panel's
+     lower edge and the cue. */
+  margin: clamp(6px, 1.1vh, 13px) auto 0;
   display: flex;
   flex-direction: column;
   align-items: center;
