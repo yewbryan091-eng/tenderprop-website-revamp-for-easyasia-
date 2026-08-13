@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { ScrollCue } from "@/components/home/ScrollCue";
 import { TwoWays } from "@/components/home/TwoWays";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
 import "@/styles/tender-listings.css";
 import "@/styles/home.css";
+import "@/styles/home-scrollcue.css";
 import "@/styles/home-twoways.css";
 
 export const Route = createFileRoute("/")({ component: HomePage });
@@ -36,7 +38,13 @@ function HomePage() {
               </span>
             </h1>
           </div>
+
+          {/* Foot of the fold — sits under the product panel once it lands, and
+              is positioned against the hero so it stays out of its layout. */}
+          <ScrollCue />
         </section>
+
+        <TwoWays />
       </main>
       <SiteFooter />
     </div>

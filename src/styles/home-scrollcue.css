@@ -1,0 +1,107 @@
+/* ── THE SCROLL CUE ───────────────────────────────────────────────────────────
+   Lives in its own file, and positions itself absolutely against `.hp-hero`, so
+   the fold's own rules are untouched — the hero and this can be edited by two
+   different people without meeting in a merge.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.hp-cue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(20px, 3.4vh, 38px);
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 14px 8px;
+  text-decoration: none;
+  color: var(--hp-title-white, #fff8ef);
+  opacity: 0.72;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.hp-cue:hover,
+.hp-cue:focus-visible {
+  opacity: 1;
+}
+
+.hp-cue:focus-visible {
+  outline: 2px solid var(--hp-title-white, #fff8ef);
+  outline-offset: 2px;
+}
+
+.hp-cue-mouse {
+  width: 25px;
+  height: 39px;
+  border: 1.5px solid currentColor;
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  padding-top: 7px;
+}
+
+.hp-cue-wheel {
+  width: 3px;
+  height: 7px;
+  border-radius: 2px;
+  background: currentColor;
+  animation: hp-cue-wheel 2.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* The wheel falls, fades, and returns — the gesture the reader should make. */
+@keyframes hp-cue-wheel {
+  0%,
+  12% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(13px);
+    opacity: 0;
+  }
+  56%,
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  88%,
+  100% {
+    opacity: 1;
+  }
+}
+
+.hp-cue-label {
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  /* The hero photo darkens toward the foreground but is not uniform; a small
+     shadow keeps this legible without the heavy treatment the headline forbids. */
+  text-shadow: 0 1px 10px rgba(16, 11, 9, 0.45);
+}
+
+@media (max-width: 650px) {
+  .hp-cue {
+    bottom: 14px;
+    gap: 8px;
+  }
+  .hp-cue-mouse {
+    width: 21px;
+    height: 33px;
+    padding-top: 6px;
+  }
+  .hp-cue-label {
+    font-size: 12.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hp-cue-wheel {
+    animation: none;
+  }
+  .hp-cue {
+    transition: none;
+  }
+}

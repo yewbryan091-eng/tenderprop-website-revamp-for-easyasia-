@@ -119,6 +119,14 @@ const LANDMASSES = [PENINSULAR, PENANG, SARAWAK, SABAH];
    stretches, so change both. */
 export const MAP_BOUNDS = { west: 99.2, east: 120.0, south: 0.15, north: 8.35 };
 
+/* The frame's width-to-height ratio. The SVG viewBox must be this many units
+   wide for every 100 tall, or the horizontal and vertical scales differ and each
+   dot is drawn as a DASH — which is exactly what shipped: at a viewBox of
+   100×100 in a 2.54:1 box every circle was stretched 2.54× and the country read
+   as hatching. Positions were right; the glyphs were not. */
+export const MAP_ASPECT =
+  (MAP_BOUNDS.east - MAP_BOUNDS.west) / (MAP_BOUNDS.north - MAP_BOUNDS.south);
+
 export function projectMap([lng, lat]: LngLat) {
   const { west, east, south, north } = MAP_BOUNDS;
   return {

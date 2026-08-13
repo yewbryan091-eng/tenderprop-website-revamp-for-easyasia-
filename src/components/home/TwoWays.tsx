@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 
-import { CITIES, malaysiaDots, projectMap } from "@/data/malaysia";
+import { CITIES, MAP_ASPECT, malaysiaDots, projectMap } from "@/data/malaysia";
 
 /* ── SECTION 2 — TWO WAYS TO BUY, ANYWHERE IN MALAYSIA ────────────────────────
    A SHOWCASE, not a tool. Bryan, 13 Aug: this section is cinematic only — it
@@ -127,7 +127,7 @@ export function TwoWays() {
   }, []);
 
   return (
-    <section className="tw" ref={ref} aria-labelledby="tw-title">
+    <section className="tw" id="how-it-works" ref={ref} aria-labelledby="tw-title">
       <div className="tw-inner">
         <div className="tw-copy">
           <p className="tw-kicker">Dua cara &middot; two ways to buy</p>
@@ -174,19 +174,23 @@ export function TwoWays() {
                 the country's true proportions (20.8° by 8.2°, matching MAP_BOUNDS),
                 so stretching to fit distorts nothing. If either is ever changed
                 alone, Malaysia stretches. */}
-            <svg className="tw-map" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <svg
+              className="tw-map"
+              viewBox={`0 0 ${100 * MAP_ASPECT} 100`}
+              preserveAspectRatio="none"
+            >
               <g className="tw-land">
                 {DOTS.map((d, i) => (
-                  <circle key={i} cx={d.x} cy={d.y} r="0.55" />
+                  <circle key={i} cx={d.x * MAP_ASPECT} cy={d.y} r="0.62" />
                 ))}
               </g>
               {/* Leader lines run from each marker out to its card's edge. */}
               <g className="tw-leaders">
                 <path
-                  d={`M${TENDER_AT.x} ${TENDER_AT.y} L ${TENDER_CARD.lead.x} ${TENDER_CARD.lead.y}`}
+                  d={`M${TENDER_AT.x * MAP_ASPECT} ${TENDER_AT.y} L ${TENDER_CARD.lead.x * MAP_ASPECT} ${TENDER_CARD.lead.y}`}
                 />
                 <path
-                  d={`M${AUCTION_AT.x} ${AUCTION_AT.y} L ${AUCTION_CARD.lead.x} ${AUCTION_CARD.lead.y}`}
+                  d={`M${AUCTION_AT.x * MAP_ASPECT} ${AUCTION_AT.y} L ${AUCTION_CARD.lead.x * MAP_ASPECT} ${AUCTION_CARD.lead.y}`}
                 />
               </g>
             </svg>
