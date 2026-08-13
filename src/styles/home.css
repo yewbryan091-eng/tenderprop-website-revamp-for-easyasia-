@@ -426,14 +426,12 @@
 }
 
 /* The event date, promoted from metadata to the editorial line it deserves.
-   `min-height` reserves the Owner Auction time slot on BOTH sides, so the two
-   halves' supporting sentences and CTAs land on the same line even though only
-   one of them prints a time. Without it the E-Tender column rode ~16px higher
-   than its twin. */
+   `min-height` reserves the Owner Auction time slot on BOTH sides so the two
+   halves' sentences and CTAs land on the same line even though only one prints
+   a time — without it the E-Tender column rode ~16px higher than its twin.
+   The reserve is one date line + the 12.5px time line, measured; it was 3.1em
+   at one point, which left ~36px of dead air under the E-Tender date. */
 .hp-product-date {
-  /* Exactly one date line plus the Owner Auction time line — measured, not
-     guessed: 1.1em of date + 2px gap + the 12.5px time line. 3.1em left ~36px
-     of dead air under the E-Tender date and pushed the cue past the fold. */
   min-height: 1.75em;
   margin: 10px 0 0;
   display: grid;
@@ -487,6 +485,11 @@
    "Browse" or "Explore". */
 .hp-product-link {
   min-height: 48px;
+  /* A DELIBERATE gap, not `margin-top: auto`. Auto distributed whatever space
+     was left over, and once the panel's content grew to fill the box exactly
+     there was none — so the button ended up flush against the supporting
+     sentence (measured 0px between the boxes) while a void sat above it. */
+  margin-top: 18px;
   /* ONE fixed width for both, not padding-sized: "View Owner Auction Listings"
      is four characters longer than "View E-Tender Listings", so letting the
      labels size the buttons made the right one read as the more important
@@ -494,7 +497,7 @@
      from overflowing the half at narrow widths. They are equivalent actions and
      must look it. */
   width: min(272px, 100%);
-  margin: auto 0 0;
+  margin-bottom: 0;
   padding: 0 16px;
   border: 1px solid transparent;
   border-radius: 8px;
