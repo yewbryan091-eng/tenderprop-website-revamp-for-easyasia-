@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 
+import { TwoWays } from "@/components/home/TwoWays";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
 import { AUCTION_START_MS, AUCTION_TIME_LABEL, OWNER_AUCTION } from "@/data/owner-auction";
@@ -8,6 +9,7 @@ import { TENDERS } from "@/data/tenders";
 import { batchesOf, daysLeft, daysUntil, fmtDate, fmtPrice, fmtRM } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 import "@/styles/home.css";
+import "@/styles/home-twoways.css";
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
@@ -272,6 +274,8 @@ function HomePage() {
             </div>
           </div>
         </section>
+
+        <TwoWays />
       </main>
       <SiteFooter />
     </div>
