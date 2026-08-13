@@ -7,7 +7,10 @@
 .hp-cue {
   position: absolute;
   left: 50%;
-  bottom: clamp(20px, 3.4vh, 38px);
+  /* Clears the search card that overlaps the foot of the hero. Reads the same
+     `--hs-overlap` the card pulls itself up by, so the two can never collide;
+     the fallback keeps the cue correct if the search card is ever removed. */
+  bottom: calc(var(--hs-overlap, 0px) + clamp(20px, 3.4vh, 38px));
   transform: translateX(-50%);
   z-index: 2;
   display: flex;
@@ -84,7 +87,9 @@
 
 @media (max-width: 650px) {
   .hp-cue {
-    bottom: 14px;
+    /* Still keyed to the overlap — a flat value here re-collides with the
+       search card, which is exactly what a hardcoded 14px did. */
+    bottom: calc(var(--hs-overlap, 0px) + 14px);
     gap: 8px;
   }
   .hp-cue-mouse {

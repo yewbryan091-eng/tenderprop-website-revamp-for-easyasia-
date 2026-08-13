@@ -1,0 +1,189 @@
+/* ── THE SEARCH CARD — straddling the seam ────────────────────────────────────
+   Sits between the hero and the showcase band, pulled up so it overlaps the
+   photograph. `--hs-overlap` is the single source of truth for how far: the card
+   reads it to pull itself up, and the scroll cue reads it to sit clear above the
+   card. Change the number once and both move together.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.home {
+  --hs-overlap: 76px;
+}
+
+.hs-wrap {
+  position: relative;
+  z-index: 3;
+  width: min(1180px, calc(100% - clamp(28px, 7vw, 104px)));
+  margin: calc(var(--hs-overlap) * -1) auto 0;
+  /* The card is 860px on a 1180px measure — narrower than the page so it reads
+     as an object resting on the seam, not a band welded across it. */
+  display: flex;
+  justify-content: center;
+}
+
+.hs-card {
+  width: min(860px, 100%);
+  padding: 18px 20px 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  /* A real shadow, because this card is genuinely above the photograph — it is
+     the one element on the page entitled to lift. */
+  box-shadow:
+    0 2px 6px rgba(23, 19, 15, 0.06),
+    0 18px 44px rgba(23, 19, 15, 0.16);
+}
+
+/* ── Tabs — the route, not a filter ────────────────────────────────────────── */
+.hs-tabs {
+  display: flex;
+  gap: 26px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 62%, transparent);
+}
+
+.hs-tab {
+  position: relative;
+  padding: 0 0 10px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.hs-tab:hover {
+  color: var(--ink);
+}
+
+/* Active state matches the site header's rule: ink text, burgundy underline. */
+.hs-tab[aria-pressed="true"] {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.hs-tab[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--burgundy);
+}
+
+.hs-tab:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+/* ── The field ─────────────────────────────────────────────────────────────── */
+.hs-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 0 0 0 16px;
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+
+.hs-row:focus-within {
+  border-color: color-mix(in srgb, var(--ink) 45%, var(--line));
+}
+
+.hs-icon {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+.hs-row input {
+  width: 100%;
+  min-width: 0;
+  height: 56px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+
+.hs-row input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.hs-row input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.hs-go {
+  align-self: stretch;
+  min-width: 152px;
+  margin: 4px 4px 4px 0;
+  padding: 0 22px;
+  border: 0;
+  background: var(--red);
+  color: var(--card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  transition: background-color 150ms ease;
+}
+
+.hs-go:hover {
+  background: #a81f15;
+}
+
+.hs-go:focus-visible {
+  outline: 3px solid var(--card);
+  outline-offset: -5px;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 650px) {
+  .home {
+    /* The card grows taller when the action drops below the field, so it
+       overlaps less — otherwise it swallows the bottom of the hero. */
+    --hs-overlap: 44px;
+  }
+  .hs-card {
+    padding: 14px 14px 16px;
+  }
+  .hs-tabs {
+    gap: 20px;
+    margin-bottom: 13px;
+  }
+  .hs-tab {
+    font-size: 14px;
+  }
+  .hs-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 0 0 0 13px;
+  }
+  .hs-row input {
+    height: 50px;
+    font-size: 14px;
+  }
+  .hs-go {
+    grid-column: 1 / -1;
+    min-height: 50px;
+    margin: 0 4px 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-tab,
+  .hs-go {
+    transition: none;
+  }
+}
