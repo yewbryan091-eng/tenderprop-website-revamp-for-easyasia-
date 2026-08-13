@@ -63,14 +63,17 @@
   /* The bottom padding used to reserve `--hs-overlap` for the search card that
      pulled itself up over the hero. There is no homepage search card any more,
      so this is plain breathing room under the scroll cue. */
-  padding: clamp(40px, 5vh, 60px) 0 clamp(28px, 3.4vh, 44px);
+  /* Trimmed when the countdown typography grew: the taller panel pushed the
+     scroll cue 7px past the fold at 1280x800. */
+  padding: clamp(26px, 3.4vh, 46px) 0 clamp(20px, 2.6vh, 34px);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .hp-eyebrow {
-  margin: 0 0 clamp(16px, 2vh, 24px);
+  /* More air under the platform line — the lockup felt packed at the top. */
+  margin: 0 0 clamp(22px, 2.9vh, 33px);
   font-family: var(--sans);
   font-size: clamp(12px, 1.02vw, 14.5px);
   font-weight: 600;
@@ -95,9 +98,11 @@
   display: block;
 }
 
+/* Down ~6% from 80px. It was reading almost as loud as the thesis line beneath
+   it; the two are meant to be a stepped hierarchy, not a shout and an echo. */
 .hp-title-primary {
   font-weight: 600;
-  font-size: clamp(56px, 5.6vw, 80px);
+  font-size: clamp(53px, 5.25vw, 75px);
   line-height: 0.9;
 }
 
@@ -130,7 +135,7 @@
   isolation: isolate;
   width: min(1120px, 100%);
   min-height: 340px;
-  margin-top: clamp(26px, 3.4vh, 38px);
+  margin-top: clamp(20px, 2.7vh, 32px);
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   overflow: hidden;
@@ -201,7 +206,7 @@
   position: relative;
   z-index: 1;
   min-width: 0;
-  padding: 26px 40px 28px;
+  padding: 20px 40px 22px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -224,13 +229,26 @@
    whole label and read as a document heading; the short stroke keeps Bryan's
    two underlined corner labels while letting each product carry its own
    colour — cream for E-Tender, brass for Owner Auction. */
+/* Same treatment as `.hl` on /tender — "Find a property *open for e-tender*":
+   Newsreader italic 600 at -0.015em. Natural case, not uppercase: the reference
+   is lowercase italic serif, and wide tracking on an italic serif fights it.
+   E-Tender keeps the panel's cream; Owner Auction takes the brass. */
 .hp-product-name {
   width: fit-content;
   margin: 0;
-  font: 800 16px/1.2 var(--sans);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 248, 239, 0.94);
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: 25px;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  text-transform: none;
+  color: var(--hp-panel-white);
+}
+
+.hp-product-auction .hp-product-name {
+  color: #d6ad61;
 }
 
 .hp-product-name::after {
@@ -238,7 +256,7 @@
   display: block;
   width: 34px;
   height: 2px;
-  margin: 9px auto 0;
+  margin: 7px auto 0;
   background: rgba(255, 248, 239, 0.82);
 }
 
@@ -278,95 +296,137 @@
 /* Two `auto` margins — this one and the CTA's — split each half's free space
    into equal gaps, so name / event+line / action share one rhythm on both sides
    of the seam whatever the panel's height. */
+/* FIXED, not `auto`. With `auto` the free space was split per-half, and the two
+   halves have different content heights — so the E-Tender countdown sat several
+   px above the Owner Auction one and the panel visibly failed to mirror. A fixed
+   margin stacks both halves identically from the top; the CTA's `auto` still
+   pins it to the bottom and absorbs whatever slack is left. */
 .hp-product-event {
-  margin-top: auto;
+  /* Stretch, or the block shrink-wraps to its widest child under the parent's
+     `align-items: center` — and the rule's percentage width then resolves
+     against ~211px instead of the half's 442px content box, rendering at 25%
+     of the countdown rather than the ~52% it asks for. */
+  align-self: stretch;
+  margin-top: 10px;
   text-align: center;
 }
 
+/* An eyebrow, clearly subordinate to the day count below it. Sits in the
+   numeral's grid column so the two share an axis. */
 .hp-product-status {
-  margin: 0;
-  font: 700 12px/1.2 var(--sans);
+  margin: 0 0 5px;
+  font: 800 13px/1.2 var(--sans);
   letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: rgba(255, 248, 239, 0.68);
+  white-space: nowrap;
+  color: rgba(255, 248, 239, 0.66);
 }
 
-/* "122 DAYS" reads as one quantity on one baseline. Stacked over a separate
-   DAYS LEFT caption, with a rule under it, the count was three stacked objects
-   and the panel looked like a dashboard row rather than an event. */
+/* ONE CENTRED COLUMN. This briefly used the Residensi Sinaran deadline panel's
+   `1fr auto 1fr` grid with the tick hanging off the numeral's baseline in a
+   third column. That panel is full-bleed; a homepage half is only ~442px wide,
+   and numeral + tick measured ~484px — so the third column ate all the space,
+   the first collapsed to zero, and the numeral was pinned to the LEFT EDGE
+   while the divider, date and CTA below it stayed centred. Every element here
+   now shares the half's centre axis. */
 .hp-product-clock {
-  margin-top: 5px;
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 8px;
-  color: var(--hp-panel-white);
-}
-
-.hp-product-clock strong {
-  font-family: "Newsreader", Georgia, serif;
-  font-optical-sizing: auto;
-  font-size: clamp(38px, 3.1vw, 46px);
-  font-weight: 550;
-  line-height: 0.86;
-  letter-spacing: -0.055em;
-}
-
-.hp-product-clock > span {
-  font: 750 13px/1 var(--sans);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 248, 239, 0.8);
-}
-
-/* The second tier of the countdown: brass numerals with their unit beneath, and
-   the colons aligned to the NUMBERS rather than the block. Each unit is its own
-   little grid, and the separators share the numerals' 20px line box, so they sit
-   on the digits' centre line instead of drifting toward the labels. */
-.hp-product-hms {
-  margin-top: 9px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 7px;
-}
-
-.hp-hms-unit {
+  margin-top: 6px;
   display: grid;
   justify-items: center;
-  gap: 4px;
-}
-
-.hp-hms-unit b {
-  /* Tabular figures: without them the digits change width as they tick and the
-     whole row jitters once a second. */
-  font: 700 20px/1 var(--sans);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
   color: var(--hp-panel-white);
 }
 
-.hp-hms-unit small {
-  font: 700 8.5px/1 var(--sans);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255, 248, 239, 0.58);
+.hp-product-clock b {
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: clamp(52px, 5.3vw, 78px);
+  font-weight: 550;
+  /* Digits carry no descenders, so default leading opens a hole under the
+     numeral and crowds the eyebrow above it. */
+  line-height: 0.86;
+  letter-spacing: -0.03em;
 }
 
-.hp-hms-sep {
-  font: 700 20px/1 var(--sans);
+.hp-product-clock i {
+  margin-top: 5px;
+  font: 800 15px/1 var(--sans);
   font-style: normal;
-  color: rgba(255, 248, 239, 0.42);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 239, 0.86);
 }
 
+.hp-tick {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: clamp(19px, 1.8vw, 26px);
+  white-space: nowrap;
+}
+
+/* Colons come from the cells themselves, so they inherit the tick's font size
+   and sit on the same baseline as the values. BETWEEN cells only — the leading
+   colon belonged to the old layout, where the tick hung off "122" and read
+   "122 : 03h". On its own centred line it was just a stray mark. */
+.hp-tick-cell + .hp-tick-cell::before {
+  content: ":";
+  margin-right: 7px;
+  font-size: 0.72em;
+  font-weight: 600;
+  line-height: 1;
+  color: rgba(255, 248, 239, 0.45);
+}
+
+.hp-tick-cell {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.hp-tick-value {
+  font-size: 1em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgba(255, 248, 239, 0.92);
+}
+
+.hp-tick-unit {
+  font-size: 0.5em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 239, 0.6);
+}
+
+/* The quiet separation between the countdown and the event date. */
+.hp-product-rule {
+  width: 52%;
+  height: 1px;
+  margin: 10px auto 0;
+  display: block;
+  background: rgba(255, 248, 239, 0.24);
+}
+
+/* The event date, promoted from metadata to the editorial line it deserves.
+   `min-height` reserves the Owner Auction time slot on BOTH sides, so the two
+   halves' supporting sentences and CTAs land on the same line even though only
+   one of them prints a time. Without it the E-Tender column rode ~16px higher
+   than its twin. */
 .hp-product-date {
-  margin: 9px 0 0;
+  /* Exactly one date line plus the Owner Auction time line — measured, not
+     guessed: 1.1em of date + 2px gap + the 12.5px time line. 3.1em left ~36px
+     of dead air under the E-Tender date and pushed the cue past the fold. */
+  min-height: 1.75em;
+  margin: 10px 0 0;
   display: grid;
+  align-content: start;
   justify-items: center;
   gap: 2px;
   font-family: "Newsreader", Georgia, serif;
   font-optical-sizing: auto;
-  font-size: 19px;
+  font-size: 27px;
   font-weight: 500;
   font-style: italic;
   line-height: 1.1;
@@ -384,7 +444,7 @@
    information. The E-Tender half prints the date alone: it runs to the end of
    its closing day, so "11:59 PM" was just noise. */
 .hp-product-date > span {
-  font: 750 12px/1.2 var(--sans);
+  font: 750 12.5px/1.2 var(--sans);
   font-style: normal;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -397,7 +457,7 @@
    the two sentences measures ~343px. `balance` only comes into play at the
    narrow widths where they genuinely have to wrap. */
 .hp-product-note {
-  margin: 14px 0 0;
+  margin: 11px 0 0;
   text-wrap: balance;
   font: 400 14px/1.4 var(--sans);
   color: rgba(255, 248, 239, 0.82);
@@ -555,7 +615,7 @@
     padding-top: 26px;
   }
   .hp-product-name {
-    font-size: 12.5px;
+    font-size: 21px;
   }
   .hp-product-name::after {
     width: 28px;
@@ -568,29 +628,31 @@
     font-size: 10px;
   }
   .hp-product-clock {
-    margin-top: 3px;
-    gap: 7px;
+    margin-top: 4px;
   }
-  .hp-product-clock strong {
-    font-size: 40px;
+  .hp-product-clock b {
+    font-size: 46px;
   }
-  .hp-product-clock > span {
-    font-size: 10px;
+  .hp-product-clock i {
+    margin-top: 5px;
+    font-size: 12.5px;
   }
-  .hp-product-hms {
-    margin-top: 7px;
-    gap: 6px;
-  }
-  .hp-hms-unit b,
-  .hp-hms-sep {
+  .hp-tick {
+    margin-left: 9px;
+    gap: 5px;
     font-size: 17px;
   }
-  .hp-hms-unit small {
-    font-size: 8px;
+  .hp-tick::before,
+  .hp-tick-cell + .hp-tick-cell::before {
+    margin-right: 5px;
+  }
+  .hp-product-rule {
+    width: 58%;
+    margin-top: 11px;
   }
   .hp-product-date {
-    margin-top: 7px;
-    font-size: 20px;
+    margin-top: 11px;
+    font-size: 21px;
   }
   .hp-product-note {
     max-width: 34ch;

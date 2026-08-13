@@ -84,7 +84,7 @@ function useHeroCountdowns(): HeroCountdowns {
 
 const pad2 = (value: number | null) => (value === null ? "--" : String(value).padStart(2, "0"));
 
-function CountdownClock({ countdown }: { countdown: EventCountdown }) {
+function CountdownClock({ countdown, label }: { countdown: EventCountdown; label: string }) {
   /* DAYS LEAD, H:M:S SUPPORTS. The day count stays the anchor — Bryan's father,
      30 Jul: what a buyer cares about is how many days are left. The clock sits
      under it as a second tier rather than being fused into one casino-style
@@ -104,24 +104,30 @@ function CountdownClock({ countdown }: { countdown: EventCountdown }) {
   return (
     <>
       <span className="sr-only">{accessibleCountdown}</span>
+      {/* ONE CENTRED AXIS. This briefly used the Residensi Sinaran deadline
+          panel's `1fr auto 1fr` grid, with the tick hanging off the numeral's
+          baseline to the right. That panel is full-bleed; a homepage half is
+          ~442px, and the numeral plus tick measured ~484px — so the row could
+          not be centred at all and the numeral was pinned to the left edge
+          while the divider, date and CTA below it stayed centred. Everything
+          now shares one axis: eyebrow, numeral, DAYS LEFT, then the clock. */}
       <div className="hp-product-clock" aria-hidden="true">
-        <strong>{countdown.days ?? "\u00a0"}</strong>
-        <span>{countdown.days === 1 ? "day" : "days"}</span>
-      </div>
-      <div className="hp-product-hms" aria-hidden="true">
-        <span className="hp-hms-unit">
-          <b>{pad2(countdown.hours)}</b>
-          <small>Hrs</small>
-        </span>
-        <i className="hp-hms-sep">:</i>
-        <span className="hp-hms-unit">
-          <b>{pad2(countdown.minutes)}</b>
-          <small>Min</small>
-        </span>
-        <i className="hp-hms-sep">:</i>
-        <span className="hp-hms-unit">
-          <b>{pad2(countdown.seconds)}</b>
-          <small>Sec</small>
+        <p className="hp-product-status">{label}</p>
+        <b>{countdown.days ?? "\u00a0"}</b>
+        <i>{countdown.days === 1 ? "day left" : "days left"}</i>
+        <span className="hp-tick">
+          {(
+            [
+              ["h", countdown.hours],
+              ["m", countdown.minutes],
+              ["s", countdown.seconds],
+            ] as const
+          ).map(([unit, value]) => (
+            <span className="hp-tick-cell" key={unit}>
+              <span className="hp-tick-value">{pad2(value)}</span>
+              <span className="hp-tick-unit">{unit}</span>
+            </span>
+          ))}
         </span>
       </div>
     </>
@@ -179,8 +185,8 @@ function HomePage() {
               <article className="hp-product hp-product-tender">
                 <h2 className="hp-product-name">E-Tender</h2>
                 <div className="hp-product-event">
-                  <p className="hp-product-status">E-Tender closes in</p>
-                  <CountdownClock countdown={remaining.tender} />
+                  <CountdownClock countdown={remaining.tender} label="E-Tender closes in" />
+                  <span className="hp-product-rule" aria-hidden="true" />
                   {/* Date only — an E-Tender runs to the end of its closing day,
                       so the 11:59 PM time adds nothing here. */}
                   <p className="hp-product-date">
@@ -197,8 +203,8 @@ function HomePage() {
               <article className="hp-product hp-product-auction">
                 <h2 className="hp-product-name">Owner Auction</h2>
                 <div className="hp-product-event">
-                  <p className="hp-product-status">Next Owner Auction in</p>
-                  <CountdownClock countdown={remaining.auction} />
+                  <CountdownClock countdown={remaining.auction} label="Next Owner Auction in" />
+                  <span className="hp-product-rule" aria-hidden="true" />
                   {/* The auction STARTS at a stated time, so this one keeps it. */}
                   <p className="hp-product-date">
                     <EventDate
