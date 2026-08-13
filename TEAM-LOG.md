@@ -14,7 +14,8 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `src/components/home/*`, `src/styles/home-twoways.css`, `src/data/malaysia.ts` | **Claude** | 12–13 Aug | ⚠️ LOCAL ONLY, NOT PUSHED — awaiting Bryan's look. **Fold** = v3 "the living market" (`9109f80`): panorama, two sky-band field notes on REAL derived data, route-aware heartbeat line, one instrument bar. (`7b92a49` "the fork" was an earlier same-evening diagonal dual-panel — superseded, kept in history only; it collided with the 12 Aug ledger row below.) **Section 2** = "Dua cara" (`a547107`): a CINEMATIC SHOWCASE — dot-matrix Malaysia on a tilted plane with two staged annotation cards. Bryan's rule for it, 13 Aug: *not* live listings, *not* interactive, *not* clickable. Do not wire it to `TENDERS` or add links to it. |
+| Homepage `/` — **fold / section 1** | `src/routes/index.tsx` (hero block), `src/styles/home.css`, `public/assets/layout/home-*` | Codex | 13 Aug 2026 | In progress: deepen image tint, move thesis to top, then add the E-Tender / Owner Auction diagonal product panel beneath it. Bryan's sketch (13 Aug) is the spec: headline, merged diagonal panel, scroll cue, then the search bar between sections 1 and 2. |
+| Homepage `/` — **section 2 + scroll cue** | `src/components/home/*`, `src/styles/home-twoways.css`, `src/styles/home-scrollcue.css`, `src/data/malaysia.ts`, one `<TwoWays />` line in `index.tsx` | **Claude** | 13 Aug | "Dua cara" showcase band + the scroll cue under the fold. Own files only, so the fold above stays Codex's. Rules: not live listings, not interactive, not clickable. |
 | Owner Auction `/owner-auction` | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing Owner Auction page architecture/data unchanged. |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing listings UI unchanged. |
@@ -32,6 +33,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 | Date | Decision | Why | Decided by |
 |---|---|---|---|
+| 13 Aug | **Homepage section 1 is headline-only.** Keep the existing full-background panorama and remove the platform eyebrow, method selector, search finder, countdown/status copy, buttons, cards and every other hero control. The thesis is exactly **“Find a property. Choose how you buy and sell it.”** as two semantic lines; `buy` is italic brass, `sell` italic wine, all other words warm white. No underline or text shadow | Bryan asked to isolate and settle the headline before rebuilding any other part of the first fold. Three rendered scale treatments favoured a stepped editorial hierarchy; independent criticism raised the lockup into quieter sky rather than adding effects over the skyline | Bryan + Codex |
 | 13 Aug | **Homepage section 2 is a CINEMATIC SHOWCASE, not a tool.** It must not render live listings, must not be interactive, and must not be clickable — a staged illustration of the two buying routes across Malaysia, in the grammar of the iNewProject unit-card section (copy left, annotated scene right, disclaimer footnote). An earlier build of it as a live Klang Valley map with a real timetable was scrapped on this instruction | Bryan: *"it should not be a real data of current live e-tender and owner auction listings, its just a cinematic and creative section... not be interactive, and clickable, just showcasing a creative way of letting people know that they can e-tender or owner auction for properties across malaysia."* The live market has its own pages; the homepage's job here is comprehension, not inventory | Bryan |
 | 13 Aug | **Homepage entrance animations ARM, never reveal.** Markup rests in its finished, visible state; JS adds a class to hide it ready to animate and removes it on approach, through the DOM rather than React state | Twice observed shipping a blank section: a throttled/hidden tab starves both IntersectionObserver and React's scheduler, and EasyAsia lifts rendered HTML with no React behind it. A section whose visible state depends on a commit is a section that can ship invisible | Claude (from live failures) |
 | 12 Aug | **Homepage `/` is a full-background property-finding gateway, not a diagonal campaign hero or countdown dashboard.** One seamless generated Malaysian panorama sits behind the centred thesis **“Find a property. Choose how you buy and sell it.”** A compact cream finder asks for E-Tender vs Owner Auction, then a property/area/state query; it passes `q` into the selected listing route. No homepage countdowns or large product cards. The image stays near-natural under one flat 10% exposure wash (12% mobile) | Bryan's father rejected the diagonal; Bryan rejected the heavy dual-product panel and dark background, then asked for a complete first fold using critical judgment. A single coherent camera scene solved the stitched-image problem. Three rendered interface treatments showed that the compact light finder makes the method choice clearest while preserving the panorama; independent criticism removed the redundant active-method instruction. Bryan then explicitly expanded the thesis to include selling while keeping the first-fold finder buyer-focused | Bryan (from his father) + Codex |
@@ -100,6 +102,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 13 Aug 2026 — Codex · Homepage section 1 reduced to the headline
+
+At Bryan's direction, removed every first-section element except the existing panorama and the
+exact thesis: the platform eyebrow, E-Tender / Owner Auction method selector, search finder,
+actions and their unused React state/navigation code are gone. The hero now contains only the
+background image, one flat contrast wash and a centred two-line Newsreader heading. “Find a
+property.” leads at 72–104px desktop; the sentence beneath steps down, with italic brass `buy`,
+italic wine `sell`, and warm white elsewhere. There is no underline or text shadow.
+
+Rendered three hierarchy treatments and shipped the stepped editorial option. Independent visual
+criticism caught the second line crossing the skyline, so the entire lockup now sits higher in the
+quiet sky and `sell` was deepened from rose to wine. Verified at 1440 / 1280 / 1024 / 768 / 390 /
+375px: exact heading copy, only three hero children, no removed-control nodes, no console warnings
+or errors and zero horizontal overflow. Header/footer hashes are unchanged; production build and
+focused lint/format checks pass.
 
 ### 12 Aug 2026 — Codex · Homepage hero copy refined
 

@@ -149,23 +149,14 @@ including today, and the final day reads "1 day left" rather than "0".
 
 ## 4. Established patterns — reuse before inventing
 
-- **Homepage gateway** (v3 "the living market", 12 Aug eve — supersedes the same-day fork v2,
-  which itself superseded the cream-finder v1; both live in git): the dusk panorama under the flat
-  10% wash (12% mobile), ANNOTATED. Two dashed ink-glass **field notes** float in the sky band and
-  pin down toward the city (≥1320px only; anchored to the CENTRE — `calc(50% ± (325px + 24px))` —
-  so they track the 650px subcopy column, never the viewport edge): left cycles one REAL listing
-  (name/area/reserve/its own closing date) every 6s, right states the market (count, price span,
-  states — all DERIVED from `TENDERS`; ≥7 states renders "across Malaysia"). **The spotlight swap
-  is a hard cut BY RULE**: keyframe entries freeze at an opacity-0 first frame and
-  `@starting-style` transitions freeze mid-fade in throttled tabs — a card whose resting state is
-  invisible is a bug, verified live. Pulses and pins are warm paper, NEVER red (places, not
-  buttons). Centred thesis (h1 at −10% of v1), then the **heartbeat** — a block-flow route-aware
-  line (dot inline so wraps read as a sentence), day-precision, never ticking — then the
-  **instrument**: one white bar of route tray (v1's paper-deep well, burgundy pressed state) +
-  place input + the zone's single red action. Still no ticking countdowns, statistics rows,
-  opaque slabs, or diagonal panels on the homepage; ticking heroes live on the product pages.
-  ≤650px: notes and pings off, instrument stacks (tray / input / action), heartbeat carries the
-  clock alone.
+- **Homepage opening**: one seamless Malaysian property panorama as a high-priority `<img>`, under
+  one flat exposure wash (18% desktop / 24% mobile), with **only** the centred Newsreader thesis:
+  “Find a property.” above “Choose how you *buy* and *sell* it.” The first line leads at
+  72–104px desktop; the second steps down to 46–67px. `buy` is italic brass, `sell` italic wine,
+  and everything else is warm white. No eyebrow, finder, selector, card, countdown, action,
+  decoration, underline or text shadow belongs in this section. Raise the lockup into the quiet
+  sky rather than compensating for the busy skyline with heavier effects. On phones the first
+  sentence remains one line while the second may wrap responsively.
 - **Homepage section 2 — the showcase band** (13 Aug): a CINEMATIC illustration, never a tool.
   Editorial column (kicker, Newsreader thesis, deck, two bordered route notes, disclaimer footnote)
   beside a staged scene: Malaysia as a burgundy dot field on a plane tilted 13° away, quiet ambient
