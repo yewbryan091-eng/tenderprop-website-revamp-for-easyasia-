@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | Codex | 13 Aug 2026 | In progress: founder-requested headline-only hero; navigation and all sections below the hero are out of scope. |
+| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | *(free)* | — | Headline-only opening shipped 13 Aug: existing panorama, exact two-sentence thesis, editorial Newsreader hierarchy, brass `buy` and wine `sell`; no other hero UI. |
 | Owner Auction `/owner-auction` | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing Owner Auction page architecture/data unchanged. |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing listings UI unchanged. |
@@ -32,6 +32,7 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 | Date | Decision | Why | Decided by |
 |---|---|---|---|
+| 13 Aug | **Homepage section 1 is headline-only.** Keep the existing full-background panorama and remove the platform eyebrow, method selector, search finder, countdown/status copy, buttons, cards and every other hero control. The thesis is exactly **“Find a property. Choose how you buy and sell it.”** as two semantic lines; `buy` is italic brass, `sell` italic wine, all other words warm white. No underline or text shadow | Bryan asked to isolate and settle the headline before rebuilding any other part of the first fold. Three rendered scale treatments favoured a stepped editorial hierarchy; independent criticism raised the lockup into quieter sky rather than adding effects over the skyline | Bryan + Codex |
 | 12 Aug | **Homepage `/` is a full-background property-finding gateway, not a diagonal campaign hero or countdown dashboard.** One seamless generated Malaysian panorama sits behind the centred thesis **“Find a property. Choose how you buy and sell it.”** A compact cream finder asks for E-Tender vs Owner Auction, then a property/area/state query; it passes `q` into the selected listing route. No homepage countdowns or large product cards. The image stays near-natural under one flat 10% exposure wash (12% mobile) | Bryan's father rejected the diagonal; Bryan rejected the heavy dual-product panel and dark background, then asked for a complete first fold using critical judgment. A single coherent camera scene solved the stitched-image problem. Three rendered interface treatments showed that the compact light finder makes the method choice clearest while preserving the panorama; independent criticism removed the redundant active-method instruction. Bryan then explicitly expanded the thesis to include selling while keeping the first-fold finder buyer-focused | Bryan (from his father) + Codex |
 | 1 Aug | **The reserve price is a GUIDE, not a floor** — buyers may offer below it | Founder: *"try to push their luck by placing an offer below the reserve price, the seller may agree or counter."* Copy saying "minimum offer considered" / "the floor" was factually wrong AND argued against the product: naming your own number **is** the e-tender | Bryan (from his father) |
 | 1 Aug | **No money moves through TenderProp.** Apply → sign-in → tender form → lead | The 3% is collected afterwards by the agent into the agency's **client account**, as BOVAEP mandates. The platform is a lead engine for a licensed agency, exactly like iNewProject | Bryan |
@@ -98,6 +99,22 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 13 Aug 2026 — Codex · Homepage section 1 reduced to the headline
+
+At Bryan's direction, removed every first-section element except the existing panorama and the
+exact thesis: the platform eyebrow, E-Tender / Owner Auction method selector, search finder,
+actions and their unused React state/navigation code are gone. The hero now contains only the
+background image, one flat contrast wash and a centred two-line Newsreader heading. “Find a
+property.” leads at 72–104px desktop; the sentence beneath steps down, with italic brass `buy`,
+italic wine `sell`, and warm white elsewhere. There is no underline or text shadow.
+
+Rendered three hierarchy treatments and shipped the stepped editorial option. Independent visual
+criticism caught the second line crossing the skyline, so the entire lockup now sits higher in the
+quiet sky and `sell` was deepened from rose to wine. Verified at 1440 / 1280 / 1024 / 768 / 390 /
+375px: exact heading copy, only three hero children, no removed-control nodes, no console warnings
+or errors and zero horizontal overflow. Header/footer hashes are unchanged; production build and
+focused lint/format checks pass.
 
 ### 12 Aug 2026 — Codex · Homepage hero copy refined
 

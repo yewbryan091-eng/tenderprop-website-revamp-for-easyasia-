@@ -1,6 +1,6 @@
 /* ── HOMEPAGE FIRST FOLD ──────────────────────────────────────────────────────
-   The page has one job: help a buyer find a property, then choose the buying
-   route. The panorama establishes market breadth; the interface remains compact.
+   One full-background panorama and one editorial thesis. Nothing else competes
+   with the headline in the opening section.
    ──────────────────────────────────────────────────────────────────────────── */
 
 .home {
@@ -16,12 +16,15 @@
 }
 
 .hp-hero {
+  --hp-title-white: #fff8ef;
+  --hp-title-buy: #d6ad61;
+  --hp-title-sell: #a94860;
   position: relative;
   isolation: isolate;
   min-height: clamp(680px, calc(100svh - 71px), 850px);
   overflow: hidden;
   background: #5d6871;
-  color: #fff;
+  color: var(--hp-title-white);
 }
 
 .hp-hero-image,
@@ -39,191 +42,62 @@
   object-position: 50% 48%;
 }
 
-/* A flat 10% exposure correction keeps white type legible without suppressing the
-   panorama. The generated image already provides the quiet text-safe sky. */
+/* One flat exposure correction carries contrast; the type itself needs no heavy
+   shadow or decorative treatment. */
 .hp-hero-wash {
   z-index: -2;
-  background: rgba(12, 17, 21, 0.1);
+  background: rgba(12, 17, 21, 0.18);
 }
 
 .hp-hero-inner {
-  width: min(1180px, calc(100% - clamp(40px, 7vw, 104px)));
+  width: min(1240px, calc(100% - clamp(40px, 7vw, 104px)));
   min-height: inherit;
   margin: 0 auto;
-  padding: clamp(54px, 8vh, 84px) 0 clamp(42px, 6vh, 62px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.hp-content {
-  width: 100%;
-}
-
-.hp-thesis {
-  position: static;
-  z-index: auto;
-  width: min(900px, 100%);
-  margin: 0 auto;
-  background: transparent;
-  border: 0;
-  text-align: center;
-  text-shadow: 0 2px 18px rgba(16, 11, 9, 0.24);
-}
-
-.hp-kicker {
-  margin: 0 0 16px;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.hp-thesis h1 {
-  margin: 0;
-  font-family: "Newsreader", Georgia, serif;
-  font-optical-sizing: auto;
-  font-size: clamp(50px, 5.2vw, 76px);
-  font-weight: 600;
-  line-height: 0.97;
-  letter-spacing: -0.036em;
-  text-wrap: balance;
-}
-
-/* ── Shared property finder ────────────────────────────────────────────────── */
-.hp-finder {
-  width: min(960px, 100%);
-  margin: clamp(34px, 5vh, 48px) auto 0;
-  padding: 20px;
-  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
-  background: color-mix(in srgb, var(--paper) 97%, transparent);
-  color: var(--ink);
-  box-shadow: 0 1px 2px rgba(23, 19, 15, 0.03);
-}
-
-.hp-method-heading {
-  margin-bottom: 10px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.hp-methods {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 4px;
-  padding: 4px;
-  background: var(--paper-deep);
-}
-
-.hp-method {
-  min-height: 58px;
-  padding: 10px 18px;
-  border: 0;
-  background: transparent;
-  color: color-mix(in srgb, var(--ink) 78%, var(--muted));
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font: inherit;
-  transition:
-    background-color 150ms ease,
-    color 150ms ease;
-}
-
-.hp-method > span {
-  font-family: "Newsreader", Georgia, serif;
-  font-size: 20px;
-  font-weight: 650;
-  line-height: 1;
-}
-
-.hp-method small {
-  font-size: 12px;
-  font-weight: 600;
-  color: inherit;
-  opacity: 0.72;
-}
-
-.hp-method[aria-pressed="true"] {
-  background: var(--burgundy);
-  color: var(--paper);
-}
-
-.hp-method:focus-visible,
-.hp-search-row input:focus-visible {
-  outline: 2px solid var(--red);
-  outline-offset: 2px;
-}
-
-.hp-search-button:focus-visible {
-  outline: 3px solid var(--paper);
-  outline-offset: -5px;
-}
-
-.hp-search-row {
-  min-height: 66px;
-  margin-top: 12px;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  border: 1px solid var(--line);
-  background: var(--card);
-}
-
-.hp-search-icon {
-  padding-left: 20px;
-  color: var(--muted);
+  padding: clamp(54px, 8vh, 84px) 0;
   display: grid;
   place-items: center;
 }
 
-.hp-search-row input {
+.hp-title {
   width: 100%;
-  min-width: 0;
-  height: 64px;
-  padding: 0 16px 0 12px;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-  font-size: 15px;
+  margin: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  text-align: center;
+  color: var(--hp-title-white);
+  letter-spacing: -0.04em;
+  transform: translateY(-48px);
 }
 
-.hp-search-row input::placeholder {
-  color: var(--muted);
-  opacity: 1;
+.hp-title-line {
+  display: block;
 }
 
-.hp-search-row input::-webkit-search-cancel-button {
-  cursor: pointer;
+.hp-title-primary {
+  font-weight: 600;
+  font-size: clamp(72px, 7.2vw, 104px);
+  line-height: 0.88;
 }
 
-.hp-search-button {
-  align-self: stretch;
-  min-width: 216px;
-  padding: 0 20px 0 24px;
-  border: 0;
-  background: var(--red);
-  color: var(--card);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  font: inherit;
-  font-size: 14px;
-  font-weight: 800;
-  transition: background-color 150ms ease;
+.hp-title-secondary {
+  margin-top: 0.22em;
+  font-size: clamp(46px, 4.65vw, 67px);
+  font-weight: 450;
+  line-height: 0.96;
 }
 
-.hp-search-button:hover {
-  background: #a81f15;
+.hp-title em {
+  font-weight: 500;
+  font-style: italic;
+}
+
+.hp-title-buy {
+  color: var(--hp-title-buy);
+}
+
+.hp-title-sell {
+  color: var(--hp-title-sell);
 }
 
 /* ── Responsive ────────────────────────────────────────────────────────────── */
@@ -235,78 +109,36 @@
 
 @media (max-width: 650px) {
   .hp-hero {
-    min-height: max(690px, calc(100svh - 216px));
+    min-height: max(540px, calc(100svh - 175px));
   }
   .hp-hero-image {
     object-position: 52% 50%;
   }
   .hp-hero-wash {
-    background: rgba(12, 17, 21, 0.12);
+    background: rgba(12, 17, 21, 0.24);
   }
   .hp-hero-inner {
     width: calc(100% - 28px);
-    padding: 44px 0 30px;
+    padding: 42px 0;
   }
-  .hp-thesis h1 {
-    font-size: clamp(41px, 12.4vw, 54px);
-    line-height: 0.99;
+  .hp-title {
+    letter-spacing: -0.035em;
+    transform: translateY(-30px);
   }
-  .hp-kicker {
-    margin-bottom: 13px;
-    line-height: 1.4;
+  .hp-title-secondary {
+    margin-top: 0.26em;
+    font-size: clamp(38px, 10.4vw, 48px);
+    line-height: 0.97;
+    text-wrap: balance;
   }
-  .hp-finder {
-    margin-top: 28px;
-    padding: 14px;
-  }
-  .hp-method-heading {
-    margin-bottom: 8px;
-  }
-  .hp-methods {
-    gap: 3px;
-    padding: 3px;
-  }
-  .hp-method {
-    min-height: 61px;
-    padding: 9px 8px;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .hp-method > span {
-    font-size: 18px;
-  }
-  .hp-method small {
-    font-size: 10px;
-  }
-  .hp-search-row {
-    min-height: 58px;
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-  .hp-search-icon {
-    padding-left: 15px;
-  }
-  .hp-search-row input {
-    height: 58px;
-    padding-right: 12px;
-    font-size: 14px;
-  }
-  .hp-search-button {
-    grid-column: 1 / -1;
-    min-width: 0;
-    min-height: 54px;
-    justify-content: center;
+  .hp-title-primary {
+    font-size: clamp(42px, 9vw, 58px);
+    line-height: 0.9;
   }
 }
 
-@media (max-width: 390px) {
-  .hp-thesis h1 {
-    font-size: 40px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hp-method,
-  .hp-search-button {
-    transition: none;
+@media (max-width: 380px) {
+  .hp-hero {
+    min-height: max(540px, calc(100svh - 216px));
   }
 }
