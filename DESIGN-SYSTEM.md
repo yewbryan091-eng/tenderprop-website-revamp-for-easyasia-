@@ -166,6 +166,20 @@ including today, and the final day reads "1 day left" rather than "0".
   opaque slabs, or diagonal panels on the homepage; ticking heroes live on the product pages.
   ≤650px: notes and pings off, instrument stacks (tray / input / action), heartbeat carries the
   clock alone.
+- **Homepage section 2 — the showcase band** (13 Aug): a CINEMATIC illustration, never a tool.
+  Editorial column (kicker, Newsreader thesis, deck, two bordered route notes, disclaimer footnote)
+  beside a staged scene: Malaysia as a burgundy dot field on a plane tilted 13° away, quiet ambient
+  markers, two breathing markers, dashed leader lines out to two annotation cards standing off the
+  plane on `translateZ`. **Hard rules, founder-set:** no live listing data, nothing interactive,
+  nothing clickable, and the scene is `aria-hidden` — a mock quoting a real house reads as
+  inventory, which this band must never do. Card positions are chosen by COUNTING covered map dots
+  (a card on the peninsula hid 41% of it); the map's proportions live in `MAP_BOUNDS` and the
+  plane's `aspect-ratio` together, so changing one alone stretches the country.
+- **Entrance animations ARM, they do not reveal** (13 Aug, load-bearing): CSS rests in the finished
+  visible state; JS adds `.is-armed` to hide it and removes it on approach, toggled through
+  `classList` rather than React state. Hide-by-default ships blank sections whenever the reveal
+  never arrives — a throttled or hidden tab starves IntersectionObserver *and* React's scheduler,
+  and the CMS lifts rendered HTML with no React behind it. Both observed live, twice.
 - **Label/value list** (`.pd-row`): label column `10.5rem`, `white-space: nowrap`, value 14.5/600,
   `min-height: 46px`, hairline under each row. Two-up via `grid-auto-flow: column`.
 - **Icon band** (`.band .stat`): scannable summary, always **derived** from the same source as the
