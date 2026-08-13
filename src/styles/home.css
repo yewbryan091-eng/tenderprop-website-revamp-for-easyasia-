@@ -1,6 +1,6 @@
 /* ── HOMEPAGE FIRST FOLD ──────────────────────────────────────────────────────
-   One full-background panorama and one editorial thesis. Nothing else competes
-   with the headline in the opening section.
+   The editorial thesis owns the upper sky. Beneath it, one diagonal instrument
+   presents the two property routes without turning either into a detached card.
    ──────────────────────────────────────────────────────────────────────────── */
 
 .home {
@@ -18,10 +18,12 @@
 .hp-hero {
   --hp-title-white: #fff8ef;
   --hp-title-buy: #d6ad61;
-  --hp-title-sell: #a94860;
+  --hp-title-sell: #9f3c50;
+  --hp-panel-white: #fff8ef;
+  --hp-panel-line: rgba(255, 248, 239, 0.3);
   position: relative;
   isolation: isolate;
-  min-height: clamp(680px, calc(100svh - 71px), 850px);
+  min-height: clamp(790px, calc(100svh - 71px), 920px);
   overflow: hidden;
   background: #5d6871;
   color: var(--hp-title-white);
@@ -46,16 +48,17 @@
    shadow or decorative treatment. */
 .hp-hero-wash {
   z-index: -2;
-  background: rgba(12, 17, 21, 0.18);
+  background: rgba(12, 17, 21, 0.24);
 }
 
 .hp-hero-inner {
   width: min(1240px, calc(100% - clamp(40px, 7vw, 104px)));
   min-height: inherit;
   margin: 0 auto;
-  padding: clamp(54px, 8vh, 84px) 0;
-  display: grid;
-  place-items: center;
+  padding: clamp(38px, 5.5vh, 58px) 0 clamp(48px, 6vh, 66px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hp-title {
@@ -67,7 +70,6 @@
   text-align: center;
   color: var(--hp-title-white);
   letter-spacing: -0.04em;
-  transform: translateY(-48px);
 }
 
 .hp-title-line {
@@ -100,30 +102,273 @@
   color: var(--hp-title-sell);
 }
 
+/* ── E-Tender / Owner Auction choice ──────────────────────────────────────── */
+.hp-products {
+  position: relative;
+  isolation: isolate;
+  width: min(1120px, 100%);
+  min-height: 286px;
+  margin-top: clamp(38px, 5vh, 52px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+  border-top: 1px solid var(--hp-panel-line);
+  border-bottom: 1px solid var(--hp-panel-line);
+}
+
+.hp-products::before,
+.hp-products::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.hp-products::before {
+  background-color: #734052;
+  background-image: url("/assets/layout/kl-skyline.webp");
+  background-position: 50% 43%;
+  background-size: cover;
+  background-blend-mode: multiply;
+  clip-path: polygon(0 0, 53% 0, 47% 100%, 0 100%);
+}
+
+.hp-products::after {
+  background-color: #514b49;
+  background-image: url("/assets/layout/owner-auction-hero.jpg");
+  background-position: 50% 28%;
+  background-size: cover;
+  background-blend-mode: multiply;
+  clip-path: polygon(53% 0, 100% 0, 100% 100%, 47% 100%);
+}
+
+.hp-products-seam {
+  position: absolute;
+  z-index: 2;
+  top: -8%;
+  bottom: -8%;
+  left: 50%;
+  width: 1px;
+  background: rgba(214, 173, 97, 0.72);
+  transform: rotate(6.3deg);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.hp-product {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  padding: 22px 46px 24px;
+  display: flex;
+  flex-direction: column;
+  color: var(--hp-panel-white);
+}
+
+.hp-product-tender {
+  padding-right: 78px;
+}
+
+.hp-product-auction {
+  padding-left: 78px;
+}
+
+.hp-product-name {
+  width: fit-content;
+  margin: 0;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 248, 239, 0.74);
+  font: 800 12px/1.2 var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 239, 0.78);
+}
+
+.hp-product-auction .hp-product-name {
+  margin-left: auto;
+  text-align: right;
+}
+
+.hp-product-event {
+  margin-top: 9px;
+  text-align: center;
+}
+
+.hp-product-status {
+  margin: 0;
+  font: 700 12px/1.2 var(--sans);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 239, 0.68);
+}
+
+.hp-product-clock {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  color: var(--hp-panel-white);
+}
+
+.hp-product-day-stack {
+  display: grid;
+  justify-items: center;
+}
+
+.hp-product-day-stack strong {
+  min-width: 2.15ch;
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: clamp(62px, 5.2vw, 74px);
+  font-weight: 550;
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+}
+
+.hp-product-day-stack > span {
+  margin-top: 6px;
+  font: 750 11px/1 var(--sans);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 239, 0.74);
+}
+
+.hp-product-tick {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+.hp-product-tick-unit {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.hp-product-tick-unit + .hp-product-tick-unit::before {
+  content: ":";
+  position: absolute;
+  right: calc(100% + 3px);
+  color: rgba(255, 248, 239, 0.52);
+}
+
+.hp-product-tick b {
+  min-width: 2ch;
+  font: 750 22px/1 var(--sans);
+  letter-spacing: 0.015em;
+}
+
+.hp-product-tick small {
+  font: 750 9px/1 var(--sans);
+  color: rgba(255, 248, 239, 0.66);
+}
+
+.hp-product-divider {
+  width: min(260px, 78%);
+  height: 1px;
+  margin: 9px auto 8px;
+  display: block;
+  background: rgba(255, 248, 239, 0.34);
+}
+
+.hp-product-date {
+  margin: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: 28px;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.hp-product-date sup {
+  position: relative;
+  top: -0.08em;
+  font-size: 0.5em;
+  line-height: 0;
+}
+
+.hp-product-date-auction {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+
+.hp-product-date-auction > span {
+  font: 750 12px/1.2 var(--sans);
+  font-style: normal;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #d6ad61;
+}
+
+.hp-product-link {
+  width: fit-content;
+  min-width: 178px;
+  min-height: 40px;
+  margin: 12px auto 0;
+  padding: 0 17px 0 19px;
+  border: 1px solid rgba(255, 248, 239, 0.64);
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  color: var(--hp-panel-white);
+  font: 750 13px/1 var(--sans);
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.hp-product-link:hover {
+  border-color: var(--hp-panel-white);
+  background: var(--hp-panel-white);
+  color: #571c2e;
+}
+
+.hp-product-link:focus-visible {
+  outline: 2px solid #d6ad61;
+  outline-offset: 3px;
+}
+
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .hp-hero-inner {
     width: min(100% - 40px, 760px);
   }
+  .hp-product {
+    padding-right: 44px;
+    padding-left: 36px;
+  }
+  .hp-product-tender {
+    padding-right: 68px;
+  }
+  .hp-product-auction {
+    padding-left: 68px;
+  }
 }
 
 @media (max-width: 650px) {
   .hp-hero {
-    min-height: max(540px, calc(100svh - 175px));
+    min-height: max(720px, calc(100svh - 175px));
   }
   .hp-hero-image {
     object-position: 52% 50%;
   }
   .hp-hero-wash {
-    background: rgba(12, 17, 21, 0.24);
+    background: rgba(12, 17, 21, 0.28);
   }
   .hp-hero-inner {
     width: calc(100% - 28px);
-    padding: 42px 0;
+    padding: 34px 0 38px;
   }
   .hp-title {
     letter-spacing: -0.035em;
-    transform: translateY(-30px);
   }
   .hp-title-secondary {
     margin-top: 0.26em;
@@ -135,10 +380,100 @@
     font-size: clamp(42px, 9vw, 58px);
     line-height: 0.9;
   }
+  .hp-products {
+    min-height: 408px;
+    margin-top: 26px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+  .hp-products::before {
+    background-position: 50% 18%;
+    clip-path: polygon(0 0, 100% 0, 100% 48%, 0 52%);
+  }
+  .hp-products::after {
+    background-position: 50% 82%;
+    clip-path: polygon(0 52%, 100% 48%, 100% 100%, 0 100%);
+  }
+  .hp-products-seam {
+    top: 50%;
+    right: -4%;
+    bottom: auto;
+    left: -4%;
+    width: auto;
+    height: 1px;
+    transform: rotate(-2.3deg);
+  }
+  .hp-product,
+  .hp-product-tender,
+  .hp-product-auction {
+    min-height: 204px;
+    padding: 12px 20px 14px;
+  }
+  .hp-product-tender {
+    padding-bottom: 20px;
+  }
+  .hp-product-auction {
+    padding-top: 20px;
+  }
+  .hp-product-name {
+    padding-bottom: 3px;
+    font-size: 11px;
+  }
+  .hp-product-event {
+    margin-top: 5px;
+  }
+  .hp-product-status {
+    font-size: 10px;
+  }
+  .hp-product-clock {
+    margin-top: 3px;
+    gap: 11px;
+  }
+  .hp-product-day-stack strong {
+    font-size: 50px;
+  }
+  .hp-product-day-stack > span {
+    margin-top: 3px;
+    font-size: 9px;
+  }
+  .hp-product-tick {
+    gap: 7px;
+  }
+  .hp-product-tick b {
+    font-size: 18px;
+  }
+  .hp-product-tick small {
+    font-size: 8px;
+  }
+  .hp-product-divider {
+    width: min(240px, 76%);
+    margin: 5px auto;
+  }
+  .hp-product-date {
+    font-size: 23px;
+  }
+  .hp-product-date-auction {
+    gap: 0;
+  }
+  .hp-product-date-auction > span {
+    font-size: 10px;
+  }
+  .hp-product-link {
+    min-width: 168px;
+    min-height: 35px;
+    margin-top: 6px;
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 380px) {
   .hp-hero {
-    min-height: max(540px, calc(100svh - 216px));
+    min-height: max(720px, calc(100svh - 216px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hp-product-link {
+    transition: none;
   }
 }
