@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 540 590">
+  <!-- WEST MALAYSIA - TenderProp section 2 illustration geometry.
+       Traced vector silhouette (not AI geography). Groups:
+       "plate"        extrude ~30 units. Peninsula + Penang island.
+       "kv-highlight" separate shape: material it burgundy and raise it
+                      4-6 units PROUD of the plate top, like the reference.
+       "markers-reference-delete-me" true anchor positions for the stems,
+                      built as 3D objects in Spline; delete before render.
+       NO text in the 3D scene ever - cards, metric, legend, labels are HTML. -->
+  <g id="plate" fill="#F1E8DE">
+    <path id="peninsula" d="M 96.0 33.5 Q 72.0 35.0 71.0 60.0 Q 70.0 85.0 80.0 100.0 Q 90.0 115.0 91.0 130.0 Q 92.0 145.0 103.5 160.0 Q 115.0 175.0 118.5 195.0 Q 122.0 215.0 130.0 237.5 Q 138.0 260.0 148.0 277.5 Q 158.0 295.0 163.0 315.0 Q 168.0 335.0 178.0 352.5 Q 188.0 370.0 192.0 385.0 Q 196.0 400.0 205.5 412.5 Q 215.0 425.0 232.5 437.5 Q 250.0 450.0 267.5 462.5 Q 285.0 475.0 305.0 487.5 Q 325.0 500.0 350.0 515.0 Q 375.0 530.0 395.0 539.0 Q 415.0 548.0 430.0 550.0 Q 445.0 552.0 460.0 543.5 Q 475.0 535.0 481.5 515.0 Q 488.0 495.0 479.0 470.0 Q 470.0 445.0 457.5 422.5 Q 445.0 400.0 433.5 377.5 Q 422.0 355.0 414.0 330.0 Q 406.0 305.0 403.0 285.0 Q 400.0 265.0 394.0 245.0 Q 388.0 225.0 379.0 205.0 Q 370.0 185.0 357.5 165.0 Q 345.0 145.0 327.5 125.0 Q 310.0 105.0 290.0 87.5 Q 270.0 70.0 255.0 57.5 Q 240.0 45.0 220.0 40.0 Q 200.0 35.0 180.0 37.5 Q 160.0 40.0 140.0 36.0 Q 120.0 32.0 96.0 33.5 Z"/>
+    <path id="penang" d="M 76.5 156.0 Q 77.0 162.0 85.0 163.0 Q 93.0 164.0 94.5 155.0 Q 96.0 146.0 91.0 143.5 Q 86.0 141.0 81.0 145.5 Q 76.0 150.0 76.5 156.0 Z"/>
+  </g>
+  <g id="kv-highlight">
+    <path d="M 175.5 374.0 Q 175.0 360.0 190.0 350.0 Q 205.0 340.0 222.5 343.0 Q 240.0 346.0 250.0 359.0 Q 260.0 372.0 256.0 385.0 Q 252.0 398.0 240.0 406.0 Q 228.0 414.0 213.0 412.0 Q 198.0 410.0 187.0 399.0 Q 176.0 388.0 175.5 374.0 Z" fill="#7A3B4E"/>
+  </g>
+  <g id="markers-reference-delete-me">
+    <circle id="etender-setia-alam" data-tier="recommended" cx="207.0" cy="380.0" r="7" fill="#571C2E"/>
+    <circle id="etender-george-town" data-tier="recommended" cx="93.0" cy="149.0" r="7" fill="#571C2E"/>
+    <circle id="auction-petaling-jaya" data-tier="recommended" cx="224.0" cy="380.0" r="7" fill="#8A6420"/>
+    <circle id="etender-seri-kembangan" data-tier="spare" cx="231.0" cy="391.0" r="7" fill="#571C2E"/>
+    <circle id="etender-johor-bahru" data-tier="spare" cx="436.0" cy="541.0" r="7" fill="#571C2E"/>
+  </g>
+</svg>
