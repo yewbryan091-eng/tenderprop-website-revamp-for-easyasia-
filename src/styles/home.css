@@ -176,13 +176,21 @@
    but nothing in the panel has to fight it. */
 .hp-products::before {
   background: rgba(87, 28, 46, 0.74);
-  clip-path: polygon(0 0, 55% 0, 45% 100%, 0 100%);
+  /* The seam leans WITH the reader: 46.5% at the top edge, 53.5% at the
+     bottom, so it opens toward E-Tender where the eye first lands. It used to
+     run the other way (55 -> 45), against left-to-right reading, which is what
+     made the panel feel defensive rather than forward-leaning.
+
+     The rake is 7% of the panel width, down from 10%: enough that the cut is
+     unmistakably deliberate, gentle enough to hand ~20px back to each half's
+     content — the old rake is why the CTAs needed 78px of clearance. */
+  clip-path: polygon(0 0, 46.5% 0, 53.5% 100%, 0 100%);
 }
 
 .hp-products::after {
   /* Warm graphite, not neutral black — it has to sit beside burgundy. */
   background: rgba(30, 25, 21, 0.74);
-  clip-path: polygon(55% 0, 100% 0, 100% 100%, 45% 100%);
+  clip-path: polygon(46.5% 0, 100% 0, 100% 100%, 53.5% 100%);
 }
 
 /* A restrained BRASS edge on the diagonal — not the thick paper slash this
@@ -199,7 +207,7 @@
      clip-path spans 0 to 100%, so it runs edge to edge; the panel's own
      `overflow: hidden` trims it to the 16px corners. */
   background: rgba(188, 148, 72, 0.7);
-  clip-path: polygon(54.94% 0, 55.06% 0, 45.06% 100%, 44.94% 100%);
+  clip-path: polygon(46.44% 0, 46.56% 0, 53.56% 100%, 53.44% 100%);
   pointer-events: none;
 }
 
@@ -224,11 +232,11 @@
    the panel's width across its height, so each half loses room on the side it
    is cut. Without this the CTAs sit under the opposite wash. */
 .hp-product-tender {
-  padding-right: 78px;
+  padding-right: 58px;
 }
 
 .hp-product-auction {
-  padding-left: 78px;
+  padding-left: 58px;
 }
 
 /* A 34px accent stroke, not a full-width rule. The old border-bottom ran the
