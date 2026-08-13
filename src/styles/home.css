@@ -240,7 +240,12 @@
 .hp-product-name {
   width: fit-content;
   margin: 0;
-  font: italic 800 16px/1.2 var(--sans);
+  /* UPRIGHT. Italic on this fold marks the expressive material — `buy`/`sell`,
+     the date, the two supporting lines. These are the fixed product names, the
+     factual anchors, and slanting them too left almost nothing upright for the
+     italic to mean anything against. Colour and the accent stroke already
+     separate the two labels; a third treatment was redundant. */
+  font: 800 18px/1.2 var(--sans);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255, 248, 239, 0.94);
