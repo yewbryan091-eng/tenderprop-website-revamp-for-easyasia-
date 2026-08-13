@@ -173,15 +173,15 @@ including today, and the final day reads "1 day left" rather than "0".
   decoration, underline or text shadow belongs in this section. Raise the lockup into the quiet
   sky rather than compensating for the busy skyline with heavier effects. On phones the first
   sentence remains one line while the second may wrap responsively.
-- **Homepage section 2 — the showcase band** (13 Aug): a CINEMATIC illustration, never a tool.
-  Editorial column (kicker, Newsreader thesis, deck, two bordered route notes, disclaimer footnote)
-  beside a staged scene: Malaysia as a burgundy dot field on a plane tilted 13° away, quiet ambient
-  markers, two breathing markers, dashed leader lines out to two annotation cards standing off the
-  plane on `translateZ`. **Hard rules, founder-set:** no live listing data, nothing interactive,
-  nothing clickable, and the scene is `aria-hidden` — a mock quoting a real house reads as
-  inventory, which this band must never do. Card positions are chosen by COUNTING covered map dots
-  (a card on the peninsula hid 41% of it); the map's proportions live in `MAP_BOUNDS` and the
-  plane's `aspect-ratio` together, so changing one alone stretches the country.
+- **Homepage section 2 — the showcase band** (14 Aug): a CINEMATIC illustration, never a tool.
+  The editorial column remains unchanged. The right side is a premium static Peninsular Malaysia
+  plate built from pinned Natural Earth 1:10m country and state-boundary vectors: warm limestone
+  top, shallow layered extrusion, restrained brass rim, engraved state lines and one connected soft
+  shadow, viewed at roughly 30° elevation. It is SVG/CSS only — no raster render, WebGL or map embed
+  — and remains crisp across desktop sizes. **Hard rules, founder-set:** West Malaysia only for this
+  pass; no East Malaysia; no live listing data, cards, pins, labels, clicks or interaction; the map
+  stays `aria-hidden`. Future Klang Valley emphasis and floating cards must be separate overlays and
+  must not alter or approximate the published coastline geometry.
 - **Entrance animations ARM, they do not reveal** (13 Aug, load-bearing): CSS rests in the finished
   visible state; JS adds `.is-armed` to hide it and removes it on approach, toggled through
   `classList` rather than React state. Hide-by-default ships blank sections whenever the reveal

@@ -1,0 +1,193 @@
+/* ── PENINSULAR MALAYSIA — STATIC SVG/CSS STONE OBJECT ────────────────────────
+   Geometry is generated from Natural Earth 1:10m, never from these styles.
+   This file controls only material, camera and depth. Keeping those concerns
+   separate lets the future Klang Valley layer sit above the unchanged plate.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.wm-map {
+  --wm-top-light: #fffaf3;
+  --wm-top-mid: #efe2d3;
+  --wm-top-low: #ddcbb9;
+  --wm-side-top: #d2bea9;
+  --wm-side-mid: #ac917c;
+  --wm-side-bottom: #725647;
+  --wm-rim: #b48a50;
+  --wm-burgundy-shade: #571c2e;
+  --wm-shadow: rgba(56, 35, 28, 0.28);
+  position: relative;
+  min-height: clamp(430px, 37vw, 550px);
+  display: grid;
+  place-items: center;
+  perspective: 1450px;
+  isolation: isolate;
+}
+
+.wm-map--porcelain {
+  --wm-top-light: #fffdf9;
+  --wm-top-mid: #f8f0e7;
+  --wm-top-low: #eadfd3;
+  --wm-side-top: #e0d2c3;
+  --wm-side-mid: #c6b29f;
+  --wm-side-bottom: #987e6b;
+  --wm-rim: #a97b3c;
+  --wm-shadow: rgba(53, 35, 29, 0.21);
+}
+
+.wm-map--monument {
+  --wm-top-light: #f9f1e7;
+  --wm-top-mid: #eadbcb;
+  --wm-top-low: #d6c2ae;
+  --wm-side-top: #c7ae98;
+  --wm-side-mid: #9d806e;
+  --wm-side-bottom: #634757;
+  --wm-rim: #bd9257;
+  --wm-shadow: rgba(52, 25, 35, 0.29);
+}
+
+.wm-map::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  width: 72%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--paper) 52%, transparent) 0%,
+    transparent 70%
+  );
+  transform: translate(5%, -2%);
+}
+
+.wm-map-ground {
+  position: absolute;
+  z-index: -1;
+  left: 51%;
+  top: 64.5%;
+  width: 61%;
+  height: 14%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--wm-shadow) 82%, transparent) 0%,
+    color-mix(in srgb, var(--wm-shadow) 39%, transparent) 45%,
+    transparent 76%
+  );
+  filter: blur(12px);
+  transform: translate(-50%, -50%) rotate(-8deg);
+}
+
+.wm-map-camera {
+  width: min(78%, 558px);
+  transform-origin: 50% 54%;
+  transform-style: preserve-3d;
+  /* 60deg away from face-on = roughly 30deg camera elevation above the
+     geographic plane, matching the approved isometric reference. */
+  transform: rotateX(60deg) rotateZ(-7deg) translate3d(2%, -2%, 0);
+  filter: drop-shadow(11px 26px 18px var(--wm-shadow));
+}
+
+.wm-map-object {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.wm-map-cast {
+  fill: color-mix(in srgb, var(--wm-shadow) 86%, transparent);
+  opacity: 0.38;
+}
+
+.wm-map-depth use {
+  stroke: color-mix(in srgb, var(--wm-side-bottom) 58%, transparent);
+  stroke-width: 0.75;
+  vector-effect: non-scaling-stroke;
+}
+
+.wm-map-top {
+  stroke: color-mix(in srgb, var(--wm-side-top) 88%, var(--wm-rim));
+  stroke-width: 1.45;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.wm-map-light {
+  opacity: 0.78;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.wm-map-states-light,
+.wm-map-states {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.wm-map-states-light {
+  stroke: rgba(255, 252, 247, 0.54);
+  stroke-width: 1.05;
+}
+
+.wm-map-states {
+  stroke: color-mix(in srgb, var(--burgundy) 66%, #8f7562);
+  stroke-width: 0.72;
+  opacity: 0.28;
+}
+
+.wm-map-grain {
+  fill: #8d725e;
+  opacity: 0.3;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.wm-map-bevel {
+  fill: none;
+  stroke: rgba(255, 253, 249, 0.72);
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  transform: translateY(-0.55px);
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.wm-map-rim {
+  fill: none;
+  stroke: var(--wm-rim);
+  stroke-width: 0.85;
+  stroke-linejoin: round;
+  opacity: 0.52;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+@media (max-width: 1000px) {
+  .wm-map {
+    min-height: clamp(400px, 61vw, 530px);
+  }
+
+  .wm-map-camera {
+    width: min(68%, 560px);
+  }
+}
+
+@media (max-width: 700px) {
+  .wm-map {
+    min-height: 350px;
+  }
+
+  .wm-map-camera {
+    width: min(78%, 430px);
+    transform: rotateX(58deg) rotateZ(-7deg) translate3d(2%, -1%, 0);
+    filter: drop-shadow(8px 21px 14px var(--wm-shadow));
+  }
+
+  .wm-map-ground {
+    top: 65%;
+    width: 73%;
+  }
+}
