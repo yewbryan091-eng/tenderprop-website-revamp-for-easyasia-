@@ -434,7 +434,7 @@
    at one point, which left ~36px of dead air under the E-Tender date. */
 .hp-product-date {
   min-height: 1.75em;
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   display: grid;
   align-content: start;
   justify-items: center;
@@ -466,16 +466,26 @@
   color: #d6ad61;
 }
 
-/* No max-width on desktop: both sentences are meant to sit on ONE line, and the
-   32ch cap was what forced "…before the E-Tender / closes." onto two. The half's
-   own content box (442px at 1120px panel) is the real limit, and the longer of
-   the two sentences measures ~343px. `balance` only comes into play at the
-   narrow widths where they genuinely have to wrap. */
+/* Editorial italic serif, matching the date above it — these read as a line of
+   copy rather than a caption.
+
+   The `max-width` is doing real work: it forces BOTH sentences onto the same
+   number of lines. They are different lengths, so left to the half's full width
+   the E-Tender line would wrap while the Owner Auction line stayed single, and
+   the two CTAs beneath them would fall out of alignment by one line. Capping
+   the measure makes them wrap together. `balance` then evens the two lines. */
 .hp-product-note {
-  margin: 11px 0 0;
+  max-width: 25ch;
+  margin: 9px 0 0;
   text-wrap: balance;
-  font: 400 14px/1.4 var(--sans);
-  color: rgba(255, 248, 239, 0.82);
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: rgba(255, 248, 239, 0.86);
 }
 
 /* ── The two primary actions ──────────────────────────────────────────────────
@@ -490,7 +500,7 @@
      was left over, and once the panel's content grew to fill the box exactly
      there was none — so the button ended up flush against the supporting
      sentence (measured 0px between the boxes) while a void sat above it. */
-  margin-top: 18px;
+  margin-top: 16px;
   /* ONE fixed width for both, not padding-sized: "View Owner Auction Listings"
      is four characters longer than "View E-Tender Listings", so letting the
      labels size the buttons made the right one read as the more important

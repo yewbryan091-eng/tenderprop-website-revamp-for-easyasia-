@@ -193,7 +193,9 @@ function HomePage() {
                     <EventDate date={TENDER_DATE} dateTime={NEXT_TENDER_DATE} />
                   </p>
                 </div>
-                <p className="hp-product-note">Submit your offer before the E-Tender closes.</p>
+                <p className="hp-product-note">
+                  Name your price in a sealed offer &mdash; even below the reserve.
+                </p>
                 <Link className="hp-product-link" to="/tender" search={{ q: undefined }}>
                   <span>View E-Tender Listings</span>
                   <span aria-hidden="true">&rarr;</span>
@@ -216,9 +218,7 @@ function HomePage() {
                     </span>
                   </p>
                 </div>
-                <p className="hp-product-note">
-                  Register before the auction and be ready to bid live.
-                </p>
+                <p className="hp-product-note">Live bidding, straight from the property owner.</p>
                 <Link className="hp-product-link" to="/owner-auction" search={{ q: undefined }}>
                   <span>View Owner Auction Listings</span>
                   <span aria-hidden="true">&rarr;</span>
