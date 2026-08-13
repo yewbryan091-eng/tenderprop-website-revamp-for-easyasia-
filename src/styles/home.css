@@ -229,10 +229,11 @@
    whole label and read as a document heading; the short stroke keeps Bryan's
    two underlined corner labels while letting each product carry its own
    colour — cream for E-Tender, brass for Owner Auction. */
-/* Same treatment as `.hl` on /tender — "Find a property *open for e-tender*":
-   Newsreader italic 600 at -0.015em. Natural case, not uppercase: the reference
-   is lowercase italic serif, and wide tracking on an italic serif fights it.
-   E-Tender keeps the panel's cream; Owner Auction takes the brass. */
+/* Newsreader italic 600, the same face as `.hl` on /tender ("Find a property
+   *open for e-tender*"), set in CAPITALS. The tracking goes slightly POSITIVE
+   here — caps in an italic serif need a little air between letters, where the
+   lowercase reference wants the tight -0.015em. E-Tender keeps the panel's
+   cream; Owner Auction takes the brass. */
 .hp-product-name {
   width: fit-content;
   margin: 0;
@@ -241,9 +242,9 @@
   font-size: 25px;
   font-weight: 600;
   font-style: italic;
-  letter-spacing: -0.015em;
+  letter-spacing: 0.02em;
   line-height: 1.05;
-  text-transform: none;
+  text-transform: uppercase;
   color: var(--hp-panel-white);
 }
 
