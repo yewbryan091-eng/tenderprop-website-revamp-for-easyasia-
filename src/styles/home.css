@@ -117,12 +117,13 @@
   font-style: italic;
 }
 
-.hp-title-buy {
-  color: var(--hp-title-buy);
-}
-
+/* Bryan, 13 Aug: `buy` and `sell` are warm white like the rest of the thesis —
+   ITALIC alone now carries the emphasis. This reverses the brass/wine colouring
+   the headline shipped with; the `--hp-title-buy` / `--hp-title-sell` tokens are
+   kept because the brass one still paints the platform eyebrow above. */
+.hp-title-buy,
 .hp-title-sell {
-  color: var(--hp-title-sell);
+  color: var(--hp-title-white);
 }
 
 /* ── E-Tender / Owner Auction choice ──────────────────────────────────────── */
