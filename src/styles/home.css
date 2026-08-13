@@ -75,9 +75,10 @@
   /* More air under the platform line — the lockup felt packed at the top. */
   margin: 0 0 clamp(22px, 2.9vh, 33px);
   font-family: var(--sans);
-  font-size: clamp(12px, 1.02vw, 14.5px);
+  /* Up ~24% from 14.5px — Bryan's father found it too small to read. */
+  font-size: clamp(13.5px, 1.25vw, 18px);
   font-weight: 600;
-  letter-spacing: 0.155em;
+  letter-spacing: 0.145em;
   text-transform: uppercase;
   text-align: center;
   color: var(--hp-title-buy);
@@ -637,7 +638,9 @@
   }
   .hp-eyebrow {
     margin-bottom: 14px;
-    font-size: 11px;
+    /* 11.5px measures 354px against the 362px a 390px phone offers — the
+       ceiling before this wraps to two lines. */
+    font-size: 11.5px;
     letter-spacing: 0.13em;
   }
   .hp-title {
@@ -747,9 +750,10 @@
   .hp-hero {
     min-height: max(720px, calc(100svh - 216px));
   }
-  /* Keeps the platform line on ONE row at 375px — it wraps at 11px/0.13em. */
+  /* Keeps the platform line on ONE row at 375px: 10.5px measures 310px against
+     347px of available width. */
   .hp-eyebrow {
-    font-size: 9.5px;
+    font-size: 10.5px;
     letter-spacing: 0.1em;
   }
 }
