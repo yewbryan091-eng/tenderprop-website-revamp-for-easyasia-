@@ -174,7 +174,7 @@ function HomePage() {
             <h1 id="hp-title" className="hp-title">
               <span className="hp-title-line hp-title-primary">Find a property.</span>{" "}
               <span className="hp-title-line hp-title-secondary">
-                Choose how you <em className="hp-title-buy">buy</em> and{" "}
+                Choose how you <em className="hp-title-buy">buy</em> or{" "}
                 <em className="hp-title-sell">sell</em> it.
               </span>
             </h1>
@@ -193,9 +193,7 @@ function HomePage() {
                     <EventDate date={TENDER_DATE} dateTime={NEXT_TENDER_DATE} />
                   </p>
                 </div>
-                <p className="hp-product-note">
-                  Name your price in a sealed offer &mdash; even below the reserve.
-                </p>
+                <p className="hp-product-note">Name your price in a private sealed offer.</p>
                 <Link className="hp-product-link" to="/tender" search={{ q: undefined }}>
                   <span>View E-Tender Listings</span>
                   <span aria-hidden="true">&rarr;</span>
@@ -207,18 +205,17 @@ function HomePage() {
                 <div className="hp-product-event">
                   <CountdownClock countdown={remaining.auction} label="Next Owner Auction in" />
                   <span className="hp-product-rule" aria-hidden="true" />
-                  {/* The auction STARTS at a stated time, so this one keeps it. */}
+                  {/* Date only, matching E-Tender. The exact 9:00 AM start used to
+                      print here; removing it makes the two halves identical in
+                      content, so every row lines up across the seam. */}
                   <p className="hp-product-date">
                     <EventDate
                       date={AUCTION_DATE}
                       dateTime={`${OWNER_AUCTION.date}T${OWNER_AUCTION.time24}+08:00`}
                     />
-                    <span>
-                      {OWNER_AUCTION.timeLabel} {OWNER_AUCTION.timezone}
-                    </span>
                   </p>
                 </div>
-                <p className="hp-product-note">Live bidding, straight from the property owner.</p>
+                <p className="hp-product-note">Bid live online on auction day.</p>
                 <Link className="hp-product-link" to="/owner-auction" search={{ q: undefined }}>
                   <span>View Owner Auction Listings</span>
                   <span aria-hidden="true">&rarr;</span>
