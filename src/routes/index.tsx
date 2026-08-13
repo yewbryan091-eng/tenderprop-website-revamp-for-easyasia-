@@ -1,8 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import { HomeSearch } from "@/components/home/HomeSearch";
-import { ScrollCue } from "@/components/home/ScrollCue";
 import { TwoWays } from "@/components/home/TwoWays";
 import { SiteFooter } from "@/components/tender/SiteFooter";
 import { SiteHeader } from "@/components/tender/SiteHeader";
@@ -18,7 +17,6 @@ import {
 } from "@/lib/tender-utils";
 import "@/styles/tender-listings.css";
 import "@/styles/home.css";
-import "@/styles/home-scrollcue.css";
 import "@/styles/home-search.css";
 import "@/styles/home-twoways.css";
 
@@ -162,10 +160,6 @@ function HomePage() {
                     <span>11:59 PM MYT</span>
                   </p>
                 </div>
-                <Link className="hp-product-link" to="/tender" search={{ q: undefined }}>
-                  <span>View E-Tender listings</span>
-                  <span aria-hidden="true">→</span>
-                </Link>
               </article>
 
               <article className="hp-product hp-product-auction">
@@ -184,20 +178,14 @@ function HomePage() {
                     </span>
                   </p>
                 </div>
-                <Link className="hp-product-link" to="/owner-auction" search={{ q: undefined }}>
-                  <span>View Owner Auction listings</span>
-                  <span aria-hidden="true">→</span>
-                </Link>
               </article>
             </div>
           </div>
-
-          {/* Foot of the fold — sits under the product panel once it lands, and
-              is positioned against the hero so it stays out of its layout. */}
-          <ScrollCue />
         </section>
 
-        {/* Straddles the seam — pulled up over the hero by `--hs-overlap`. */}
+        {/* Straddles the seam — pulled up over the hero by `--hs-overlap`. With
+            the scroll cue gone this card IS the signal that the page continues,
+            and the only action at the fold. */}
         <HomeSearch />
 
         <TwoWays />
