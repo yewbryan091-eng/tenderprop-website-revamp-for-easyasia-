@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 940 700">
+  <!-- KLANG VALLEY - TenderProp section 2 illustration geometry.
+       Layer 1 "plate": extrude this in Spline (suggest 28-36 units deep).
+       Layer 2 "roads": optional engrave/decal on the plate top.
+       Layer 3 "markers": POSITION REFERENCE ONLY - the real markers and stems
+       are built as 3D objects in Spline at these coordinates; delete this
+       layer before final render. Do not render text in the 3D scene - all
+       type stays HTML. -->
+  <g id="plate">
+    <path d="M 95 430 Q 50 380 65 330 Q 80 280 110 250 Q 140 220 190 190 Q 240 160 290 140 Q 340 120 400 105 Q 460 90 520 95 Q 580 100 630 120 Q 680 140 720 170 Q 760 200 800 250 Q 840 300 860 350 Q 880 400 860 450 Q 840 500 790 535 Q 740 570 680 590 Q 620 610 560 615 Q 500 620 440 600 Q 380 580 320 560 Q 260 540 200 510 Q 140 480 95 430 Z" fill="#F1E8DE"/>
+  </g>
+  <g id="roads" fill="none" stroke="#571C2E" stroke-width="3" stroke-dasharray="2 11" stroke-linecap="round" opacity="0.5">
+    <path d="M 70 400 C 260 460, 440 400, 700 300"/><path d="M 300 150 C 350 280, 320 440, 240 580"/>
+  </g>
+  <g id="markers-reference-delete-me">
+    <circle id="etender-shah-alam" cx="240" cy="440" r="9" fill="#571C2E"/><circle id="auction-ampang" cx="730" cy="300" r="9" fill="#8A6420"/><circle id="etender-kajang" cx="660" cy="500" r="9" fill="#571C2E"/>
+  </g>
+</svg>

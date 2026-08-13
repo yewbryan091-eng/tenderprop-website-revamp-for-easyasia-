@@ -1,0 +1,353 @@
+/* ── /sandbox — SECTION 2 RIGHT-SIDE EXPERIMENTS ──────────────────────────────
+   Dev-only comparison page. Each variant stages the Dua cara band's right
+   column at real size on the section's own paper-deep ground, so what wins
+   here drops into TwoWays with no re-tuning.
+
+   Everything rests visible — no arming on a sandbox page; entrances get
+   rehearsed after a winner is picked, not while judging composition.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.sb {
+  min-height: 100vh;
+  padding: 44px 0 90px;
+  background: var(--paper-deep);
+  color: var(--ink);
+}
+
+.sb-head {
+  width: min(1180px, calc(100% - 56px));
+  margin: 0 auto 10px;
+}
+
+.sb-head h1 {
+  margin: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.sb-head p {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+/* ── Variant frames ────────────────────────────────────────────────────────── */
+.sb-variant {
+  width: min(1180px, calc(100% - 56px));
+  margin: 42px auto 0;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.sb-variant header h2 {
+  margin: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 21px;
+  font-weight: 650;
+  color: var(--burgundy);
+}
+
+.sb-variant header p {
+  margin: 6px 0 0;
+  max-width: 88ch;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.sb-stage {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+}
+
+.sb-foot {
+  margin: 14px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Shared: the standing cards ────────────────────────────────────────────── */
+.sb-card {
+  width: 196px;
+  margin: 0;
+  padding: 11px 13px 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 18px 34px rgba(23, 19, 15, 0.18);
+  overflow: hidden;
+}
+
+.sb-card img {
+  display: block;
+  width: calc(100% + 26px);
+  height: 64px;
+  margin: -11px -13px 9px;
+  object-fit: cover;
+}
+
+.sb-card figcaption {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.sb-riser-tender .sb-card figcaption,
+.sb-card-t figcaption {
+  color: var(--burgundy);
+}
+
+/* Brass for the auction identity — matches the hero panel's pairing. The
+   fold's brass (#d6ad61) is a DARK-ground colour; on paper cards it drops to
+   the darker brass so it still reads. */
+.sb-riser-auction .sb-card figcaption,
+.sb-card-a figcaption {
+  color: #8a6420;
+}
+
+.sb-card-what {
+  margin: 7px 0 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.sb-card-where {
+  margin: 4px 0 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── A + C: the valley plane ───────────────────────────────────────────────── */
+.sb-scene-valley {
+  perspective: 1100px;
+}
+
+.sb-plane {
+  position: relative;
+  width: min(720px, 92vw);
+  aspect-ratio: 94 / 70;
+  transform: rotateX(50deg);
+  transform-style: preserve-3d;
+  /* The steep tilt halves the scene's rendered height; margins rebalance the
+     stage so the risers' heads don't collide with the variant above. */
+  margin: -40px 0 -56px;
+}
+
+.sb-valley {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sb-valley-dots circle {
+  fill: var(--burgundy);
+  opacity: 0.4;
+}
+
+.sb-valley-roads path {
+  fill: none;
+  stroke: var(--burgundy);
+  stroke-width: 0.35;
+  stroke-dasharray: 0.2 1.1;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.sb-valley-labels text {
+  font-family: var(--sans);
+  font-size: 2.5px;
+  font-weight: 800;
+  letter-spacing: 0.32px;
+  fill: var(--burgundy);
+  opacity: 0.78;
+  /* A paper halo so names sit ON the dot terrain instead of drowning in it —
+     same trick print maps use. paint-order draws the stroke behind the fill. */
+  paint-order: stroke;
+  stroke: var(--paper-deep);
+  stroke-width: 0.9px;
+  stroke-linejoin: round;
+}
+
+/* ── The risers — post, pin, shadow, standing card ─────────────────────────── */
+.sb-riser {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+
+/* Grounding ellipse ON the plane, under the post. */
+.sb-riser-shadow {
+  position: absolute;
+  width: 44px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(23, 19, 15, 0.3) 0%, transparent 68%);
+}
+
+/* The post stands perpendicular to the plane: rotate the plane's XY into Z. */
+.sb-riser-post {
+  position: absolute;
+  width: 1.5px;
+  height: var(--rise);
+  transform-origin: bottom center;
+  transform: translate(-50%, -100%) rotateX(-90deg) translateY(0);
+  /* rotateX(-90) around the bottom edge tips this line up out of the plane. */
+  background: linear-gradient(
+    to top,
+    rgba(87, 28, 46, 0.75),
+    rgba(87, 28, 46, 0.25)
+  );
+}
+
+.sb-riser-auction .sb-riser-post {
+  background: linear-gradient(to top, rgba(138, 100, 32, 0.8), rgba(138, 100, 32, 0.28));
+}
+
+.sb-riser-pin {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--burgundy);
+}
+
+.sb-riser-auction .sb-riser-pin {
+  background: #8a6420;
+}
+
+.sb-riser-pin::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  color: inherit;
+  opacity: 0.5;
+  animation: sb-pulse 3.2s ease-out infinite;
+}
+
+.sb-riser-tender .sb-riser-pin::after {
+  color: var(--burgundy);
+}
+
+.sb-riser-auction .sb-riser-pin::after {
+  color: #8a6420;
+}
+
+@keyframes sb-pulse {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* The card floats at the top of its post, counter-rotated to face the reader.
+   translateZ lifts it off the plane by the post's height. */
+.sb-riser .sb-card {
+  position: absolute;
+  transform: translate(-50%, -100%) translateZ(var(--rise)) rotateX(-50deg);
+  transform-origin: bottom center;
+}
+
+/* ── B: the house ──────────────────────────────────────────────────────────── */
+.sb-frame {
+  position: relative;
+  width: min(720px, 92vw);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 56px rgba(23, 19, 15, 0.22);
+}
+
+.sb-frame > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+}
+
+.sb-leads {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sb-leads path {
+  fill: none;
+  stroke: rgba(255, 248, 239, 0.75);
+  stroke-width: 0.35;
+  stroke-dasharray: 1.4 1.2;
+}
+
+.sb-pin {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff8ef;
+  box-shadow: 0 0 10px rgba(255, 248, 239, 0.8);
+}
+
+.sb-pin::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 248, 239, 0.6);
+  animation: sb-pulse 3.2s ease-out infinite;
+}
+
+.sb-pin-2::after {
+  animation-delay: 1.6s;
+}
+
+.sb-card-flat {
+  position: absolute;
+  box-shadow: 0 14px 30px rgba(10, 8, 6, 0.35);
+}
+
+/* ── Small screens: the sandbox is a desktop judging room, keep it usable ──── */
+@media (max-width: 760px) {
+  .sb-plane {
+    transform: rotateX(46deg);
+    margin: -24px 0 -36px;
+  }
+  .sb-card {
+    width: 168px;
+  }
+  .sb-card-flat {
+    position: static;
+    margin: 8px auto 0;
+  }
+  .sb-scene-house .sb-frame {
+    border-radius: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-riser-pin::after,
+  .sb-pin::after {
+    animation: none;
+  }
+}
