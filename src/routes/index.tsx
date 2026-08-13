@@ -104,17 +104,16 @@ function CountdownClock({ countdown, label }: { countdown: EventCountdown; label
   return (
     <>
       <span className="sr-only">{accessibleCountdown}</span>
-      {/* ONE CENTRED AXIS. This briefly used the Residensi Sinaran deadline
-          panel's `1fr auto 1fr` grid, with the tick hanging off the numeral's
-          baseline to the right. That panel is full-bleed; a homepage half is
-          ~442px, and the numeral plus tick measured ~484px — so the row could
-          not be centred at all and the numeral was pinned to the left edge
-          while the divider, date and CTA below it stayed centred. Everything
-          now shares one axis: eyebrow, numeral, DAYS LEFT, then the clock. */}
+      {/* `1fr auto 1fr`: eyebrow, numeral and DAYS LEFT share the centre
+          column, the tick hangs off the numeral's BASELINE in column three.
+          The numeral only drifts off-centre by (col3 - col1)/2, so the tick
+          MUST stay narrow enough that column three does not eat column one —
+          at 26px it measured 250px against 442px of content, column one
+          collapsed to zero and the numeral was pinned to the left edge. Keep
+          it near 120px and the numeral sits within ~10px of true centre. */}
       <div className="hp-product-clock" aria-hidden="true">
         <p className="hp-product-status">{label}</p>
         <b>{countdown.days ?? "\u00a0"}</b>
-        <i>{countdown.days === 1 ? "day left" : "days left"}</i>
         <span className="hp-tick">
           {(
             [
@@ -129,6 +128,7 @@ function CountdownClock({ countdown, label }: { countdown: EventCountdown; label
             </span>
           ))}
         </span>
+        <i>{countdown.days === 1 ? "day left" : "days left"}</i>
       </div>
     </>
   );
