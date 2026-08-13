@@ -118,7 +118,7 @@
   position: relative;
   isolation: isolate;
   width: min(1120px, 100%);
-  min-height: 196px;
+  min-height: 300px;
   margin-top: clamp(30px, 4vh, 42px);
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -146,31 +146,32 @@
    seam cuts ONE continuous photograph. That is also the product argument —
    same market, same streets, two ways in — which two different photographs
    actively contradicted. Saves ~556 KB of the fold's weight. */
+/* Alpha was 0.44 / 0.50, chosen to preserve photographic tonal range. Rendered,
+   that let the skyline's lit windows and the sunset run straight through the
+   day counts and the CTAs — the photo stopped being ground and competed as
+   content. At 0.74 the panorama still reads as atmosphere behind both halves
+   but nothing in the panel has to fight it. */
 .hp-products::before {
-  /* Alpha tuned by measurement, not taste: the photo behind this band is
-     already night-dark, so the wash buys almost no extra contrast (white sits
-     at ~10:1 either way) but every extra 0.1 of alpha halves the photographic
-     detail that survives. 0.44 keeps roughly twice the tonal range of 0.66
-     while the gold time label still clears 4.5:1 for small text. */
-  background: rgba(87, 28, 46, 0.44);
-  clip-path: polygon(0 0, 53% 0, 47% 100%, 0 100%);
+  background: rgba(87, 28, 46, 0.74);
+  clip-path: polygon(0 0, 55% 0, 45% 100%, 0 100%);
 }
 
 .hp-products::after {
-  background: rgba(26, 22, 20, 0.5);
-  clip-path: polygon(53% 0, 100% 0, 100% 100%, 47% 100%);
+  /* Warm graphite, not neutral black — it has to sit beside burgundy. */
+  background: rgba(30, 25, 21, 0.74);
+  clip-path: polygon(55% 0, 100% 0, 100% 100%, 45% 100%);
 }
 
+/* The seam is clipped to the SAME boundary as the two halves rather than being
+   a rotated 1px bar. The rotated version only lined up at one panel size — the
+   angle was hard-coded at 6.3deg while the clip-path boundary changes angle
+   with the panel's aspect ratio, so they drifted apart as the panel resized. */
 .hp-products-seam {
   position: absolute;
+  inset: 0;
   z-index: 2;
-  top: -8%;
-  bottom: -8%;
-  left: 50%;
-  width: 1px;
-  background: rgba(214, 173, 97, 0.72);
-  transform: rotate(6.3deg);
-  transform-origin: center;
+  background: rgba(214, 173, 97, 0.62);
+  clip-path: polygon(55% 0, 55.12% 0, 45.12% 100%, 45% 100%);
   pointer-events: none;
 }
 
@@ -178,29 +179,43 @@
   position: relative;
   z-index: 1;
   min-width: 0;
-  padding: 17px 38px 19px;
+  padding: 24px 40px 26px;
   display: flex;
   flex-direction: column;
   color: var(--hp-panel-white);
 }
 
+/* The extra inner padding is the diagonal's clearance — the seam leans 10% of
+   the panel's width across its height, so each half loses room on the side it
+   is cut. Without this the CTAs sit under the opposite wash. */
 .hp-product-tender {
-  padding-right: 64px;
+  padding-right: 78px;
 }
 
 .hp-product-auction {
-  padding-left: 64px;
+  padding-left: 78px;
 }
 
+/* A 34px accent stroke, not a full-width rule. The old border-bottom ran the
+   whole label and read as a document heading; the short stroke keeps Bryan's
+   two underlined corner labels while letting each product carry its own
+   colour — cream for E-Tender, brass for Owner Auction. */
 .hp-product-name {
   width: fit-content;
   margin: 0;
-  padding-bottom: 4px;
-  border-bottom: 1px solid rgba(255, 248, 239, 0.74);
-  font: 800 12px/1.2 var(--sans);
-  letter-spacing: 0.14em;
+  font: 800 16px/1.2 var(--sans);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 248, 239, 0.78);
+  color: rgba(255, 248, 239, 0.94);
+}
+
+.hp-product-name::after {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin-top: 9px;
+  background: rgba(255, 248, 239, 0.82);
 }
 
 .hp-product-auction .hp-product-name {
@@ -208,21 +223,30 @@
   text-align: right;
 }
 
+.hp-product-auction .hp-product-name::after {
+  margin-left: auto;
+  background: #d6ad61;
+}
+
 /* The one line that says what the route actually IS. The panel previously
    spent all of its weight on a date and never explained either product, so a
    stranger learned nothing about sealed offers vs live bidding. */
 .hp-product-what {
-  margin: 7px 0 0;
-  font: 500 13px/1.35 var(--sans);
-  color: rgba(255, 248, 239, 0.9);
+  margin: 10px 0 0;
+  font: 400 15px/1.35 var(--sans);
+  color: rgba(255, 248, 239, 0.85);
 }
 
 .hp-product-auction .hp-product-what {
   text-align: right;
 }
 
+/* Two `auto` margins — one here, one on the CTA — split the half's free space
+   into two equal gaps, so the label block, the countdown and the action sit on
+   the same rhythm on both sides of the seam. Fixed margins made the panel
+   top-heavy: the countdown crowded the subtitle and left a void above the CTA. */
 .hp-product-event {
-  margin-top: 7px;
+  margin-top: auto;
   text-align: center;
 }
 
@@ -234,79 +258,36 @@
   color: rgba(255, 248, 239, 0.68);
 }
 
+/* "122 DAYS" reads as one quantity on one baseline. Stacked over a separate
+   DAYS LEFT caption, with a rule under it, the count was three stacked objects
+   and the panel looked like a dashboard row rather than an event. */
 .hp-product-clock {
-  margin-top: 6px;
+  margin-top: 9px;
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 10px;
+  gap: 9px;
   color: var(--hp-panel-white);
 }
 
-.hp-product-day-stack {
-  display: grid;
-  justify-items: center;
-}
-
-.hp-product-day-stack strong {
-  min-width: 2.15ch;
+.hp-product-clock strong {
   font-family: "Newsreader", Georgia, serif;
   font-optical-sizing: auto;
-  font-size: clamp(40px, 3.3vw, 50px);
+  font-size: clamp(44px, 3.7vw, 56px);
   font-weight: 550;
   line-height: 0.86;
   letter-spacing: -0.055em;
 }
 
-.hp-product-day-stack > span {
-  margin-top: 6px;
-  font: 750 11px/1 var(--sans);
-  letter-spacing: 0.09em;
+.hp-product-clock > span {
+  font: 750 13px/1 var(--sans);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 248, 239, 0.74);
-}
-
-.hp-product-tick {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-}
-
-.hp-product-tick-unit {
-  position: relative;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 2px;
-}
-
-.hp-product-tick-unit + .hp-product-tick-unit::before {
-  content: ":";
-  position: absolute;
-  right: calc(100% + 3px);
-  color: rgba(255, 248, 239, 0.52);
-}
-
-.hp-product-tick b {
-  min-width: 2ch;
-  font: 750 22px/1 var(--sans);
-  letter-spacing: 0.015em;
-}
-
-.hp-product-tick small {
-  font: 750 9px/1 var(--sans);
-  color: rgba(255, 248, 239, 0.66);
-}
-
-.hp-product-divider {
-  width: min(200px, 66%);
-  height: 1px;
-  margin: 8px auto 7px;
-  display: block;
-  background: rgba(255, 248, 239, 0.34);
+  color: rgba(255, 248, 239, 0.8);
 }
 
 .hp-product-date {
-  margin: 0;
+  margin: 7px 0 0;
   display: grid;
   justify-items: center;
   gap: 3px;
@@ -337,19 +318,22 @@
   color: #d6ad61;
 }
 
+/* Same geometry both sides; the colour is what separates them. E-Tender is
+   cream — private, editorial. Owner Auction is brass — event, formal. */
 .hp-product-link {
   width: fit-content;
   min-width: 0;
-  min-height: 42px;
+  min-height: 48px;
   margin: auto auto 0;
-  padding: 0 20px;
-  border: 1px solid rgba(255, 248, 239, 0.7);
+  padding: 0 22px;
+  border: 1px solid rgba(255, 248, 239, 0.55);
+  background: rgba(255, 248, 239, 0.12);
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 18px;
   color: var(--hp-panel-white);
-  font: 750 12.5px/1 var(--sans);
+  font: 750 13px/1 var(--sans);
   text-decoration: none;
   transition:
     background-color 160ms ease,
@@ -357,10 +341,22 @@
     color 160ms ease;
 }
 
-.hp-product-link:hover {
+.hp-product-tender .hp-product-link:hover {
   border-color: var(--hp-panel-white);
   background: var(--hp-panel-white);
   color: #571c2e;
+}
+
+.hp-product-auction .hp-product-link {
+  border-color: rgba(214, 173, 97, 0.72);
+  background: rgba(214, 173, 97, 0.1);
+  color: #f2e0ba;
+}
+
+.hp-product-auction .hp-product-link:hover {
+  border-color: #d6ad61;
+  background: #d6ad61;
+  color: #1e1915;
 }
 
 .hp-product-link:focus-visible {
@@ -424,21 +420,15 @@
     grid-template-rows: repeat(2, minmax(0, 1fr));
   }
   .hp-products::before {
-    background-position: 50% 18%;
     clip-path: polygon(0 0, 100% 0, 100% 48%, 0 52%);
   }
   .hp-products::after {
-    background-position: 50% 82%;
     clip-path: polygon(0 52%, 100% 48%, 100% 100%, 0 100%);
   }
+  /* Same trick as desktop: clip the seam to the stacked layout's own boundary
+     so it cannot drift from where the two washes actually meet. */
   .hp-products-seam {
-    top: 50%;
-    right: -4%;
-    bottom: auto;
-    left: -4%;
-    width: auto;
-    height: 1px;
-    transform: rotate(-2.3deg);
+    clip-path: polygon(0 52%, 100% 48%, 100% 48.35%, 0 52.35%);
   }
   .hp-product,
   .hp-product-tender,
@@ -452,54 +442,46 @@
   .hp-product-auction {
     padding-top: 20px;
   }
+  /* Sized so the two stacked halves land near the 427px the ledger calls for:
+     both CTAs have to stay reachable inside the first 812px viewport, and the
+     scroll cue is positioned against the hero — let this panel grow and it
+     runs straight underneath the cue. */
   .hp-product-name {
-    padding-bottom: 3px;
-    font-size: 11px;
+    font-size: 12px;
+  }
+  .hp-product-name::after {
+    width: 28px;
+    margin-top: 5px;
+  }
+  .hp-product-what {
+    margin-top: 6px;
+    font-size: 13px;
   }
   .hp-product-event {
-    margin-top: 5px;
+    margin-top: 4px;
   }
   .hp-product-status {
     font-size: 10px;
   }
   .hp-product-clock {
-    margin-top: 3px;
-    gap: 11px;
-  }
-  .hp-product-day-stack strong {
-    font-size: 50px;
-  }
-  .hp-product-day-stack > span {
-    margin-top: 3px;
-    font-size: 9px;
-  }
-  .hp-product-tick {
+    margin-top: 2px;
     gap: 7px;
   }
-  .hp-product-tick b {
-    font-size: 18px;
+  .hp-product-clock strong {
+    font-size: 42px;
   }
-  .hp-product-tick small {
-    font-size: 8px;
-  }
-  .hp-product-divider {
-    width: min(240px, 76%);
-    margin: 5px auto;
+  .hp-product-clock > span {
+    font-size: 10px;
   }
   .hp-product-date {
-    font-size: 23px;
-  }
-  .hp-product-date-auction {
-    gap: 0;
-  }
-  .hp-product-date-auction > span {
-    font-size: 10px;
+    margin-top: 2px;
+    font-size: 21px;
   }
   .hp-product-link {
     min-width: 168px;
-    min-height: 35px;
-    margin-top: 6px;
-    font-size: 12px;
+    min-height: 38px;
+    margin-top: 7px;
+    font-size: 11.5px;
   }
 }
 

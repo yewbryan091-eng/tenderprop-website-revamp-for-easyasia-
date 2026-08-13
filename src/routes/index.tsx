@@ -96,10 +96,8 @@ function CountdownClock({ countdown }: { countdown: EventCountdown }) {
     <>
       <span className="sr-only">{accessibleCountdown}</span>
       <div className="hp-product-clock" aria-hidden="true">
-        <div className="hp-product-day-stack">
-          <strong>{countdown.days ?? "\u00a0"}</strong>
-          <span>{countdown.days === 1 ? "day left" : "days left"}</span>
-        </div>
+        <strong>{countdown.days ?? "\u00a0"}</strong>
+        <span>{countdown.days === 1 ? "day" : "days"}</span>
       </div>
     </>
   );
@@ -159,14 +157,13 @@ function HomePage() {
                 <div className="hp-product-event">
                   <p className="hp-product-status">E-Tender closes in</p>
                   <CountdownClock countdown={remaining.tender} />
-                  <span className="hp-product-divider" aria-hidden="true" />
                   <p className="hp-product-date">
                     <EventDate date={TENDER_DATE} dateTime={NEXT_TENDER_DATE} />
                     <span>11:59 PM MYT</span>
                   </p>
                 </div>
                 <Link className="hp-product-link" to="/tender" search={{ q: undefined }}>
-                  <span>See E-Tender listings</span>
+                  <span>View E-Tender listings</span>
                   <span aria-hidden="true">→</span>
                 </Link>
               </article>
@@ -177,7 +174,6 @@ function HomePage() {
                 <div className="hp-product-event">
                   <p className="hp-product-status">Next Owner Auction in</p>
                   <CountdownClock countdown={remaining.auction} />
-                  <span className="hp-product-divider" aria-hidden="true" />
                   <p className="hp-product-date">
                     <EventDate
                       date={AUCTION_DATE}
@@ -189,7 +185,7 @@ function HomePage() {
                   </p>
                 </div>
                 <Link className="hp-product-link" to="/owner-auction" search={{ q: undefined }}>
-                  <span>See Owner Auction listings</span>
+                  <span>View Owner Auction listings</span>
                   <span aria-hidden="true">→</span>
                 </Link>
               </article>
