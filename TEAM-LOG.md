@@ -14,7 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
-| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | *(free)* | — | Headline-only opening shipped 13 Aug: existing panorama, exact two-sentence thesis, editorial Newsreader hierarchy, brass `buy` and wine `sell`; no other hero UI. |
+| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | Codex | 13 Aug 2026 | In progress: deepen image tint, move thesis to top, then add the E-Tender / Owner Auction diagonal product panel beneath it. |
 | Owner Auction `/owner-auction` | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing Owner Auction page architecture/data unchanged. |
 | Global header | `src/components/tender/SiteHeader.tsx`, `.nav*` rules in `tender-listings.css` | *(free)* | — | Rebuilt 6 Aug: About removed, true-centred (`1fr auto 1fr`), calm ink links with a burgundy underline for active, and the `.nav-pkg` package tab carrying "Valuation Report Included" under **Sell** |
 | Tender listings page | `src/routes/tender/index.tsx`, `PropertyCard.tsx`, `StateFilters.tsx`, `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing listings UI unchanged. |
