@@ -14,6 +14,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 
 | Area | Files | Held by | Since | Status |
 |---|---|---|---|---|
+| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | *(free)* | — | Combined E-Tender / Owner Auction event instrument completed and verified 13 Aug; source pages, navigation and lower-page content unchanged. |
 | Homepage `/` — **fold / section 1** | `src/routes/index.tsx` (hero block), `src/styles/home.css`, `public/assets/layout/home-*` | Codex | 13 Aug 2026 | In progress: deepen image tint, move thesis to top, then add the E-Tender / Owner Auction diagonal product panel beneath it. Bryan's sketch (13 Aug) is the spec: headline, merged diagonal panel, scroll cue, then the search bar between sections 1 and 2. |
 | Homepage `/` — **section 2 + scroll cue** | `src/components/home/*`, `src/styles/home-twoways.css`, `src/styles/home-scrollcue.css`, `src/data/malaysia.ts`, one `<TwoWays />` line in `index.tsx` | **Claude** | 13 Aug | "Dua cara" showcase band + the scroll cue under the fold. Own files only, so the fold above stays Codex's. Rules: not live listings, not interactive, not clickable. |
 | Owner Auction `/owner-auction` | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing Owner Auction page architecture/data unchanged. |
@@ -33,6 +34,8 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 | Date | Decision | Why | Decided by |
 |---|---|---|---|
+| 13 Aug | **Homepage section 1 is now a two-tier editorial/event composition:** the exact centred thesis stays in the quiet upper sky; beneath it, one compact diagonal instrument combines the source E-Tender and Owner Auction event panels. Each half keeps its own source image/tint, a live day-led H/M/S clock, full italic event date and one outlined “Go to listings” action. E-Tender is underlined at the upper-left; Owner Auction is underlined at the upper-right. No search box or Owner Auction registration-closing line. Desktop stays 286px tall; mobile stacks both halves into ~427px so both actions are discoverable in the first 812px viewport | Bryan moved on from the headline-isolation stage, supplied both source-page references and his sketch, asked to combine them without making large boxes, then explicitly restored the two underlined corner labels. Three earlier surface treatments established that transparent/source-imagery panels beat solid card slabs; final independent criticism compressed the mobile stack without shrinking away required information | Bryan + Codex |
+| 13 Aug | ~~**Homepage section 1 is headline-only.**~~ **Isolation stage complete; superseded later the same day by the combined-event row above.** The permanent part of this decision is the exact two-line thesis: `buy` italic brass, `sell` italic wine, all other words warm white, with no headline underline or text shadow | Bryan asked to isolate and settle the headline before rebuilding the next part of the first fold. Three rendered scale treatments favoured a stepped editorial hierarchy; independent criticism raised the lockup into quieter sky rather than adding effects over the skyline | Bryan + Codex |
 | 13 Aug | **Homepage section 1 is headline-only.** Keep the existing full-background panorama and remove the platform eyebrow, method selector, search finder, countdown/status copy, buttons, cards and every other hero control. The thesis is exactly **“Find a property. Choose how you buy and sell it.”** as two semantic lines; `buy` is italic brass, `sell` italic wine, all other words warm white. No underline or text shadow | Bryan asked to isolate and settle the headline before rebuilding any other part of the first fold. Three rendered scale treatments favoured a stepped editorial hierarchy; independent criticism raised the lockup into quieter sky rather than adding effects over the skyline | Bryan + Codex |
 | 13 Aug | **Homepage section 2 is a CINEMATIC SHOWCASE, not a tool.** It must not render live listings, must not be interactive, and must not be clickable — a staged illustration of the two buying routes across Malaysia, in the grammar of the iNewProject unit-card section (copy left, annotated scene right, disclaimer footnote). An earlier build of it as a live Klang Valley map with a real timetable was scrapped on this instruction | Bryan: *"it should not be a real data of current live e-tender and owner auction listings, its just a cinematic and creative section... not be interactive, and clickable, just showcasing a creative way of letting people know that they can e-tender or owner auction for properties across malaysia."* The live market has its own pages; the homepage's job here is comprehension, not inventory | Bryan |
 | 13 Aug | **Homepage entrance animations ARM, never reveal.** Markup rests in its finished, visible state; JS adds a class to hide it ready to animate and removes it on approach, through the DOM rather than React state | Twice observed shipping a blank section: a throttled/hidden tab starves both IntersectionObserver and React's scheduler, and EasyAsia lifts rendered HTML with no React behind it. A section whose visible state depends on a commit is a section that can ship invisible | Claude (from live failures) |
@@ -102,6 +105,26 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 13 Aug 2026 — Codex · Homepage event panels combined beneath the thesis
+
+Built the next first-section layer from Bryan's two source references: the E-Tender KLCC deadline
+panel and the Owner Auction landed-home event panel now form one compact diagonal instrument under
+the existing editorial headline. Both use their original local source imagery under flat blended
+tints, the shared deadline utilities drive live day/hour/minute/second readings, and the full
+italic 12th December 2026 date remains prominent. Owner Auction keeps its brass 9:00 AM MYT; its
+registration-closing sentence is deliberately omitted. Both routes use one outlined “Go to
+listings” action. The underlined method markers sit in the sketched outer corners: E-Tender upper
+left, Owner Auction upper right.
+
+Compared the earlier dark-solid, light-paper and image-transparent surface treatments and retained
+the image-backed treatment because it is the only one that visibly inherits both product pages
+without becoming two detached cards. Desktop is one 286px-high feature. Independent criticism
+approved desktop but found the first mobile build too billboard-like at 574px; the final mobile
+version is ~427px total, with both actions visible by the bottom of a 375×812 viewport. Measured
+`scrollWidth === clientWidth` at 375, production build and focused lint/format pass. Full-repo lint
+remains red on 381 pre-existing formatting issues outside the homepage files; this pass did not
+rewrite those unrelated files.
 
 ### 13 Aug 2026 — Codex · Homepage section 1 reduced to the headline
 

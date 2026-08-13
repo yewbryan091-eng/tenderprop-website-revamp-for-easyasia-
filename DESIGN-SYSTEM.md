@@ -150,6 +150,22 @@ including today, and the final day reads "1 day left" rather than "0".
 ## 4. Established patterns — reuse before inventing
 
 - **Homepage opening**: one seamless Malaysian property panorama as a high-priority `<img>`, under
+  one flat exposure wash (24% desktop / 28% mobile). The centred Newsreader thesis owns the quiet
+  upper sky: “Find a property.” above “Choose how you *buy* and *sell* it.” The first line leads at
+  72–104px desktop; the second steps down to 46–67px. `buy` is italic brass, `sell` italic wine
+  (`#9F3C50` for readable hero type), and everything else is warm white. No eyebrow, search box,
+  supporting paragraph, decorative dots, headline underline or text shadow.
+
+  Beneath the thesis, E-Tender and Owner Auction share **one compact diagonal event instrument**,
+  never two detached cards. Desktop is 286px tall: burgundy-tinted KL skyline at left, dark-tinted
+  landed home at right, and one fine brass seam. Each half carries an underlined method marker in
+  its outer top corner, the matching “closes/starts in” label, a day-led live H/M/S clock, full
+  italic event date and one outlined listings action; Owner Auction alone adds its brass event
+  time. The registration-closing sentence and homepage search stay out. At 650px the instrument
+  stacks across a shallow diagonal seam at roughly 212px per half, keeps Owner Auction's marker at
+  the upper-right, and fits both actions by the bottom of a 375×812 first viewport with zero
+  horizontal overflow. The clocks derive from `tender-utils`; their ticking visual is
+  `aria-hidden` and a non-live screen-reader reading carries the same duration.
   one flat exposure wash (18% desktop / 24% mobile), with **only** the centred Newsreader thesis:
   “Find a property.” above “Choose how you *buy* and *sell* it.” The first line leads at
   72–104px desktop; the second steps down to 46–67px. `buy` is italic brass, `sell` italic wine,
