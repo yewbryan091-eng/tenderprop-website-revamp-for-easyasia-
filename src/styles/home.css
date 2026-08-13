@@ -245,6 +245,34 @@
   background: #d6ad61;
 }
 
+/* Bryan, 13 Aug: the two labels sit in the panel's OUTER TOP CORNERS, as the
+   fold carried them before — E-Tender upper-left, Owner Auction upper-right,
+   each accent stroke tucked under its own label. Only the labels move; the
+   countdown, date, supporting line and CTA stay centred in each half.
+
+   Corner placement also clears the diagonal more safely than centring did:
+   the seam leans toward the left as it descends, so the top-left and top-right
+   extremes are the two points furthest from it. */
+.hp-product-tender .hp-product-name {
+  align-self: flex-start;
+  text-align: left;
+}
+
+.hp-product-tender .hp-product-name::after {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.hp-product-auction .hp-product-name {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.hp-product-auction .hp-product-name::after {
+  margin-right: 0;
+  margin-left: auto;
+}
+
 /* Two `auto` margins — this one and the CTA's — split each half's free space
    into equal gaps, so name / event+line / action share one rhythm on both sides
    of the seam whatever the panel's height. */
