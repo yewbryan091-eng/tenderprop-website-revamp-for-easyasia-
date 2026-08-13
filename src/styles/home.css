@@ -107,8 +107,8 @@
   position: relative;
   isolation: isolate;
   width: min(1120px, 100%);
-  min-height: 286px;
-  margin-top: clamp(38px, 5vh, 52px);
+  min-height: 196px;
+  margin-top: clamp(30px, 4vh, 42px);
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   overflow: hidden;
@@ -124,21 +124,29 @@
   z-index: -1;
 }
 
+/* ── ONE PHOTOGRAPH, CUT IN TWO ───────────────────────────────────────────────
+   These halves were two more photographs — `kl-skyline.webp` and
+   `owner-auction-hero.jpg`, lifted from the two product pages. That put THREE
+   images in the first viewport (905 KB) whose average tones were within a few
+   RGB points of each other, and two of which were the same subject: KLCC
+   appeared in the hero panorama and again in the left panel, 100px apart.
+
+   Now both halves are translucent washes over the hero panorama itself, so the
+   seam cuts ONE continuous photograph. That is also the product argument —
+   same market, same streets, two ways in — which two different photographs
+   actively contradicted. Saves ~556 KB of the fold's weight. */
 .hp-products::before {
-  background-color: #734052;
-  background-image: url("/assets/layout/kl-skyline.webp");
-  background-position: 50% 43%;
-  background-size: cover;
-  background-blend-mode: multiply;
+  /* Alpha tuned by measurement, not taste: the photo behind this band is
+     already night-dark, so the wash buys almost no extra contrast (white sits
+     at ~10:1 either way) but every extra 0.1 of alpha halves the photographic
+     detail that survives. 0.44 keeps roughly twice the tonal range of 0.66
+     while the gold time label still clears 4.5:1 for small text. */
+  background: rgba(87, 28, 46, 0.44);
   clip-path: polygon(0 0, 53% 0, 47% 100%, 0 100%);
 }
 
 .hp-products::after {
-  background-color: #514b49;
-  background-image: url("/assets/layout/owner-auction-hero.jpg");
-  background-position: 50% 28%;
-  background-size: cover;
-  background-blend-mode: multiply;
+  background: rgba(26, 22, 20, 0.5);
   clip-path: polygon(53% 0, 100% 0, 100% 100%, 47% 100%);
 }
 
@@ -159,18 +167,18 @@
   position: relative;
   z-index: 1;
   min-width: 0;
-  padding: 22px 46px 24px;
+  padding: 17px 38px 19px;
   display: flex;
   flex-direction: column;
   color: var(--hp-panel-white);
 }
 
 .hp-product-tender {
-  padding-right: 78px;
+  padding-right: 64px;
 }
 
 .hp-product-auction {
-  padding-left: 78px;
+  padding-left: 64px;
 }
 
 .hp-product-name {
@@ -189,8 +197,21 @@
   text-align: right;
 }
 
+/* The one line that says what the route actually IS. The panel previously
+   spent all of its weight on a date and never explained either product, so a
+   stranger learned nothing about sealed offers vs live bidding. */
+.hp-product-what {
+  margin: 7px 0 0;
+  font: 500 13px/1.35 var(--sans);
+  color: rgba(255, 248, 239, 0.9);
+}
+
+.hp-product-auction .hp-product-what {
+  text-align: right;
+}
+
 .hp-product-event {
-  margin-top: 9px;
+  margin-top: 7px;
   text-align: center;
 }
 
@@ -203,11 +224,11 @@
 }
 
 .hp-product-clock {
-  margin-top: 8px;
+  margin-top: 6px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: center;
-  gap: 15px;
+  gap: 10px;
   color: var(--hp-panel-white);
 }
 
@@ -220,9 +241,9 @@
   min-width: 2.15ch;
   font-family: "Newsreader", Georgia, serif;
   font-optical-sizing: auto;
-  font-size: clamp(62px, 5.2vw, 74px);
+  font-size: clamp(40px, 3.3vw, 50px);
   font-weight: 550;
-  line-height: 0.82;
+  line-height: 0.86;
   letter-spacing: -0.055em;
 }
 
@@ -266,21 +287,24 @@
 }
 
 .hp-product-divider {
-  width: min(260px, 78%);
+  width: min(200px, 66%);
   height: 1px;
-  margin: 9px auto 8px;
+  margin: 8px auto 7px;
   display: block;
   background: rgba(255, 248, 239, 0.34);
 }
 
 .hp-product-date {
   margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
   font-family: "Newsreader", Georgia, serif;
   font-optical-sizing: auto;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 500;
   font-style: italic;
-  line-height: 1.05;
+  line-height: 1.1;
   letter-spacing: -0.025em;
 }
 
@@ -291,13 +315,10 @@
   line-height: 0;
 }
 
-.hp-product-date-auction {
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-}
-
-.hp-product-date-auction > span {
+/* The exact moment each route ends. This is what makes two different day
+   counts under the same calendar date legible instead of looking like a bug:
+   an E-Tender runs to the end of its closing day, an auction starts at 9am. */
+.hp-product-date > span {
   font: 750 12px/1.2 var(--sans);
   font-style: normal;
   letter-spacing: 0.1em;
@@ -307,17 +328,17 @@
 
 .hp-product-link {
   width: fit-content;
-  min-width: 178px;
-  min-height: 40px;
-  margin: 12px auto 0;
-  padding: 0 17px 0 19px;
-  border: 1px solid rgba(255, 248, 239, 0.64);
+  min-width: 0;
+  min-height: 42px;
+  margin: auto auto 0;
+  padding: 0 20px;
+  border: 1px solid rgba(255, 248, 239, 0.7);
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 22px;
+  gap: 16px;
   color: var(--hp-panel-white);
-  font: 750 13px/1 var(--sans);
+  font: 750 12.5px/1 var(--sans);
   text-decoration: none;
   transition:
     background-color 160ms ease,

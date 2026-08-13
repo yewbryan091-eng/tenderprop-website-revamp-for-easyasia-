@@ -85,15 +85,12 @@ function useHeroCountdowns(): HeroCountdowns {
 }
 
 function CountdownClock({ countdown }: { countdown: EventCountdown }) {
-  const units = [
-    { value: countdown.hours, label: "H" },
-    { value: countdown.minutes, label: "M" },
-    { value: countdown.seconds, label: "S" },
-  ];
+  /* DAYS ONLY. Bryan's father, 30 Jul: what a buyer cares about is how many
+     days are left, not the timer — a seconds column beside a three-digit day
+     count "advertises that nothing is happening". Two of them side by side
+     also ticked a second out of step with each other, which reads as broken. */
   const accessibleCountdown =
-    countdown.days === null
-      ? "Countdown loading"
-      : `${countdown.days} days, ${countdown.hours} hours, ${countdown.minutes} minutes and ${countdown.seconds} seconds`;
+    countdown.days === null ? "Countdown loading" : `${countdown.days} days left`;
 
   return (
     <>
@@ -102,14 +99,6 @@ function CountdownClock({ countdown }: { countdown: EventCountdown }) {
         <div className="hp-product-day-stack">
           <strong>{countdown.days ?? "\u00a0"}</strong>
           <span>{countdown.days === 1 ? "day left" : "days left"}</span>
-        </div>
-        <div className="hp-product-tick">
-          {units.map((unit) => (
-            <span className="hp-product-tick-unit" key={unit.label}>
-              <b>{unit.value === null ? "\u00a0\u00a0" : String(unit.value).padStart(2, "0")}</b>
-              <small>{unit.label}</small>
-            </span>
-          ))}
         </div>
       </div>
     </>
@@ -165,27 +154,30 @@ function HomePage() {
 
               <article className="hp-product hp-product-tender">
                 <h2 className="hp-product-name">E-Tender</h2>
+                <p className="hp-product-what">Sealed offers &mdash; you name the price</p>
                 <div className="hp-product-event">
                   <p className="hp-product-status">E-Tender closes in</p>
                   <CountdownClock countdown={remaining.tender} />
                   <span className="hp-product-divider" aria-hidden="true" />
                   <p className="hp-product-date">
                     <EventDate date={TENDER_DATE} dateTime={NEXT_TENDER_DATE} />
+                    <span>11:59 PM MYT</span>
                   </p>
                 </div>
-                <Link className="hp-product-link" to="/tender" aria-label="Go to E-Tender listings">
-                  <span>Go to listings</span>
+                <Link className="hp-product-link" to="/tender" search={{ q: undefined }}>
+                  <span>See E-Tender listings</span>
                   <span aria-hidden="true">→</span>
                 </Link>
               </article>
 
               <article className="hp-product hp-product-auction">
                 <h2 className="hp-product-name">Owner Auction</h2>
+                <p className="hp-product-what">Live bidding on auction day</p>
                 <div className="hp-product-event">
                   <p className="hp-product-status">Next Owner Auction in</p>
                   <CountdownClock countdown={remaining.auction} />
                   <span className="hp-product-divider" aria-hidden="true" />
-                  <p className="hp-product-date hp-product-date-auction">
+                  <p className="hp-product-date">
                     <EventDate
                       date={AUCTION_DATE}
                       dateTime={`${OWNER_AUCTION.date}T${OWNER_AUCTION.time24}+08:00`}
@@ -195,12 +187,8 @@ function HomePage() {
                     </span>
                   </p>
                 </div>
-                <Link
-                  className="hp-product-link"
-                  to="/owner-auction"
-                  aria-label="Go to Owner Auction listings"
-                >
-                  <span>Go to listings</span>
+                <Link className="hp-product-link" to="/owner-auction" search={{ q: undefined }}>
+                  <span>See Owner Auction listings</span>
                   <span aria-hidden="true">→</span>
                 </Link>
               </article>
