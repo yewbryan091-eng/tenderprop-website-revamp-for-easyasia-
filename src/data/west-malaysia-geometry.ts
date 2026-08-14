@@ -113,8 +113,8 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 100.75,
     x: 237.61,
     y: 184.98,
-    color: "#A77A7E",
-    stemHeight: 92,
+    color: "#B98A91",
+    stemHeight: 212,
   },
   {
     key: "central",
@@ -123,8 +123,8 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 101.6054,
     x: 421.59,
     y: 522.8,
-    color: "#B97B62",
-    stemHeight: 76,
+    color: "#BE9177",
+    stemHeight: 54,
   },
   {
     key: "south",
@@ -133,7 +133,7 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 103.1988,
     x: 764.3,
     y: 965.99,
-    color: "#9A8C67",
-    stemHeight: 64,
+    color: "#A69A76",
+    stemHeight: 44,
   },
 ] as const;

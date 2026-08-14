@@ -167,30 +167,40 @@
   pointer-events: none;
 }
 
-.wm-pool-outer {
+/* Three washes, largest and softest first. Opacities stay low so the state
+   engraving and the limestone grain still read THROUGH the stain — it should
+   register as "this area is softly highlighted", not as a marker. */
+.wm-pool-a {
+  stroke: none;
+  opacity: 0.13;
+}
+
+.wm-pool-b {
+  stroke: none;
+  opacity: 0.18;
+}
+
+.wm-pool-c {
   stroke: none;
   opacity: 0.24;
 }
 
-.wm-pool-inner {
-  stroke: none;
-  opacity: 0.34;
-}
-
+/* Deliberately quiet. The eye should travel watercolour -> stem, not
+   "map marker -> stem", so the peg is barely more than a tonal dot. */
 .wm-peg-base {
-  stroke: rgba(35, 22, 18, 0.38);
-  stroke-width: 0.5;
+  stroke: rgba(35, 22, 18, 0.16);
+  stroke-width: 0.4;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
 .wm-peg-top {
-  fill: rgba(255, 253, 248, 0.32);
+  fill: rgba(255, 253, 248, 0.2);
   pointer-events: none;
 }
 
 .wm-peg-bottom {
-  fill: rgba(32, 20, 16, 0.26);
+  fill: rgba(32, 20, 16, 0.14);
   pointer-events: none;
 }
 
@@ -286,7 +296,7 @@
    this the top of both cards was cut off by the section edge. The plate keeps
    its own size; only the space above it grows. */
 .wm-map {
-  padding-top: clamp(46px, 7.5vw, 96px);
+  padding-top: clamp(150px, 18vw, 226px);
 }
 
 /* Zero-size point sitting on the peg. `--wm-peg-*` are written by useStemTips()
@@ -306,11 +316,11 @@
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 1.4px;
+  width: 1.5px;
   height: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
-  margin-left: -0.7px;
+  margin-left: -0.75px;
   background: var(--wm-stem-color, #8a7663);
-  opacity: 0.8;
+  opacity: 0.72;
 }
 
 .wm-card {
@@ -318,7 +328,10 @@
   left: 0;
   bottom: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
   width: calc(152px * var(--wm-stem-scale, 1));
-  transform: translateX(calc(-50% + var(--wm-card-dx, 0px) * var(--wm-stem-scale, 1)));
+  /* Dead centre on the stem. The stem sits at the anchor's left:0, so a plain
+     -50% puts the card's horizontal centre on the stem's centreline exactly —
+     no per-card nudges, which is what let them drift apart before. */
+  transform: translateX(-50%);
   border-radius: 12px;
   background: #fffcf8;
   /* A tight contact shadow so it reads as a solid object, plus a wide soft one

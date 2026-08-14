@@ -27,17 +27,27 @@ const DEPTH_LAYERS = Array.from({ length: 21 }, (_, index) => 21 - index);
    matching the brief's 34-44 unit target) and a smaller, denser inner body.
    Different outlines (not one shape rescaled) so the pair never reads as a
    concentric ring. */
-const POOL_OUTER_PATH =
-  "M2 -19 C9 -18 16 -13 18 -6 C20 1 17 9 11 14 C5 19 -4 20 -11 16 C-18 12 -21 3 -19 -5 C-17 -13 -10 -18 -2 -19 Z";
-const POOL_INNER_PATH =
-  "M0 -11 C5 -11 9 -7 10 -2 C11 3 8 8 3 10 C-2 12 -8 9 -10 4 C-12 -1 -9 -7 -4 -10 C-2 -11 -1 -11 0 -11 Z";
+const POOL_WASH_A =
+  "M6 -72 C34 -68 58 -50 66 -24 C74 2 66 30 46 48 C26 66 -4 72 -30 62 C-56 52 -72 28 -70 0 C-68 -28 -50 -52 -26 -64 C-18 -69 -8 -72 6 -72 Z";
+const POOL_WASH_B =
+  "M-4 -50 C20 -52 42 -38 50 -16 C58 6 50 30 30 42 C10 54 -16 52 -34 38 C-52 24 -56 0 -48 -20 C-40 -40 -22 -49 -4 -50 Z";
+const POOL_WASH_C =
+  "M2 -28 C16 -27 26 -18 28 -6 C30 6 24 18 12 24 C0 30 -14 27 -22 18 C-30 9 -30 -6 -22 -16 C-16 -24 -8 -28 2 -28 Z";
 
-/* Distinct outer/inner rotation per location keeps the two layers visibly
-   off-axis from each other so the wash reads as an irregular stain. */
+/* THREE related-but-different outlines, never one shape rescaled — a shape
+   scaled three times reads as a concentric ring, which is exactly the radar-dot
+   look this is meant to avoid. Each layer also gets its own rotation and a small
+   offset per location, so no two stains repeat and none is radially symmetric. */
+const POOL_LAYERS = [
+  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true },
+  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true },
+  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false },
+] as const;
+
 const POOL_TILTS = [
-  { outer: -12, inner: 58 },
-  { outer: 34, inner: -21 },
-  { outer: 96, inner: 12 },
+  { a: { r: -12, x: -5, y: 4 }, b: { r: 58, x: 6, y: -5 }, c: { r: 24, x: -2, y: 3 } },
+  { a: { r: 34, x: 7, y: -3 }, b: { r: -21, x: -6, y: 6 }, c: { r: 70, x: 3, y: 2 } },
+  { a: { r: 96, x: -4, y: -6 }, b: { r: 12, x: 5, y: 4 }, c: { r: -40, x: -2, y: -3 } },
 ];
 
 /* The cards live in a FLAT layer, so nothing in CSS knows where a peg ended up
@@ -68,8 +78,14 @@ function useStemTips(
       const peg = pegs[index];
       if (!peg) return;
       const p = peg.getBoundingClientRect();
-      anchor.style.setProperty("--wm-peg-x", `${((p.left + p.width / 2 - box.left) / box.width) * 100}%`);
-      anchor.style.setProperty("--wm-peg-y", `${((p.top + p.height / 2 - box.top) / box.height) * 100}%`);
+      anchor.style.setProperty(
+        "--wm-peg-x",
+        `${((p.left + p.width / 2 - box.left) / box.width) * 100}%`,
+      );
+      anchor.style.setProperty(
+        "--wm-peg-y",
+        `${((p.top + p.height / 2 - box.top) / box.height) * 100}%`,
+      );
     });
   }, [mapRef, cardsRef]);
 
@@ -91,7 +107,15 @@ function useStemTips(
 function MailGlyph() {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" width="11" height="11">
-      <rect x="3" y="5" width="18" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" />
+      <rect
+        x="3"
+        y="5"
+        width="18"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+      />
       <path d="m3 5 9 7.2L21 5" fill="none" stroke="currentColor" strokeWidth="2.2" />
     </svg>
   );
@@ -114,7 +138,13 @@ function ClockGlyph() {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" width="12" height="12">
       <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M12 7v5.4l3.4 2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M12 7v5.4l3.4 2"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -122,8 +152,23 @@ function ClockGlyph() {
 function CalendarGlyph() {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" width="12" height="12">
-      <rect x="3.5" y="5.5" width="17" height="15" rx="1.6" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M3.5 10.5h17M8 3.5v4M16 3.5v4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <rect
+        x="3.5"
+        y="5.5"
+        width="17"
+        height="15"
+        rx="1.6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <path
+        d="M3.5 10.5h17M8 3.5v4M16 3.5v4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -150,16 +195,9 @@ const STEM_CARDS: Record<
     price: string;
     footLead: string;
     footSub?: string;
-    /* Horizontal nudge off the stem's axis, in px. The north and central pegs
-       are only ~92px apart on screen — narrower than a card — so centring both
-       on their stems overlapped them and buried the northern price. Fanning
-       them apart is what Bryan's reference does too: its stems meet their cards
-       off-centre rather than dead middle. */
-    dx: number;
   }
 > = {
   north: {
-    dx: -46,
     method: "E-Tender",
     photo: "greenlane-bukit-jelutong-1.jpg",
     name: "Taman Sejati Indah",
@@ -170,7 +208,6 @@ const STEM_CARDS: Record<
     footSub: "Closes 12 Dec 2026",
   },
   central: {
-    dx: 16,
     method: "Owner Auction",
     photo: "country-heights.jpg",
     name: "Jalan Tasik Raban",
@@ -180,7 +217,6 @@ const STEM_CARDS: Record<
     footLead: "12 Dec 2026 · 9:00 AM",
   },
   south: {
-    dx: 0,
     method: "E-Tender",
     photo: "meranti-terrace.jpg",
     name: "Taman Sri Kluang",
@@ -226,11 +262,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
   useStemTips(mapRef, cardsRef);
 
   return (
-    <div
-      ref={mapRef}
-      className={`wm-map wm-map--${finish} ${className}`.trim()}
-      aria-hidden="true"
-    >
+    <div ref={mapRef} className={`wm-map wm-map--${finish} ${className}`.trim()} aria-hidden="true">
       <span className="wm-map-ground" />
       <div className="wm-map-camera">
         <svg
@@ -322,19 +354,20 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               const tilt = POOL_TILTS[index % POOL_TILTS.length];
               return (
                 <g key={location.key} transform={`translate(${location.x} ${location.y})`}>
-                  <path
-                    className="wm-pool-outer"
-                    d={POOL_OUTER_PATH}
-                    transform={`rotate(${tilt.outer}) scale(1.25)`}
-                    fill={location.color}
-                    filter={`url(#${poolBlurId})`}
-                  />
-                  <path
-                    className="wm-pool-inner"
-                    d={POOL_INNER_PATH}
-                    transform={`rotate(${tilt.inner}) scale(1.15)`}
-                    fill={location.color}
-                  />
+                  {POOL_LAYERS.map((layer) => {
+                    const t =
+                      tilt[layer.cls.endsWith("a") ? "a" : layer.cls.endsWith("b") ? "b" : "c"];
+                    return (
+                      <path
+                        key={layer.cls}
+                        className={layer.cls}
+                        d={layer.path}
+                        transform={`translate(${t.x} ${t.y}) rotate(${t.r})`}
+                        fill={location.color}
+                        filter={layer.blur ? `url(#${poolBlurId})` : undefined}
+                      />
+                    );
+                  })}
                 </g>
               );
             })}
@@ -429,32 +462,31 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 {
                   zIndex: index + 1,
                   "--wm-stem-h": `${location.stemHeight}px`,
-                  "--wm-card-dx": `${card.dx}px`,
                   "--wm-stem-color": location.color,
                 } as CSSProperties
               }
             >
               <span className="wm-card-stem" />
               <span className={`wm-card${auction ? " wm-card--auction" : ""}`}>
-              <span className="wm-card-photo">
-                <img src={PROJECT_IMG(card.photo)} alt="" loading="lazy" decoding="async" />
-                <span className="wm-card-badge">
-                  {auction ? <GavelGlyph /> : <MailGlyph />}
-                  {card.method}
+                <span className="wm-card-photo">
+                  <img src={PROJECT_IMG(card.photo)} alt="" loading="lazy" decoding="async" />
+                  <span className="wm-card-badge">
+                    {auction ? <GavelGlyph /> : <MailGlyph />}
+                    {card.method}
+                  </span>
                 </span>
-              </span>
-              <span className="wm-card-body">
-                <span className="wm-card-name">{card.name}</span>
-                <span className="wm-card-place">{card.place}</span>
-                <span className="wm-card-rule" />
-                <span className="wm-card-label">{card.priceLabel}</span>
-                <span className="wm-card-price">{card.price}</span>
-                <span className="wm-card-rule" />
-                <span className="wm-card-foot">
-                  {auction ? <CalendarGlyph /> : <ClockGlyph />}
-                  <b>{card.footLead}</b>
-                </span>
-                {card.footSub ? <span className="wm-card-foot-sub">{card.footSub}</span> : null}
+                <span className="wm-card-body">
+                  <span className="wm-card-name">{card.name}</span>
+                  <span className="wm-card-place">{card.place}</span>
+                  <span className="wm-card-rule" />
+                  <span className="wm-card-label">{card.priceLabel}</span>
+                  <span className="wm-card-price">{card.price}</span>
+                  <span className="wm-card-rule" />
+                  <span className="wm-card-foot">
+                    {auction ? <CalendarGlyph /> : <ClockGlyph />}
+                    <b>{card.footLead}</b>
+                  </span>
+                  {card.footSub ? <span className="wm-card-foot-sub">{card.footSub}</span> : null}
                 </span>
               </span>
             </span>
