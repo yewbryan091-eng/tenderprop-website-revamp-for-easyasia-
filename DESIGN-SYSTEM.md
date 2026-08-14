@@ -204,7 +204,7 @@ including today, and the final day reads "1 day left" rather than "0".
   and land use. The correct area basis changes by property form; the position does not. These
   promoted facts do not repeat in the specification list below.
 - **Facts strip** (`.v1-facts`): three cells, vertical rules between, label / value / sub-line.
-- **Tender Information dossier** (`.v1`): one full-bleed, shallow 40/60 split on every real listing;
+- **E-Tender Information dossier** (`.v1`): one full-bleed, shallow 40/60 split on every real listing;
   desktop height should stay close to the `/tender` hero rather than becoming a tall card. The left
   is the same platform-level monochrome KL panorama under a **flat** burgundy wash and owns all
   timing information: a day-led live countdown with H/M/S subordinate, tender start and closing
@@ -214,6 +214,13 @@ including today, and the final day reads "1 day left" rather than "0".
   link is a separate tertiary row, not a competing utility in the same stretched footer. Never use
   a property photo here; never duplicate deadline information on the right; never restore the pin
   or paperclip. The diagonal collapses to a clean vertical stack at 700px, with timing first.
+- **Owner Auction Bid Information dossier** (`.oa-dossier`): keep the same shallow 40/60 shell
+  but never copy the E-Tender period into it. Owner Auction is one scheduled event. The left is
+  an espresso/brass auction docket: auction day and time dominate; registration closing date and
+  days left form one paired footer. Weekday, month/year and time are one right-hand stack beside
+  the large day numeral so no label can collide with it. The right begins **Starting bid** (not
+  reserve price) → 3% of the successful bid → live-bidding method → auction outcome → Register to
+  bid. The section-nav label is **Bid Information**. At 700px it stacks with the auction docket first.
 - **Slim invitation band** (`.pd-ask`): 44px serif glyph + title + one line + red CTA. ~98px tall.
 - **Body prose**: **two columns at full width**, `line-height: 1.72`, with at most one pull-quote
   (`border-left: 2px solid var(--burgundy)`) as the anchor, placed *outside* any disclosure.

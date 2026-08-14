@@ -79,10 +79,6 @@ const AUCTION_WEEKDAY = new Intl.DateTimeFormat("en-MY", {
   weekday: "long",
   timeZone: "Asia/Kuala_Lumpur",
 }).format(new Date(`${OWNER_AUCTION.date}T00:00:00+08:00`));
-/* Three visual treatments share one semantic docket during QA. One character switches the
-   composition without changing its content: a = event docket, b = countdown-led, c = split. */
-const AUCTION_DOSSIER_VARIANT: string = "a";
-
 /* The payment ladder is derived, never typed. Founder-confirmed 30 Jul 2026: the 3%
    tender deposit is the Malaysian earnest deposit — the first slice of the standard
    10% down payment, not a separate platform charge. Balance to 10% falls due at SPA,
@@ -998,7 +994,7 @@ export function AuctionSinaranDetail() {
           <div className="wrap">
             <div className="row">
               <a className="snav-lead" href="#tender">
-                Tender Information
+                Bid Information
               </a>{" "}
               <a href="#details">Details</a> <a href="#about">About</a>{" "}
               <a href="#selling">Selling Points</a> <a href="#area">What's Nearby</a>{" "}
@@ -1014,7 +1010,7 @@ export function AuctionSinaranDetail() {
             <div className="v1">
               <div className="v1-grid">
                 <section
-                  className={`v1-deadline-panel oa-dossier oa-dossier--${AUCTION_DOSSIER_VARIANT}`}
+                  className="v1-deadline-panel oa-dossier"
                   aria-label={`Owner Auction on ${AUCTION_DATE_LABEL} at ${AUCTION_TIME_LABEL}; registration closes ${REGISTRATION_LABEL}`}
                 >
                   <img
@@ -1026,8 +1022,14 @@ export function AuctionSinaranDetail() {
                   />
                   <div className="v1-deadline-content oa-dossier-content">
                     <div className="oa-dossier-head">
-                      <span className="oa-dossier-kicker">Owner Auction</span>
-                      <span className="oa-dossier-mode">Live bidding</span>
+                      <span className="oa-dossier-kicker">Auction day</span>
+                      <span className="oa-dossier-mode">
+                        {!cd
+                          ? "Registration"
+                          : cd.days > 0 || cd.finalDay
+                            ? "Registration open"
+                            : "Registration closed"}
+                      </span>
                     </div>
 
                     <div className="oa-event-date" aria-hidden="true">
@@ -1086,16 +1088,13 @@ export function AuctionSinaranDetail() {
 
                 <div className="v1-main" id="tender-action-panel">
                   {/* FOUR ZONES, descending weight, ending in the action — not three equal
-                      columns. The reserve price is the number this whole page is about: it is
-                      what a buyer decides against. At a third of a shared row it carried the same
-                      weight as "Method: E-Tender", which is the least surprising fact here. */}
+                      columns. Owner Auction opens at a starting bid; it is not the E-Tender
+                      reserve guide that buyers may offer above or below. */}
                   <div className="v1-price">
                     <div className="v1-price-fig">
-                      <span className="lbl">Reserve price</span>
+                      <span className="lbl">Starting bid</span>
                       <b className="num">{rm(RESERVE)}</b>
-                      {/* FOUNDER-CORRECTED 1 Aug: never "minimum offer considered" or "the floor".
-                          Buyers do offer below it; the seller may accept or counter. */}
-                      <span className="sub">Offer above or below it</span>
+                      <span className="sub">Live bidding begins from this price</span>
                     </div>
                     {/* The action sits BESIDE the price, not at the foot of the panel. Two
                         measurements drove it: the full-width button was 5.2x the width of its own
@@ -1148,7 +1147,7 @@ export function AuctionSinaranDetail() {
                       <span className="lbl">Method</span>
                       <b>Owner Auction</b>
                       <span className="sub">Live bidding</span>
-                      <a className="v1-textlink v1-howto" href="/how-e-tender-works">
+                      <a className="v1-textlink v1-howto" href="/owner-auction">
                         <span>See how Owner Auction works</span>
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                           <path d="M5 12h13M13 6l6 6-6 6" />
@@ -1157,18 +1156,12 @@ export function AuctionSinaranDetail() {
                     </div>
                   </div>
 
-                  {/* No box around the button. The zone rule above already separates it, and a
-                      container only competed with the thing inside it. */}
-                  {/* Closes the panel with what happens after you apply. The action itself now
-                      sits beside the price — see the note there.
-                      FOUNDER-VERIFIED (Bryan, 30 Jul): "it's not about win or lose — there's
-                      always a chance / room for negotiation done by the agent." Hedged, so it
-                      promises a route and never an outcome. See the DECISIONS table. */}
+                  {/* Closes with the live-bidding outcome rather than carrying the E-Tender
+                      accept / counter / decline language into a different selling method. */}
                   <div className="v1-submit">
                     <p className="v1-outcome">
-                      <b>Accepted, countered or not accepted</b> &mdash; the seller responds within
-                      5 working days, and where there is room to move the appointed agent negotiates
-                      on your behalf.
+                      <b>Bid live on auction day</b> &mdash; the auctioneer calls each bid openly
+                      and confirms the auction outcome when bidding closes.
                     </p>
                   </div>
 

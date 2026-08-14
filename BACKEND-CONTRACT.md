@@ -61,6 +61,16 @@ Every e-tender listing must have all of these or it cannot render.
 | `titleType` | string | `Strata` | May be empty |
 | `image` | asset | `residensi-sinaran-1.jpg` | Card thumbnail |
 
+### 2a. Owner Auction pricing — required for Owner Auction listings
+
+Owner Auction does **not** reuse E-Tender's `reservePrice` semantics. Bryan confirmed on
+14 Aug 2026 that the buyer-facing amount is the **starting bid**: live bidding begins from
+this price. EasyAsia therefore needs a separate field when `tenderMethod = Owner Auction`.
+
+| Field | Type | Example | Notes for the admin form |
+|---|---|---|---|
+| `startingBid` | integer (RM) | `517000` | **Owner Auction only.** The opening amount for live bidding; do not describe it as the E-Tender reserve guide. |
+
 **Nullable, but the key must exist** — `null` means *"the agency has not told us"* and the page
 prints "Not stated". That is deliberately different from a field that does not apply.
 
