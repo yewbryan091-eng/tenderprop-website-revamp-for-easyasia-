@@ -110,31 +110,46 @@ if (westStateLines.length !== 24) {
   );
 }
 
-/* GeoNames, WGS84. Colours and stem heights are the approved Section 2 pool
-   markers, not method icons — deliberately distinct per point so overlapping
-   centres stay individually readable. */
+/* COMPOSITION-LED ANCHORS, WGS84. These three coordinates are not city centres:
+   Bryan marked the three positions he wanted on a render (14 Aug), and each
+   coordinate is the inverse of that mark through the project() function below,
+   so the stems land exactly where he placed them.
+
+   The section already declares itself "Illustration only", so naming these
+   after cities they are not would be the dishonest option — they are labelled
+   by region, with the nearest real settlement noted for reference:
+     north   ~8km from Sungai Petani, Kedah
+     central inland Perak/Pahang border, the Cameron Highlands foothills
+     south   ~22km from Kluang, inland Johor
+   If these ever need to BE the three major subsale markets, the coordinates
+   for George Town / Kuala Lumpur / Johor Bahru sit at SVG 148,280 · 439,769 ·
+   885,1130 — noticeably closer to the peninsula's extremities than these.
+
+   Colours and stem heights are the approved Section 2 pool markers, not method
+   icons — deliberately distinct per point so overlapping centres stay
+   individually readable. */
 const LOCATION_SOURCE = [
   {
-    key: "george-town",
-    name: "George Town",
-    lat: 5.411229,
-    lon: 100.335426,
+    key: "north",
+    name: "Northern Peninsular",
+    lat: 5.5906,
+    lon: 100.4445,
     color: "#A77A7E",
     stemHeight: 120,
   },
   {
-    key: "kuala-lumpur",
-    name: "Kuala Lumpur",
-    lat: 3.14120171804761,
-    lon: 101.686534881592,
+    key: "central",
+    name: "Central Peninsular",
+    lat: 4.2831,
+    lon: 101.6054,
     color: "#B97B62",
     stemHeight: 146,
   },
   {
-    key: "johor-bahru",
-    name: "Johor Bahru",
-    lat: 1.4655,
-    lon: 103.7578,
+    key: "south",
+    name: "Southern Peninsular",
+    lat: 2.2275,
+    lon: 103.1988,
     color: "#9A8C67",
     stemHeight: 92,
   },
