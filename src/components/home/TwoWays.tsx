@@ -46,7 +46,7 @@ export function TwoWays() {
     <section className="tw" id="how-it-works" aria-labelledby="tw-title">
       <div className="tw-inner">
         <div className="tw-copy">
-          <p className="tw-kicker">Two ways to buy</p>
+          <p className="tw-kicker">Two ways to buy &middot; Dua Cara</p>
           {/* Two lines, not four. The map is the proof now, so the headline no
               longer narrates it. "the same house can be bought two ways" also
               implied one property runs BOTH routes, which is not the case —
