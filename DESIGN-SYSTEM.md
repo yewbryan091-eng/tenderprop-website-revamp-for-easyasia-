@@ -178,10 +178,14 @@ including today, and the final day reads "1 day left" rather than "0".
   plate built from pinned Natural Earth 1:10m country and state-boundary vectors: warm limestone
   top, shallow layered extrusion, restrained brass rim, engraved state lines and one connected soft
   shadow, viewed at roughly 30° elevation. It is SVG/CSS only — no raster render, WebGL or map embed
-  — and remains crisp across desktop sizes. **Hard rules, founder-set:** West Malaysia only for this
-  pass; no East Malaysia; no live listing data, cards, pins, labels, clicks or interaction; the map
-  stays `aria-hidden`. Future Klang Valley emphasis and floating cards must be separate overlays and
-  must not alter or approximate the published coastline geometry.
+  — and remains crisp across desktop sizes. Three coordinate-projected property locations sit above
+  the stone as subtle organic pools with matching upright stems: dusty rose for Setia Alam, muted
+  terracotta for Petaling Jaya and soft olive-taupe for Seri Kembangan. These colours only connect a
+  location to its future property card; they never encode selling method or categorise geography.
+  **Hard rules, founder-set:** West Malaysia only; no East Malaysia; no live listing data, state or
+  Klang Valley category fill, labels, clicks or interaction; the map stays `aria-hidden`. Property
+  cards and their E-Tender / Owner Auction method badges are a later overlay and must not alter or
+  approximate the published coastline geometry.
 - **Entrance animations ARM, they do not reveal** (13 Aug, load-bearing): CSS rests in the finished
   visible state; JS adds `.is-armed` to hide it and removes it on approach, toggled through
   `classList` rather than React state. Hide-by-default ships blank sections whenever the reveal

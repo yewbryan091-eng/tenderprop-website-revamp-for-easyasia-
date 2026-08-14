@@ -78,6 +78,7 @@
 }
 
 .wm-map-camera {
+  position: relative;
   width: min(78%, 558px);
   transform-origin: 50% 54%;
   transform-style: preserve-3d;
@@ -85,6 +86,7 @@
      geographic plane, matching the approved isometric reference. */
   transform: rotateX(60deg) rotateZ(-7deg) translate3d(2%, -2%, 0);
   filter: drop-shadow(11px 26px 18px var(--wm-shadow));
+  --wm-stem-scale: 1;
 }
 
 .wm-map-object {
@@ -165,6 +167,70 @@
   pointer-events: none;
 }
 
+.wm-pool-outer {
+  stroke: none;
+  opacity: 0.24;
+}
+
+.wm-pool-inner {
+  stroke: none;
+  opacity: 0.34;
+}
+
+.wm-peg-base {
+  stroke: rgba(35, 22, 18, 0.38);
+  stroke-width: 0.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.wm-peg-top {
+  fill: rgba(255, 253, 248, 0.32);
+  pointer-events: none;
+}
+
+.wm-peg-bottom {
+  fill: rgba(32, 20, 16, 0.26);
+  pointer-events: none;
+}
+
+.wm-stems {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.wm-stem-anchor {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+.wm-stem-upright {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  /* Cancels `.wm-map-camera`'s rotateX(60deg) rotateZ(-7deg) locally so the
+     inner line's own vertical axis reads as upright on screen. */
+  transform: rotateZ(7deg) rotateX(-60deg);
+}
+
+.wm-stem-line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: calc(1.3px * var(--wm-stem-scale, 1));
+  height: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
+  margin-left: calc(-0.65px * var(--wm-stem-scale, 1));
+  background: var(--wm-stem-color, var(--wm-rim));
+  opacity: 0.78;
+}
+
 @media (max-width: 1000px) {
   .wm-map {
     min-height: clamp(400px, 61vw, 530px);
@@ -184,6 +250,11 @@
     width: min(78%, 430px);
     transform: rotateX(58deg) rotateZ(-7deg) translate3d(2%, -1%, 0);
     filter: drop-shadow(8px 21px 14px var(--wm-shadow));
+    --wm-stem-scale: 0.74;
+  }
+
+  .wm-stem-upright {
+    transform: rotateZ(7deg) rotateX(-58deg);
   }
 
   .wm-map-ground {

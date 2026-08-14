@@ -110,6 +110,41 @@ if (westStateLines.length !== 24) {
   );
 }
 
+/* GeoNames, WGS84. Colours and stem heights are the approved Section 2 pool
+   markers, not method icons — deliberately distinct per point so overlapping
+   centres stay individually readable. */
+const LOCATION_SOURCE = [
+  {
+    key: "setia-alam",
+    name: "Setia Alam",
+    lat: 3.10155,
+    lon: 101.45565,
+    color: "#A77A7E",
+    stemHeight: 146,
+  },
+  {
+    key: "petaling-jaya",
+    name: "Petaling Jaya",
+    lat: 3.10726,
+    lon: 101.60671,
+    color: "#B97B62",
+    stemHeight: 92,
+  },
+  {
+    key: "seri-kembangan",
+    name: "Seri Kembangan",
+    lat: 3.0333333,
+    lon: 101.7166667,
+    color: "#9A8C67",
+    stemHeight: 120,
+  },
+];
+
+const locations = LOCATION_SOURCE.map(({ key, name, lat, lon, color, stemHeight }) => {
+  const [x, y] = project([lon, lat]);
+  return { key, name, lat, lon, x: clean(x), y: clean(y), color, stemHeight };
+});
+
 const viewBox = `0 0 ${clean(width)} ${clean(height)}`;
 const generatedNotice = `Natural Earth 1:10m Admin 0 + Admin 1; commit ${NATURAL_EARTH_COMMIT}`;
 const stateLinesModule = westStateLines
@@ -119,9 +154,16 @@ const stateLinesModule = westStateLines
   )
   .join("\n");
 
+const locationsModule = locations
+  .map(
+    ({ key, name, lat, lon, x, y, color, stemHeight }) =>
+      `  {\n    key: ${JSON.stringify(key)},\n    name: ${JSON.stringify(name)},\n    lat: ${lat},\n    lon: ${lon},\n    x: ${x},\n    y: ${y},\n    color: ${JSON.stringify(color)},\n    stemHeight: ${stemHeight},\n  },`,
+  )
+  .join("\n");
+
 await writeFile(
   new URL("../src/data/west-malaysia-geometry.ts", import.meta.url),
-  `/* GENERATED FILE — run npm run generate:west-malaysia.\n   Source: ${generatedNotice}\n   West-only selection: complete Malaysian polygon and boundary components west of 105.5E.\n   No geometry is hand-drawn or simplified in this file. */\n\nexport const WEST_MALAYSIA_VIEWBOX = "${viewBox}";\nexport const WEST_MALAYSIA_PATH =\n  ${JSON.stringify(path)};\nexport const WEST_MALAYSIA_STATE_LINES = [\n${stateLinesModule}\n] as const;\n`,
+  `/* GENERATED FILE — run npm run generate:west-malaysia.\n   Source: ${generatedNotice}\n   West-only selection: complete Malaysian polygon and boundary components west of 105.5E.\n   No geometry is hand-drawn or simplified in this file.\n   Location coordinates: GeoNames, WGS84; projected with the same project() used above. */\n\nexport const WEST_MALAYSIA_VIEWBOX = "${viewBox}";\nexport const WEST_MALAYSIA_PATH =\n  ${JSON.stringify(path)};\nexport const WEST_MALAYSIA_STATE_LINES = [\n${stateLinesModule}\n] as const;\nexport const WEST_MALAYSIA_LOCATIONS = [\n${locationsModule}\n] as const;\n`,
 );
 
 await writeFile(
@@ -138,6 +180,7 @@ console.log(
       coordinateCount: coordinates.length,
       bounds,
       viewBox,
+      locations,
     },
     null,
     2,
