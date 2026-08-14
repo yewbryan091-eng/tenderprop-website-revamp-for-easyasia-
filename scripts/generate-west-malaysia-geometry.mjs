@@ -132,8 +132,11 @@ const LOCATION_SOURCE = [
   {
     key: "north",
     name: "Northern Peninsular",
-    lat: 5.5906,
-    lon: 100.4445,
+    /* Bryan's first mark landed on Kedah's WESTERN BOUNDARY, hard against the
+       coast — the pool half sat on the state line. Moved into the state's
+       interior on his follow-up. */
+    lat: 5.85,
+    lon: 100.75,
     color: "#A77A7E",
     stemHeight: 120,
   },
