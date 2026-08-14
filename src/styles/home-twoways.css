@@ -61,38 +61,55 @@
   color: var(--muted);
 }
 
-/* Typography only — no box, border or fill. Two bordered cards here competed
-   with the three property cards on the map and made the section read as a
-   dashboard rather than one editorial spread. */
+/* No box, border or fill — an illustration beside a short stack of type.
+   Bordered cards here competed with the three property cards on the map and
+   made the section read as a dashboard rather than one editorial spread. */
 .tw-routes {
-  margin: clamp(28px, 3.6vh, 40px) 0 0;
+  margin: clamp(30px, 3.8vh, 44px) 0 0;
   display: grid;
-  gap: 16px;
+  gap: 24px;
 }
 
 .tw-route {
-  display: block;
-}
-
-.tw-route dt {
-  margin: 0 0 3px;
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 20px;
+}
+
+.tw-route-art {
+  flex: none;
+  width: 132px;
+}
+
+.tw-route-text h3 {
+  margin: 0 0 4px;
   font-family: "Newsreader", Georgia, serif;
   font-optical-sizing: auto;
-  font-size: 21px;
+  font-size: 25px;
   font-weight: 650;
   line-height: 1;
   color: var(--burgundy);
 }
 
-.tw-route dd {
-  /* The icon is 15px with a 9px gap, so this indents to the term's own text. */
-  margin: 0 0 0 24px;
-  font-size: 14.5px;
-  line-height: 1.5;
+/* Brass for the auction term — the same header-vetted #836A33 family, which
+   clears AA on paper where the bright panel brass does not. */
+.tw-route--auction .tw-route-text h3 {
+  color: #836a33;
+}
+
+.tw-route-sub {
+  margin: 0 0 5px;
+  font-size: 16px;
+  line-height: 1.4;
   color: var(--muted);
+}
+
+.tw-route-note {
+  margin: 0;
+  max-width: 30ch;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--muted) 85%, transparent);
 }
 
 .tw-note {
@@ -135,8 +152,263 @@
   }
 }
 
-@media (max-width: 700px) {
-  .tw-routes {
-    grid-template-columns: minmax(0, 1fr);
+@media (max-width: 560px) {
+  .tw-route {
+    gap: 14px;
+  }
+  .tw-route-art {
+    width: 104px;
+  }
+  .tw-route-text h3 {
+    font-size: 22px;
+  }
+}
+
+/* ── The route illustrations ─────────────────────────────────────────────────
+   Editorial linework: one warm ink outline weight, cream paper fills, a single
+   blurred wash of colour behind each object. No gradients, no gloss, no photo
+   rendering. Colours are deliberately the MUTED family (wash #8E2233/#B58F3E),
+   not the bright panel accents — these sit on cream, not on the dark hero. */
+.tw-ill {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.tw-ill-wash {
+  filter: blur(7px);
+}
+
+.tw-ill-wash--tender {
+  fill: #8e2233;
+  opacity: 0.1;
+}
+
+.tw-ill-wash--auction {
+  fill: #b58f3e;
+  opacity: 0.1;
+}
+
+.tw-ill-ground {
+  fill: #4a322b;
+  opacity: 0.07;
+}
+
+.tw-env-body {
+  fill: #fbf5ec;
+  stroke: #4a322b;
+  stroke-width: 1.4;
+}
+
+.tw-env-crease {
+  fill: none;
+  stroke: #4a322b;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  opacity: 0.38;
+}
+
+.tw-env-flap {
+  fill: #f3eadb;
+  stroke: #4a322b;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  transform-box: view-box;
+  transform-origin: 80px 44px;
+}
+
+.tw-env-seal {
+  transform-box: view-box;
+  transform-origin: 80px 85px;
+}
+
+.tw-env-seal-disc {
+  fill: #6e2439;
+  stroke: #4a322b;
+  stroke-width: 1;
+}
+
+.tw-env-seal-ring {
+  fill: none;
+  stroke: rgba(255, 248, 239, 0.55);
+  stroke-width: 1.2;
+}
+
+.tw-gavel {
+  transform-box: view-box;
+  transform-origin: 38px 66px;
+}
+
+.tw-gavel-handle {
+  fill: #6b5a4c;
+  stroke: #3a2a25;
+  stroke-width: 1.3;
+}
+
+.tw-gavel-head {
+  fill: #4a4038;
+  stroke: #3a2a25;
+  stroke-width: 1.3;
+}
+
+.tw-band {
+  fill: #b58f3e;
+}
+
+.tw-base {
+  fill: #efe5d4;
+  stroke: #4a322b;
+  stroke-width: 1.3;
+}
+
+.tw-base-top {
+  fill: #e2d5bf;
+  stroke: #4a322b;
+  stroke-width: 1.2;
+}
+
+.tw-strikes {
+  fill: none;
+  stroke: #b58f3e;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.tw-live-dot {
+  fill: #b58f3e;
+}
+
+.tw-live-text {
+  font-family: var(--sans);
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  fill: #836a33;
+}
+
+/* ── The entrance ────────────────────────────────────────────────────────────
+   One-shot and SEQUENCED: copy → envelope appears → flap closes, seal presses →
+   gavel appears raised → one strike → impact lines → disclaimer. Then nothing
+   moves except the LIVE dot.
+
+   ARMED, never reveal-by-default (ledger 13 Aug): every rule here is inert
+   until TwoWays.tsx adds `.tw--armed` / `.tw--play`, so with no JS the section
+   rests fully drawn. Reduced motion is double-gated — the JS refuses to arm and
+   this whole block sits behind the media query. */
+@media (prefers-reduced-motion: no-preference) {
+  .tw--armed :is(.tw-kicker, h2, .tw-deck, .tw-note, .tw-route) {
+    opacity: 0;
+  }
+
+  .tw--play :is(.tw-kicker, h2, .tw-deck, .tw-note) {
+    animation: tw-rise 520ms cubic-bezier(0.22, 0.61, 0.21, 1) both;
+  }
+
+  .tw--play h2 {
+    animation-delay: 60ms;
+  }
+
+  .tw--play .tw-deck {
+    animation-delay: 120ms;
+  }
+
+  .tw--play .tw-note {
+    animation-delay: 1050ms;
+  }
+
+  .tw--play .tw-route--tender {
+    animation: tw-rise 560ms cubic-bezier(0.22, 0.61, 0.21, 1) 150ms both;
+  }
+
+  .tw--play .tw-route--auction {
+    animation: tw-rise 560ms cubic-bezier(0.22, 0.61, 0.21, 1) 460ms both;
+  }
+
+  .tw--play .tw-env-flap {
+    animation: tw-flap 300ms ease-out 380ms both;
+  }
+
+  .tw--play .tw-env-seal {
+    animation: tw-seal 430ms cubic-bezier(0.34, 1.35, 0.5, 1) 360ms both;
+  }
+
+  .tw--play .tw-gavel {
+    animation: tw-strike 280ms cubic-bezier(0.6, 0, 0.85, 0.35) 700ms both;
+  }
+
+  .tw--play .tw-strikes {
+    animation: tw-pop 150ms ease-out 980ms both;
+  }
+
+  .tw--play .tw-live-dot {
+    animation: tw-pulse 1.6s ease-in-out 1300ms infinite;
+  }
+
+  @keyframes tw-rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes tw-flap {
+    from {
+      transform: scaleY(0.88);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes tw-seal {
+    0% {
+      transform: scale(0.86);
+    }
+
+    55% {
+      transform: scale(1.05);
+    }
+
+    100% {
+      transform: none;
+    }
+  }
+
+  @keyframes tw-strike {
+    from {
+      transform: rotate(-18deg);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes tw-pop {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes tw-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.35;
+    }
   }
 }
