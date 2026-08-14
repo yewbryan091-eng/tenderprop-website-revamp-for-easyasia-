@@ -15,7 +15,7 @@
   --wm-burgundy-shade: #571c2e;
   --wm-shadow: rgba(56, 35, 28, 0.28);
   position: relative;
-  min-height: clamp(430px, 37vw, 550px);
+  min-height: clamp(500px, 44vw, 660px);
   display: grid;
   place-items: center;
   perspective: 1450px;
@@ -79,7 +79,8 @@
 
 .wm-map-camera {
   position: relative;
-  width: min(78%, 558px);
+  /* The map is the section's dominant object, so it takes the column. */
+  width: min(96%, 720px);
   transform-origin: 50% 54%;
   transform-style: preserve-3d;
   /* 60deg away from face-on = roughly 30deg camera elevation above the
@@ -247,11 +248,11 @@
 
 @media (max-width: 1000px) {
   .wm-map {
-    min-height: clamp(400px, 61vw, 530px);
+    min-height: clamp(430px, 66vw, 580px);
   }
 
   .wm-map-camera {
-    width: min(68%, 560px);
+    width: min(88%, 620px);
   }
 }
 
