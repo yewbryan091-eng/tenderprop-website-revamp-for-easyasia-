@@ -114,7 +114,7 @@ export const WEST_MALAYSIA_LOCATIONS = [
     x: 237.61,
     y: 184.98,
     color: "#A77A7E",
-    stemHeight: 196,
+    stemHeight: 92,
   },
   {
     key: "central",
@@ -124,7 +124,7 @@ export const WEST_MALAYSIA_LOCATIONS = [
     x: 421.59,
     y: 522.8,
     color: "#B97B62",
-    stemHeight: 112,
+    stemHeight: 76,
   },
   {
     key: "south",
@@ -134,6 +134,6 @@ export const WEST_MALAYSIA_LOCATIONS = [
     x: 764.3,
     y: 965.99,
     color: "#9A8C67",
-    stemHeight: 92,
+    stemHeight: 64,
   },
 ] as const;

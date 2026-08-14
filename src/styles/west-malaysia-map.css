@@ -286,7 +286,7 @@
    this the top of both cards was cut off by the section edge. The plate keeps
    its own size; only the space above it grows. */
 .wm-map {
-  padding-top: clamp(90px, 13vw, 150px);
+  padding-top: clamp(46px, 7.5vw, 96px);
 }
 
 /* Zero-size point sitting on the peg. `--wm-peg-*` are written by useStemTips()

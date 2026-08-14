@@ -138,10 +138,11 @@ const LOCATION_SOURCE = [
     lat: 5.85,
     lon: 100.75,
     color: "#A77A7E",
-    /* Tall on purpose. North and central sit only ~13% of the map apart
-       horizontally — less than a card's width — so their cards collide unless
-       the stagger does the separating. */
-    stemHeight: 196,
+    /* A gentle descending stagger, north to south. These used to be stretched
+       (196/112/92) to keep the two northern cards from colliding; the cards'
+       own horizontal fan does that job now, so the stems can sit at a natural
+       height instead of being propped up. */
+    stemHeight: 92,
   },
   {
     key: "central",
@@ -149,7 +150,7 @@ const LOCATION_SOURCE = [
     lat: 4.2831,
     lon: 101.6054,
     color: "#B97B62",
-    stemHeight: 112,
+    stemHeight: 76,
   },
   {
     key: "south",
@@ -157,7 +158,7 @@ const LOCATION_SOURCE = [
     lat: 2.2275,
     lon: 103.1988,
     color: "#9A8C67",
-    stemHeight: 92,
+    stemHeight: 64,
   },
 ];
 
