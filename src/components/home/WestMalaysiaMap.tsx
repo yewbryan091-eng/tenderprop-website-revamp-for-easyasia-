@@ -16,11 +16,18 @@ type WestMalaysiaMapProps = {
   finish?: WestMalaysiaMapFinish;
 };
 
-/* Twenty-one copies of the exact Natural Earth path form one shallow sidewall.
-   This stays SVG rather than raster so every coastline detail remains sharp at
-   any responsive size. Future Klang Valley artwork should be layered above
-   `.wm-map-top`, never cut into or replace this source geometry. */
-const DEPTH_LAYERS = Array.from({ length: 21 }, (_, index) => 21 - index);
+/* Copies of the exact Natural Earth path, stamped down a diagonal, form one
+   shallow sidewall. This stays SVG rather than raster so every coastline detail
+   remains sharp at any responsive size. Future Klang Valley artwork should be
+   layered above `.wm-map-top`, never cut into or replace this source geometry.
+
+   The TOTAL DROP is what defines how thick the wall looks, and it is unchanged
+   from the 21-layer version (21 × 0.72 / 21 × 3.25). Only the slicing is finer:
+   each copy now carries its own colour rather than a gradient, and 21 colour
+   steps across a 68-unit wall banded visibly, so the drop is cut into 42. */
+const DEPTH_SLICES = 42;
+const DEPTH_DROP = { x: 15.12, y: 68.25 };
+const DEPTH_LAYERS = Array.from({ length: DEPTH_SLICES }, (_, index) => DEPTH_SLICES - index);
 
 /* Three hand-authored, lobed washes share a location without sharing a centre.
    Their deliberately uneven shoulders survive the camera tilt as spilled
@@ -185,7 +192,15 @@ function CalendarGlyph() {
 
    Each card's place matches the region its stem actually stands in, so the
    composition does not claim a Selangor address over a Kedah anchor.
-   Photography is from the real asset pack. */
+
+   Photography is from the real asset pack, and the PICTURE has to survive the
+   same test as the address: a floodlit motorsport grandstand cannot illustrate
+   a RM385k house in Sungai Petani, and a glass-walled city penthouse cannot
+   illustrate a RM465k house in Kuala Lipis. Both were doing exactly that. The
+   pack reuses one photo across several towns already (`tenders.ts` puts the OUG
+   house in Kota Bharu and the D'Puncak porch in Kuala Terengganu), so reuse is
+   the house pattern — a mismatched CLASS of building is what breaks the read.
+   Chosen for what survives at 125px: mid-shot and close-up beat aerials. */
 const STEM_CARDS: Record<
   string,
   {
@@ -206,7 +221,8 @@ const STEM_CARDS: Record<
   north: {
     dx: 0,
     method: "E-Tender",
-    photo: "greenlane-bukit-jelutong-1.jpg",
+    /* was greenlane-bukit-jelutong-1.jpg — a floodlit stadium. */
+    photo: "single-storey-landed-oug.jpg",
     name: "Taman Sejati Indah",
     place: "Sungai Petani, Kedah",
     priceLabel: "Reserve price",
@@ -217,7 +233,8 @@ const STEM_CARDS: Record<
   central: {
     dx: 0,
     method: "Owner Auction",
-    photo: "country-heights.jpg",
+    /* was country-heights.jpg — a glass-walled city penthouse. */
+    photo: "d-puncak.jpeg",
     name: "Jalan Sungai Jelai",
     place: "Kuala Lipis, Pahang",
     priceLabel: "Starting bid",
@@ -357,14 +374,31 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             filter={`url(#${blurId})`}
           />
 
-          <g className="wm-map-depth" fill={`url(#${sideId})`}>
-            {DEPTH_LAYERS.map((layer) => (
-              <use
-                key={layer}
-                href={`#${shapeId}`}
-                transform={`translate(${layer * 0.72} ${layer * 3.25})`}
-              />
-            ))}
+          {/* Each slice is FLAT-FILLED, dark at the foot of the wall and light
+              where it meets the stone face. The gradient it replaces was mapped
+              in objectBoundingBox units, so all 21 identical bounding boxes got
+              the identical ramp — it varied over the map's 1334-unit height and
+              therefore barely changed at all across a 68-unit wall, which is
+              why the sidewall read as one flat brown band. Interpolating BY
+              SLICE puts the ramp where the depth actually is. */}
+          <g className="wm-map-depth">
+            {DEPTH_LAYERS.map((layer) => {
+              const t = layer / DEPTH_SLICES;
+              /* Same three stops the old gradient used — top, mid at 0.55,
+                 bottom — so all three finishes keep their full palette. */
+              const fill =
+                t < 0.55
+                  ? `color-mix(in srgb, var(--wm-side-mid) ${((t / 0.55) * 100).toFixed(1)}%, var(--wm-side-top))`
+                  : `color-mix(in srgb, var(--wm-side-bottom) ${(((t - 0.55) / 0.45) * 100).toFixed(1)}%, var(--wm-side-mid))`;
+              return (
+                <use
+                  key={layer}
+                  href={`#${shapeId}`}
+                  transform={`translate(${(t * DEPTH_DROP.x).toFixed(3)} ${(t * DEPTH_DROP.y).toFixed(3)})`}
+                  style={{ fill }}
+                />
+              );
+            })}
           </g>
 
           <use href={`#${shapeId}`} className="wm-map-top" fill={`url(#${topId})`} />

@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
 import {
+  AUCTION_HERO_DATE,
   AUCTION_START_MS,
   AUCTION_TIME_LABEL,
   OWNER_AUCTION,
+  REGISTRATION_DATE,
   REGISTRATION_CLOSE_MS,
 } from "@/data/owner-auction";
 import { TENDERS } from "@/data/tenders";
@@ -13,7 +15,6 @@ import { initDetailPage } from "@/lib/tender-detail-behaviour";
 import { AGENT_PHOTO, PROJECT_IMG, SINARAN_PHOTOS } from "@/lib/images";
 import {
   MS_DAY,
-  closeAtMs,
   daysLeft,
   daysUntil,
   depositOf,
@@ -21,7 +22,6 @@ import {
   fmtDate,
   isFinalDay,
   isFinalDayUntil,
-  ordinalDateParts,
   remainingMs,
   remainingMsUntil,
   tenderId,
@@ -66,12 +66,6 @@ const SINARAN_CLOSING = SINARAN_TENDER.closingDate;
 /* Absent keys mean the agency has not supplied that asset — the corresponding button is
    simply not rendered. See the `media` block on the Tender type. */
 const MEDIA = SINARAN_TENDER.media ?? {};
-/* Full ordinal dates, same treatment as the /tender hero: "1st October 2028".
-   ⚠️ The START is derived and founder-unconfirmed — closing − 3 months. */
-const TENDER_START = ordinalDateParts(
-  new Date(closeAtMs(SINARAN_CLOSING) - 92 * MS_DAY).toISOString().slice(0, 10),
-);
-const TENDER_CLOSE = ordinalDateParts(SINARAN_CLOSING);
 /* Plain string form, for the sticky bar and FAQ prose where a <sup> would be wrong. */
 const TENDER_CLOSE_LABEL = fmtDate(SINARAN_CLOSING);
 
@@ -81,6 +75,13 @@ const TENDER_CLOSE_LABEL = fmtDate(SINARAN_CLOSING);
    listing ends up disagreeing with the grid that advertised it. */
 const AUCTION_DATE_LABEL = fmtDate(OWNER_AUCTION.date);
 const REGISTRATION_LABEL = fmtDate(OWNER_AUCTION.registrationClosesDate);
+const AUCTION_WEEKDAY = new Intl.DateTimeFormat("en-MY", {
+  weekday: "long",
+  timeZone: "Asia/Kuala_Lumpur",
+}).format(new Date(`${OWNER_AUCTION.date}T00:00:00+08:00`));
+/* Three visual treatments share one semantic docket during QA. One character switches the
+   composition without changing its content: a = event docket, b = countdown-led, c = split. */
+const AUCTION_DOSSIER_VARIANT: string = "a";
 
 /* The payment ladder is derived, never typed. Founder-confirmed 30 Jul 2026: the 3%
    tender deposit is the Malaysian earnest deposit — the first slice of the standard
@@ -720,7 +721,7 @@ export function AuctionSinaranDetail() {
     mortgageValid && Number.isFinite(amount) ? rm(amount) : "—";
 
   return (
-    <div className="tp-detail">
+    <div className="tp-detail oa-detail">
       <main>
         {/* The overview runs wider than the reading column below it (per Bryan's
             iNewProject reference). Photos want width; body copy wants ~70ch. The
@@ -1012,10 +1013,10 @@ export function AuctionSinaranDetail() {
           <div className="wrap">
             <div className="v1">
               <div className="v1-grid">
-                {/* Standard across every real listing: this is a platform-level tender
-                    deadline image, not a photograph of the property. Source: Yamiko Ling
-                    on Pexels, photo 21898339. */}
-                <section className="v1-deadline-panel" aria-label="E-tender deadline">
+                <section
+                  className={`v1-deadline-panel oa-dossier oa-dossier--${AUCTION_DOSSIER_VARIANT}`}
+                  aria-label={`Owner Auction on ${AUCTION_DATE_LABEL} at ${AUCTION_TIME_LABEL}; registration closes ${REGISTRATION_LABEL}`}
+                >
                   <img
                     className="v1-deadline-image"
                     src="/assets/layout/tender-information-kl.jpg"
@@ -1023,97 +1024,61 @@ export function AuctionSinaranDetail() {
                     loading="lazy"
                     decoding="async"
                   />
-                  {/* ONE statement of the deadline. It used to make four — a 39.7px heading
-                      "E-Tender closes in", the day count, "Closing date" and the date itself
-                      — which is why 27 words here carried about two facts. The heading was
-                      also 39.7px against a 54px number: a 1.36:1 label-to-value ratio, the
-                      same fault the listings hero had before it went to 2.6:1. The eyebrow
-                      now carries that sentence, in the hero's own words. */}
-                  {/* Mirrors the /tender hero exactly (Bryan): eyebrow, day count with the
-                      live H/M/S hanging off its baseline, unit beneath — then the two dates
-                      that bracket the tender. Same three-column grid trick as the hero, so the
-                      numeral stays on the panel's centre axis however wide the strip gets; a
-                      plain row would centre the BLOCK and push the numeral off-centre. */}
-                  <div className="v1-deadline-content">
-                    <div className="v1-countdown">
-                      <span className="v1-deadline-kicker">Registration closes in</span>
+                  <div className="v1-deadline-content oa-dossier-content">
+                    <div className="oa-dossier-head">
+                      <span className="oa-dossier-kicker">Owner Auction</span>
+                      <span className="oa-dossier-mode">Live bidding</span>
+                    </div>
+
+                    <div className="oa-event-date" aria-hidden="true">
+                      <span className="oa-event-weekday">{AUCTION_WEEKDAY}</span>
+                      <b className="oa-event-day">{AUCTION_HERO_DATE.day}</b>
+                      <span className="oa-event-month">
+                        {AUCTION_HERO_DATE.month} {AUCTION_HERO_DATE.year}
+                      </span>
+                      <span className="oa-event-time">
+                        {OWNER_AUCTION.timeLabel} <small>{OWNER_AUCTION.timezone}</small>
+                      </span>
+                    </div>
+
+                    <div className="oa-registration">
+                      <div className="oa-registration-date">
+                        <span>Registration closes</span>
+                        <b>
+                          {REGISTRATION_DATE.day}
+                          <sup>{REGISTRATION_DATE.suffix}</sup> {REGISTRATION_DATE.month}{" "}
+                          {REGISTRATION_DATE.year}
+                        </b>
+                        <small>11:59 PM MYT</small>
+                      </div>
                       <div
-                        className="v1-timer"
+                        className="oa-registration-countdown"
                         role="timer"
                         aria-label={
                           cd
                             ? cd.finalDay
-                              ? `${cd.h} hours and ${cd.m} minutes remaining`
-                              : `${cd.days} ${cd.days === 1 ? "day" : "days"} remaining`
-                            : "Time remaining until Owner Auction registration closes"
+                              ? `${cd.h} hours and ${cd.m} minutes left to register`
+                              : `${cd.days} ${cd.days === 1 ? "day" : "days"} left to register`
+                            : "Time remaining to register for the Owner Auction"
                         }
                         aria-live="off"
                       >
-                        {/* FOUNDER RULE: days lead. Hours and minutes take over inside the
-                            final 24 hours, where "0 days" says nothing. */}
-                        <span className="u" aria-hidden="true">
-                          <b>
-                            {!cd
-                              ? "\u00a0"
-                              : cd.finalDay
-                                ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m`
-                                : cd.days.toLocaleString("en-MY")}
-                          </b>
-                          {/* Hangs off the numeral's baseline, exactly as the /tender hero does
-                              (Bryan). Mirrored 1fr columns keep the numeral on the panel's axis. */}
-                          {cd && !cd.finalDay && (
-                            <span className="v1-tick">
-                              {[
-                                ["h", cd.h],
-                                ["m", cd.m],
-                                ["s", cd.s],
-                              ].map(([label, value]) => (
-                                <span className="v1-tick-cell" key={label as string}>
-                                  <span className="v1-tick-value">
-                                    {String(value).padStart(2, "0")}
-                                  </span>
-                                  <span className="v1-tick-unit">{label as string}</span>
-                                </span>
-                              ))}
-                            </span>
-                          )}
-                          <i>
-                            {!cd
-                              ? ""
-                              : cd.finalDay
-                                ? "left today"
-                                : cd.days === 1
-                                  ? "day left"
-                                  : "days left"}
-                          </i>
+                        <b aria-hidden="true">
+                          {!cd
+                            ? "\u00a0"
+                            : cd.finalDay
+                              ? `${cd.h}h ${String(cd.m).padStart(2, "0")}m`
+                              : cd.days.toLocaleString("en-MY")}
+                        </b>
+                        <span aria-hidden="true">
+                          {!cd
+                            ? ""
+                            : cd.finalDay
+                              ? "left to register"
+                              : cd.days === 1
+                                ? "day left to register"
+                                : "days left to register"}
                         </span>
-                      </div>
-                    </div>
-
-                    {/* The two dates that bracket this tender. There is NO third "register by"
-                        date: FOUNDER-CORRECTED 1 Aug — an account is only needed at the moment
-                        you apply, when Apply raises the sign-in / sign-up dialog. The 14-day
-                        registration lead we had been showing was our own invention. */}
-                    <div className="v1-dates">
-                      <div>
-                        <span>Tender starts</span>
-                        <b className="v1-date">
-                          {TENDER_START.day}
-                          <sup>{TENDER_START.suffix}</sup> {TENDER_START.month} {TENDER_START.year}
-                        </b>
-                      </div>
-                      {/* The two dates are a SPAN, not a list — the arrow says so. Decorative,
-                          so aria-hidden; the labels already carry the meaning for a reader. */}
-                      <svg className="v1-dates-arrow" viewBox="0 0 34 12" aria-hidden="true">
-                        <path d="M0 6h31M26.5 1.5 32 6l-5.5 4.5" />
-                      </svg>
-                      <div>
-                        <span>Closing date</span>
-                        <b className="v1-date">
-                          {TENDER_CLOSE.day}
-                          <sup>{TENDER_CLOSE.suffix}</sup> {TENDER_CLOSE.month} {TENDER_CLOSE.year}
-                        </b>
-                        <small>End of day, MYT</small>
                       </div>
                     </div>
                   </div>

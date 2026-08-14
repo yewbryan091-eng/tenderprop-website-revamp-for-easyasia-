@@ -102,7 +102,19 @@
   opacity: 0.38;
 }
 
-.wm-map-depth use {
+/* NO PER-LAYER STROKE. The sidewall is one shape stamped 21 times down a
+   diagonal; every copy used to carry its own non-scaling 0.75px hairline, so
+   the wall drew 21 dark outlines 1.8px apart and read as corrugated cardboard —
+   you could count the layers along the Perak coast, and Langkawi came out as a
+   stack of pancakes rather than an island. The stroke was never holding the
+   wall together: consecutive copies overlap by far more than their offset, so
+   their FILLS already union into one solid mass. Removing it costs nothing and
+   leaves the side gradient to carry the depth on its own.
+
+   The bottom edge still needs to be crisp against the paper, so the deepest
+   copy alone keeps a hairline — one outline at the foot of the wall, which is
+   what a solid object has. */
+.wm-map-depth use:first-child {
   stroke: color-mix(in srgb, var(--wm-side-bottom) 58%, transparent);
   stroke-width: 0.75;
   vector-effect: non-scaling-stroke;
