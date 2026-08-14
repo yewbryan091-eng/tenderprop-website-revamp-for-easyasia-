@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useId, useRef } from "react";
 import type { CSSProperties } from "react";
 
-import { PROJECT_IMG } from "@/lib/images";
 import {
   WEST_MALAYSIA_LOCATIONS,
   WEST_MALAYSIA_PATH,
@@ -59,13 +58,13 @@ const POOL_TILTS = [
   { a: { r: 96, x: -23, y: -23 }, b: { r: 12, x: 25, y: 21 }, c: { r: -15, x: -15, y: -16 } },
 ];
 
-/* The cards live in a FLAT layer, so nothing in CSS knows where a peg ended up
+/* The flags live in a FLAT layer, so nothing in CSS knows where a peg ended up
    once the camera's rotateX/rotateZ has had its way. This measures each peg's
-   rendered centre and writes it onto the matching card anchor.
+   rendered centre and writes it onto the matching flag anchor.
 
    The connector is then drawn in that same flat layer, from the anchor up to
-   the card — so the line and the card share one coordinate space and CANNOT
-   drift apart. Anchoring the card to the 3D stem's tip instead looked joined
+   the flag — so the line and the flag share one coordinate space and CANNOT
+   drift apart. Anchoring the flag to the 3D stem's tip instead looked joined
    at one viewport and detached at the next.
 
    Measured rather than hard-coded: the camera transform is constant, so the
@@ -74,16 +73,16 @@ const POOL_TILTS = [
    number would silently detach every card from its stem. */
 function useStemTips(
   mapRef: React.RefObject<HTMLDivElement | null>,
-  cardsRef: React.RefObject<HTMLDivElement | null>,
+  flagsRef: React.RefObject<HTMLDivElement | null>,
 ) {
   const sync = useCallback(() => {
     const map = mapRef.current;
-    const cards = cardsRef.current;
-    if (!map || !cards) return;
+    const flags = flagsRef.current;
+    if (!map || !flags) return;
     const box = map.getBoundingClientRect();
     if (!box.width || !box.height) return;
     const pegs = map.querySelectorAll<SVGGElement>(".wm-map-pegs g");
-    cards.querySelectorAll<HTMLElement>(".wm-card-anchor").forEach((anchor, index) => {
+    flags.querySelectorAll<HTMLElement>(".wm-flag-anchor").forEach((anchor, index) => {
       const peg = pegs[index];
       if (!peg) return;
       const p = peg.getBoundingClientRect();
@@ -96,7 +95,7 @@ function useStemTips(
         `${((p.top + p.height / 2 - box.top) / box.height) * 100}%`,
       );
     });
-  }, [mapRef, cardsRef]);
+  }, [mapRef, flagsRef]);
 
   useEffect(() => {
     sync();
@@ -111,8 +110,8 @@ function useStemTips(
   }, [sync, mapRef]);
 }
 
-/* Card glyphs. The seal and gavel mirror the two the left column already uses,
-   so the badge on the map and the method cards beside it read as one family. */
+/* Flag glyphs. The seal and gavel mirror the two the left column already uses,
+   so the marker on the map and the method terms beside it read as one family. */
 function MailGlyph() {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" width="11" height="11">
@@ -143,77 +142,36 @@ function GavelGlyph() {
   );
 }
 
-function ClockGlyph() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" width="12" height="12">
-      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path
-        d="M12 7v5.4l3.4 2"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
+/* ── METHOD FLAGS, NOT PROPERTY CARDS ────────────────────────────────────────
+   These were full listing cards — photo, name, place, reserve price, a rule, a
+   clock, days left, a closing date — and that was the wrong grammar for this
+   section. A property card is the visual language of INVENTORY: it promises a
+   click. Section 2 is explicitly not inventory (13 Aug ledger: "must not render
+   live listings, must not be interactive, and must not be clickable"), so the
+   card was writing a cheque the section could not cash, which is exactly why an
+   "Illustration only" footnote had to apologise for it underneath. Three dense
+   125px objects also sat on top of the calmest, largest object on the page and
+   fought it — the plate is what this section is for.
 
-function CalendarGlyph() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" width="12" height="12">
-      <rect
-        x="3.5"
-        y="5.5"
-        width="17"
-        height="15"
-        rx="1.6"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M3.5 10.5h17M8 3.5v4M16 3.5v4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
+   A flag says the whole sentence in three lines and nothing more: which of the
+   two routes, where in the country, what it costs. No photo, no property name,
+   no countdown — a name and a deadline are the two things that read as "this is
+   a real listing, click it". Bryan, 14 Aug: "i love the idea of the map, i just
+   dont know what to do with the cards — is cards the right idea?"
 
-/* ── STAGED CARDS, NOT LIVE LISTINGS ─────────────────────────────────────────
-   The 13 Aug ledger is explicit: Section 2 "must not render live listings,
-   must not be interactive, and must not be clickable — a staged illustration
-   of the two buying routes". So this content is written here rather than read
-   from TENDERS, every element is a <span>, and `.wm-stems` already carries
-   `pointer-events: none`. The section's existing "Illustration only" footnote
-   is what covers it for the reader.
-
-   Each card's place matches the region its stem actually stands in, so the
-   composition does not claim a Selangor address over a Kedah anchor.
-
-   Photography is from the real asset pack, and the PICTURE has to survive the
-   same test as the address: a floodlit motorsport grandstand cannot illustrate
-   a RM385k house in Sungai Petani, and a glass-walled city penthouse cannot
-   illustrate a RM465k house in Kuala Lipis. Both were doing exactly that. The
-   pack reuses one photo across several towns already (`tenders.ts` puts the OUG
-   house in Kota Bharu and the D'Puncak porch in Kuala Terengganu), so reuse is
-   the house pattern — a mismatched CLASS of building is what breaks the read.
-   Chosen for what survives at 125px: mid-shot and close-up beat aerials. */
-const STEM_CARDS: Record<
+   Still staged, so the rules that governed the cards still hold: written here
+   rather than read from TENDERS, every element a <span>, layer is
+   `pointer-events: none`. Each flag's place matches the region its stem
+   actually stands in, so the composition never claims a Selangor address over
+   a Kedah anchor. */
+const STEM_FLAGS: Record<
   string,
   {
     method: "E-Tender" | "Owner Auction";
-    photo: string;
-    name: string;
     place: string;
-    priceLabel: string;
     price: string;
-    footLead: string;
-    footSub?: string;
     /* Controlled horizontal offset, px. Every final value is zero so each
-       straight stem meets its card at bottom centre; the hook stays available
+       straight stem meets its flag at bottom centre; the hook stays available
        for a future small editorial nudge without moving the geographic peg. */
     dx: number;
   }
@@ -221,36 +179,20 @@ const STEM_CARDS: Record<
   north: {
     dx: 0,
     method: "E-Tender",
-    /* was greenlane-bukit-jelutong-1.jpg — a floodlit stadium. */
-    photo: "single-storey-landed-oug.jpg",
-    name: "Taman Sejati Indah",
     place: "Sungai Petani, Kedah",
-    priceLabel: "Reserve price",
     price: "RM 385,000",
-    footLead: "18 days left",
-    footSub: "Closes 12 Dec 2026",
   },
   central: {
     dx: 0,
     method: "Owner Auction",
-    /* was country-heights.jpg — a glass-walled city penthouse. */
-    photo: "d-puncak.jpeg",
-    name: "Jalan Sungai Jelai",
     place: "Kuala Lipis, Pahang",
-    priceLabel: "Starting bid",
     price: "RM 465,000",
-    footLead: "12 Dec 2026 · 9:00 AM",
   },
   south: {
     dx: 0,
     method: "E-Tender",
-    photo: "meranti-terrace.jpg",
-    name: "Taman Sri Kluang",
     place: "Kluang, Johor",
-    priceLabel: "Reserve price",
     price: "RM 520,000",
-    footLead: "14 days left",
-    footSub: "Closes 08 Dec 2026",
   },
 };
 
@@ -280,12 +222,13 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
   const lightId = `wm-light-${instance}`;
   const sideId = `wm-side-${instance}`;
   const grainId = `wm-grain-${instance}`;
+  const speckleId = `wm-speckle-${instance}`;
   const blurId = `wm-blur-${instance}`;
   const poolBlurId = `wm-pool-blur-${instance}`;
   const clipId = `wm-clip-${instance}`;
   const mapRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
-  useStemTips(mapRef, cardsRef);
+  const flagsRef = useRef<HTMLDivElement>(null);
+  useStemTips(mapRef, flagsRef);
 
   return (
     <div ref={mapRef} className={`wm-map wm-map--${finish} ${className}`.trim()} aria-hidden="true">
@@ -338,6 +281,29 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 result="tonedNoise"
               />
               <feComposite in="tonedNoise" in2="SourceAlpha" operator="in" />
+            </filter>
+
+            {/* The fine tooth of the surface. Deliberately isotropic where the
+                grain above is stretched 7:1 — the two must not share a
+                direction or they resolve back into one streaky pattern. */}
+            <filter id={speckleId} x="-8%" y="-8%" width="116%" height="116%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.055"
+                numOctaves="3"
+                seed="41"
+                result="speckle"
+              />
+              <feColorMatrix
+                in="speckle"
+                type="matrix"
+                values=".48 0 0 0 .24
+                        0 .42 0 0 .19
+                        0 0 .34 0 .14
+                        0 0 0 .17 0"
+                result="tonedSpeckle"
+              />
+              <feComposite in="tonedSpeckle" in2="SourceAlpha" operator="in" />
             </filter>
 
             <filter id={blurId} x="-30%" y="-30%" width="160%" height="180%">
@@ -448,6 +414,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
           </g>
 
           <use href={`#${shapeId}`} className="wm-map-grain" filter={`url(#${grainId})`} />
+          <use href={`#${shapeId}`} className="wm-map-speckle" filter={`url(#${speckleId})`} />
 
           {/* Pegs sit above the grain and engravings so their small silhouette
               stays crisp; one shared low-profile hex plate per location,
@@ -502,51 +469,37 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
       </div>
 
       {/* FLAT overlay, deliberately OUTSIDE `.wm-map-camera`. Inside it, the
-          card inherits the camera's rotateX(60deg) and lies down on the stone
-          — cancelling that per-card only works for the hairline stem, whose
-          1.3px width hides the residual perspective skew. A card is a large
-          surface and showed it immediately. Out here it simply faces the
-          viewer, pinned to the stem's measured screen position. */}
-      <div className="wm-cards" ref={cardsRef}>
+          flag inherits the camera's rotateX(60deg) and lies down on the stone
+          — cancelling that per-flag only works for the hairline stem, whose
+          1.3px width hides the residual perspective skew. Any real surface
+          shows it immediately. Out here it simply faces the viewer, pinned to
+          the stem's measured screen position. */}
+      <div className="wm-flags" ref={flagsRef}>
         {WEST_MALAYSIA_LOCATIONS.map((location, index) => {
-          const card = STEM_CARDS[location.key];
-          if (!card) return null;
-          const auction = card.method === "Owner Auction";
+          const flag = STEM_FLAGS[location.key];
+          if (!flag) return null;
+          const auction = flag.method === "Owner Auction";
           return (
             <span
               key={location.key}
-              className="wm-card-anchor"
+              className="wm-flag-anchor"
               style={
                 {
                   zIndex: index + 1,
                   "--wm-stem-h": `${location.stemHeight}px`,
-                  "--wm-card-dx": `${card.dx}px`,
+                  "--wm-flag-dx": `${flag.dx}px`,
                   "--wm-stem-color": location.color,
                 } as CSSProperties
               }
             >
-              <span className="wm-card-stem" />
-              <span className={`wm-card${auction ? " wm-card--auction" : ""}`}>
-                <span className="wm-card-photo">
-                  <img src={PROJECT_IMG(card.photo)} alt="" loading="lazy" decoding="async" />
-                  <span className="wm-card-badge">
-                    {auction ? <GavelGlyph /> : <MailGlyph />}
-                    {card.method}
-                  </span>
+              <span className="wm-flag-stem" />
+              <span className={`wm-flag${auction ? " wm-flag--auction" : ""}`}>
+                <span className="wm-flag-method">
+                  {auction ? <GavelGlyph /> : <MailGlyph />}
+                  {flag.method}
                 </span>
-                <span className="wm-card-body">
-                  <span className="wm-card-name">{card.name}</span>
-                  <span className="wm-card-place">{card.place}</span>
-                  <span className="wm-card-rule" />
-                  <span className="wm-card-label">{card.priceLabel}</span>
-                  <span className="wm-card-price">{card.price}</span>
-                  <span className="wm-card-rule" />
-                  <span className="wm-card-foot">
-                    {auction ? <CalendarGlyph /> : <ClockGlyph />}
-                    <b>{card.footLead}</b>
-                  </span>
-                  {card.footSub ? <span className="wm-card-foot-sub">{card.footSub}</span> : null}
-                </span>
+                <span className="wm-flag-place">{flag.place}</span>
+                <span className="wm-flag-price">{flag.price}</span>
               </span>
             </span>
           );

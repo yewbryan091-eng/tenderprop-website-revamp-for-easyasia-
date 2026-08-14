@@ -79,14 +79,32 @@
 
 .wm-map-camera {
   position: relative;
-  /* The map is the section's dominant object, so it takes the column. */
-  width: min(101%, 760px);
+  /* The map is the section's dominant object, so it takes the column AND
+     overspills it. The cap is what actually binds on a wide desktop; it is set
+     by where the coastline lands, measured, not by the box: at this width the
+     land's right edge stops just inside the viewport. */
+  width: min(112%, 748px);
   transform-origin: 50% 54%;
   transform-style: preserve-3d;
   /* 60deg away from face-on = roughly 30deg camera elevation above the
      geographic plane, matching the approved isometric reference. */
   transform: rotateX(60deg) rotateZ(-7deg) translate3d(2%, -2%, 0);
   filter: drop-shadow(11px 26px 18px var(--wm-shadow));
+  /* rotateX(60deg) lays the plane down, so the camera PAINTS about 61% of the
+     height its layout box reserves — the remaining 39% is empty air the section
+     was paying for twice over, once above the picture and once below. Both
+     shares grew with the plate, and the top share stopped being useful when the
+     flags replaced the cards: a flag is a third of a card's height, so it needs
+     nowhere near that much headroom to stand in.
+
+     Measured, not guessed. Before this pair, the section stood 1066px tall to
+     hold 562px of picture — 318px empty above the topmost flag and 186px below
+     the shadow's last visible row, i.e. 47% of the section was air. These are
+     in `vw` because the surplus is a fixed fraction of the camera's height and
+     the camera's height is a fixed fraction of its width. `.tw` clips, so
+     neither can ever bleed out of the section. */
+  margin-top: calc(-1 * clamp(48px, 10.2vw, 150px));
+  margin-bottom: calc(-1 * clamp(40px, 9.9vw, 146px));
   --wm-stem-scale: 1;
 }
 
@@ -133,29 +151,54 @@
   pointer-events: none;
 }
 
+/* State separations are DOTTED and MAROON — Bryan, 14 Aug. A continuous
+   hairline read as a printed map's administrative boundary; a dotted one reads
+   as a drawn annotation on a made object, which is what this plate is. Round
+   caps on a near-zero dash length are what make a dot rather than a dash.
+
+   Both layers carry the SAME dasharray. The light layer sits 1.15 units below
+   the dark one and exists to give each boundary a lit lower lip, so it has to
+   dot in step — a solid light line under a dotted dark one just looks like a
+   misregistered second border. */
 .wm-map-states-light,
 .wm-map-states {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke-dasharray: 0.1 4.6;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
 }
 
 .wm-map-states-light {
-  stroke: rgba(255, 252, 247, 0.54);
-  stroke-width: 1.05;
+  stroke: rgba(255, 252, 247, 0.62);
+  stroke-width: 1.5;
 }
 
 .wm-map-states {
-  stroke: color-mix(in srgb, var(--burgundy) 66%, #8f7562);
-  stroke-width: 0.72;
-  opacity: 0.28;
+  stroke: var(--burgundy);
+  stroke-width: 1.6;
+  /* Much higher than the old 0.28 because a dotted line puts far less ink on
+     the stone than a solid one, and because the maroon has to survive being
+     read through warm limestone — under about 0.6 it greys out to brown and
+     stops being maroon at all. */
+  opacity: 0.72;
 }
 
+/* Two grains, not one. The streaky layer is the stone's own bedding; the fine
+   one is the tooth of the surface. Alone, the streaks read as a printing
+   artefact — together they read as material. Both stay in `soft-light` so the
+   limestone's own light and shade come through them rather than being covered. */
 .wm-map-grain {
   fill: #8d725e;
-  opacity: 0.3;
+  opacity: 0.44;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.wm-map-speckle {
+  fill: #6f5747;
+  opacity: 0.36;
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
@@ -243,7 +286,7 @@
   transform: rotateZ(7deg) rotateX(-60deg);
 }
 
-/* Superseded by `.wm-card-stem`, which is drawn flat alongside the card so the
+/* Superseded by `.wm-flag-stem`, which is drawn flat alongside the flag so the
    two cannot drift apart. Kept hidden rather than deleted: the 3D stem is what
    the pools and pegs were composed against. */
 .wm-stem-line {
@@ -290,32 +333,40 @@
   }
 }
 
-/* ── PROPERTY CARDS ─────────────────────────────────────────────────────────
-   A FLAT layer over the plate. Each card is pinned to its stem's measured
+/* ── METHOD FLAGS ───────────────────────────────────────────────────────────
+   A FLAT layer over the plate. Each flag is pinned to its stem's measured
    screen position and translated up by that stem's height, so it appears to
    rest on the stem's tip while facing the viewer square-on.
 
+   These replaced full property cards. The card lost the argument on grammar,
+   not on craft: a photo + name + price + countdown is what INVENTORY looks
+   like, and this section is a staged illustration where nothing is clickable.
+   Three lines — route, place, price — say the section's whole sentence and let
+   the plate stay the largest thing in the frame.
+
    Staged illustration, never a control: the layer is `pointer-events: none`
    and every element is a span, so nothing is hoverable or clickable. */
-.wm-cards {
+.wm-flags {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 3;
 }
 
-/* Headroom for the cards. They stand a stem's height plus their own height
-   above their pegs, and the two northern pegs sit high on the plate — without
-   this the top of both cards was cut off by the section edge. The plate keeps
-   its own size; only the space above it grows. */
+/* Headroom. Flags stand a stem's height plus their own height above their pegs,
+   and the northern peg sits high on the plate. Much smaller than the cards
+   needed — a flag is about a third of a card's height — and smaller again since
+   the plate was enlarged, because the camera's layout box already reserves more
+   height above the picture than it paints. The plate keeps its own size; only
+   the space above it grows. */
 .wm-map {
-  padding-top: clamp(64px, 9vw, 120px);
+  padding-top: clamp(20px, 2.4vw, 36px);
 }
 
 /* Zero-size point sitting on the peg. `--wm-peg-*` are written by useStemTips()
    from the peg's RENDERED centre, because the peg's own SVG coordinates say
    nothing about where the camera transform actually put it. */
-.wm-card-anchor {
+.wm-flag-anchor {
   position: absolute;
   left: var(--wm-peg-x, 50%);
   top: var(--wm-peg-y, 50%);
@@ -324,159 +375,107 @@
 }
 
 /* The connector, drawn flat. Its foot is on the peg and its head is exactly
-   where the card's foot sits, so the two always meet. */
-.wm-card-stem {
+   where the flag's foot sits, so the two always meet. */
+.wm-flag-stem {
   position: absolute;
   left: 0;
   bottom: 0;
   width: 1.5px;
   /* STRAIGHT, always. It rises vertically from the exact geographic point to
-     the card's lower edge. All final `dx` values are zero, so every line meets
-     the card at its exact bottom centre. */
+     the flag's lower edge. All final `dx` values are zero, so every line meets
+     the flag at its exact bottom centre. */
   height: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
   margin-left: -0.75px;
   background: var(--wm-stem-color, #8a7663);
   opacity: 0.76;
 }
 
-.wm-card {
+.wm-flag {
   position: absolute;
   left: 0;
   bottom: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
-  /* A uniform 8% reduction preserves every locked internal relationship. */
-  width: calc(136px * var(--wm-stem-scale, 1));
-  transform: translateX(calc(-50% + var(--wm-card-dx, 0px) * var(--wm-stem-scale, 1))) scale(0.92);
+  /* Sized by its own longest line rather than by a fixed card width — a flag
+     is a label, and a label that pads itself out to a column looks like a card
+     again. `max-content` with nowrap keeps "Sungai Petani, Kedah" on one line. */
+  width: max-content;
+  max-width: calc(210px * var(--wm-stem-scale, 1));
+  transform: translateX(calc(-50% + var(--wm-flag-dx, 0px) * var(--wm-stem-scale, 1)));
   transform-origin: 50% 100%;
-  border-radius: 12px;
+  padding: 11px 15px 12px;
+  border-radius: 10px;
   background: #fffcf8;
   /* A tight contact shadow so it reads as a solid object, plus a wide soft one
-     that lifts it off the plate without muddying the stone. */
+     that lifts it off the plate without muddying the stone. Lighter than the
+     card's — there is far less object here to hold up. */
   box-shadow:
-    0 1px 2px rgba(45, 32, 24, 0.09),
-    0 16px 30px -10px rgba(45, 32, 24, 0.28);
-  overflow: hidden;
+    0 1px 2px rgba(45, 32, 24, 0.08),
+    0 12px 24px -10px rgba(45, 32, 24, 0.24);
   font-family: var(--sans);
   text-align: left;
+  /* The route colour, inherited by the top rule and by both coloured lines.
+     E-Tender takes the burgundy, Owner Auction the brass — the same split the
+     fold's product panel uses. */
+  --wm-flag-ink: #571c2e;
+  --wm-flag-ink-small: #571c2e;
 }
 
-.wm-card-photo {
-  position: relative;
-  display: block;
-  aspect-ratio: 16 / 10;
-  background: #e6ded3;
+.wm-flag--auction {
+  --wm-flag-ink: #9a7333;
+  /* Brass at 8.5px falls to about 3.9:1 on this cream, which is fine for the
+     15.5px price and not for the route line above it. The small type takes a
+     darker brass; measured 5.6:1. */
+  --wm-flag-ink-small: #7d5a22;
 }
 
-.wm-card-photo img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-}
-
-/* Straddles the photo's lower edge, as in Bryan's reference. */
-.wm-card-badge {
+/* One coloured edge along the top, in place of the card's filled badge. The
+   badge had to straddle a photo to have somewhere to live; with the photo gone
+   it became a chip floating in a box — a box inside a box. */
+.wm-flag::before {
+  content: "";
   position: absolute;
-  left: 9px;
-  bottom: 0;
-  transform: translateY(50%);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: #571c2e;
-  color: #fff8ef;
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  line-height: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 2.5px;
+  border-radius: 10px 10px 0 0;
+  background: var(--wm-flag-ink);
 }
 
-.wm-card--auction .wm-card-badge {
-  background: #2a2320;
-}
-
-.wm-card-badge svg {
-  width: 9px;
-  height: 9px;
-}
-
-.wm-card-body {
-  display: block;
-  padding: 16px 11px 11px;
-  color: #17130f;
-}
-
-.wm-card-name {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.wm-card-place {
-  display: block;
-  margin-top: 2px;
-  font-size: 9.5px;
-  color: #75695e;
-  line-height: 1.3;
-}
-
-.wm-card-rule {
-  display: block;
-  height: 1px;
-  margin: 8px 0;
-  background: #e8ded1;
-}
-
-.wm-card-label {
-  display: block;
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #837465;
-}
-
-.wm-card-price {
-  display: block;
-  margin-top: 2px;
-  font-size: 14.5px;
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  color: #571c2e;
-}
-
-/* Owner Auction takes the brass, the same split the fold's panel uses. */
-.wm-card--auction .wm-card-price {
-  color: #9a7333;
-}
-
-.wm-card-foot {
+.wm-flag-method {
   display: flex;
   align-items: center;
-  gap: 4px;
-  /* Nowrap at 8.8px: "12 Dec 2026 · 9:00 AM" wrapped to two lines once the card
-     narrowed to 136px, which made the Owner Auction card taller than its two
-     siblings. Dimensional only — the type treatment is unchanged. */
-  white-space: nowrap;
-  color: #571c2e;
-  font-size: 8.8px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.wm-card--auction .wm-card-foot {
-  color: #9a7333;
-}
-
-.wm-card-foot-sub {
-  display: block;
-  margin-top: 2px;
-  padding-left: 14px;
+  gap: 5px;
+  color: var(--wm-flag-ink-small);
   font-size: 8.5px;
-  color: #837465;
-  line-height: 1.3;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.wm-flag-method svg {
+  width: 10px;
+  height: 10px;
+}
+
+.wm-flag-place {
+  display: block;
+  margin-top: 7px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #6b6055;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.wm-flag-price {
+  display: block;
+  margin-top: 3px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--wm-flag-ink);
+  line-height: 1.1;
+  white-space: nowrap;
 }

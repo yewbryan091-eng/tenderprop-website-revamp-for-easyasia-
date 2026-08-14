@@ -21,8 +21,12 @@
   width: min(1180px, calc(100% - clamp(28px, 7vw, 104px)));
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
-  gap: clamp(28px, 4vw, 64px);
+  /* The plate is the subject of this section, so the copy takes only the width
+     its longest headline line actually needs and the rest of the spread goes to
+     the map. Do not drop the copy below ~430px at this breakpoint — that is
+     where "Across Malaysia," stops fitting on one line at 57px. */
+  grid-template-columns: minmax(0, 0.76fr) minmax(0, 1.24fr);
+  gap: clamp(24px, 2.6vw, 40px);
   align-items: center;
 }
 
@@ -125,6 +129,19 @@
    its camera and material; this wrapper owns its place in the right column. */
 .tw-scene {
   min-width: 0;
+  /* The scene runs PAST the text column's right edge, out toward the viewport.
+     `.tw` clips, so this can never widen the page. The stop is set by the land
+     itself, not by the box: the painted SVG carries blur and shadow padding, so
+     the coastline sits well inside its own right edge and the bleed spends that
+     padding rather than cutting Johor off. */
+  /* NEGATIVE ON THE LEFT, not the right. The plate is centred inside this
+     column, so widening the column rightward pushes the coastline further right
+     — the opposite of what a right-side bleed does everywhere else. Johor's tip
+     is the binding edge and it was landing within 10px of the window, so the
+     column grows LEFTWARD instead: the plate keeps its size and the whole
+     object slides back inside. The empty sea west of Perlis is what fills the
+     space it vacates, so nothing collides with the copy. */
+  margin-left: calc(-1 * clamp(0px, 2vw, 30px));
 }
 
 /* ── Responsive ────────────────────────────────────────────────────────────── */
