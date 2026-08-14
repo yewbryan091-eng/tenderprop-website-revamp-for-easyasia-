@@ -1,6 +1,7 @@
-import { useId } from "react";
+import { useCallback, useEffect, useId, useRef } from "react";
 import type { CSSProperties } from "react";
 
+import { PROJECT_IMG } from "@/lib/images";
 import {
   WEST_MALAYSIA_LOCATIONS,
   WEST_MALAYSIA_PATH,
@@ -39,6 +40,158 @@ const POOL_TILTS = [
   { outer: 96, inner: 12 },
 ];
 
+/* The cards live in a FLAT layer, so nothing in CSS knows where a peg ended up
+   once the camera's rotateX/rotateZ has had its way. This measures each peg's
+   rendered centre and writes it onto the matching card anchor.
+
+   The connector is then drawn in that same flat layer, from the anchor up to
+   the card — so the line and the card share one coordinate space and CANNOT
+   drift apart. Anchoring the card to the 3D stem's tip instead looked joined
+   at one viewport and detached at the next.
+
+   Measured rather than hard-coded: the camera transform is constant, so the
+   percentages ARE stable for a given layout — but they shift the moment the
+   map gains padding or the breakpoint changes the stem scale, and a stale
+   number would silently detach every card from its stem. */
+function useStemTips(
+  mapRef: React.RefObject<HTMLDivElement | null>,
+  cardsRef: React.RefObject<HTMLDivElement | null>,
+) {
+  const sync = useCallback(() => {
+    const map = mapRef.current;
+    const cards = cardsRef.current;
+    if (!map || !cards) return;
+    const box = map.getBoundingClientRect();
+    if (!box.width || !box.height) return;
+    const pegs = map.querySelectorAll<SVGGElement>(".wm-map-pegs g");
+    cards.querySelectorAll<HTMLElement>(".wm-card-anchor").forEach((anchor, index) => {
+      const peg = pegs[index];
+      if (!peg) return;
+      const p = peg.getBoundingClientRect();
+      anchor.style.setProperty("--wm-peg-x", `${((p.left + p.width / 2 - box.left) / box.width) * 100}%`);
+      anchor.style.setProperty("--wm-peg-y", `${((p.top + p.height / 2 - box.top) / box.height) * 100}%`);
+    });
+  }, [mapRef, cardsRef]);
+
+  useEffect(() => {
+    sync();
+    const map = mapRef.current;
+    if (!map || typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", sync);
+      return () => window.removeEventListener("resize", sync);
+    }
+    const observer = new ResizeObserver(sync);
+    observer.observe(map);
+    return () => observer.disconnect();
+  }, [sync, mapRef]);
+}
+
+/* Card glyphs. The seal and gavel mirror the two the left column already uses,
+   so the badge on the map and the method cards beside it read as one family. */
+function MailGlyph() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="11" height="11">
+      <rect x="3" y="5" width="18" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" />
+      <path d="m3 5 9 7.2L21 5" fill="none" stroke="currentColor" strokeWidth="2.2" />
+    </svg>
+  );
+}
+
+function GavelGlyph() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="11" height="11">
+      <path
+        d="m14 13-7.5 7.5a2.12 2.12 0 0 1-3-3L11 10M16 16l6-6M8 8l6-6M9 7l8 8M21 11l-8-8"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+      />
+    </svg>
+  );
+}
+
+function ClockGlyph() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="12" height="12">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M12 7v5.4l3.4 2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CalendarGlyph() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="12" height="12">
+      <rect x="3.5" y="5.5" width="17" height="15" rx="1.6" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M3.5 10.5h17M8 3.5v4M16 3.5v4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/* ── STAGED CARDS, NOT LIVE LISTINGS ─────────────────────────────────────────
+   The 13 Aug ledger is explicit: Section 2 "must not render live listings,
+   must not be interactive, and must not be clickable — a staged illustration
+   of the two buying routes". So this content is written here rather than read
+   from TENDERS, every element is a <span>, and `.wm-stems` already carries
+   `pointer-events: none`. The section's existing "Illustration only" footnote
+   is what covers it for the reader.
+
+   Each card's place matches the region its stem actually stands in, so the
+   composition does not claim a Selangor address over a Kedah anchor.
+   Photography is from the real asset pack. */
+const STEM_CARDS: Record<
+  string,
+  {
+    method: "E-Tender" | "Owner Auction";
+    photo: string;
+    name: string;
+    place: string;
+    priceLabel: string;
+    price: string;
+    footLead: string;
+    footSub?: string;
+    /* Horizontal nudge off the stem's axis, in px. The north and central pegs
+       are only ~92px apart on screen — narrower than a card — so centring both
+       on their stems overlapped them and buried the northern price. Fanning
+       them apart is what Bryan's reference does too: its stems meet their cards
+       off-centre rather than dead middle. */
+    dx: number;
+  }
+> = {
+  north: {
+    dx: -46,
+    method: "E-Tender",
+    photo: "greenlane-bukit-jelutong-1.jpg",
+    name: "Taman Sejati Indah",
+    place: "Sungai Petani, Kedah",
+    priceLabel: "Reserve price",
+    price: "RM 385,000",
+    footLead: "18 days left",
+    footSub: "Closes 12 Dec 2026",
+  },
+  central: {
+    dx: 16,
+    method: "Owner Auction",
+    photo: "country-heights.jpg",
+    name: "Jalan Tasik Raban",
+    place: "Lenggong, Perak",
+    priceLabel: "Starting bid",
+    price: "RM 465,000",
+    footLead: "12 Dec 2026 · 9:00 AM",
+  },
+  south: {
+    dx: 0,
+    method: "E-Tender",
+    photo: "meranti-terrace.jpg",
+    name: "Taman Sri Kluang",
+    place: "Kluang, Johor",
+    priceLabel: "Reserve price",
+    price: "RM 520,000",
+    footLead: "14 days left",
+    footSub: "Closes 08 Dec 2026",
+  },
+};
+
 /* Low-profile six-sided peg plate, shared silhouette for every location.
    Top/bottom overlay panels add a subtle light-over-dark bevel in the
    record's own hue without becoming a second colour or a category icon. */
@@ -68,9 +221,16 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
   const blurId = `wm-blur-${instance}`;
   const poolBlurId = `wm-pool-blur-${instance}`;
   const clipId = `wm-clip-${instance}`;
+  const mapRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+  useStemTips(mapRef, cardsRef);
 
   return (
-    <div className={`wm-map wm-map--${finish} ${className}`.trim()} aria-hidden="true">
+    <div
+      ref={mapRef}
+      className={`wm-map wm-map--${finish} ${className}`.trim()}
+      aria-hidden="true"
+    >
       <span className="wm-map-ground" />
       <div className="wm-map-camera">
         <svg
@@ -225,7 +385,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             edge — so it rises flush from the peg instead of lying across
             the tilted stone plane. */}
         <div className="wm-stems">
-          {WEST_MALAYSIA_LOCATIONS.map((location) => {
+          {WEST_MALAYSIA_LOCATIONS.map((location, index) => {
             const { left, top } = projectedToPercent(location.x, location.y);
             return (
               <span
@@ -233,21 +393,73 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 className="wm-stem-anchor"
                 style={{ left: `${left}%`, top: `${top}%` }}
               >
-                <span className="wm-stem-upright">
-                  <span
-                    className="wm-stem-line"
-                    style={
-                      {
-                        "--wm-stem-h": `${location.stemHeight}px`,
-                        "--wm-stem-color": location.color,
-                      } as CSSProperties
-                    }
-                  />
+                <span
+                  className="wm-stem-upright"
+                  style={
+                    {
+                      "--wm-stem-h": `${location.stemHeight}px`,
+                      "--wm-stem-color": location.color,
+                    } as CSSProperties
+                  }
+                >
+                  <span className="wm-stem-line" />
                 </span>
               </span>
             );
           })}
         </div>
+      </div>
+
+      {/* FLAT overlay, deliberately OUTSIDE `.wm-map-camera`. Inside it, the
+          card inherits the camera's rotateX(60deg) and lies down on the stone
+          — cancelling that per-card only works for the hairline stem, whose
+          1.3px width hides the residual perspective skew. A card is a large
+          surface and showed it immediately. Out here it simply faces the
+          viewer, pinned to the stem's measured screen position. */}
+      <div className="wm-cards" ref={cardsRef}>
+        {WEST_MALAYSIA_LOCATIONS.map((location, index) => {
+          const card = STEM_CARDS[location.key];
+          if (!card) return null;
+          const auction = card.method === "Owner Auction";
+          return (
+            <span
+              key={location.key}
+              className="wm-card-anchor"
+              style={
+                {
+                  zIndex: index + 1,
+                  "--wm-stem-h": `${location.stemHeight}px`,
+                  "--wm-card-dx": `${card.dx}px`,
+                  "--wm-stem-color": location.color,
+                } as CSSProperties
+              }
+            >
+              <span className="wm-card-stem" />
+              <span className={`wm-card${auction ? " wm-card--auction" : ""}`}>
+              <span className="wm-card-photo">
+                <img src={PROJECT_IMG(card.photo)} alt="" loading="lazy" decoding="async" />
+                <span className="wm-card-badge">
+                  {auction ? <GavelGlyph /> : <MailGlyph />}
+                  {card.method}
+                </span>
+              </span>
+              <span className="wm-card-body">
+                <span className="wm-card-name">{card.name}</span>
+                <span className="wm-card-place">{card.place}</span>
+                <span className="wm-card-rule" />
+                <span className="wm-card-label">{card.priceLabel}</span>
+                <span className="wm-card-price">{card.price}</span>
+                <span className="wm-card-rule" />
+                <span className="wm-card-foot">
+                  {auction ? <CalendarGlyph /> : <ClockGlyph />}
+                  <b>{card.footLead}</b>
+                </span>
+                {card.footSub ? <span className="wm-card-foot-sub">{card.footSub}</span> : null}
+                </span>
+              </span>
+            </span>
+          );
+        })}
       </div>
     </div>
   );

@@ -220,7 +220,11 @@
   transform: rotateZ(7deg) rotateX(-60deg);
 }
 
+/* Superseded by `.wm-card-stem`, which is drawn flat alongside the card so the
+   two cannot drift apart. Kept hidden rather than deleted: the 3D stem is what
+   the pools and pegs were composed against. */
 .wm-stem-line {
+  display: none;
   position: absolute;
   left: 0;
   bottom: 0;
@@ -261,4 +265,186 @@
     top: 65%;
     width: 73%;
   }
+}
+
+/* ── PROPERTY CARDS ─────────────────────────────────────────────────────────
+   A FLAT layer over the plate. Each card is pinned to its stem's measured
+   screen position and translated up by that stem's height, so it appears to
+   rest on the stem's tip while facing the viewer square-on.
+
+   Staged illustration, never a control: the layer is `pointer-events: none`
+   and every element is a span, so nothing is hoverable or clickable. */
+.wm-cards {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Headroom for the cards. They stand a stem's height plus their own height
+   above their pegs, and the two northern pegs sit high on the plate — without
+   this the top of both cards was cut off by the section edge. The plate keeps
+   its own size; only the space above it grows. */
+.wm-map {
+  padding-top: clamp(90px, 13vw, 150px);
+}
+
+/* Zero-size point sitting on the peg. `--wm-peg-*` are written by useStemTips()
+   from the peg's RENDERED centre, because the peg's own SVG coordinates say
+   nothing about where the camera transform actually put it. */
+.wm-card-anchor {
+  position: absolute;
+  left: var(--wm-peg-x, 50%);
+  top: var(--wm-peg-y, 50%);
+  width: 0;
+  height: 0;
+}
+
+/* The connector, drawn flat. Its foot is on the peg and its head is exactly
+   where the card's foot sits, so the two always meet. */
+.wm-card-stem {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 1.4px;
+  height: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
+  margin-left: -0.7px;
+  background: var(--wm-stem-color, #8a7663);
+  opacity: 0.8;
+}
+
+.wm-card {
+  position: absolute;
+  left: 0;
+  bottom: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
+  width: calc(152px * var(--wm-stem-scale, 1));
+  transform: translateX(calc(-50% + var(--wm-card-dx, 0px) * var(--wm-stem-scale, 1)));
+  border-radius: 12px;
+  background: #fffcf8;
+  /* A tight contact shadow so it reads as a solid object, plus a wide soft one
+     that lifts it off the plate without muddying the stone. */
+  box-shadow:
+    0 1px 2px rgba(45, 32, 24, 0.09),
+    0 16px 30px -10px rgba(45, 32, 24, 0.28);
+  overflow: hidden;
+  font-family: var(--sans);
+  text-align: left;
+}
+
+.wm-card-photo {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  background: #e6ded3;
+}
+
+.wm-card-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Straddles the photo's lower edge, as in Bryan's reference. */
+.wm-card-badge {
+  position: absolute;
+  left: 9px;
+  bottom: 0;
+  transform: translateY(50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #571c2e;
+  color: #fff8ef;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.wm-card--auction .wm-card-badge {
+  background: #2a2320;
+}
+
+.wm-card-badge svg {
+  width: 9px;
+  height: 9px;
+}
+
+.wm-card-body {
+  display: block;
+  padding: 16px 11px 11px;
+  color: #17130f;
+}
+
+.wm-card-name {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.wm-card-place {
+  display: block;
+  margin-top: 2px;
+  font-size: 9.5px;
+  color: #75695e;
+  line-height: 1.3;
+}
+
+.wm-card-rule {
+  display: block;
+  height: 1px;
+  margin: 8px 0;
+  background: #e8ded1;
+}
+
+.wm-card-label {
+  display: block;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #837465;
+}
+
+.wm-card-price {
+  display: block;
+  margin-top: 2px;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: #571c2e;
+}
+
+/* Owner Auction takes the brass, the same split the fold's panel uses. */
+.wm-card--auction .wm-card-price {
+  color: #9a7333;
+}
+
+.wm-card-foot {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #571c2e;
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.wm-card--auction .wm-card-foot {
+  color: #9a7333;
+}
+
+.wm-card-foot-sub {
+  display: block;
+  margin-top: 2px;
+  padding-left: 14px;
+  font-size: 8.5px;
+  color: #837465;
+  line-height: 1.3;
 }

@@ -138,7 +138,10 @@ const LOCATION_SOURCE = [
     lat: 5.85,
     lon: 100.75,
     color: "#A77A7E",
-    stemHeight: 120,
+    /* Tall on purpose. North and central sit only ~13% of the map apart
+       horizontally — less than a card's width — so their cards collide unless
+       the stagger does the separating. */
+    stemHeight: 196,
   },
   {
     key: "central",
@@ -146,7 +149,7 @@ const LOCATION_SOURCE = [
     lat: 4.2831,
     lon: 101.6054,
     color: "#B97B62",
-    stemHeight: 146,
+    stemHeight: 112,
   },
   {
     key: "south",
