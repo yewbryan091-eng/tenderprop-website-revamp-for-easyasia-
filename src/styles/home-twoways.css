@@ -53,27 +53,6 @@
   text-wrap: balance;
 }
 
-/* The Jalur Gemilang clipped to the word itself. Stretched rather than
-   cover-cropped: the word is far wider than the flag's 2:1, so `cover` would
-   show only a band of middle stripes and lose the canton entirely.
-
-   Guarded by @supports — without background-clip:text the transparent fill
-   would render the word invisible rather than merely unflagged. */
-.tw-flag {
-  color: inherit;
-}
-
-@supports (background-clip: text) or (-webkit-background-clip: text) {
-  .tw-flag {
-    background-image: url("/assets/layout/jalur-gemilang.svg");
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-}
-
 .tw-deck {
   margin: 20px 0 0;
   max-width: 34em;

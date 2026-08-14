@@ -56,9 +56,7 @@ export function TwoWays() {
               and the listing data carries every state including Sabah and
               Sarawak. The illustration showing the peninsula is a drawing
               decision, not the limit of the offer. */}
-          <h2 id="tw-title">
-            Across <span className="tw-flag">Malaysia</span>, two ways to buy.
-          </h2>
+          <h2 id="tw-title">Across Malaysia, two ways to buy.</h2>
           <p className="tw-deck">
             Discover Malaysian subsale properties offered through private E-Tender or live Owner
             Auction &mdash; each with its own price, place and closing date.
