@@ -198,9 +198,66 @@
 
 .wm-map-speckle {
   fill: #6f5747;
-  opacity: 0.36;
+  opacity: 0.3;
   mix-blend-mode: soft-light;
   pointer-events: none;
+}
+
+/* Aged-paper mottling — palm-sized ±2–3% tonal patches. This is the §"surface
+   tonal variation" layer: caused-by-material, never a designed gradient. */
+.wm-map-mottle {
+  fill: #8d725e;
+  opacity: 0.55;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+/* ── TERRAIN ────────────────────────────────────────────────────────────────
+   All terrain is `soft-light`, so it MODULATES the limestone's own tone and
+   cannot paint grey over cream — the exact failure of the 14 Aug relief.
+   Everything below the plate's dotted maroon state borders in the hierarchy,
+   and it must stay that way: if a contour ever competes with a border,
+   the contour loses opacity, not the border. */
+.wm-terrain-sheet {
+  opacity: 0.15;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.wm-terrain-range {
+  opacity: 0.58;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+/* Elevation lightening: nested envelopes accumulate toward the crests, so the
+   summit pockets sit ~3 fills lighter than the plain — raised ground catching
+   more of the key light, per the plate's upper-left lighting. */
+.wm-terrain-fill {
+  fill: #fffdf7;
+  opacity: 0.05;
+}
+
+/* Contour engraving — the state-boundary language (dark hairline over a lit
+   lower lip) but solid, thinner and far fainter. Deliberately inside the
+   5–12% window; the lit lip is brighter because white-on-cream needs more
+   ink than brown-on-cream to register at all. */
+.wm-terrain-contours path,
+.wm-terrain-contours-light path {
+  fill: none;
+  stroke-linejoin: round;
+}
+
+.wm-terrain-contours path {
+  stroke: #7a5f4b;
+  stroke-width: 0.8;
+  opacity: 0.11;
+}
+
+.wm-terrain-contours-light path {
+  stroke: #fffdf7;
+  stroke-width: 0.9;
+  opacity: 0.28;
 }
 
 .wm-map-bevel {

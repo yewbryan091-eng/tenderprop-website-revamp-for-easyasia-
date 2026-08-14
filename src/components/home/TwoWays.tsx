@@ -47,54 +47,55 @@ function GavelArt() {
         className="tw-ill-wash tw-ill-wash--auction"
         d="M32 68 C26 44 50 24 80 25 C110 26 138 44 135 70 C132 92 110 108 78 106 C50 104 38 90 32 68 Z"
       />
-      <ellipse className="tw-ill-ground" cx="88" cy="113" rx="44" ry="4" />
-      <g className="tw-live">
-        <circle className="tw-live-dot" cx="26" cy="25" r="3.4" />
-        <text className="tw-live-text" x="34" y="28.5">
-          LIVE
-        </text>
+      <ellipse className="tw-ill-ground" cx="90" cy="113" rx="48" ry="4" />
+      {/* +18% and nudged right/up so the gavel carries the same presence as the
+          envelope — it was drawn smaller inside the same viewBox. The strike
+          rotation still pivots correctly: `transform-box: view-box` resolves
+          the origin in LOCAL viewBox units, which this wrapper scales whole. */}
+      <g className="tw-gavel-scene" transform="translate(-9 -19) scale(1.18)">
+        <rect className="tw-base" x="84" y="99" width="34" height="8.5" rx="3.5" />
+        <rect className="tw-base-top" x="90" y="95.5" width="22" height="4.5" rx="2" />
+        <g className="tw-gavel">
+          <rect
+            className="tw-gavel-handle"
+            x="36"
+            y="63.5"
+            width="58"
+            height="5"
+            rx="2.5"
+            transform="rotate(21 38 66)"
+          />
+          <rect
+            className="tw-gavel-head"
+            x="90"
+            y="70"
+            width="16"
+            height="33"
+            rx="5.5"
+            transform="rotate(21 98 86.5)"
+          />
+          <rect
+            className="tw-band"
+            x="90"
+            y="73"
+            width="16"
+            height="4.5"
+            rx="2"
+            transform="rotate(21 98 86.5)"
+          />
+          <rect
+            className="tw-band"
+            x="90"
+            y="94.5"
+            width="16"
+            height="4.5"
+            rx="2"
+            transform="rotate(21 98 86.5)"
+          />
+        </g>
+        {/* Two ticks, not three — Bryan: restrained. */}
+        <path className="tw-strikes" d="M118 89 L126 82 M121 96 L131 94" />
       </g>
-      <rect className="tw-base" x="84" y="99" width="34" height="8.5" rx="3.5" />
-      <rect className="tw-base-top" x="90" y="95.5" width="22" height="4.5" rx="2" />
-      <g className="tw-gavel">
-        <rect
-          className="tw-gavel-handle"
-          x="36"
-          y="63.5"
-          width="58"
-          height="5"
-          rx="2.5"
-          transform="rotate(21 38 66)"
-        />
-        <rect
-          className="tw-gavel-head"
-          x="90"
-          y="70"
-          width="16"
-          height="33"
-          rx="5.5"
-          transform="rotate(21 98 86.5)"
-        />
-        <rect
-          className="tw-band"
-          x="90"
-          y="73"
-          width="16"
-          height="4.5"
-          rx="2"
-          transform="rotate(21 98 86.5)"
-        />
-        <rect
-          className="tw-band"
-          x="90"
-          y="94.5"
-          width="16"
-          height="4.5"
-          rx="2"
-          transform="rotate(21 98 86.5)"
-        />
-      </g>
-      <path className="tw-strikes" d="M118 89 L126 82 M121 96 L131 94 M119 103 L127 108" />
     </svg>
   );
 }
@@ -176,7 +177,7 @@ export function TwoWays() {
                 <h3>E-Tender</h3>
                 <p className="tw-route-sub">Private sealed offers</p>
                 <p className="tw-route-note">
-                  Submit privately &mdash; your offer is never shown to other buyers.
+                  Name your price privately. Other buyers never see your offer.
                 </p>
               </div>
             </div>
@@ -185,9 +186,15 @@ export function TwoWays() {
                 <GavelArt />
               </div>
               <div className="tw-route-text">
-                <h3>Owner Auction</h3>
+                <h3>
+                  Owner Auction
+                  <span className="tw-live-tag">
+                    <span className="tw-live-dot" />
+                    Live Bidding
+                  </span>
+                </h3>
                 <p className="tw-route-sub">Live online bidding</p>
-                <p className="tw-route-note">Bid live on auction day.</p>
+                <p className="tw-route-note">Bid openly against other buyers on auction day.</p>
               </div>
             </div>
           </div>

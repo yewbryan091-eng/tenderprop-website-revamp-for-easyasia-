@@ -106,7 +106,10 @@
 
 .tw-route-note {
   margin: 0;
-  max-width: 30ch;
+  /* 34ch lands BOTH support lines on exactly two lines — equal depth — and
+     `pretty` stops the auction line stranding "day." as an orphan. */
+  max-width: 34ch;
+  text-wrap: pretty;
   font-size: 13.5px;
   line-height: 1.5;
   color: color-mix(in srgb, var(--muted) 85%, transparent);
@@ -275,16 +278,28 @@
   stroke-linecap: round;
 }
 
-.tw-live-dot {
-  fill: #b58f3e;
+/* The LIVE tag rides the Owner Auction heading, not the drawing — floating
+   over the gavel it read as decoration; beside the term it reads as format. */
+.tw-live-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  transform: translateY(-3px);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #836a33;
 }
 
-.tw-live-text {
-  font-family: var(--sans);
-  font-size: 8.5px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  fill: #836a33;
+.tw-live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #b58f3e;
 }
 
 /* ── The entrance ────────────────────────────────────────────────────────────
