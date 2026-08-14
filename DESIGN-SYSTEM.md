@@ -179,8 +179,9 @@ including today, and the final day reads "1 day left" rather than "0".
   top, shallow layered extrusion, restrained brass rim, engraved state lines and one connected soft
   shadow, viewed at roughly 30° elevation. It is SVG/CSS only — no raster render, WebGL or map embed
   — and remains crisp across desktop sizes. Three coordinate-projected property locations sit above
-  the stone as subtle organic pools with matching upright stems: dusty rose for Setia Alam, muted
-  terracotta for Petaling Jaya and soft olive-taupe for Seri Kembangan. These colours only connect a
+  the stone as subtle organic pools with matching upright stems: dusty rose for George Town, muted
+  terracotta for Kuala Lumpur and soft olive-taupe for Johor Bahru. Together they form a deliberate
+  north / centre / south sweep across the peninsula. These colours only connect a
   location to its future property card; they never encode selling method or categorise geography.
   **Hard rules, founder-set:** West Malaysia only; no East Malaysia; no live listing data, state or
   Klang Valley category fill, labels, clicks or interaction; the map stays `aria-hidden`. Property

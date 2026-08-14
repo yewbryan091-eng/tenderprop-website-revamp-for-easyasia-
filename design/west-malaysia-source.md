@@ -18,8 +18,8 @@ The same longitude rule selects 24 complete Admin 1 boundary-line components for
 
 The three homepage location markers use real-world GeoNames coordinates (WGS84), run through the **same** `project()` function and mid-latitude cosine correction as the coastline and state-boundary geometry above — not eyeballed or hand-placed against the rendered map.
 
-| Location       | GeoNames source                                        | Lat (WGS84) | Lon (WGS84) | Projected x | Projected y |
-| -------------- | ------------------------------------------------------ | ----------- | ----------- | ----------- | ----------- |
-| Setia Alam     | `https://www.geonames.org/13118091/setia-alam.html`    | 3.10155     | 101.45565   | 389.38      | 777.55      |
-| Petaling Jaya  | `https://www.geonames.org/1735158/petaling-jaya.html`  | 3.10726     | 101.60671   | 421.87      | 776.32      |
-| Seri Kembangan | `https://www.geonames.org/1744246/seri-kembangan.html` | 3.0333333   | 101.7166667 | 445.52      | 792.25      |
+| Location      | GeoNames source                                       | Lat (WGS84)      | Lon (WGS84)       | Projected x | Projected y |
+| ------------- | ------------------------------------------------------ | ---------------- | ----------------- | ----------- | ----------- |
+| George Town   | `https://www.geonames.org/1735106/george-town.html`   | 5.411229         | 100.335426         | 148.45      | 279.58      |
+| Kuala Lumpur  | `https://www.geonames.org/1735161/kuala-lumpur.html`  | 3.14120171804761 | 101.686534881592   | 439.04      | 769         |
+| Johor Bahru   | `https://www.geonames.org/1732752/johor-bahru.html`   | 1.4655           | 103.7578           | 884.53      | 1130.28     |

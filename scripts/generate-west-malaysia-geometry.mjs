@@ -115,28 +115,28 @@ if (westStateLines.length !== 24) {
    centres stay individually readable. */
 const LOCATION_SOURCE = [
   {
-    key: "setia-alam",
-    name: "Setia Alam",
-    lat: 3.10155,
-    lon: 101.45565,
+    key: "george-town",
+    name: "George Town",
+    lat: 5.411229,
+    lon: 100.335426,
     color: "#A77A7E",
+    stemHeight: 120,
+  },
+  {
+    key: "kuala-lumpur",
+    name: "Kuala Lumpur",
+    lat: 3.14120171804761,
+    lon: 101.686534881592,
+    color: "#B97B62",
     stemHeight: 146,
   },
   {
-    key: "petaling-jaya",
-    name: "Petaling Jaya",
-    lat: 3.10726,
-    lon: 101.60671,
-    color: "#B97B62",
-    stemHeight: 92,
-  },
-  {
-    key: "seri-kembangan",
-    name: "Seri Kembangan",
-    lat: 3.0333333,
-    lon: 101.7166667,
+    key: "johor-bahru",
+    name: "Johor Bahru",
+    lat: 1.4655,
+    lon: 103.7578,
     color: "#9A8C67",
-    stemHeight: 120,
+    stemHeight: 92,
   },
 ];
 

@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SandboxRouteImport } from './routes/sandbox'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as BuyIndexRouteImport } from './routes/buy/index'
 import { Route as HowETenderWorksIndexRouteImport } from './routes/how-e-tender-works/index'
@@ -25,6 +26,11 @@ import { Route as TenderResidensiSinaranRouteImport } from './routes/tender/resi
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SandboxRoute = SandboxRouteImport.update({
+  id: '/sandbox',
+  path: '/sandbox',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
@@ -86,6 +92,7 @@ const TenderResidensiSinaranRoute = TenderResidensiSinaranRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sandbox': typeof SandboxRoute
   '/owner-auction/residensi-sinaran': typeof OwnerAuctionResidensiSinaranRoute
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
   '/about/': typeof AboutIndexRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sandbox': typeof SandboxRoute
   '/owner-auction/residensi-sinaran': typeof OwnerAuctionResidensiSinaranRoute
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
   '/about': typeof AboutIndexRoute
@@ -115,6 +123,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sandbox': typeof SandboxRoute
   '/owner-auction/residensi-sinaran': typeof OwnerAuctionResidensiSinaranRoute
   '/tender/residensi-sinaran': typeof TenderResidensiSinaranRoute
   '/about/': typeof AboutIndexRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/sandbox'
     | '/owner-auction/residensi-sinaran'
     | '/tender/residensi-sinaran'
     | '/about/'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/sandbox'
     | '/owner-auction/residensi-sinaran'
     | '/tender/residensi-sinaran'
     | '/about'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/sandbox'
     | '/owner-auction/residensi-sinaran'
     | '/tender/residensi-sinaran'
     | '/about/'
@@ -174,6 +186,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SandboxRoute: typeof SandboxRoute
   OwnerAuctionResidensiSinaranRoute: typeof OwnerAuctionResidensiSinaranRoute
   TenderResidensiSinaranRoute: typeof TenderResidensiSinaranRoute
   AboutIndexRoute: typeof AboutIndexRoute
@@ -194,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sandbox': {
+      id: '/sandbox'
+      path: '/sandbox'
+      fullPath: '/sandbox'
+      preLoaderRoute: typeof SandboxRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about/': {
@@ -278,6 +298,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SandboxRoute: SandboxRoute,
   OwnerAuctionResidensiSinaranRoute: OwnerAuctionResidensiSinaranRoute,
   TenderResidensiSinaranRoute: TenderResidensiSinaranRoute,
   AboutIndexRoute: AboutIndexRoute,
