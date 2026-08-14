@@ -47,38 +47,45 @@ export function TwoWays() {
       <div className="tw-inner">
         <div className="tw-copy">
           <p className="tw-kicker">Dua cara &middot; two ways to buy</p>
-          <h2 id="tw-title">From Perlis to Sabah, the same house can be bought two ways.</h2>
+          {/* Two lines, not four. The map is the proof now, so the headline no
+              longer narrates it. "the same house can be bought two ways" also
+              implied one property runs BOTH routes, which is not the case —
+              different properties, different places, two ways to buy.
+
+              "Across Malaysia", not "Peninsular": the proposition is national
+              and the listing data carries every state including Sabah and
+              Sarawak. The illustration showing the peninsula is a drawing
+              decision, not the limit of the offer. */}
+          <h2 id="tw-title">Across Malaysia, two ways to buy.</h2>
           <p className="tw-deck">
-            TenderProp opens Malaysian subsale property to sealed E-Tender and live Owner Auction.
-            Same streets, same houses &mdash; a different way in.
+            Discover Malaysian subsale properties offered through private E-Tender or live Owner
+            Auction &mdash; each with its own price, place and closing date.
           </p>
 
-          <div className="tw-routes">
-            <article className="tw-route">
-              <h3>
+          {/* A REMINDER, not an explainer. Section 1 already taught both routes
+              in full; repeating that here was redundant, and two bordered
+              boxes on the left fighting three property cards on the right made
+              the section read as a dashboard. No boxes, no borders, no fills —
+              just the term and what it means. */}
+          <dl className="tw-routes">
+            <div className="tw-route">
+              <dt>
                 <SealIcon />
                 E-Tender
-              </h3>
-              <p>
-                Submit a sealed offer before the closing date. You name the price &mdash; even below
-                the reserve.
-              </p>
-            </article>
-            <article className="tw-route">
-              <h3>
+              </dt>
+              <dd>Private sealed offers</dd>
+            </div>
+            <div className="tw-route">
+              <dt>
                 <GavelIcon />
                 Owner Auction
-              </h3>
-              <p>
-                Bid live on auction day, in the open. The owner chose to sell this way &mdash; it is
-                never a bank lelong.
-              </p>
-            </article>
-          </div>
+              </dt>
+              <dd>Live online bidding</dd>
+            </div>
+          </dl>
 
           <p className="tw-note">
-            Illustration only. Live properties, reserve prices and closing dates are on the E-Tender
-            and Owner Auction pages.
+            Illustration only. View current properties on the E-Tender and Owner Auction pages.
           </p>
         </div>
 
