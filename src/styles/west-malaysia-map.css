@@ -318,12 +318,12 @@
   left: 0;
   bottom: 0;
   width: 1.5px;
-  /* Length and angle are computed from (dx, height) in the component, so the
-     head lands on the card's bottom centre however far the card has slid. */
-  height: calc(var(--wm-stem-len, 100px) * var(--wm-stem-scale, 1));
+  /* STRAIGHT, always. It rises vertically from the exact geographic point to
+     the card's lower edge. Because the card slides sideways by `dx`, the stem
+     meets that edge off-centre rather than dead middle — every offset is kept
+     smaller than half a card, so the join always lands on the card. */
+  height: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
   margin-left: -0.75px;
-  transform-origin: 50% 100%;
-  transform: rotate(var(--wm-stem-rot, 0deg));
   background: var(--wm-stem-color, #8a7663);
   opacity: 0.7;
 }

@@ -147,8 +147,12 @@ const LOCATION_SOURCE = [
   {
     key: "central",
     name: "Central Peninsular",
+    /* Moved ~47km east of Bryan's original mark, on his instruction that pins
+       could shift for composition. At 101.6054 its card sat only 101px from the
+       northern card's — narrower than the 136px card — so the two overlapped
+       once every line was centred. Still inland Pahang. */
     lat: 4.2831,
-    lon: 101.6054,
+    lon: 102.03,
     color: "#BE9177",
     stemHeight: 80,
   },

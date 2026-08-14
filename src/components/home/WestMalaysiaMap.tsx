@@ -209,7 +209,7 @@ const STEM_CARDS: Record<
   }
 > = {
   north: {
-    dx: -52,
+    dx: 0,
     method: "E-Tender",
     photo: "greenlane-bukit-jelutong-1.jpg",
     name: "Taman Sejati Indah",
@@ -220,17 +220,17 @@ const STEM_CARDS: Record<
     footSub: "Closes 12 Dec 2026",
   },
   central: {
-    dx: 30,
+    dx: 0,
     method: "Owner Auction",
     photo: "country-heights.jpg",
-    name: "Jalan Tasik Raban",
-    place: "Lenggong, Perak",
+    name: "Jalan Sungai Jelai",
+    place: "Kuala Lipis, Pahang",
     priceLabel: "Starting bid",
     price: "RM 465,000",
     footLead: "12 Dec 2026 · 9:00 AM",
   },
   south: {
-    dx: 6,
+    dx: 0,
     method: "E-Tender",
     photo: "meranti-terrace.jpg",
     name: "Taman Sri Kluang",
@@ -476,11 +476,6 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 {
                   zIndex: index + 1,
                   "--wm-stem-h": `${location.stemHeight}px`,
-                  /* One straight leaning line, not a bent leader: its foot is
-                     on the peg and its head lands exactly on the card's bottom
-                     centre, so length and angle both fall out of (dx, height). */
-                  "--wm-stem-len": `${Math.hypot(card.dx, location.stemHeight)}px`,
-                  "--wm-stem-rot": `${(Math.atan2(card.dx, location.stemHeight) * 180) / Math.PI}deg`,
                   "--wm-card-dx": `${card.dx}px`,
                   "--wm-stem-color": location.color,
                 } as CSSProperties
