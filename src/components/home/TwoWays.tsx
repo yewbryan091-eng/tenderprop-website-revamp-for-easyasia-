@@ -53,48 +53,28 @@ function GavelArt() {
           rotation still pivots correctly: `transform-box: view-box` resolves
           the origin in LOCAL viewBox units, which this wrapper scales whole. */}
       <g className="tw-gavel-scene" transform="translate(-9 -19) scale(1.18)">
-        <rect className="tw-base" x="84" y="99" width="34" height="8.5" rx="3.5" />
-        <rect className="tw-base-top" x="90" y="95.5" width="22" height="4.5" rx="2" />
+        {/* REST POSE = CONTACT. The head is a vertical cylinder whose striking
+            face sits flush on the block's top plate (both at y=99) — the old
+            pose tilted the head 21°, so its corner stabbed through the block.
+            The swing rotates this whole group about the handle butt (30,66):
+            raised at -18°, landing exactly back on this flush contact. */}
+        <rect className="tw-base" x="82" y="103.5" width="38" height="7" rx="3" />
+        <rect className="tw-base-top" x="88" y="99" width="26" height="4.5" rx="2" />
         <g className="tw-gavel">
           <rect
             className="tw-gavel-handle"
-            x="36"
+            x="28"
             y="63.5"
-            width="58"
+            width="68"
             height="5"
             rx="2.5"
-            transform="rotate(21 38 66)"
+            transform="rotate(15.5 30 66)"
           />
-          <rect
-            className="tw-gavel-head"
-            x="90"
-            y="70"
-            width="16"
-            height="33"
-            rx="5.5"
-            transform="rotate(21 98 86.5)"
-          />
-          <rect
-            className="tw-band"
-            x="90"
-            y="73"
-            width="16"
-            height="4.5"
-            rx="2"
-            transform="rotate(21 98 86.5)"
-          />
-          <rect
-            className="tw-band"
-            x="90"
-            y="94.5"
-            width="16"
-            height="4.5"
-            rx="2"
-            transform="rotate(21 98 86.5)"
-          />
+          <rect className="tw-gavel-head" x="91.5" y="69" width="17" height="30" rx="5.5" />
+          <rect className="tw-band" x="91.5" y="71.5" width="17" height="4.5" rx="2" />
+          <rect className="tw-band" x="91.5" y="92.5" width="17" height="4.5" rx="2" />
         </g>
-        {/* Two ticks, not three — Bryan: restrained. */}
-        <path className="tw-strikes" d="M118 89 L126 82 M121 96 L131 94" />
+        <path className="tw-strikes" d="M121 92 L129 85 M124 100 L134 98" />
       </g>
     </svg>
   );
