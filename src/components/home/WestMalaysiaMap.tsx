@@ -28,6 +28,45 @@ const DEPTH_SLICES = 42;
 const DEPTH_DROP = { x: 15.12, y: 68.25 };
 const DEPTH_LAYERS = Array.from({ length: DEPTH_SLICES }, (_, index) => DEPTH_SLICES - index);
 
+/* ── RELIEF: THE HIGHLANDS ARE CARVED ────────────────────────────────────────
+   The plate was one flat cream field — half the object undifferentiated, with
+   the dotted state borders dividing nothing. It is a stone RELIEF, so the
+   honest way to bring it alive is to carve it rather than to decorate it.
+
+   Two ridges, shaded the way relief maps have always been shaded: a dark copy
+   pushed away from the light and a light copy pulled toward it, both heavily
+   blurred, so the ridge reads as raised ground under the same raking key light
+   that lights the rest of the plate.
+
+   PLACED BY COORDINATE, NOT BY EYE. The peninsula's own projection is recovered
+   from the three anchors in `west-malaysia-geometry.ts` — they carry both their
+   lat/lon and their projected x/y, and both scales agree to 5 significant
+   figures across all three (x = 215.08 per degree of longitude from 99.64525E;
+   y = 215.60 per degree of latitude down from 6.708N). Every control point
+   below is a real place run through that:
+
+     Titiwangsa   Perlis border 6.40N 100.90E → Cameron Highlands 4.47N 101.38E
+                  → Genting 3.42N 101.79E → Negeri Sembilan 2.60N 102.25E
+     Banjaran Timur / Tahan   5.20N 101.90E → 4.63N 102.23E
+     Kledang (Perak west flank)   4.60N 101.05E → 4.20N 101.10E
+     Gunung Ledang (Johor)        2.37N 102.61E
+
+   FOUR masses, not one. A single clean stroke down the middle read as a smear
+   across the plate rather than as a range; a range has flanks and outliers, and
+   the two small ones also stop Johor and the south being dead flat. Ledang is a
+   single isolated peak in life, so it stays a dab — long enough to catch the
+   light, too short to read as a second spine.
+
+   Deliberately SOFT. This is tonal shading, not a drawn feature — it should
+   read as "there are highlands here", never as a claim about an exact ridge
+   line. If it ever hardens into something you could trace, it has gone wrong. */
+const TITIWANGSA =
+  "M270 66 C300 150 318 205 324 260 C345 340 360 420 373 483 C390 530 400 570 410 605 C428 650 448 680 461 709 C480 750 500 785 517 810 C534 845 550 870 560 886";
+const BANJARAN_TIMUR = "M485 325 C510 350 535 380 552 420 C563 442 569 452 571 456";
+const KLEDANG = "M302 454 C306 478 309 505 313 540";
+const LEDANG = "M629 926 C634 931 641 939 646 947";
+const RELIEF_RIDGES = [TITIWANGSA, BANJARAN_TIMUR, KLEDANG, LEDANG];
+
 /* Three hand-authored, lobed washes share a location without sharing a centre.
    Their deliberately uneven shoulders survive the camera tilt as spilled
    pigment rather than resolving into three tidy ellipses. */
@@ -223,6 +262,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
   const sideId = `wm-side-${instance}`;
   const grainId = `wm-grain-${instance}`;
   const speckleId = `wm-speckle-${instance}`;
+  const reliefId = `wm-relief-${instance}`;
   const blurId = `wm-blur-${instance}`;
   const poolBlurId = `wm-pool-blur-${instance}`;
   const clipId = `wm-clip-${instance}`;
@@ -281,6 +321,10 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 result="tonedNoise"
               />
               <feComposite in="tonedNoise" in2="SourceAlpha" operator="in" />
+            </filter>
+
+            <filter id={reliefId} x="-25%" y="-25%" width="150%" height="150%">
+              <feGaussianBlur stdDeviation="14" />
             </filter>
 
             {/* The fine tooth of the surface. Deliberately isotropic where the
@@ -395,6 +439,25 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 </g>
               );
             })}
+          </g>
+
+          {/* Carved highlands. Below the engravings and the grain, so the state
+              borders and the stone's tooth both read straight THROUGH the
+              relief — a ridge that covered them would look like a decal laid on
+              the plate instead of the plate's own shape. The key light sits
+              up-left (see the `lightId` radial at 0.22 / 0.12), so the shade
+              goes down-right and the highlight up-left of every ridge. */}
+          <g className="wm-map-relief" clipPath={`url(#${clipId})`}>
+            <g className="wm-relief-shade" filter={`url(#${reliefId})`}>
+              {RELIEF_RIDGES.map((ridge, index) => (
+                <path key={index} d={ridge} transform="translate(9 10)" />
+              ))}
+            </g>
+            <g className="wm-relief-light" filter={`url(#${reliefId})`}>
+              {RELIEF_RIDGES.map((ridge, index) => (
+                <path key={index} d={ridge} transform="translate(-8 -9)" />
+              ))}
+            </g>
           </g>
 
           {/* Published Admin 1 shapes give the stone face its geographic
