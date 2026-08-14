@@ -142,7 +142,7 @@ const LOCATION_SOURCE = [
        (196/112/92) to keep the two northern cards from colliding; the cards'
        own horizontal fan does that job now, so the stems can sit at a natural
        height instead of being propped up. */
-    stemHeight: 212,
+    stemHeight: 100,
   },
   {
     key: "central",
@@ -150,7 +150,7 @@ const LOCATION_SOURCE = [
     lat: 4.2831,
     lon: 101.6054,
     color: "#BE9177",
-    stemHeight: 54,
+    stemHeight: 80,
   },
   {
     key: "south",
@@ -158,7 +158,7 @@ const LOCATION_SOURCE = [
     lat: 2.2275,
     lon: 103.1988,
     color: "#A69A76",
-    stemHeight: 44,
+    stemHeight: 62,
   },
 ];
 

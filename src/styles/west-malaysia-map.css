@@ -172,17 +172,17 @@
    register as "this area is softly highlighted", not as a marker. */
 .wm-pool-a {
   stroke: none;
-  opacity: 0.13;
+  opacity: 0.1;
 }
 
 .wm-pool-b {
   stroke: none;
-  opacity: 0.18;
+  opacity: 0.13;
 }
 
 .wm-pool-c {
   stroke: none;
-  opacity: 0.24;
+  opacity: 0.17;
 }
 
 /* Deliberately quiet. The eye should travel watercolour -> stem, not
@@ -296,7 +296,7 @@
    this the top of both cards was cut off by the section edge. The plate keeps
    its own size; only the space above it grows. */
 .wm-map {
-  padding-top: clamp(150px, 18vw, 226px);
+  padding-top: clamp(64px, 9vw, 120px);
 }
 
 /* Zero-size point sitting on the peg. `--wm-peg-*` are written by useStemTips()
@@ -317,21 +317,23 @@
   left: 0;
   bottom: 0;
   width: 1.5px;
-  height: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
+  /* Length and angle are computed from (dx, height) in the component, so the
+     head lands on the card's bottom centre however far the card has slid. */
+  height: calc(var(--wm-stem-len, 100px) * var(--wm-stem-scale, 1));
   margin-left: -0.75px;
+  transform-origin: 50% 100%;
+  transform: rotate(var(--wm-stem-rot, 0deg));
   background: var(--wm-stem-color, #8a7663);
-  opacity: 0.72;
+  opacity: 0.7;
 }
 
 .wm-card {
   position: absolute;
   left: 0;
   bottom: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
-  width: calc(152px * var(--wm-stem-scale, 1));
-  /* Dead centre on the stem. The stem sits at the anchor's left:0, so a plain
-     -50% puts the card's horizontal centre on the stem's centreline exactly —
-     no per-card nudges, which is what let them drift apart before. */
-  transform: translateX(-50%);
+  /* ~11% smaller than before, so the map stays the dominant object. */
+  width: calc(136px * var(--wm-stem-scale, 1));
+  transform: translateX(calc(-50% + var(--wm-card-dx, 0px) * var(--wm-stem-scale, 1)));
   border-radius: 12px;
   background: #fffcf8;
   /* A tight contact shadow so it reads as a solid object, plus a wide soft one
@@ -443,8 +445,12 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  /* Nowrap at 8.8px: "12 Dec 2026 · 9:00 AM" wrapped to two lines once the card
+     narrowed to 136px, which made the Owner Auction card taller than its two
+     siblings. Dimensional only — the type treatment is unchanged. */
+  white-space: nowrap;
   color: #571c2e;
-  font-size: 9.5px;
+  font-size: 8.8px;
   font-weight: 700;
   line-height: 1.2;
 }

@@ -44,10 +44,14 @@ const POOL_LAYERS = [
   { cls: "wm-pool-c", path: POOL_WASH_C, blur: false },
 ] as const;
 
+/* Offsets are LARGE relative to each shape — around a third of the wash's own
+   radius. Small offsets leave the three outlines sharing a centre, which is
+   exactly what the eye reads as concentric rings. Pushed this far apart, and
+   with the blur raised, they dissolve into one lopsided stain instead. */
 const POOL_TILTS = [
-  { a: { r: -12, x: -5, y: 4 }, b: { r: 58, x: 6, y: -5 }, c: { r: 24, x: -2, y: 3 } },
-  { a: { r: 34, x: 7, y: -3 }, b: { r: -21, x: -6, y: 6 }, c: { r: 70, x: 3, y: 2 } },
-  { a: { r: 96, x: -4, y: -6 }, b: { r: 12, x: 5, y: 4 }, c: { r: -40, x: -2, y: -3 } },
+  { a: { r: -12, x: -16, y: 11 }, b: { r: 58, x: 14, y: -13 }, c: { r: 24, x: -9, y: 8 } },
+  { a: { r: 34, x: 18, y: -9 }, b: { r: -21, x: -15, y: 15 }, c: { r: 70, x: 8, y: 10 } },
+  { a: { r: 96, x: -13, y: -15 }, b: { r: 12, x: 16, y: 12 }, c: { r: -9, x: -7, y: -9 } },
 ];
 
 /* The cards live in a FLAT layer, so nothing in CSS knows where a peg ended up
@@ -195,9 +199,17 @@ const STEM_CARDS: Record<
     price: string;
     footLead: string;
     footSub?: string;
+    /* Controlled horizontal offset, px. The stem BASE stays on the exact
+       geographic point; only the floating card slides, and the connector leans
+       to meet its bottom centre. Without this the north and central cards
+       overlap badly — their pegs are ~92px apart on screen, narrower than a
+       card — and the only alternative was a stem tall enough to look like a
+       flagpole. */
+    dx: number;
   }
 > = {
   north: {
+    dx: -52,
     method: "E-Tender",
     photo: "greenlane-bukit-jelutong-1.jpg",
     name: "Taman Sejati Indah",
@@ -208,6 +220,7 @@ const STEM_CARDS: Record<
     footSub: "Closes 12 Dec 2026",
   },
   central: {
+    dx: 30,
     method: "Owner Auction",
     photo: "country-heights.jpg",
     name: "Jalan Tasik Raban",
@@ -217,6 +230,7 @@ const STEM_CARDS: Record<
     footLead: "12 Dec 2026 · 9:00 AM",
   },
   south: {
+    dx: 6,
     method: "E-Tender",
     photo: "meranti-terrace.jpg",
     name: "Taman Sri Kluang",
@@ -319,7 +333,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             </filter>
 
             <filter id={poolBlurId} x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="1.3" />
+              <feGaussianBlur stdDeviation="5.5" />
             </filter>
           </defs>
 
@@ -462,6 +476,12 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 {
                   zIndex: index + 1,
                   "--wm-stem-h": `${location.stemHeight}px`,
+                  /* One straight leaning line, not a bent leader: its foot is
+                     on the peg and its head lands exactly on the card's bottom
+                     centre, so length and angle both fall out of (dx, height). */
+                  "--wm-stem-len": `${Math.hypot(card.dx, location.stemHeight)}px`,
+                  "--wm-stem-rot": `${(Math.atan2(card.dx, location.stemHeight) * 180) / Math.PI}deg`,
+                  "--wm-card-dx": `${card.dx}px`,
                   "--wm-stem-color": location.color,
                 } as CSSProperties
               }
