@@ -178,15 +178,17 @@ including today, and the final day reads "1 day left" rather than "0".
   plate built from pinned Natural Earth 1:10m country and state-boundary vectors: warm limestone
   top, shallow layered extrusion, restrained brass rim, engraved state lines and one connected soft
   shadow, viewed at roughly 30° elevation. It is SVG/CSS only — no raster render, WebGL or map embed
-  — and remains crisp across desktop sizes. Three coordinate-projected property locations sit above
-  the stone as subtle organic pools with matching upright stems: dusty rose for George Town, muted
-  terracotta for Kuala Lumpur and soft olive-taupe for Johor Bahru. Together they form a deliberate
-  north / centre / south sweep across the peninsula. These colours only connect a
-  location to its future property card; they never encode selling method or categorise geography.
+  — and remains crisp across desktop sizes. Its final desktop camera width is `min(101%, 760px)`.
+  Three coordinate-projected staged properties sit above accurate Kedah / Pahang / Johor anchors.
+  Their cards are uniformly scaled to 92%, centred over straight `1.5px` stems at `82 / 68 / 55px`
+  with `0.76` opacity. Each anchor carries three displaced, off-centre lobed washes at low
+  `0.085 / 0.105 / 0.11` opacity; the broadest layer is 1.45× its former contour before the plate's
+  5.2% desktop increase. Dusty rose, muted terracotta and soft olive-taupe connect each property to
+  its place only; they never encode selling method or categorise geography.
   **Hard rules, founder-set:** West Malaysia only; no East Malaysia; no live listing data, state or
-  Klang Valley category fill, labels, clicks or interaction; the map stays `aria-hidden`. Property
-  cards and their E-Tender / Owner Auction method badges are a later overlay and must not alter or
-  approximate the published coastline geometry.
+  Klang Valley category fill, map labels, clicks or interaction; the map stays `aria-hidden`. The
+  staged cards and E-Tender / Owner Auction badges are a flat, non-interactive overlay and must not
+  alter or approximate the published coastline geometry.
 - **Entrance animations ARM, they do not reveal** (13 Aug, load-bearing): CSS rests in the finished
   visible state; JS adds `.is-armed` to hide it and removes it on approach, toggled through
   `classList` rather than React state. Hide-by-default ships blank sections whenever the reveal

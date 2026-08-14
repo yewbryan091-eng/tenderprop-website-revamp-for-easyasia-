@@ -22,26 +22,24 @@ type WestMalaysiaMapProps = {
    `.wm-map-top`, never cut into or replace this source geometry. */
 const DEPTH_LAYERS = Array.from({ length: 21 }, (_, index) => 21 - index);
 
-/* Each location's wash is two hand-authored organic bezier shapes, both
-   centred on 0 0: a soft, lightly blurred outer stain (~40 units across,
-   matching the brief's 34-44 unit target) and a smaller, denser inner body.
-   Different outlines (not one shape rescaled) so the pair never reads as a
-   concentric ring. */
+/* Three hand-authored, lobed washes share a location without sharing a centre.
+   Their deliberately uneven shoulders survive the camera tilt as spilled
+   pigment rather than resolving into three tidy ellipses. */
 const POOL_WASH_A =
-  "M6 -72 C34 -68 58 -50 66 -24 C74 2 66 30 46 48 C26 66 -4 72 -30 62 C-56 52 -72 28 -70 0 C-68 -28 -50 -52 -26 -64 C-18 -69 -8 -72 6 -72 Z";
+  "M8 -72 C28 -68 40 -55 55 -42 C74 -36 79 -12 69 5 C77 23 61 46 42 49 C27 68 -3 73 -24 59 C-45 64 -70 43 -66 22 C-81 6 -68 -23 -52 -34 C-50 -55 -25 -71 -7 -65 C-1 -70 2 -72 8 -72 Z M-95 31 C-87 22 -72 24 -69 34 C-68 44 -82 50 -92 43 C-100 40 -101 35 -95 31 Z M70 -49 C78 -55 89 -51 91 -43 C92 -36 83 -30 75 -34 C68 -37 66 -44 70 -49 Z";
 const POOL_WASH_B =
-  "M-4 -50 C20 -52 42 -38 50 -16 C58 6 50 30 30 42 C10 54 -16 52 -34 38 C-52 24 -56 0 -48 -20 C-40 -40 -22 -49 -4 -50 Z";
+  "M-5 -50 C14 -55 30 -42 35 -29 C53 -29 61 -7 51 7 C59 25 34 43 17 39 C3 55 -23 50 -30 35 C-49 34 -59 11 -48 -5 C-55 -25 -32 -45 -17 -40 C-14 -46 -10 -49 -5 -50 Z M-61 -34 C-54 -43 -40 -41 -37 -32 C-35 -24 -47 -18 -56 -22 C-64 -24 -66 -29 -61 -34 Z M48 31 C55 25 66 28 68 36 C69 43 60 48 53 45 C47 43 44 36 48 31 Z";
 const POOL_WASH_C =
-  "M2 -28 C16 -27 26 -18 28 -6 C30 6 24 18 12 24 C0 30 -14 27 -22 18 C-30 9 -30 -6 -22 -16 C-16 -24 -8 -28 2 -28 Z";
+  "M3 -29 C14 -27 20 -18 18 -10 C31 -4 29 11 19 16 C15 28 -1 31 -10 22 C-23 25 -31 12 -24 2 C-31 -10 -17 -23 -8 -20 C-5 -26 -1 -29 3 -29 Z";
 
 /* THREE related-but-different outlines, never one shape rescaled — a shape
    scaled three times reads as a concentric ring, which is exactly the radar-dot
    look this is meant to avoid. Each layer also gets its own rotation and a small
    offset per location, so no two stains repeat and none is radially symmetric. */
 const POOL_LAYERS = [
-  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true },
-  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true },
-  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false },
+  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 1.45, sy: 1.2 },
+  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 1.38, sy: 1.42 },
+  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 1.34, sy: 1.18 },
 ] as const;
 
 /* Offsets are LARGE relative to each shape — around a third of the wash's own
@@ -49,9 +47,9 @@ const POOL_LAYERS = [
    exactly what the eye reads as concentric rings. Pushed this far apart, and
    with the blur raised, they dissolve into one lopsided stain instead. */
 const POOL_TILTS = [
-  { a: { r: -12, x: -16, y: 11 }, b: { r: 58, x: 14, y: -13 }, c: { r: 24, x: -9, y: 8 } },
-  { a: { r: 34, x: 18, y: -9 }, b: { r: -21, x: -15, y: 15 }, c: { r: 70, x: 8, y: 10 } },
-  { a: { r: 96, x: -13, y: -15 }, b: { r: 12, x: 16, y: 12 }, c: { r: -9, x: -7, y: -9 } },
+  { a: { r: -12, x: -25, y: 16 }, b: { r: 58, x: 24, y: -22 }, c: { r: 24, x: -15, y: 14 } },
+  { a: { r: 34, x: 26, y: -16 }, b: { r: -21, x: -24, y: 23 }, c: { r: 70, x: 15, y: 17 } },
+  { a: { r: 96, x: -23, y: -23 }, b: { r: 12, x: 25, y: 21 }, c: { r: -15, x: -15, y: -16 } },
 ];
 
 /* The cards live in a FLAT layer, so nothing in CSS knows where a peg ended up
@@ -199,12 +197,9 @@ const STEM_CARDS: Record<
     price: string;
     footLead: string;
     footSub?: string;
-    /* Controlled horizontal offset, px. The stem BASE stays on the exact
-       geographic point; only the floating card slides, and the connector leans
-       to meet its bottom centre. Without this the north and central cards
-       overlap badly — their pegs are ~92px apart on screen, narrower than a
-       card — and the only alternative was a stem tall enough to look like a
-       flagpole. */
+    /* Controlled horizontal offset, px. Every final value is zero so each
+       straight stem meets its card at bottom centre; the hook stays available
+       for a future small editorial nudge without moving the geographic peg. */
     dx: number;
   }
 > = {
@@ -333,7 +328,22 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             </filter>
 
             <filter id={poolBlurId} x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="5.5" />
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.025 0.036"
+                numOctaves="2"
+                seed="19"
+                result="poolNoise"
+              />
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="poolNoise"
+                scale="16"
+                xChannelSelector="R"
+                yChannelSelector="G"
+                result="poolRagged"
+              />
+              <feGaussianBlur in="poolRagged" stdDeviation="5.2" />
             </filter>
           </defs>
 
@@ -376,7 +386,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                         key={layer.cls}
                         className={layer.cls}
                         d={layer.path}
-                        transform={`translate(${t.x} ${t.y}) rotate(${t.r})`}
+                        transform={`translate(${t.x} ${t.y}) rotate(${t.r}) scale(${layer.sx} ${layer.sy})`}
                         fill={location.color}
                         filter={layer.blur ? `url(#${poolBlurId})` : undefined}
                       />

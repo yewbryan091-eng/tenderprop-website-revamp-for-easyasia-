@@ -80,7 +80,7 @@
 .wm-map-camera {
   position: relative;
   /* The map is the section's dominant object, so it takes the column. */
-  width: min(96%, 720px);
+  width: min(101%, 760px);
   transform-origin: 50% 54%;
   transform-style: preserve-3d;
   /* 60deg away from face-on = roughly 30deg camera elevation above the
@@ -173,17 +173,17 @@
    register as "this area is softly highlighted", not as a marker. */
 .wm-pool-a {
   stroke: none;
-  opacity: 0.1;
+  opacity: 0.085;
 }
 
 .wm-pool-b {
   stroke: none;
-  opacity: 0.13;
+  opacity: 0.105;
 }
 
 .wm-pool-c {
   stroke: none;
-  opacity: 0.17;
+  opacity: 0.11;
 }
 
 /* Deliberately quiet. The eye should travel watercolour -> stem, not
@@ -319,22 +319,22 @@
   bottom: 0;
   width: 1.5px;
   /* STRAIGHT, always. It rises vertically from the exact geographic point to
-     the card's lower edge. Because the card slides sideways by `dx`, the stem
-     meets that edge off-centre rather than dead middle — every offset is kept
-     smaller than half a card, so the join always lands on the card. */
+     the card's lower edge. All final `dx` values are zero, so every line meets
+     the card at its exact bottom centre. */
   height: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
   margin-left: -0.75px;
   background: var(--wm-stem-color, #8a7663);
-  opacity: 0.7;
+  opacity: 0.76;
 }
 
 .wm-card {
   position: absolute;
   left: 0;
   bottom: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
-  /* ~11% smaller than before, so the map stays the dominant object. */
+  /* A uniform 8% reduction preserves every locked internal relationship. */
   width: calc(136px * var(--wm-stem-scale, 1));
-  transform: translateX(calc(-50% + var(--wm-card-dx, 0px) * var(--wm-stem-scale, 1)));
+  transform: translateX(calc(-50% + var(--wm-card-dx, 0px) * var(--wm-stem-scale, 1))) scale(0.92);
+  transform-origin: 50% 100%;
   border-radius: 12px;
   background: #fffcf8;
   /* A tight contact shadow so it reads as a solid object, plus a wide soft one

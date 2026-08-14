@@ -138,11 +138,10 @@ const LOCATION_SOURCE = [
     lat: 5.85,
     lon: 100.75,
     color: "#B98A91",
-    /* A gentle descending stagger, north to south. These used to be stretched
-       (196/112/92) to keep the two northern cards from colliding; the cards'
-       own horizontal fan does that job now, so the stems can sit at a natural
-       height instead of being propped up. */
-    stemHeight: 100,
+    /* A compact descending stagger, north to south. The plate and cards now
+       carry the hierarchy, so the stems only need enough air to keep each
+       property legible above its exact anchor. */
+    stemHeight: 82,
   },
   {
     key: "central",
@@ -154,7 +153,7 @@ const LOCATION_SOURCE = [
     lat: 4.2831,
     lon: 102.03,
     color: "#BE9177",
-    stemHeight: 80,
+    stemHeight: 68,
   },
   {
     key: "south",
@@ -162,7 +161,7 @@ const LOCATION_SOURCE = [
     lat: 2.2275,
     lon: 103.1988,
     color: "#A69A76",
-    stemHeight: 62,
+    stemHeight: 55,
   },
 ];
 
