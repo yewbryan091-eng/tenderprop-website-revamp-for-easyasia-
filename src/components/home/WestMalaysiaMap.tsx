@@ -398,16 +398,20 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                   wrinkles into ridge-and-valley runs; the rect that carries
                   this filter is rotated 14° so the runs follow the range axis
                   rather than the viewport axis. */}
+              {/* type "turbulence", not fractalNoise, and that is the whole
+                  crinkle: turbulence is folded absolute-value noise, so its
+                  height field carries sharp V-creases that light like ridge
+                  lines — fractalNoise billows like suede. */}
               <feTurbulence
-                type="fractalNoise"
+                type="turbulence"
                 baseFrequency="0.042 0.016"
-                numOctaves="5"
+                numOctaves="4"
                 seed="11"
                 result="height"
               />
               <feDiffuseLighting
                 in="height"
-                surfaceScale="2.4"
+                surfaceScale="3.1"
                 diffuseConstant="0.56"
                 lightingColor="#ffffff"
                 result="lit"
