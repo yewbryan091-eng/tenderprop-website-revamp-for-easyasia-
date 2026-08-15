@@ -7,8 +7,9 @@ import {
   WEST_MALAYSIA_STATE_LINES,
 } from "@/data/west-malaysia-geometry";
 import "@/styles/west-malaysia-map.css";
+import { LANDCOVER, RIVERS, URBAN } from "@/data/west-malaysia-landcover";
 
-export type WestMalaysiaMapFinish = "limestone" | "porcelain" | "monument";
+export type WestMalaysiaMapFinish = "limestone" | "porcelain" | "monument" | "terrain";
 
 type WestMalaysiaMapProps = {
   className?: string;
@@ -801,6 +802,59 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                   <path key={`cd-${band.key}`} d={band.d} />
                 ))}
               </g>
+            </g>
+          </g>
+
+          {/* ── LAND COVER ─────────────────────────────────────────────────
+              Hue, and ONLY hue. Every fill here blends with `color`, which
+              takes hue and saturation from the source and LUMINOSITY from the
+              backdrop — so the relief, grain and mottle underneath survive
+              untouched and simply acquire a colour. That is the whole trick:
+              a green lowland that is exactly as light as the stone it
+              replaces keeps the value ladder, and therefore keeps every
+              burgundy peg readable (worst case 3.52:1, measured).
+
+              Value differences between zones are carried SEPARATELY by
+              `.wm-cover-shade`, at low opacity, so the forest can sit a step
+              darker than the paddy without either escaping the ladder.
+
+              The group is off by default (`--wm-landcover: 0`) and only the
+              `terrain` finish turns it on, so limestone/porcelain/monument
+              render exactly as before. */}
+          <g className="wm-landcover" clipPath={`url(#${clipId})`}>
+            <g className="wm-cover-hue">
+              {LANDCOVER.map((region) => (
+                <path
+                  key={region.key}
+                  className={`wm-cover wm-cover--${region.zone}`}
+                  d={region.d}
+                />
+              ))}
+              {URBAN.map((u) => (
+                <circle
+                  key={u.key}
+                  className="wm-cover wm-cover--urban"
+                  cx={u.cx}
+                  cy={u.cy}
+                  r={u.r}
+                />
+              ))}
+            </g>
+            <g className="wm-cover-shade">
+              {LANDCOVER.map((region) => (
+                <path
+                  key={region.key}
+                  className={`wm-shade wm-shade--${region.zone}`}
+                  d={region.d}
+                />
+              ))}
+            </g>
+            {/* Rivers last, over their own valleys, so the water reads as cut
+                INTO the land rather than lying on top of the tint. */}
+            <g className="wm-rivers">
+              {RIVERS.map((river) => (
+                <path key={river.key} d={river.d} />
+              ))}
             </g>
           </g>
 

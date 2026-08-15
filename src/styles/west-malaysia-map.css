@@ -584,3 +584,114 @@
   line-height: 1.1;
   white-space: nowrap;
 }
+
+/* ── LAND COVER — the "terrain" finish ────────────────────────────────────────
+   Bryan, 14 Aug: the plate should feel alive — real terrain, dirt, forest,
+   mountains — not one flat stone. The blocker was architectural, and it was
+   written into this file as a rule: every terrain layer above blends
+   `soft-light` or `multiply` over a single limestone base, so the plate could
+   only ever be LIGHTER or DARKER stone. It could not hold a hue.
+
+   This layer is the exception, and it earns it by splitting the job in two:
+
+   · `.wm-cover-hue` blends with `color` — hue and saturation from the fill,
+     LUMINOSITY FROM THE BACKDROP. So the relief, grain, mottle and speckle
+     underneath are not overpainted; they keep every value they had and simply
+     become green. That is why the ladder fixed in the header comment survives
+     intact, and why the burgundy pegs never fall below 3.52:1 (measured across
+     all seven zones) instead of the ~2.7:1 a normally-filled dark green gives.
+
+   · `.wm-cover-shade` carries the small VALUE differences separately, at low
+     opacity, so rainforest can sit a step below paddy without either zone
+     escaping the ladder.
+
+   Regions come from `west-malaysia-landcover.ts` and are real: Taman Negara
+   and the Pahang interior, Endau-Rompin, the Kedah–Perlis rice bowl, the
+   Kelantan delta, the Straits mangrove fringe, and four settlement smudges.
+   Nothing here is a decorative blob — a Malaysian reader should recognise the
+   shapes, which is the entire difference between texture and soul.
+
+   OFF unless the finish asks for it, so limestone, porcelain and monument
+   render byte-identically to before. */
+.wm-landcover {
+  opacity: var(--wm-landcover, 0);
+  pointer-events: none;
+}
+
+.wm-cover-hue {
+  mix-blend-mode: color;
+}
+
+.wm-cover {
+  opacity: 0.9;
+}
+
+/* Warm, desaturated, yellow-shifted greens — the vintage-atlas family, not
+   satellite green. They have to sit beside burgundy and brass on cream. */
+.wm-cover--forest {
+  fill: #7e8a5c;
+}
+
+.wm-cover--paddy {
+  fill: #bcc088;
+}
+
+.wm-cover--mangrove {
+  fill: #8c8c64;
+}
+
+.wm-cover--urban {
+  fill: #a79a8c;
+  opacity: 0.72;
+}
+
+/* The lowland tint is the plate's own ground colour, so it is painted by the
+   finish below rather than by a region: everything NOT covered above stays
+   plantation-green because the terrain finish tints the base itself. */
+
+.wm-cover-shade {
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+.wm-shade {
+  fill: none;
+}
+
+/* Only the forest is darkened, and only slightly: it is the one land cover
+   that genuinely sits below its surroundings in value. Paddy and mangrove take
+   hue alone — inventing a value difference for them would be decoration. */
+.wm-shade--forest {
+  fill: #6f7a4e;
+  opacity: 0.34;
+}
+
+/* ── RIVERS ───────────────────────────────────────────────────────────────────
+   Engraved, not drawn on: a dark stroke with a light one offset a hair below
+   it, the same two-pass trick the state borders use, so the water reads as cut
+   into the surface. Four real rivers — Pahang, Perak, Kelantan, Muar. */
+.wm-rivers path {
+  fill: none;
+  stroke: #5d6647;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+
+/* ── The finish itself ───────────────────────────────────────────────────────
+   The base ladder shifts from limestone to a lowland plantation green, and the
+   SUMMITS keep the stone: geologically right, since Malaysia's peaks are
+   exposed rock, and it means the limestone already built is not discarded —
+   it is promoted to where it belongs. */
+.wm-map--terrain {
+  --wm-landcover: 1;
+  --wm-top-light: #d9d2a4;
+  --wm-top-mid: #b3b585;
+  --wm-top-low: #94996a;
+  --wm-side-top: #8f8358;
+  --wm-side-mid: #6d6440;
+  --wm-side-bottom: #443c27;
+  --wm-rim: #c99b55;
+  --wm-shadow: rgba(46, 44, 24, 0.3);
+}

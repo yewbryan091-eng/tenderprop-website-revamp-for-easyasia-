@@ -33,6 +33,11 @@ const STUDIES: {
     title: "C — Burgundy monument",
     note: "Deeper wine-toned extrusion and stronger mass. Most branded, but visually heavier beside the editorial copy.",
   },
+  {
+    finish: "terrain",
+    title: "D — Naturalistic terrain",
+    note: "Real land cover: rainforest, the Kedah-Perlis rice bowl, the Straits mangrove fringe, four settlement smudges and four rivers. Hue only — every tint blends with `color`, so the relief keeps its own value and the pegs stay readable.",
+  },
 ];
 
 function Sandbox() {
