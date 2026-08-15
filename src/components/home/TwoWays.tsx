@@ -163,7 +163,9 @@ export function TwoWays() {
                 <EnvelopeArt />
               </div>
               <div className="tw-route-text">
-                <h3>E-Tender</h3>
+                <h3>
+                  <span className="tw-route-num">1.)</span> E-Tender
+                </h3>
                 <p className="tw-route-sub">Private sealed offers</p>
                 <p className="tw-route-note">
                   Name your price privately. Other buyers never see your offer.
@@ -176,7 +178,7 @@ export function TwoWays() {
               </div>
               <div className="tw-route-text">
                 <h3>
-                  Owner Auction
+                  <span className="tw-route-num">2.)</span> Owner Auction
                   <span className="tw-live-tag">
                     <span className="tw-live-dot" />
                     Live Bidding

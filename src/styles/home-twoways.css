@@ -78,7 +78,7 @@
 
 .tw-route-art {
   flex: none;
-  width: 132px;
+  width: 124px;
 }
 
 .tw-route-text h3 {
@@ -89,6 +89,16 @@
   font-weight: 650;
   line-height: 1;
   color: var(--burgundy);
+}
+
+/* The enumerator inherits the term completely — same serif, same weight, same
+   colour, full opacity. It was set lighter and semi-transparent to read as a
+   marker; Bryan wants it identical to the name it numbers. Declared here only
+   so nothing downstream can quietly restyle it. */
+.tw-route-num {
+  font: inherit;
+  color: inherit;
+  opacity: 1;
 }
 
 /* Brass for the auction term — the same header-vetted #836A33 family, which
@@ -299,13 +309,16 @@
 .tw-live-tag {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  margin-left: 10px;
+  gap: 4px;
+  /* Tight enough to stay on the heading's line now that "2.)" precedes it —
+     wrapping cost the auction row an extra line and broke the two rows' equal
+     depth. */
+  margin-left: 8px;
   transform: translateY(-3px);
   font-family: var(--sans);
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   white-space: nowrap;
   color: #836a33;
