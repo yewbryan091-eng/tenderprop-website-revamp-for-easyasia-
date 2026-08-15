@@ -195,7 +195,9 @@ export function TwoWays() {
 
         {/* MAP + staged cards. Nothing interactive. */}
         <div className="tw-scene" aria-hidden="true">
-          <WestMalaysiaMap finish="limestone" />
+          {/* Study D, chosen by Bryan 15 Aug — the naturalistic country, not the
+              stone plate. All iteration happens on THIS finish from here on. */}
+          <WestMalaysiaMap finish="terrain" />
         </div>
       </div>
     </section>

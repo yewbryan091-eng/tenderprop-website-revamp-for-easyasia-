@@ -74,6 +74,28 @@
   --wm-shadow: rgba(53, 35, 29, 0.21);
 }
 
+/* ── THE TERRAIN FINISH — study D, CHOSEN by Bryan 15 Aug ────────────────────
+   The naturalistic country: the base ladder shifts from limestone to lowland
+   plantation green, the land-cover gate opens, and the SUMMITS keep the stone —
+   geologically right (Malaysia's peaks are exposed rock), and it means the
+   limestone isn't discarded, it's promoted to where it belongs.
+
+   ⚠️ This block was lost once already: the 15 Aug material rewrite rebuilt this
+   file and the finish block didn't survive, leaving study D rendering on
+   limestone tokens with the gate shut. If a finish ever looks identical to
+   limestone, check THIS block exists before debugging anything else. */
+.wm-map--terrain {
+  --wm-landcover: 1;
+  --wm-top-light: #d9d2a4;
+  --wm-top-mid: #b3b585;
+  --wm-top-low: #94996a;
+  --wm-side-top: #8f8358;
+  --wm-side-mid: #6d6440;
+  --wm-side-bottom: #443c27;
+  --wm-rim: #c99b55;
+  --wm-shadow: rgba(46, 44, 24, 0.3);
+}
+
 .wm-map--monument {
   --wm-top-light: #f9f1e7;
   --wm-top-mid: #eadbcb;
@@ -624,6 +646,10 @@
 
 .wm-cover {
   opacity: 0.9;
+  /* FEATHERED for every finish — a flat vector fill gives vegetation a hard
+     sticker edge, and vegetation thins at its margins. The ancestor group's
+     coastline clip cuts the blurred composite, so nothing bleeds to sea. */
+  filter: blur(11px);
 }
 
 /* Warm, desaturated, yellow-shifted greens — the vintage-atlas family, not
@@ -664,6 +690,7 @@
 .wm-shade--forest {
   fill: #6f7a4e;
   opacity: 0.34;
+  filter: blur(14px);
 }
 
 /* ── RIVERS ───────────────────────────────────────────────────────────────────
@@ -832,7 +859,6 @@
    nothing bleeds into the sea. */
 .wm-map--limestone .wm-cover {
   opacity: 0.62;
-  filter: blur(11px);
 }
 
 .wm-map--limestone .wm-cover--paddy {
@@ -851,7 +877,6 @@
 
 .wm-map--limestone .wm-shade--forest {
   opacity: 0.24;
-  filter: blur(14px);
 }
 
 /* ── DIRT ON THE RANGES ──────────────────────────────────────────────────────
@@ -859,12 +884,14 @@
    whisper. The reference colours its mountains: warm ochre deepening toward
    the crests, the ground the forest thins out to. Multiply, so the crinkle
    relief lights THROUGH the tint rather than being painted over. */
+.wm-map--terrain .wm-terrain-fill,
 .wm-map--limestone .wm-terrain-fill {
   fill: #b98d58;
   opacity: 0.14;
   mix-blend-mode: multiply;
 }
 
+.wm-map--terrain .wm-terrain-contours path,
 .wm-map--limestone .wm-terrain-contours path {
   opacity: 0.1;
 }
@@ -876,4 +903,12 @@
        water — the rivers stay fully drawn, nothing goes missing. */
     opacity: 0.3;
   }
+}
+
+
+/* On the green country the settlement smudges at 0.72 read as stains; the peg
+   blooms already carry the colour story at the cities. Same restraint as the
+   limestone treatment. */
+.wm-map--terrain .wm-cover--urban {
+  opacity: 0.2;
 }
