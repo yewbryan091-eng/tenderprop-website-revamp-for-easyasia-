@@ -1,0 +1,205 @@
+/* ── E-TENDER APPLICATION ──────────────────────────────────────────────────────
+   Tokens come from tender-listings.css, which the route imports first. Nothing here
+   redefines a colour — this sheet is layout and type only.
+
+   ONE VERTICAL RHYTHM, so the spacing is pointable-to rather than assembled from
+   near-misses (standing rule, Bryan 3 Aug): 8 / 14 / 22 / 34. Every gap below is one
+   of those four. Card padding is a single value. Field gap is a single value. */
+
+.tp-apply {
+  --apply-gap: 22px;
+  --apply-pad: clamp(20px, 2.2vw, 26px);
+  background: var(--paper);
+  padding: clamp(26px, 4vw, 46px) 0 clamp(48px, 7vw, 84px);
+  min-height: 60vh;
+}
+
+.apply-wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 40px); }
+.apply-wrap-narrow { max-width: 660px; }
+
+/* ── masthead ── */
+.apply-head { margin-bottom: 34px; }
+.apply-eyebrow {
+  margin: 0 0 8px; font-size: 11.5px; font-weight: 800; letter-spacing: .16em;
+  line-height: 1; text-transform: uppercase; color: var(--burgundy);
+}
+.apply-head h1 {
+  margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-weight: 600; font-size: clamp(30px, 3.4vw, 42px); line-height: 1.06;
+  letter-spacing: -.018em; color: var(--ink);
+}
+.apply-head-meta {
+  display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 14px 0 0;
+  font-size: 14.5px; color: var(--muted);
+}
+.apply-head-meta span { display: inline-flex; align-items: center; gap: 7px; }
+.apply-head-meta svg { flex: none; width: 16px; height: 16px; color: var(--burgundy); }
+.apply-head-close { margin: 8px 0 0; font-size: 14.5px; color: var(--muted); }
+.apply-head-close b { color: var(--red); font-weight: 700; }
+
+/* ── the two-column body ── */
+.apply-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr) clamp(300px, 30%, 366px);
+  gap: var(--apply-gap); align-items: start;
+}
+.apply-main, .apply-side { display: grid; gap: var(--apply-gap); min-width: 0; }
+/* Sticky only where there is room to scroll past it; below the breakpoint the aside
+   becomes ordinary flow content underneath the form. */
+@media (min-width: 981px) { .apply-side { position: sticky; top: 96px; } }
+@media (max-width: 980px) { .apply-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ── cards ── */
+.apply-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: var(--apply-pad);
+}
+.apply-h {
+  margin: 0 0 8px; font-size: 12px; font-weight: 800; letter-spacing: .13em;
+  line-height: 1; text-transform: uppercase; color: var(--ink);
+}
+.apply-sub { margin: 0 0 22px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.apply-sub b { color: var(--ink); font-weight: 700; }
+
+/* ── the pre-filled property block ── */
+.apply-facts {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 22px; margin: 14px 0 0;
+}
+.apply-facts .is-wide { grid-column: 1 / -1; }
+.apply-facts dt {
+  margin: 0 0 2px; font-size: 11.5px; font-weight: 700; letter-spacing: .07em;
+  line-height: 1.2; text-transform: uppercase; color: var(--muted);
+}
+.apply-facts dd { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--ink); }
+@media (max-width: 520px) { .apply-facts { grid-template-columns: minmax(0, 1fr); } }
+
+/* ── fields ── */
+.apply-fields { display: grid; gap: 22px; }
+.apply-field label {
+  display: block; margin-bottom: 8px; font-size: 13.5px; font-weight: 700;
+  line-height: 1.2; color: var(--ink);
+}
+.apply-field input {
+  width: 100%; padding: 13px 14px; border: 1.5px solid var(--line); border-radius: 8px;
+  background: var(--paper); color: var(--ink);
+  font-family: var(--sans); font-size: 15.5px; line-height: 1.3;
+}
+.apply-field input::placeholder { color: color-mix(in srgb, var(--muted) 62%, transparent); }
+.apply-field input:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; border-color: var(--red); }
+.apply-field.is-invalid input { border-color: var(--red); background: color-mix(in srgb, var(--red) 4%, var(--card)); }
+.apply-hint { margin: 8px 0 0; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+/* Error text carries an icon-free but explicit prefix in the copy itself, so colour is
+   never the only channel — the 1.4.1 requirement, and it also survives a mono print. */
+.apply-err { margin: 8px 0 0; font-size: 12.5px; font-weight: 600; line-height: 1.4; color: var(--red); }
+.apply-err-top { margin-top: 14px; }
+
+/* ── the offer field: the one thing this page exists to collect ── */
+.apply-card-offer { border-color: color-mix(in srgb, var(--burgundy) 30%, var(--line)); }
+.apply-money { display: flex; align-items: stretch; }
+.apply-money-rm {
+  display: inline-flex; align-items: center; padding: 0 12px 0 14px;
+  border: 1.5px solid var(--line); border-right: 0; border-radius: 8px 0 0 8px;
+  background: var(--paper-deep); color: var(--muted);
+  font-size: 15px; font-weight: 800; letter-spacing: .02em;
+}
+.apply-money input {
+  border-radius: 0 8px 8px 0;
+  font-size: clamp(20px, 2.2vw, 24px); font-weight: 800; letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+/* Reserved height so the live echo appearing does not shift the submit button down —
+   a control that moves as you type is a control you misclick. */
+.apply-echo {
+  min-height: 18px; margin: 8px 0 0;
+  font-size: 13px; line-height: 1.4; color: var(--muted); font-variant-numeric: tabular-nums;
+}
+
+/* ── submit ── */
+.apply-submit { display: grid; gap: 14px; justify-items: start; }
+.apply-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 13px 22px; border: 1.5px solid var(--burgundy); border-radius: 8px;
+  background: var(--burgundy); color: #fff;
+  font-family: var(--sans); font-size: 15px; font-weight: 700; line-height: 1;
+  text-decoration: none; cursor: pointer;
+  transition: background .16s ease, border-color .16s ease, color .16s ease;
+}
+.apply-btn svg { flex: none; width: 17px; height: 17px; }
+.apply-btn:hover { background: #6d2439; border-color: #6d2439; }
+.apply-btn:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.apply-btn.is-ghost { background: transparent; color: var(--burgundy); }
+.apply-btn.is-ghost:hover { background: color-mix(in srgb, var(--burgundy) 8%, transparent); color: var(--burgundy); border-color: var(--burgundy); }
+.apply-btn.is-lg { padding: 16px 28px; font-size: 16.5px; }
+.apply-submit-note { margin: 0; max-width: 46ch; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.apply-submit-note b { color: var(--ink); font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .apply-btn { transition: none; } }
+
+/* ── the deposit card ── */
+.apply-card-deposit { background: var(--paper-deep); border-color: color-mix(in srgb, var(--burgundy) 22%, var(--line)); }
+.apply-deposit-value {
+  margin: 14px 0 0; font-size: clamp(26px, 2.8vw, 32px); font-weight: 800;
+  letter-spacing: -.03em; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.apply-deposit-basis { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+.apply-deposit-points { margin: 22px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.apply-deposit-points li { font-size: 13.5px; line-height: 1.5; color: var(--ink); }
+.apply-deposit-points b { font-weight: 700; }
+
+/* ── what happens next ── */
+.apply-next ol { margin: 14px 0 0; padding: 0 0 0 22px; display: grid; gap: 14px; }
+.apply-steps li { font-size: 13.5px; line-height: 1.5; color: var(--ink); }
+.apply-steps li::marker { color: var(--burgundy); font-weight: 800; }
+.apply-next-foot {
+  margin: 22px 0 0; padding-top: 14px; border-top: 1px solid var(--line);
+  font-size: 12.5px; line-height: 1.5; color: var(--muted);
+}
+
+/* ── the members gate ── */
+.apply-gate {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: clamp(26px, 3.4vw, 40px); text-align: center;
+}
+.apply-gate-icon { display: inline-grid; place-items: center; width: 46px; height: 46px; color: var(--burgundy); }
+.apply-gate-icon svg { width: 100%; height: 100%; }
+.apply-gate h2 {
+  margin: 14px 0 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-weight: 600; font-size: clamp(22px, 2.4vw, 27px); line-height: 1.14;
+  letter-spacing: -.015em; color: var(--ink);
+}
+.apply-gate > p { margin: 14px auto 0; max-width: 48ch; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
+.apply-gate-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 22px; }
+.apply-gate-note { font-size: 12.5px !important; }
+
+/* ── the receipt ── */
+.apply-done {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: clamp(26px, 3.4vw, 40px);
+}
+.apply-done-icon { display: inline-grid; place-items: center; width: 40px; height: 40px; margin-bottom: 14px; color: var(--good); }
+.apply-done-icon svg { width: 100%; height: 100%; }
+.apply-done h1 {
+  margin: 0; font-family: "Newsreader", Georgia, serif; font-optical-sizing: auto;
+  font-weight: 600; font-size: clamp(26px, 3vw, 34px); line-height: 1.08;
+  letter-spacing: -.018em; color: var(--ink);
+}
+.apply-done-lede { margin: 14px 0 0; font-size: 15.5px; line-height: 1.55; color: var(--muted); }
+.apply-done-lede b { color: var(--ink); font-weight: 700; }
+.apply-receipt {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 22px;
+  margin: 22px 0 0; padding: 22px 0; border-block: 1px solid var(--line);
+}
+.apply-receipt dt {
+  margin: 0 0 2px; font-size: 11.5px; font-weight: 700; letter-spacing: .07em;
+  line-height: 1.2; text-transform: uppercase; color: var(--muted);
+}
+.apply-receipt dd { margin: 0; font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--ink); }
+.apply-done .apply-next { margin-top: 22px; padding: 0; border: 0; background: none; }
+.apply-done-note { margin: 22px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+@media (max-width: 520px) { .apply-receipt { grid-template-columns: minmax(0, 1fr); } }
+
+/* ── Act 242 disclosure ── */
+.apply-legal {
+  margin: 34px 0 0; max-width: 80ch;
+  font-size: 12px; line-height: 1.6; color: var(--muted);
+}
+.apply-legal b { color: var(--ink); font-weight: 700; }

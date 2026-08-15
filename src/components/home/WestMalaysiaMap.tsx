@@ -91,90 +91,89 @@ const TERRAIN_BANDS = [
    old 56% luminance while the nested highlands retain the strongest relief. */
 const TERRAIN_MASK_TONE = ["#a8a8a8", "#d8d8d8", "#ffffff"];
 
-/* Authored CREST fragments sit inside the geography envelopes above. These are
-   not extra mountains or an elevation dataset: they make the already documented
-   range axes legible as a carved object. Short Titiwangsa fragments follow the
-   Korbu / Cameron / Fraser / Genting pockets without becoming one white seam;
-   the secondary fragments follow Bintang/Kledang and Banjaran Timur/Tahan. */
-const TERRAIN_RIDGE_PATHS = [
+/* Five broad relief zones replace the soft individual lobes. The three
+   Titiwangsa clusters are deliberately broken at natural passes, then overlap
+   through shoulders and spurs; Bintang/Kledang and Timur/Tahan remain quieter
+   secondary systems. These are illustrative, geography-led areas rather than
+   claimed elevation polygons. */
+const TERRAIN_CLUSTERS = [
   {
-    key: "titiwangsa-north-a",
-    weight: "major",
-    d: "M324 92 C324 130 329 160 332 190",
+    key: "titiwangsa-north",
+    level: "primary",
+    d: "M295 72 C279 102 290 133 286 164 C282 194 294 219 289 247 C286 272 298 302 319 318 C337 332 354 314 361 291 C368 267 359 244 367 221 C376 194 365 166 363 140 C360 111 342 70 317 61 C307 58 300 63 295 72 Z",
   },
   {
-    key: "titiwangsa-north-b",
-    weight: "minor",
-    d: "M336 221 C339 258 338 295 345 327",
+    key: "titiwangsa-central",
+    level: "primary",
+    d: "M316 322 C296 356 309 389 305 424 C301 456 314 482 310 511 C307 542 323 579 348 604 C370 625 392 611 405 583 C416 558 406 532 418 508 C431 481 421 450 418 422 C414 387 391 337 356 317 C339 307 324 309 316 322 Z",
   },
   {
-    key: "titiwangsa-korbu",
-    weight: "major",
-    d: "M350 359 C352 392 356 423 365 451",
+    key: "titiwangsa-south",
+    level: "primary",
+    d: "M374 599 C356 632 373 664 372 696 C371 728 389 754 388 784 C387 816 405 853 433 879 C456 900 481 891 493 865 C506 839 496 814 509 791 C523 764 511 733 507 706 C501 672 472 622 432 600 C411 588 383 584 374 599 Z",
   },
   {
-    key: "titiwangsa-cameron",
-    weight: "major",
-    d: "M374 488 C383 521 395 553 408 581",
+    key: "bintang-kledang",
+    level: "secondary",
+    d: "M240 287 C225 313 237 342 233 370 C229 398 240 421 239 447 C239 474 252 501 273 515 C291 527 309 510 314 487 C319 465 310 445 316 424 C323 399 311 373 307 349 C302 321 281 286 258 278 C250 275 244 279 240 287 Z",
   },
   {
-    key: "titiwangsa-fraser",
-    weight: "minor",
-    d: "M420 617 C434 644 444 675 452 703",
-  },
-  {
-    key: "titiwangsa-genting-south",
-    weight: "trace",
-    d: "M466 738 C476 762 486 787 494 811",
-  },
-  {
-    key: "titiwangsa-south-tip",
-    weight: "minor",
-    d: "M509 842 C520 866 532 890 540 903",
-  },
-  {
-    key: "banjaran-timur-north",
-    weight: "minor",
-    d: "M471 291 C480 319 492 345 505 367",
-  },
-  {
-    key: "banjaran-timur-tahan",
-    weight: "trace",
-    d: "M516 389 C532 421 548 457 567 486",
-  },
-  {
-    key: "bintang-north",
-    weight: "trace",
-    d: "M258 307 C264 334 270 360 276 386",
-  },
-  {
-    key: "kledang-south",
-    weight: "minor",
-    d: "M282 408 C288 434 295 460 301 480",
+    key: "timur-tahan",
+    level: "secondary",
+    d: "M453 274 C439 301 455 330 456 359 C456 386 470 409 470 434 C470 461 486 491 510 509 C530 524 552 514 563 490 C574 467 563 446 574 425 C586 401 572 375 564 352 C554 326 526 288 492 273 C477 266 459 263 453 274 Z",
   },
 ];
 
-/* Open slope marks — short tributary-like cuts rather than closed contour
-   rings. Each branch leaves one of the real crest axes above and runs down its
-   flank, so the linework reads as erosion in carved limestone rather than a
-   conventional contour map or decorative noise. */
-const TERRAIN_EROSION_PATHS = [
-  { key: "north-w", d: "M327 128 C318 141 321 157 313 171" },
-  { key: "north-e", d: "M338 181 C350 194 347 211 359 224" },
-  { key: "kinta-w", d: "M342 305 C326 326 333 347 318 369" },
-  { key: "korbu-e", d: "M361 421 C382 437 383 464 405 480" },
-  { key: "cameron-w", d: "M381 503 C363 523 367 548 348 566" },
-  { key: "cameron-e", d: "M398 544 C412 555 418 575 437 585" },
-  { key: "fraser-e", d: "M425 611 C444 626 450 648 473 662" },
-  { key: "genting-w", d: "M454 675 C436 693 442 716 425 734" },
-  { key: "south-e", d: "M494 784 C511 800 518 823 538 837" },
-  { key: "timur-w", d: "M486 322 C474 339 480 358 469 374" },
-  { key: "timur-e", d: "M510 367 C526 380 532 399 548 410" },
-  { key: "tahan-e", d: "M548 431 C566 447 570 468 586 479" },
-  { key: "bintang-w", d: "M268 340 C254 355 260 375 248 391" },
-  { key: "kledang-e", d: "M286 420 C300 434 296 454 307 468" },
+/* Valley channels are cut out of the cluster alpha before it is lit. Their
+   branching widths create real saddles and drainage structure without any
+   pale centreline, contour ring or decorative scratch on the finished face. */
+const TERRAIN_VALLEYS = [
+  { key: "north-trunk", width: 18, d: "M326 78 C315 123 329 159 319 201 C313 229 322 257 313 296" },
+  { key: "north-west", width: 9, d: "M320 160 C303 177 296 198 287 222" },
+  { key: "north-east", width: 6, d: "M321 205 C340 219 349 240 359 260" },
+  {
+    key: "central-trunk",
+    width: 16,
+    d: "M356 335 C344 379 360 417 348 458 C340 490 352 530 342 575",
+  },
+  { key: "central-west", width: 9, d: "M351 408 C329 427 320 452 308 480" },
+  { key: "central-east", width: 7, d: "M351 465 C376 481 390 506 409 529" },
+  { key: "cameron-saddle", width: 11, d: "M350 530 C372 543 383 565 398 585" },
+  {
+    key: "south-trunk",
+    width: 19,
+    d: "M421 616 C407 658 425 698 414 740 C406 774 420 815 412 854",
+  },
+  { key: "south-west", width: 8, d: "M418 700 C394 719 385 746 374 773" },
+  { key: "south-east", width: 11, d: "M416 759 C444 775 458 800 480 824" },
+  {
+    key: "bintang-trunk",
+    width: 12,
+    d: "M267 299 C256 340 270 378 260 420 C255 445 263 470 257 494",
+  },
+  {
+    key: "timur-trunk",
+    width: 13,
+    d: "M492 287 C482 326 499 359 490 397 C483 424 495 454 489 486",
+  },
+  { key: "tahan-east", width: 8, d: "M491 372 C515 389 528 413 550 433" },
 ];
 
+const TERRAIN_VALLEY_TIPS = [
+  { key: "north-trunk-tip", d: "M304 291 L321 293 L310 319 Z" },
+  { key: "north-west-tip", d: "M283 218 L292 222 L279 239 Z" },
+  { key: "north-east-tip", d: "M355 256 L363 254 L369 275 Z" },
+  { key: "central-trunk-tip", d: "M334 571 L351 573 L338 598 Z" },
+  { key: "central-west-tip", d: "M304 476 L313 480 L301 497 Z" },
+  { key: "central-east-tip", d: "M405 524 L413 531 L425 546 Z" },
+  { key: "cameron-tip", d: "M394 580 L402 588 L412 602 Z" },
+  { key: "south-trunk-tip", d: "M402 850 L421 852 L408 878 Z" },
+  { key: "south-west-tip", d: "M370 769 L378 774 L366 791 Z" },
+  { key: "south-east-tip", d: "M476 819 L485 826 L496 840 Z" },
+  { key: "bintang-tip", d: "M252 490 L263 492 L254 512 Z" },
+  { key: "timur-tip", d: "M483 482 L495 484 L486 507 Z" },
+  { key: "tahan-tip", d: "M546 428 L554 435 L566 447 Z" },
+];
 /* Three hand-authored, lobed washes share a location without sharing a centre.
    Their deliberately uneven shoulders survive the camera tilt as spilled
    pigment rather than resolving into three tidy ellipses. */
@@ -376,6 +375,8 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
   const crinkleId = `wm-crinkle-${instance}`;
   const sheetId = `wm-sheet-${instance}`;
   const etchId = `wm-etch-${instance}`;
+  const ridgeReliefId = `wm-ridge-relief-${instance}`;
+  const ridgeClusterMaskId = `wm-ridge-cluster-mask-${instance}`;
   const rangeMaskId = `wm-range-mask-${instance}`;
   const maskBlurId = `wm-mask-blur-${instance}`;
   const mottleId = `wm-mottle-${instance}`;
@@ -419,7 +420,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             <filter id={grainId} x="-8%" y="-8%" width="116%" height="116%">
               <feTurbulence
                 type="fractalNoise"
-                baseFrequency="0.012 0.085"
+                baseFrequency="0.026 0.019"
                 numOctaves="3"
                 seed="27"
                 result="noise"
@@ -430,24 +431,21 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 values=".55 0 0 0 .28
                         0 .45 0 0 .20
                         0 0 .35 0 .15
-                        0 0 0 .26 0"
+                        0 0 0 .22 0"
                 result="tonedNoise"
               />
               <feComposite in="tonedNoise" in2="SourceAlpha" operator="in" />
             </filter>
 
-            {/* The fine tooth of the surface. Deliberately isotropic where the
-                grain above is stretched 7:1 — the two must not share a
-                direction or they resolve back into one streaky pattern.
-                Frequency 0.16, ~3× finer than its first draft: at 0.055 the
-                features were big enough to read as SPECKLES, which is a
-                surface defect; at 0.16 they read as the tooth of uncoated
-                paper, which is a material. */}
+            {/* Fine isotropic tooth over the broader mineral field above. The
+                two scales are deliberately non-directional: a strong 7:1
+                bedding ratio was one more way the surface could read as long
+                scratches instead of hand-finished limestone. */}
             <filter id={speckleId} x="-8%" y="-8%" width="116%" height="116%">
               <feTurbulence
                 type="fractalNoise"
-                baseFrequency="0.16"
-                numOctaves="3"
+                baseFrequency="0.23"
+                numOctaves="4"
                 seed="41"
                 result="speckle"
               />
@@ -457,7 +455,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 values=".48 0 0 0 .24
                         0 .42 0 0 .19
                         0 0 .34 0 .14
-                        0 0 0 .22 0"
+                        0 0 0 .18 0"
                 result="tonedSpeckle"
               />
               <feComposite in="tonedSpeckle" in2="SourceAlpha" operator="in" />
@@ -480,21 +478,21 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 flat ground stays near-neutral and only actual slopes shift the
                 limestone's tone. */}
             <filter id={crinkleId} x="-5%" y="-5%" width="110%" height="110%">
-              {/* Two deterministic scales make a landform rather than cloth:
-                  low-frequency fractal noise supplies broad shoulders, while
-                  a finer folded field cuts drainage-like creases through it.
-                  The rect is rotated 14° so both scales follow the peninsula's
-                  north-west / south-east mountain axis. */}
+              {/* Two deterministic scales: broad shoulders carry most of the
+                  volume and a restrained finer field adds erosion only inside
+                  the documented range mask. The authored masses below provide
+                  direction, so this field no longer has to fake a mountain
+                  spine with narrow wrinkle runs. */}
               <feTurbulence
                 type="fractalNoise"
-                baseFrequency="0.014 0.0055"
+                baseFrequency="0.0095 0.0065"
                 numOctaves="3"
                 seed="11"
                 result="landform"
               />
               <feTurbulence
                 type="turbulence"
-                baseFrequency="0.052 0.019"
+                baseFrequency="0.034 0.022"
                 numOctaves="2"
                 seed="37"
                 result="erosion"
@@ -503,39 +501,27 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 in="landform"
                 in2="erosion"
                 operator="arithmetic"
-                k2="0.84"
-                k3="0.16"
+                k2="0.8"
+                k3="0.2"
                 result="rawHeight"
               />
-              <feGaussianBlur in="rawHeight" stdDeviation="0.9" result="height" />
+              <feGaussianBlur in="rawHeight" stdDeviation="1.45" result="height" />
               <feDiffuseLighting
                 in="height"
-                surfaceScale="6.4"
-                diffuseConstant="0.63"
-                lightingColor="#fff5e8"
+                surfaceScale="8.2"
+                diffuseConstant="0.7"
+                lightingColor="#fff1df"
                 result="lit"
               >
                 <feDistantLight azimuth="235" elevation="58" />
               </feDiffuseLighting>
               <feComponentTransfer in="lit" result="litContrast">
-                <feFuncR type="linear" slope="1.42" intercept="-0.23" />
-                <feFuncG type="linear" slope="1.42" intercept="-0.23" />
-                <feFuncB type="linear" slope="1.42" intercept="-0.23" />
+                <feFuncR type="linear" slope="1.34" intercept="-0.19" />
+                <feFuncG type="linear" slope="1.34" intercept="-0.19" />
+                <feFuncB type="linear" slope="1.34" intercept="-0.19" />
               </feComponentTransfer>
-              <feSpecularLighting
-                in="height"
-                surfaceScale="4"
-                specularConstant="0.14"
-                specularExponent="15"
-                lightingColor="#fff8ed"
-                result="specular"
-              >
-                <feDistantLight azimuth="235" elevation="58" />
-              </feSpecularLighting>
-              <feComposite in="specular" in2="SourceAlpha" operator="in" result="specularClip" />
-              <feBlend in="litContrast" in2="specularClip" mode="screen" result="litRelief" />
               <feColorMatrix
-                in="litRelief"
+                in="litContrast"
                 type="matrix"
                 values="1.05 0 0 0 0
                         0 .97 0 0 .006
@@ -603,6 +589,33 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               />
             </filter>
 
+            {/* One bounded heightfield turns the broad, valley-cut mask into
+                raised stone. A tighter blur keeps the branching recesses
+                carved while the warm upper-left light stays fully matte. */}
+            <filter id={ridgeReliefId} x="-12%" y="-12%" width="124%" height="124%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="5.2" result="ridgeHeight" />
+              <feDiffuseLighting
+                in="ridgeHeight"
+                surfaceScale="18"
+                diffuseConstant="0.86"
+                lightingColor="#fff0dc"
+                result="ridgeLight"
+              >
+                <feDistantLight azimuth="235" elevation="48" />
+              </feDiffuseLighting>
+              <feComponentTransfer in="ridgeLight" result="ridgeContrast">
+                <feFuncR type="linear" slope="1.28" intercept="-0.15" />
+                <feFuncG type="linear" slope="1.28" intercept="-0.15" />
+                <feFuncB type="linear" slope="1.28" intercept="-0.15" />
+              </feComponentTransfer>
+              <feComponentTransfer in="ridgeContrast" result="warmRidgeLight">
+                <feFuncR type="linear" slope="0.5" intercept="0.5" />
+                <feFuncG type="linear" slope="0.58" intercept="0.37" />
+                <feFuncB type="linear" slope="0.62" intercept="0.28" />
+              </feComponentTransfer>
+              <feComposite in="warmRidgeLight" in2="ridgeHeight" operator="in" />
+            </filter>
+
             <filter id={maskBlurId} x="-25%" y="-25%" width="150%" height="150%">
               <feGaussianBlur stdDeviation="11" />
             </filter>
@@ -625,14 +638,45 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               </g>
             </mask>
 
-            {/* Aged-paper mottling: palm-sized tonal patches, the slow tonal
-                drift of an uncoated sheet. Alpha .16 remains subtle once the
-                layer's soft-light blend and .68 group opacity are applied. */}
+            {/* The white cluster areas are the raised highlands; black
+                branching channels remove height before the diffuse-light pass,
+                so valleys belong to the volume rather than sitting on it as
+                strokes. Secondary ranges carry less mask luminance. */}
+            <mask
+              id={ridgeClusterMaskId}
+              maskUnits="userSpaceOnUse"
+              x="205"
+              y="35"
+              width="400"
+              height="930"
+            >
+              <rect x="205" y="35" width="400" height="930" fill="#000000" />
+              {TERRAIN_CLUSTERS.map((cluster) => (
+                <path
+                  key={cluster.key}
+                  d={cluster.d}
+                  fill={cluster.level === "primary" ? "#ffffff" : "#a8a8a8"}
+                />
+              ))}
+              <g fill="none" stroke="#000000" strokeLinecap="butt" strokeLinejoin="round">
+                {TERRAIN_VALLEYS.map((valley) => (
+                  <path key={valley.key} d={valley.d} strokeWidth={valley.width} />
+                ))}
+              </g>
+              <g fill="#000000">
+                {TERRAIN_VALLEY_TIPS.map((tip) => (
+                  <path key={tip.key} d={tip.d} />
+                ))}
+              </g>
+            </mask>
+
+            {/* Broad warm-beige mottling underneath the fine tooth: slow tonal
+                variation across the entire face, independent of elevation. */}
             <filter id={mottleId} x="-8%" y="-8%" width="116%" height="116%">
               <feTurbulence
                 type="fractalNoise"
-                baseFrequency="0.006 0.0045"
-                numOctaves="2"
+                baseFrequency="0.0042 0.0032"
+                numOctaves="3"
                 seed="15"
                 result="mottleNoise"
               />
@@ -642,7 +686,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 values=".52 0 0 0 .27
                         0 .44 0 0 .21
                         0 0 .36 0 .16
-                        0 0 0 .16 0"
+                        0 0 0 .2 0"
                 result="tonedMottle"
               />
               <feComposite in="tonedMottle" in2="SourceAlpha" operator="in" />
@@ -718,10 +762,9 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             {/* The sheet: whole-plate handmade-paper undulation. */}
             <use href={`#${shapeId}`} className="wm-terrain-sheet" filter={`url(#${sheetId})`} />
 
-            {/* The ranges: crinkle relief through the graded geography mask.
-                The mask lives on the GROUP so it stays in unrotated user
-                space while the rect inside rotates 14° to lay the wrinkle
-                runs along the range axis. */}
+            {/* The ranges: broad two-scale material relief through the graded
+                geography mask. It supplies shoulders and micro-erosion; the
+                authored closed masses below carry the real range direction. */}
             <g mask={`url(#${rangeMaskId})`}>
               <rect
                 className="wm-terrain-range"
@@ -730,8 +773,13 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 width="720"
                 height="1120"
                 filter={`url(#${crinkleId})`}
-                transform="rotate(14 420 480)"
               />
+            </g>
+
+            {/* The geography-led cluster mask is applied BEFORE this group is
+                filtered, making its cut valleys part of the heightfield. */}
+            <g className="wm-terrain-clusters" filter={`url(#${ridgeReliefId})`}>
+              <rect x="205" y="35" width="400" height="930" mask={`url(#${ridgeClusterMaskId})`} />
             </g>
 
             {/* Elevation tone + engraved contours, roughened together by the
@@ -751,43 +799,6 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               <g className="wm-terrain-contours">
                 {TERRAIN_BANDS.map((band) => (
                   <path key={`cd-${band.key}`} d={band.d} />
-                ))}
-              </g>
-              <g className="wm-terrain-ridges-shadow" transform="translate(2.4 3.1)">
-                {TERRAIN_RIDGE_PATHS.map((ridge) => (
-                  <path
-                    key={`rs-${ridge.key}`}
-                    className={`wm-terrain-ridge--${ridge.weight}`}
-                    d={ridge.d}
-                  />
-                ))}
-              </g>
-              <g className="wm-terrain-ridges-light" transform="translate(-1.25 -1.45)">
-                {TERRAIN_RIDGE_PATHS.map((ridge) => (
-                  <path
-                    key={`rl-${ridge.key}`}
-                    className={`wm-terrain-ridge--${ridge.weight}`}
-                    d={ridge.d}
-                  />
-                ))}
-              </g>
-              <g className="wm-terrain-ridges-crest">
-                {TERRAIN_RIDGE_PATHS.map((ridge) => (
-                  <path
-                    key={`rc-${ridge.key}`}
-                    className={`wm-terrain-ridge--${ridge.weight}`}
-                    d={ridge.d}
-                  />
-                ))}
-              </g>
-              <g className="wm-terrain-erosion-light" transform="translate(-0.7 -0.85)">
-                {TERRAIN_EROSION_PATHS.map((cut) => (
-                  <path key={`el-${cut.key}`} d={cut.d} />
-                ))}
-              </g>
-              <g className="wm-terrain-erosion">
-                {TERRAIN_EROSION_PATHS.map((cut) => (
-                  <path key={`ed-${cut.key}`} d={cut.d} />
                 ))}
               </g>
             </g>
@@ -820,6 +831,13 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             })}
           </g>
 
+          {/* Whole-face material remains below the administrative engraving so
+              even the stronger highland treatment cannot sand away a state
+              boundary. Every use still carries the exact coastline shape. */}
+          <use href={`#${shapeId}`} className="wm-map-mottle" filter={`url(#${mottleId})`} />
+          <use href={`#${shapeId}`} className="wm-map-grain" filter={`url(#${grainId})`} />
+          <use href={`#${shapeId}`} className="wm-map-speckle" filter={`url(#${speckleId})`} />
+
           {/* Published Admin 1 shapes give the stone face its geographic
               detail. A tiny light offset beneath the dark hairline makes each
               boundary read as a shallow engraving rather than a flat map UI. */}
@@ -835,10 +853,6 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               ))}
             </g>
           </g>
-
-          <use href={`#${shapeId}`} className="wm-map-grain" filter={`url(#${grainId})`} />
-          <use href={`#${shapeId}`} className="wm-map-speckle" filter={`url(#${speckleId})`} />
-          <use href={`#${shapeId}`} className="wm-map-mottle" filter={`url(#${mottleId})`} />
 
           {/* Pegs sit above the grain and engravings so their small silhouette
               stays crisp; one shared low-profile hex plate per location,

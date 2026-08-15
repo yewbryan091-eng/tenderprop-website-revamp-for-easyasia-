@@ -63,6 +63,11 @@ const LISTING_NAME = SINARAN_TENDER.name;
 /* Shared with /tender — same key, same id scheme, so one shortlist serves both pages. */
 const SAVE_KEY = "tp_shortlist";
 const LISTING_ID = tenderId(SINARAN_TENDER);
+/* The two "Submit your e-tender" buttons used to be href="#tender" — they scrolled to the
+   information section, which is not what either of them says it does. They now open the
+   application (routes/tender/apply.tsx), which is step 1 of the founder's flow. The listing
+   travels as a query param so one route serves every listing. */
+const APPLY_HREF = `/tender/apply?listing=${encodeURIComponent(LISTING_ID)}`;
 /* The address was previously NOWHERE on this page as text — it existed only as a search
    string inside the Google Maps iframe URL, which means it was unselectable, invisible to a
    screen reader, invisible to Google Search, and gone the moment the iframe failed to load.
@@ -587,7 +592,7 @@ export function ResidensiSinaranDetail() {
                     {/* aria-live so the confirmation is announced, not just seen. */}
                     <span aria-live="polite">{shareNote ?? "Share"}</span>
                   </button>
-                  <a className="btn red" href="#tender">Submit your e-tender</a>
+                  <a className="btn red" href={APPLY_HREF}>Submit your e-tender</a>
                 </div>
               </div>
             </div>
@@ -1448,7 +1453,7 @@ export function ResidensiSinaranDetail() {
         <div className="wrap in">
           <div className="identity"><span className="nm">Residensi Sinaran</span><span className="meta">E-Tender closes {TENDER_CLOSE_LABEL}</span></div>
           <div className="pr"><div className="k">Reserve price</div><div className="v num">RM517,000</div><span className="closes">Closes {TENDER_CLOSE_LABEL}</span></div>
-          <a className="btn red" href="#tender">Submit your e-tender</a>
+          <a className="btn red" href={APPLY_HREF}>Submit your e-tender</a>
         </div>
       </div>
 

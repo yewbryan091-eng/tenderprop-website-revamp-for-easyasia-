@@ -221,26 +221,40 @@
   transform-origin: 80px 44px;
 }
 
-.tw-env-seal {
+.tw-env-lock {
   transform-box: view-box;
   transform-origin: 80px 85px;
 }
 
-.tw-env-seal-disc {
+.tw-env-lock-body {
   fill: #6e2439;
   stroke: #4a322b;
   stroke-width: 1;
 }
 
-.tw-env-seal-ring {
+/* Shackle in the ink outline weight, so it reads as drawn metal rather than a
+   second coloured mass on a 13px object. */
+.tw-env-lock-shackle {
   fill: none;
-  stroke: rgba(255, 248, 239, 0.55);
-  stroke-width: 1.2;
+  stroke: #4a322b;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+}
+
+.tw-env-lock-hole {
+  fill: rgba(255, 248, 239, 0.82);
+}
+
+.tw-env-lock-hole-stem {
+  stroke: rgba(255, 248, 239, 0.82);
+  stroke-width: 1.5;
+  stroke-linecap: round;
 }
 
 .tw-gavel {
   transform-box: view-box;
-  transform-origin: 30px 66px;
+  /* The handle butt, now that the handle sits on the head's midline. */
+  transform-origin: 30px 84px;
 }
 
 .tw-gavel-handle {
@@ -344,7 +358,7 @@
     animation: tw-flap 300ms ease-out 380ms both;
   }
 
-  .tw--play .tw-env-seal {
+  .tw--play .tw-env-lock {
     animation: tw-seal 430ms cubic-bezier(0.34, 1.35, 0.5, 1) 360ms both;
   }
 

@@ -12,7 +12,7 @@ import { WestMalaysiaMap } from "@/components/home/WestMalaysiaMap";
    thin ink outlines, cream paper fills, one wash of colour behind each — never
    raster art. They are inline (not <img>) so the entrance can move the flap,
    seal and gavel as separate parts. Every motion exists to explain the product:
-   the flap closes and the seal presses because an E-Tender is sealed; the gavel
+   the flap closes and the padlock presses shut because an E-Tender is sealed; the gavel
    swings once because an Owner Auction is live. Nothing loops except the tiny
    LIVE dot. */
 
@@ -31,9 +31,21 @@ function EnvelopeArt() {
           className="tw-env-flap"
           d="M31 45 C47 60 65 76 80 85 C95 76 113 60 129 45 L129 44 L31 44 Z"
         />
-        <g className="tw-env-seal">
-          <circle className="tw-env-seal-disc" cx="80" cy="85" r="9" />
-          <circle className="tw-env-seal-ring" cx="80" cy="85" r="3.6" />
+        {/* A PADLOCK, not a wax seal — Bryan: it should say "sealed" literally.
+            Same centre (80,85) as the seal it replaces, so the press animation
+            and its transform-origin carry over untouched. */}
+        <g className="tw-env-lock">
+          <path className="tw-env-lock-shackle" d="M76.4 84 v-3.4 a3.6 3.6 0 0 1 7.2 0 V84" />
+          <rect
+            className="tw-env-lock-body"
+            x="73.2"
+            y="83.6"
+            width="13.6"
+            height="11.4"
+            rx="2.6"
+          />
+          <circle className="tw-env-lock-hole" cx="80" cy="88.2" r="1.5" />
+          <path className="tw-env-lock-hole-stem" d="M80 89.4 v2.2" />
         </g>
       </g>
     </svg>
@@ -61,15 +73,12 @@ function GavelArt() {
         <rect className="tw-base" x="82" y="103.5" width="38" height="7" rx="3" />
         <rect className="tw-base-top" x="88" y="99" width="26" height="4.5" rx="2" />
         <g className="tw-gavel">
-          <rect
-            className="tw-gavel-handle"
-            x="28"
-            y="63.5"
-            width="68"
-            height="5"
-            rx="2.5"
-            transform="rotate(15.5 30 66)"
-          />
+          {/* DEAD HORIZONTAL, and drawn before the head so the head covers the
+              joint. The head is a vertical cylinder, so a raked handle met it
+              off-axis and the junction read as a kink — a real gavel's handle
+              is perpendicular to the head. y is the head's vertical midpoint
+              (69..99 -> 84), so it enters dead centre. */}
+          <rect className="tw-gavel-handle" x="28" y="81.5" width="67" height="5" rx="2.5" />
           <rect className="tw-gavel-head" x="91.5" y="69" width="17" height="30" rx="5.5" />
           <rect className="tw-band" x="91.5" y="71.5" width="17" height="4.5" rx="2" />
           <rect className="tw-band" x="91.5" y="92.5" width="17" height="4.5" rx="2" />

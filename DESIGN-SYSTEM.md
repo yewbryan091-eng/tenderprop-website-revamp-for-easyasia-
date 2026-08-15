@@ -190,15 +190,19 @@ including today, and the final day reads "1 day left" rather than "0".
   staged cards and E-Tender / Owner Auction badges are a flat, non-interactive overlay and must not
   alter or approximate the published coastline geometry.
   **Top-surface material** (15 Aug): keep terrain as a second read, but never return to the blank
-  slab. The published coastline clip owns every layer. Broad fractal landform plus a 16% finer
-  erosion field is lit from upper-left (`azimuth 235°`) only inside the documented Titiwangsa,
-  Banjaran Timur/Tahan and Bintang/Kledang envelopes. Broken crest paths use a warm recess at
-  `0.25` under an ivory catchlight at `0.62`; 14 open slope cuts use `0.18 / 0.38`. Closed envelope
-  contours stay almost subliminal at `0.06 / 0.16`, below the dotted state engraving. Whole-face
-  bedding, fine paper tooth and slow mineral mottle remain independent of the terrain mask, so the
-  lowlands still feel made by hand. The final relief/paper strengths are `0.66 / 0.34`. A broad
-  brown cloud reads as thumb-smudged plaster; high-frequency V-creases read as combed fabric — both
-  were rendered and rejected. Increase crisp structure before increasing diffuse terrain weight.
+  slab. The published coastline clip owns every layer. Five broad authored height masks replace
+  the rejected white crest and erosion strokes: three overlapping, broken Titiwangsa sections plus
+  quieter Bintang/Kledang and Timur/Tahan ranges. Thirteen varied-width branching valley cuts and
+  tapered tips are subtracted from the mask before a single matte diffuse-light pass (`azimuth
+  235°`, `surfaceScale 18`, cluster opacity `0.50`), so ridges read as connected volume rather than
+  drawn veins. A geography-masked two-scale field (`0.0095 0.0065` landform + `0.034 0.022`
+  erosion at `80 / 20`) supplies restrained shoulders and micro-erosion; whole-sheet undulation is
+  separate. Closed envelope contours stay almost subliminal at `0.06 / 0.16`, below the dotted
+  state engraving (`0.78`). Whole-face warm mottle (`0.0042 0.0032`), mineral grain (`0.026
+  0.019`) and isotropic paper tooth (`0.23`) remain independent of the terrain mask, so eastern and
+  southern plains stay calmer but still tactile. Final CSS strengths are relief `0.86`, sheet
+  `0.50`, cluster `0.50`, grain `0.48`, speckle `0.34`, mottle `0.82`. The authored zones are
+  geographically grounded illustration, not claimed elevation precision.
 - **Entrance animations ARM, they do not reveal** (13 Aug, load-bearing): CSS rests in the finished
   visible state; JS adds `.is-armed` to hide it and removes it on approach, toggled through
   `classList` rather than React state. Hide-by-default ships blank sections whenever the reveal
