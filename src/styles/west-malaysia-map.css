@@ -14,6 +14,8 @@
   --wm-rim: #b48a50;
   --wm-burgundy-shade: #571c2e;
   --wm-shadow: rgba(56, 35, 28, 0.28);
+  --wm-relief-strength: 0.66;
+  --wm-sheet-strength: 0.34;
   position: relative;
   min-height: clamp(500px, 44vw, 660px);
   display: grid;
@@ -191,15 +193,15 @@
    limestone's own light and shade come through them rather than being covered. */
 .wm-map-grain {
   fill: #8d725e;
-  opacity: 0.44;
-  mix-blend-mode: soft-light;
+  opacity: 0.42;
+  mix-blend-mode: multiply;
   pointer-events: none;
 }
 
 .wm-map-speckle {
   fill: #6f5747;
-  opacity: 0.3;
-  mix-blend-mode: soft-light;
+  opacity: 0.26;
+  mix-blend-mode: multiply;
   pointer-events: none;
 }
 
@@ -207,7 +209,7 @@
    tonal variation" layer: caused-by-material, never a designed gradient. */
 .wm-map-mottle {
   fill: #8d725e;
-  opacity: 0.55;
+  opacity: 0.68;
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
@@ -219,13 +221,13 @@
    and it must stay that way: if a contour ever competes with a border,
    the contour loses opacity, not the border. */
 .wm-terrain-sheet {
-  opacity: 0.15;
+  opacity: var(--wm-sheet-strength);
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
 
 .wm-terrain-range {
-  opacity: 0.58;
+  opacity: var(--wm-relief-strength);
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
@@ -235,7 +237,7 @@
    more of the key light, per the plate's upper-left lighting. */
 .wm-terrain-fill {
   fill: #fffdf7;
-  opacity: 0.05;
+  opacity: 0.055;
 }
 
 /* Contour engraving — the state-boundary language (dark hairline over a lit
@@ -251,13 +253,93 @@
 .wm-terrain-contours path {
   stroke: #7a5f4b;
   stroke-width: 0.8;
-  opacity: 0.11;
+  opacity: 0.06;
 }
 
 .wm-terrain-contours-light path {
   stroke: #fffdf7;
   stroke-width: 0.9;
-  opacity: 0.28;
+  opacity: 0.16;
+}
+
+/* The paired crest strokes are the tactile read at normal homepage distance:
+   a narrow warm recess down-light from each real range axis and a wider ivory
+   catch-light up-light. They stay crisp (displaced, never blurred), while the
+   procedural heightfield underneath supplies the shoulders and valleys. */
+.wm-terrain-ridges-shadow path,
+.wm-terrain-ridges-light path,
+.wm-terrain-ridges-crest path,
+.wm-terrain-erosion path,
+.wm-terrain-erosion-light path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wm-terrain-ridges-shadow path {
+  stroke: #a18168;
+  stroke-width: 2.6;
+  opacity: 0.25;
+}
+
+.wm-terrain-ridges-light path {
+  stroke: #fffaf0;
+  stroke-width: 2.3;
+  opacity: 0.62;
+}
+
+.wm-terrain-ridges-crest path {
+  stroke: #b89c80;
+  stroke-width: 0.62;
+  opacity: 0.2;
+}
+
+/* Each crest is split into short fragments and tapers by class. These local
+   width changes stop the catchlight joining into one chalk-white fracture at
+   homepage scale while keeping the mountain axis physically legible. */
+.wm-terrain-ridges-shadow .wm-terrain-ridge--minor {
+  stroke-width: 2.05;
+  opacity: 0.21;
+}
+
+.wm-terrain-ridges-shadow .wm-terrain-ridge--trace {
+  stroke-width: 1.55;
+  opacity: 0.17;
+}
+
+.wm-terrain-ridges-light .wm-terrain-ridge--minor {
+  stroke-width: 1.72;
+  opacity: 0.54;
+}
+
+.wm-terrain-ridges-light .wm-terrain-ridge--trace {
+  stroke-width: 1.2;
+  opacity: 0.44;
+}
+
+.wm-terrain-ridges-crest .wm-terrain-ridge--minor {
+  stroke-width: 0.5;
+  opacity: 0.16;
+}
+
+.wm-terrain-ridges-crest .wm-terrain-ridge--trace {
+  stroke-width: 0.38;
+  opacity: 0.12;
+}
+
+/* Open tributary cuts give the relief scale and direction without drawing
+   obvious closed contour rings. Their light lip is offset toward the key; the
+   dark hairline remains visibly below the maroon state engraving. */
+.wm-terrain-erosion path {
+  stroke: #866954;
+  stroke-width: 0.58;
+  opacity: 0.18;
+}
+
+.wm-terrain-erosion-light path {
+  stroke: #fffaf1;
+  stroke-width: 0.72;
+  opacity: 0.38;
 }
 
 .wm-map-bevel {

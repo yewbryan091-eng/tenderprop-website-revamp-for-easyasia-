@@ -189,6 +189,16 @@ including today, and the final day reads "1 day left" rather than "0".
   Klang Valley category fill, map labels, clicks or interaction; the map stays `aria-hidden`. The
   staged cards and E-Tender / Owner Auction badges are a flat, non-interactive overlay and must not
   alter or approximate the published coastline geometry.
+  **Top-surface material** (15 Aug): keep terrain as a second read, but never return to the blank
+  slab. The published coastline clip owns every layer. Broad fractal landform plus a 16% finer
+  erosion field is lit from upper-left (`azimuth 235°`) only inside the documented Titiwangsa,
+  Banjaran Timur/Tahan and Bintang/Kledang envelopes. Broken crest paths use a warm recess at
+  `0.25` under an ivory catchlight at `0.62`; 14 open slope cuts use `0.18 / 0.38`. Closed envelope
+  contours stay almost subliminal at `0.06 / 0.16`, below the dotted state engraving. Whole-face
+  bedding, fine paper tooth and slow mineral mottle remain independent of the terrain mask, so the
+  lowlands still feel made by hand. The final relief/paper strengths are `0.66 / 0.34`. A broad
+  brown cloud reads as thumb-smudged plaster; high-frequency V-creases read as combed fabric — both
+  were rendered and rejected. Increase crisp structure before increasing diffuse terrain weight.
 - **Entrance animations ARM, they do not reveal** (13 Aug, load-bearing): CSS rests in the finished
   visible state; JS adds `.is-armed` to hide it and removes it on approach, toggled through
   `classList` rather than React state. Hide-by-default ships blank sections whenever the reveal

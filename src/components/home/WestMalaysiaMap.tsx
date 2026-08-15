@@ -86,8 +86,94 @@ const TERRAIN_BANDS = [
   },
 ];
 
-/* Mask luminance per level — the crinkle's intensity map. */
-const TERRAIN_MASK_TONE = ["#8e8e8e", "#c9c9c9", "#ffffff"];
+/* Mask luminance per level — the relief's intensity map. The range envelope
+   must still register at homepage scale, so the foothills now begin above the
+   old 56% luminance while the nested highlands retain the strongest relief. */
+const TERRAIN_MASK_TONE = ["#a8a8a8", "#d8d8d8", "#ffffff"];
+
+/* Authored CREST fragments sit inside the geography envelopes above. These are
+   not extra mountains or an elevation dataset: they make the already documented
+   range axes legible as a carved object. Short Titiwangsa fragments follow the
+   Korbu / Cameron / Fraser / Genting pockets without becoming one white seam;
+   the secondary fragments follow Bintang/Kledang and Banjaran Timur/Tahan. */
+const TERRAIN_RIDGE_PATHS = [
+  {
+    key: "titiwangsa-north-a",
+    weight: "major",
+    d: "M324 92 C324 130 329 160 332 190",
+  },
+  {
+    key: "titiwangsa-north-b",
+    weight: "minor",
+    d: "M336 221 C339 258 338 295 345 327",
+  },
+  {
+    key: "titiwangsa-korbu",
+    weight: "major",
+    d: "M350 359 C352 392 356 423 365 451",
+  },
+  {
+    key: "titiwangsa-cameron",
+    weight: "major",
+    d: "M374 488 C383 521 395 553 408 581",
+  },
+  {
+    key: "titiwangsa-fraser",
+    weight: "minor",
+    d: "M420 617 C434 644 444 675 452 703",
+  },
+  {
+    key: "titiwangsa-genting-south",
+    weight: "trace",
+    d: "M466 738 C476 762 486 787 494 811",
+  },
+  {
+    key: "titiwangsa-south-tip",
+    weight: "minor",
+    d: "M509 842 C520 866 532 890 540 903",
+  },
+  {
+    key: "banjaran-timur-north",
+    weight: "minor",
+    d: "M471 291 C480 319 492 345 505 367",
+  },
+  {
+    key: "banjaran-timur-tahan",
+    weight: "trace",
+    d: "M516 389 C532 421 548 457 567 486",
+  },
+  {
+    key: "bintang-north",
+    weight: "trace",
+    d: "M258 307 C264 334 270 360 276 386",
+  },
+  {
+    key: "kledang-south",
+    weight: "minor",
+    d: "M282 408 C288 434 295 460 301 480",
+  },
+];
+
+/* Open slope marks — short tributary-like cuts rather than closed contour
+   rings. Each branch leaves one of the real crest axes above and runs down its
+   flank, so the linework reads as erosion in carved limestone rather than a
+   conventional contour map or decorative noise. */
+const TERRAIN_EROSION_PATHS = [
+  { key: "north-w", d: "M327 128 C318 141 321 157 313 171" },
+  { key: "north-e", d: "M338 181 C350 194 347 211 359 224" },
+  { key: "kinta-w", d: "M342 305 C326 326 333 347 318 369" },
+  { key: "korbu-e", d: "M361 421 C382 437 383 464 405 480" },
+  { key: "cameron-w", d: "M381 503 C363 523 367 548 348 566" },
+  { key: "cameron-e", d: "M398 544 C412 555 418 575 437 585" },
+  { key: "fraser-e", d: "M425 611 C444 626 450 648 473 662" },
+  { key: "genting-w", d: "M454 675 C436 693 442 716 425 734" },
+  { key: "south-e", d: "M494 784 C511 800 518 823 538 837" },
+  { key: "timur-w", d: "M486 322 C474 339 480 358 469 374" },
+  { key: "timur-e", d: "M510 367 C526 380 532 399 548 410" },
+  { key: "tahan-e", d: "M548 431 C566 447 570 468 586 479" },
+  { key: "bintang-w", d: "M268 340 C254 355 260 375 248 391" },
+  { key: "kledang-e", d: "M286 420 C300 434 296 454 307 468" },
+];
 
 /* Three hand-authored, lobed washes share a location without sharing a centre.
    Their deliberately uneven shoulders survive the camera tilt as spilled
@@ -344,7 +430,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 values=".55 0 0 0 .28
                         0 .45 0 0 .20
                         0 0 .35 0 .15
-                        0 0 0 .13 0"
+                        0 0 0 .26 0"
                 result="tonedNoise"
               />
               <feComposite in="tonedNoise" in2="SourceAlpha" operator="in" />
@@ -371,7 +457,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 values=".48 0 0 0 .24
                         0 .42 0 0 .19
                         0 0 .34 0 .14
-                        0 0 0 .13 0"
+                        0 0 0 .22 0"
                 result="tonedSpeckle"
               />
               <feComposite in="tonedSpeckle" in2="SourceAlpha" operator="in" />
@@ -390,40 +476,70 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 blending turns that into lighten/darken on the limestone — so
                 the crinkle can NEVER read as grey paint on cream.
 
-                diffuseConstant 0.56 is what centres it: a flat surface under
-                elevation 58° lights to 0.56 × sin(58°) ≈ 0.475 — near-neutral
-                under soft-light — so only actual slopes shift the tone. */}
+                The filtered relief is contrast-centred before soft-light so
+                flat ground stays near-neutral and only actual slopes shift the
+                limestone's tone. */}
             <filter id={crinkleId} x="-5%" y="-5%" width="110%" height="110%">
-              {/* Anisotropic on purpose: y-frequency ~2.6× lower elongates the
-                  wrinkles into ridge-and-valley runs; the rect that carries
-                  this filter is rotated 14° so the runs follow the range axis
-                  rather than the viewport axis. */}
-              {/* type "turbulence", not fractalNoise, and that is the whole
-                  crinkle: turbulence is folded absolute-value noise, so its
-                  height field carries sharp V-creases that light like ridge
-                  lines — fractalNoise billows like suede. */}
+              {/* Two deterministic scales make a landform rather than cloth:
+                  low-frequency fractal noise supplies broad shoulders, while
+                  a finer folded field cuts drainage-like creases through it.
+                  The rect is rotated 14° so both scales follow the peninsula's
+                  north-west / south-east mountain axis. */}
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.014 0.0055"
+                numOctaves="3"
+                seed="11"
+                result="landform"
+              />
               <feTurbulence
                 type="turbulence"
-                baseFrequency="0.042 0.016"
-                numOctaves="4"
-                seed="11"
-                result="height"
+                baseFrequency="0.052 0.019"
+                numOctaves="2"
+                seed="37"
+                result="erosion"
               />
+              <feComposite
+                in="landform"
+                in2="erosion"
+                operator="arithmetic"
+                k2="0.84"
+                k3="0.16"
+                result="rawHeight"
+              />
+              <feGaussianBlur in="rawHeight" stdDeviation="0.9" result="height" />
               <feDiffuseLighting
                 in="height"
-                surfaceScale="3.1"
-                diffuseConstant="0.56"
-                lightingColor="#ffffff"
+                surfaceScale="6.4"
+                diffuseConstant="0.63"
+                lightingColor="#fff5e8"
                 result="lit"
               >
                 <feDistantLight azimuth="235" elevation="58" />
               </feDiffuseLighting>
+              <feComponentTransfer in="lit" result="litContrast">
+                <feFuncR type="linear" slope="1.42" intercept="-0.23" />
+                <feFuncG type="linear" slope="1.42" intercept="-0.23" />
+                <feFuncB type="linear" slope="1.42" intercept="-0.23" />
+              </feComponentTransfer>
+              <feSpecularLighting
+                in="height"
+                surfaceScale="4"
+                specularConstant="0.14"
+                specularExponent="15"
+                lightingColor="#fff8ed"
+                result="specular"
+              >
+                <feDistantLight azimuth="235" elevation="58" />
+              </feSpecularLighting>
+              <feComposite in="specular" in2="SourceAlpha" operator="in" result="specularClip" />
+              <feBlend in="litContrast" in2="specularClip" mode="screen" result="litRelief" />
               <feColorMatrix
-                in="lit"
+                in="litRelief"
                 type="matrix"
-                values="1.04 0 0 0 0
-                        0 .96 0 0 .005
-                        0 0 .86 0 .02
+                values="1.05 0 0 0 0
+                        0 .97 0 0 .006
+                        0 0 .88 0 .018
                         0 0 0 1 0"
                 result="warmLit"
               />
@@ -436,22 +552,27 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             <filter id={sheetId} x="-5%" y="-5%" width="110%" height="110%">
               <feTurbulence
                 type="fractalNoise"
-                baseFrequency="0.011 0.007"
+                baseFrequency="0.009 0.006"
                 numOctaves="3"
                 seed="7"
                 result="height"
               />
               <feDiffuseLighting
                 in="height"
-                surfaceScale="1.5"
-                diffuseConstant="0.56"
+                surfaceScale="2.6"
+                diffuseConstant="0.61"
                 lightingColor="#ffffff"
                 result="lit"
               >
                 <feDistantLight azimuth="235" elevation="62" />
               </feDiffuseLighting>
+              <feComponentTransfer in="lit" result="sheetContrast">
+                <feFuncR type="linear" slope="1.3" intercept="-0.16" />
+                <feFuncG type="linear" slope="1.3" intercept="-0.16" />
+                <feFuncB type="linear" slope="1.3" intercept="-0.16" />
+              </feComponentTransfer>
               <feColorMatrix
-                in="lit"
+                in="sheetContrast"
                 type="matrix"
                 values="1.04 0 0 0 0
                         0 .96 0 0 .005
@@ -505,7 +626,8 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             </mask>
 
             {/* Aged-paper mottling: palm-sized tonal patches, the slow tonal
-                drift of an uncoated sheet. Alpha .1 → net ±2–3% luminance. */}
+                drift of an uncoated sheet. Alpha .16 remains subtle once the
+                layer's soft-light blend and .68 group opacity are applied. */}
             <filter id={mottleId} x="-8%" y="-8%" width="116%" height="116%">
               <feTurbulence
                 type="fractalNoise"
@@ -520,7 +642,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 values=".52 0 0 0 .27
                         0 .44 0 0 .21
                         0 0 .36 0 .16
-                        0 0 0 .1 0"
+                        0 0 0 .16 0"
                 result="tonedMottle"
               />
               <feComposite in="tonedMottle" in2="SourceAlpha" operator="in" />
@@ -629,6 +751,43 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               <g className="wm-terrain-contours">
                 {TERRAIN_BANDS.map((band) => (
                   <path key={`cd-${band.key}`} d={band.d} />
+                ))}
+              </g>
+              <g className="wm-terrain-ridges-shadow" transform="translate(2.4 3.1)">
+                {TERRAIN_RIDGE_PATHS.map((ridge) => (
+                  <path
+                    key={`rs-${ridge.key}`}
+                    className={`wm-terrain-ridge--${ridge.weight}`}
+                    d={ridge.d}
+                  />
+                ))}
+              </g>
+              <g className="wm-terrain-ridges-light" transform="translate(-1.25 -1.45)">
+                {TERRAIN_RIDGE_PATHS.map((ridge) => (
+                  <path
+                    key={`rl-${ridge.key}`}
+                    className={`wm-terrain-ridge--${ridge.weight}`}
+                    d={ridge.d}
+                  />
+                ))}
+              </g>
+              <g className="wm-terrain-ridges-crest">
+                {TERRAIN_RIDGE_PATHS.map((ridge) => (
+                  <path
+                    key={`rc-${ridge.key}`}
+                    className={`wm-terrain-ridge--${ridge.weight}`}
+                    d={ridge.d}
+                  />
+                ))}
+              </g>
+              <g className="wm-terrain-erosion-light" transform="translate(-0.7 -0.85)">
+                {TERRAIN_EROSION_PATHS.map((cut) => (
+                  <path key={`el-${cut.key}`} d={cut.d} />
+                ))}
+              </g>
+              <g className="wm-terrain-erosion">
+                {TERRAIN_EROSION_PATHS.map((cut) => (
+                  <path key={`ed-${cut.key}`} d={cut.d} />
                 ))}
               </g>
             </g>
