@@ -49,12 +49,12 @@
      soft-light could barely register; on the re-valued surface the same number
      renders 1.86x stronger, so the tuning had to be re-taken from scratch
      rather than inherited. */
-  --wm-relief-strength: 1.12;
-  --wm-sheet-strength: 0.5;
-  --wm-cluster-strength: 0.5;
-  --wm-grain-strength: 0.48;
-  --wm-speckle-strength: 0.34;
-  --wm-mottle-strength: 0.82;
+  --wm-relief-strength: 1.4;
+  --wm-sheet-strength: 0.62;
+  --wm-cluster-strength: 0.66;
+  --wm-grain-strength: 0.66;
+  --wm-speckle-strength: 0.5;
+  --wm-mottle-strength: 1;
   position: relative;
   min-height: clamp(500px, 44vw, 660px);
   display: grid;
@@ -240,12 +240,12 @@
 
 .wm-map-states {
   stroke: var(--burgundy);
-  stroke-width: 1.6;
-  /* Much higher than the old 0.28 because a dotted line puts far less ink on
-     the stone than a solid one, and because the maroon has to survive being
-     read through warm limestone — under about 0.6 it greys out to brown and
-     stops being maroon at all. */
-  opacity: 0.78;
+  stroke-width: 1.4;
+  /* Dropped 0.78 -> 0.5 (Bryan, 15 Aug): boundaries stay useful but must sit
+     BEHIND the physical geography now that the relief carries real weight.
+     Do not go under ~0.45 — below that the maroon greys out to brown and
+     stops reading as a boundary at all. */
+  opacity: 0.5;
 }
 
 /* Multi-scale face material, independent of terrain: a broad mineral field,
@@ -1001,7 +1001,7 @@
 }
 
 .wm-canopy {
-  opacity: 0.5;
+  opacity: 0.42;
   mix-blend-mode: multiply;
 }
 
@@ -1012,3 +1012,54 @@
 }
 
 
+
+
+/* ── RIVER HIERARCHY ─────────────────────────────────────────────────────────
+   Rank drives opacity, not just width (Bryan, 15 Aug: several waterways
+   carried almost equal visual weight). Majors — Pahang, Perak, Kelantan —
+   stay full; minors step back; feeders sit at just over a third, so the eye
+   finds the great rivers first and discovers the tributaries afterwards. */
+.wm-r--minor {
+  opacity: 0.66;
+}
+
+.wm-r--feeder {
+  opacity: 0.38;
+}
+
+/* ── TONE ZONES ──────────────────────────────────────────────────────────────
+   Atmospheric, not cartographic. Blurred far past any edge so the washes are
+   felt as regional character and never seen as areas. If a boundary is ever
+   visible here, raise the blur — never lower the opacity, which would just
+   remove the effect. */
+.wm-tone path {
+  /* 46 was ~21px on screen — the zones read as areas. At 130 units the edge is
+     gone and only the character survives, which is the entire brief. */
+  filter: blur(130px);
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+
+/* ── COASTLINE RIM ───────────────────────────────────────────────────────────
+   The premium detail: one consistent light lip separating the top surface
+   from the extruded wall, INSIDE the coastline (the clip keeps the outer half
+   off, so it reads as a lit edge rather than a glowing outline). Paired with a
+   faint dark seat just below it — an edge is a highlight AND a shadow, and the
+   highlight alone reads as neon. */
+.wm-coast-rim-light,
+.wm-coast-rim-seat {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.wm-coast-rim-light {
+  stroke: #fffdf4;
+  stroke-width: 2.6;
+  opacity: 0.42;
+}
+
+.wm-coast-rim-seat {
+  stroke: #6b5c3c;
+  stroke-width: 1.6;
+  opacity: 0.22;
+}

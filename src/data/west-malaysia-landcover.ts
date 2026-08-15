@@ -500,6 +500,13 @@ export const RIVERS = RIVER_SPECS.map((spec, index) => ({
      - a negative, index-staggered delay so no two rivers pulse in sync —
        synchrony is the one thing real water never does. */
   flowWidth: +Math.min(1.7, Math.max(0.8, spec.w1 * 0.19)).toFixed(2),
+  /* ── VISUAL HIERARCHY (Bryan, 15 Aug: too many waterways carried equal
+     weight). Rank by mouth width, and let the rank drive OPACITY as well as
+     size — on a real map the eye finds two or three great rivers first and
+     discovers the rest afterwards. Trunks stay full; the feeders drop to
+     just over a third, which is what makes the network read as a hierarchy
+     rather than a web. */
+  rank: spec.w1 >= 8 ? "major" : spec.w1 >= 4 ? "minor" : "feeder",
   flowDuration: +(9 + spec.w1 * 0.5).toFixed(1),
   flowDelay: +(index * -1.9).toFixed(1),
 }));
@@ -549,3 +556,53 @@ export const ESTUARIES = TRUNKS.map((spec) => {
     },
   };
 });
+
+/* ── REGIONAL TONE — 3-6%, not colour zones ──────────────────────────────────
+   Bryan, 15 Aug: within the existing olive/beige family, the west mountains a
+   touch darker and more desaturated, the east lowlands fractionally lighter,
+   the south warmer beige. The central plains are the BASE and get no overlay
+   at all — a region reads as "normal" only if something else shifts around it.
+
+   Deliberately huge, deliberately blurred to nothing: these are atmospheric
+   washes, and if any edge of one is ever visible the effect has failed. */
+export const TONE_ZONES: { key: string; fill: string; opacity: number; d: string }[] = [
+  {
+    key: "west-mountains",
+    fill: "#6e7350",
+    opacity: 0.16,
+    d: smooth([
+      [100.5, 6.2],
+      [101.5, 5.6],
+      [101.9, 4.4],
+      [101.8, 3.2],
+      [101.2, 2.6],
+      [100.5, 3.4],
+      [100.2, 4.8],
+    ]),
+  },
+  {
+    key: "east-lowlands",
+    fill: "#e6dcb8",
+    opacity: 0.17,
+    d: smooth([
+      [102.4, 6.2],
+      [103.4, 5.6],
+      [103.6, 4.2],
+      [103.4, 3.0],
+      [102.6, 3.1],
+      [102.3, 4.6],
+    ]),
+  },
+  {
+    key: "south-warm",
+    fill: "#d9c69a",
+    opacity: 0.18,
+    d: smooth([
+      [102.2, 2.6],
+      [103.4, 2.5],
+      [103.9, 1.6],
+      [103.2, 1.2],
+      [102.4, 1.7],
+    ]),
+  },
+];

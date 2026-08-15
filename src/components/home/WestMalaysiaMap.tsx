@@ -7,7 +7,7 @@ import {
   WEST_MALAYSIA_STATE_LINES,
 } from "@/data/west-malaysia-geometry";
 import "@/styles/west-malaysia-map.css";
-import { ESTUARIES, LANDCOVER, RIVERS, URBAN } from "@/data/west-malaysia-landcover";
+import { ESTUARIES, LANDCOVER, RIVERS, TONE_ZONES, URBAN } from "@/data/west-malaysia-landcover";
 
 export type WestMalaysiaMapFinish = "limestone" | "porcelain" | "monument" | "terrain";
 
@@ -375,14 +375,27 @@ function projectedToPercent(x: number, y: number) {
    it. One puff, mirrored/rotated/scaled per cloud, so the fleet reads as
    weather rather than a stamp. Positions sit on the peninsula's diagonal and
    keep clear of the three pegs and the Klang Valley bloom. */
+/* ⚠️ PLACEMENT IS TESTED, NOT EYEBALLED. A cloud's FOOTPRINT (crown centres
+   plus both tips, through its own rotate/flip/scale) must land inside the
+   coastline — a wisp overhanging the edge reads as fog on the wall, not
+   weather over a country. Two were caught that way: "g" hung off Johor's west
+   coast because the land there starts near x=614, and "a" had its right tip
+   in the Straits. Re-test after moving any cloud; the harness lives in the
+   15 Aug session notes and only needs the coastline path plus this table. */
 const CLOUDS = [
   /* Four, by Bryan's call — one per region so the weather reads as national,
      none over a peg site or the Klang Valley: Kedah, the central range (the
      largest, where clouds actually gather), the eastern lowland, Johor. */
-  { key: "a", x: 250, y: 150, s: 0.85, o: 0.95, flip: false, rot: 0 },
+  /* Kedah. Nudged 22 left / 14 down off (250,150): the footprint test found
+     its right tip at (314,154) sitting in the Straits. */
+  /* Northern: dimmed to 0.72 — at 0.95 it hid too much Kedah terrain. */
+  { key: "a", x: 228, y: 164, s: 0.85, o: 0.72, flip: false, rot: 0 },
   { key: "c", x: 330, y: 440, s: 1.15, o: 1, flip: false, rot: -6 },
-  { key: "e", x: 560, y: 730, s: 0.95, o: 0.9, flip: true, rot: 8 },
-  { key: "g", x: 470, y: 970, s: 0.9, o: 0.9, flip: false, rot: 5 },
+  /* Johor sits EAST — at this latitude the land only begins around x=614,
+     so the old x=470 hung the wisp off the coast like fog on the wall. At
+     (700, 1000) the puff's full extent (±63 units at this scale) stays on
+     land: 637..763 against a landmass spanning ~614..850. */
+  { key: "g", x: 700, y: 1000, s: 0.9, o: 0.9, flip: false, rot: 5 },
 ];
 
 function CloudPuff() {
@@ -469,7 +482,7 @@ export function WestMalaysiaMap({
               <feColorMatrix
                 in="n"
                 type="matrix"
-                values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 14 -8.5"
+                values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 11 -6.2"
                 result="dots"
               />
               <feComposite in="SourceGraphic" in2="dots" operator="in" />
@@ -899,6 +912,13 @@ export function WestMalaysiaMap({
             </g>
           </g>
 
+          {/* Regional tone: 3-6% shifts, hugely blurred, under all land cover. */}
+          <g className="wm-tone" clipPath={`url(#${clipId})`}>
+            {TONE_ZONES.map((zone) => (
+              <path key={zone.key} d={zone.d} fill={zone.fill} opacity={zone.opacity} />
+            ))}
+          </g>
+
           {/* ── LAND COVER ─────────────────────────────────────────────────
               Hue, and ONLY hue. Every fill here blends with `color`, which
               takes hue and saturation from the source and LUMINOSITY from the
@@ -976,6 +996,10 @@ export function WestMalaysiaMap({
                 <path key={`cn-${band.key}`} d={band.d} />
               ))}
             </g>
+            {/* Coastline rim: seat first (just below the edge), then the lit
+                lip. Both clipped, so only their inner halves print. */}
+            <use href={`#${shapeId}`} className="wm-coast-rim-seat" transform="translate(0 2.2)" />
+            <use href={`#${shapeId}`} className="wm-coast-rim-light" />
             <g className="wm-valley-mist">
               <ellipse cx="286" cy="468" rx="17" ry="62" transform="rotate(14 286 468)" />
               <ellipse cx="452" cy="560" rx="30" ry="74" transform="rotate(8 452 560)" />
@@ -1001,13 +1025,13 @@ export function WestMalaysiaMap({
                 of itself. Same ribbon, blurred, so it has no edge of its own. */}
             <g className="wm-river-margin" filter={`url(#${riverBlurId})`}>
               {RIVERS.map((river) => (
-                <path key={`mg-${river.key}`} d={river.d} />
+                <path key={`mg-${river.key}`} className={`wm-r--${river.rank}`} d={river.d} />
               ))}
             </g>
             {/* Lit far bank, offset along the plate's own key-light direction. */}
             <g className="wm-river-bank" transform="translate(1.2 1.5)">
               {RIVERS.map((river) => (
-                <path key={`bank-${river.key}`} d={river.d} />
+                <path key={`bank-${river.key}`} className={`wm-r--${river.rank}`} d={river.d} />
               ))}
             </g>
             <g className="wm-estuary-silt">
@@ -1024,7 +1048,7 @@ export function WestMalaysiaMap({
             </g>
             <g className="wm-river-water">
               {RIVERS.map((river) => (
-                <path key={`wa-${river.key}`} d={river.d} />
+                <path key={`wa-${river.key}`} className={`wm-r--${river.rank}`} d={river.d} />
               ))}
             </g>
             {/* Mouth fans AFTER the water so the widening covers the ribbon's
@@ -1051,6 +1075,7 @@ export function WestMalaysiaMap({
               {RIVERS.map((river) => (
                 <path
                   key={`fl-${river.key}`}
+                  className={`wm-r--${river.rank}`}
                   d={river.flow}
                   style={{
                     strokeWidth: river.flowWidth,
