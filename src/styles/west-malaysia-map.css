@@ -915,3 +915,41 @@
 .wm-map--terrain .wm-cover--urban {
   opacity: 0.2;
 }
+
+
+/* ── FOREST ON THE RANGES ────────────────────────────────────────────────────
+   Inside the hue-only group, so the relief's own light survives — these paint
+   green onto the mountains' flanks, and the level-2 summit pockets are simply
+   absent, leaving bare stone at the crests. Elongated, irregular, broken at
+   the passes: the shape of real forest, and a shape that cannot become a dot. */
+.wm-rf {
+  filter: blur(9px);
+}
+
+.wm-rf--0 {
+  fill: #6f7f52;
+  opacity: 0.5;
+}
+
+.wm-rf--1 {
+  fill: #7e8a5c;
+  opacity: 0.34;
+}
+
+/* ── ESTUARIES ───────────────────────────────────────────────────────────────
+   The fan is a shade lighter than the channel — river water thinning into sea
+   light — and the silt ellipse is the tidal stain the river leaves inland of
+   its mouth. Both clipped at the exact shoreline by the group's coastline
+   clip; the fan's overshoot is what makes the cut edge read as the sea taking
+   over, not the river giving up. */
+.wm-estuaries path {
+  fill: #5e83a0;
+  opacity: 0.55;
+}
+
+.wm-estuary-silt ellipse {
+  fill: #c9b087;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  filter: blur(5px);
+}

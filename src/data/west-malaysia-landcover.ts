@@ -432,3 +432,49 @@ export const LAKES: { key: string; note: string; d: string }[] = [
     ]),
   },
 ];
+
+/* ── ESTUARIES — where the rivers actually end ────────────────────────────────
+   Every river used to just STOP at the coast, which is the least alive moment
+   a water system can have. Each trunk river (mouth width >= 4) now opens into
+   a fan at its real mouth — the Pahang at Pekan, the Perak at Bagan Datoh, the
+   Kelantan at the Kota Bharu delta, the Muar at Muar town, the Klang past Port
+   Klang. The fan deliberately OVERSHOOTS the coast; the coastline clip cuts it
+   at the exact shore, so the river reads as opening into the sea rather than
+   tapering to a point on land. The silt ellipse is the tidal stain inland of
+   the mouth — mud the river leaves behind. */
+const TRUNKS = RIVER_SPECS.filter((spec) => spec.w1 >= 4);
+
+export const ESTUARIES = TRUNKS.map((spec) => {
+  const pts = densify(spec.points);
+  const m = pts[pts.length - 1];
+  const prev = pts[Math.max(0, pts.length - 6)];
+  let dx = m.x - prev.x;
+  let dy = m.y - prev.y;
+  const len = Math.hypot(dx, dy) || 1;
+  dx /= len;
+  dy /= len;
+  const nx = -dy;
+  const ny = dx;
+  const reach = 22;
+  const overshoot = 12;
+  const s = { x: m.x - dx * reach, y: m.y - dy * reach };
+  const e = { x: m.x + dx * overshoot, y: m.y + dy * overshoot };
+  const wNarrow = spec.w1 * 0.95;
+  const wWide = spec.w1 * 2.5;
+  const fan =
+    `M${(s.x + nx * wNarrow).toFixed(1)} ${(s.y + ny * wNarrow).toFixed(1)}` +
+    ` L${(e.x + nx * wWide).toFixed(1)} ${(e.y + ny * wWide).toFixed(1)}` +
+    ` L${(e.x - nx * wWide).toFixed(1)} ${(e.y - ny * wWide).toFixed(1)}` +
+    ` L${(s.x - nx * wNarrow).toFixed(1)} ${(s.y - ny * wNarrow).toFixed(1)} Z`;
+  return {
+    key: spec.key,
+    fan,
+    silt: {
+      cx: +m.x.toFixed(1),
+      cy: +m.y.toFixed(1),
+      rx: +(spec.w1 * 2.6).toFixed(1),
+      ry: +(spec.w1 * 1.5).toFixed(1),
+      angle: +((Math.atan2(dy, dx) * 180) / Math.PI).toFixed(1),
+    },
+  };
+});

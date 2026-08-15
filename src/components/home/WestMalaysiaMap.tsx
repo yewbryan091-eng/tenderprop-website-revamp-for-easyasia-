@@ -7,7 +7,7 @@ import {
   WEST_MALAYSIA_STATE_LINES,
 } from "@/data/west-malaysia-geometry";
 import "@/styles/west-malaysia-map.css";
-import { LAKES, LANDCOVER, RIVERS, URBAN } from "@/data/west-malaysia-landcover";
+import { ESTUARIES, LAKES, LANDCOVER, RIVERS, URBAN } from "@/data/west-malaysia-landcover";
 
 export type WestMalaysiaMapFinish = "limestone" | "porcelain" | "monument" | "terrain";
 
@@ -850,6 +850,20 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                   r={u.r}
                 />
               ))}
+              {/* ── FOREST ON THE RANGES — the only way forest is allowed back
+                  (see the landcover module's blob ban). Level 0/1 envelopes
+                  take the green; level-2 summit pockets stay bare stone, so
+                  the mountains read clothed below and exposed at the crests —
+                  which is where Malaysia's primary forest actually is. */}
+              <g className="wm-range-forest">
+                {TERRAIN_BANDS.filter((band) => band.level < 2).map((band) => (
+                  <path
+                    key={`rf-${band.key}`}
+                    className={`wm-rf wm-rf--${band.level}`}
+                    d={band.d}
+                  />
+                ))}
+              </g>
             </g>
             <g className="wm-cover-shade">
               {LANDCOVER.map((region) => (
@@ -889,9 +903,28 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 <path key={`bank-${river.key}`} d={river.d} />
               ))}
             </g>
+            <g className="wm-estuary-silt">
+              {ESTUARIES.map((est) => (
+                <ellipse
+                  key={`si-${est.key}`}
+                  cx={est.silt.cx}
+                  cy={est.silt.cy}
+                  rx={est.silt.rx}
+                  ry={est.silt.ry}
+                  transform={`rotate(${est.silt.angle} ${est.silt.cx} ${est.silt.cy})`}
+                />
+              ))}
+            </g>
             <g className="wm-river-water">
               {RIVERS.map((river) => (
                 <path key={`wa-${river.key}`} d={river.d} />
+              ))}
+            </g>
+            {/* Mouth fans AFTER the water so the widening covers the ribbon's
+                blunt end; the coastline clip cuts the overshoot at the shore. */}
+            <g className="wm-estuaries">
+              {ESTUARIES.map((est) => (
+                <path key={`es-${est.key}`} d={est.fan} />
               ))}
             </g>
             {/* THE GLINT — a specular sliver up-left of centre, where the key
