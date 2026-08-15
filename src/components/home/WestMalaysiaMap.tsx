@@ -7,7 +7,7 @@ import {
   WEST_MALAYSIA_STATE_LINES,
 } from "@/data/west-malaysia-geometry";
 import "@/styles/west-malaysia-map.css";
-import { ESTUARIES, LAKES, LANDCOVER, RIVERS, URBAN } from "@/data/west-malaysia-landcover";
+import { ESTUARIES, LANDCOVER, RIVERS, URBAN } from "@/data/west-malaysia-landcover";
 
 export type WestMalaysiaMapFinish = "limestone" | "porcelain" | "monument" | "terrain";
 
@@ -360,6 +360,38 @@ function projectedToPercent(x: number, y: number) {
     left: ((x - WM_VIEWBOX.minX) / WM_VIEWBOX.width) * 100,
     top: ((y - WM_VIEWBOX.minY) / WM_VIEWBOX.height) * 100,
   };
+}
+
+/* ── CLOUDS — a stationary fleet, on the land, mostly shadow ─────────────────
+   Bryan, 15 Aug: many, clearly visible, stationary, and WITHIN the map. Both
+   the wisps and their shadows are clipped to the coastline, so a cloud
+   physically cannot leave the landform. Each is a wisp paired with a shadow
+   displaced down-right along the plate's key light — the displacement is the
+   altitude cue that makes them float above the terrain instead of sticking to
+   it. One puff, mirrored/rotated/scaled per cloud, so the fleet reads as
+   weather rather than a stamp. Positions sit on the peninsula's diagonal and
+   keep clear of the three pegs and the Klang Valley bloom. */
+const CLOUDS = [
+  { key: "a", x: 250, y: 140, s: 0.85, flip: false, rot: 0 },
+  { key: "b", x: 520, y: 180, s: 0.7, flip: true, rot: 8 },
+  { key: "c", x: 330, y: 430, s: 1.15, flip: false, rot: -6 },
+  { key: "d", x: 640, y: 430, s: 0.75, flip: true, rot: 4 },
+  { key: "e", x: 560, y: 720, s: 1.0, flip: false, rot: 10 },
+  { key: "f", x: 780, y: 770, s: 0.8, flip: true, rot: -8 },
+  { key: "g", x: 480, y: 960, s: 1.0, flip: false, rot: 5 },
+  { key: "h", x: 800, y: 1060, s: 0.6, flip: true, rot: -4 },
+];
+
+function CloudPuff() {
+  /* Four overlapping ellipses — a cumulus blob the blur turns to vapour. */
+  return (
+    <>
+      <ellipse cx="0" cy="0" rx="56" ry="20" />
+      <ellipse cx="-36" cy="8" rx="34" ry="14" />
+      <ellipse cx="38" cy="6" rx="40" ry="15" />
+      <ellipse cx="6" cy="-14" rx="36" ry="15" />
+    </>
+  );
 }
 
 export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMalaysiaMapProps) {
@@ -935,19 +967,6 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 <path key={`gl-${river.key}`} d={river.glint} />
               ))}
             </g>
-            {/* ── LAKES — still water beside the moving kind ─────────────────
-                Temenggor, Kenyir, Bera: real, and each gets a lit north-west
-                rim from the same key light that lights everything else. */}
-            <g className="wm-lakes">
-              {LAKES.map((lake) => (
-                <path key={lake.key} d={lake.d} />
-              ))}
-            </g>
-            <g className="wm-lake-rims" transform="translate(-0.8 -1)">
-              {LAKES.map((lake) => (
-                <path key={`rim-${lake.key}`} d={lake.d} />
-              ))}
-            </g>
             {/* ── FLOW — the water moving seaward ────────────────────────────
                 A dashed light stroke sliding along each centreline. The dash
                 travel is the ONLY ambient loop on the plate besides the peg
@@ -1021,6 +1040,20 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
           {/* Pegs sit above the grain and engravings so their small silhouette
               stays crisp; one shared low-profile hex plate per location,
               never a ring, pulse or category-specific icon. */}
+          {/* Cloud shadows sweep the terrain but never the pegs — weather
+              stays under everything that stands on the map. */}
+          <g clipPath={`url(#${clipId})`}>
+            {CLOUDS.map((cloud) => (
+              <g
+                key={`cs-${cloud.key}`}
+                className="wm-cloud-shadow"
+                transform={`translate(${cloud.x + 24} ${cloud.y + 52}) rotate(${cloud.rot}) scale(${cloud.flip ? -cloud.s : cloud.s} ${cloud.s})`}
+              >
+                <CloudPuff />
+              </g>
+            ))}
+          </g>
+
           <g className="wm-map-pegs">
             {WEST_MALAYSIA_LOCATIONS.map((location) => (
               <g
@@ -1036,6 +1069,20 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
 
           <use href={`#${shapeId}`} className="wm-map-bevel" />
           <use href={`#${shapeId}`} className="wm-map-rim" />
+
+          {/* The wisps themselves — over everything in the scene, still under
+              the HTML stems and cards, which live outside this SVG. */}
+          <g className="wm-clouds" clipPath={`url(#${clipId})`}>
+            {CLOUDS.map((cloud) => (
+              <g
+                key={`cw-${cloud.key}`}
+                className="wm-cloud-wisp"
+                transform={`translate(${cloud.x} ${cloud.y}) rotate(${cloud.rot}) scale(${cloud.flip ? -cloud.s : cloud.s} ${cloud.s})`}
+              >
+                <CloudPuff />
+              </g>
+            ))}
+          </g>
         </svg>
 
         {/* Stems live outside the SVG, split into three nested layers: a

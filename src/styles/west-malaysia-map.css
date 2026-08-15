@@ -776,20 +776,6 @@
   }
 }
 
-/* ── LAKES — still water beside the moving kind ──────────────────────────────
-   Slightly deeper than the rivers (standing water reads darker), with a lit
-   north-west rim from the same key light as everything else. */
-.wm-lakes path {
-  fill: #46708c;
-  opacity: 0.85;
-}
-
-.wm-lake-rims path {
-  fill: none;
-  stroke: #d8e9f0;
-  stroke-width: 1.1;
-  opacity: 0.45;
-}
 
 /* ── SHALLOW-WATER SHELF ─────────────────────────────────────────────────────
    The sea remembering the coast: one wide, soft, cool ring at the foot of the
@@ -952,4 +938,23 @@
   opacity: 0.35;
   mix-blend-mode: multiply;
   filter: blur(5px);
+}
+
+
+/* ── CLOUDS — still weather ──────────────────────────────────────────────────
+   No animation by Bryan's call: a stationary fleet, composed like an aerial
+   photograph, which also keeps the rivers as the plate's only motion. The
+   wisp is bright and reasonably crisp (blur 7); its shadow is softer and
+   displaced — the pairing is the realism, not the puff itself. */
+.wm-cloud-shadow ellipse {
+  fill: color-mix(in srgb, var(--wm-shadow) 92%, transparent);
+  opacity: 0.3;
+  filter: blur(10px);
+  mix-blend-mode: multiply;
+}
+
+.wm-cloud-wisp ellipse {
+  fill: #fffefa;
+  opacity: 0.75;
+  filter: blur(7px);
 }

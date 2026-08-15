@@ -211,7 +211,7 @@ const RIVER_SPECS: RiverSpec[] = [
     key: "pahang",
     note: "Sungai Pahang, 459km — Kuala Tembeling, Jerantut, Temerloh, Chenor, out at Pekan. The widest mouth on the peninsula.",
     w0: 1.4,
-    w1: 9.5,
+    w1: 11.5,
     meander: 3.2,
     points: [
       [102.4, 4.05],
@@ -228,7 +228,7 @@ const RIVER_SPECS: RiverSpec[] = [
     key: "perak",
     note: "Sungai Perak, 400km — Grik, Kuala Kangsar, Teluk Intan, out at Bagan Datoh, including its real south-then-west dogleg.",
     w0: 1.3,
-    w1: 8.2,
+    w1: 10,
     meander: 3,
     points: [
       [101.4, 5.75],
@@ -248,7 +248,7 @@ const RIVER_SPECS: RiverSpec[] = [
     key: "kelantan",
     note: "Sungai Kelantan — Kuala Krai, where the Galas and Lebir meet, north through Pasir Mas to the Kota Bharu delta.",
     w0: 1.6,
-    w1: 7,
+    w1: 8,
     meander: 2.4,
     points: [
       [102.2, 5.53],
@@ -263,7 +263,7 @@ const RIVER_SPECS: RiverSpec[] = [
     key: "muar",
     note: "Sungai Muar — Negeri Sembilan highlands, south-west through Segamat district to Muar on the Straits.",
     w0: 1.1,
-    w1: 5.6,
+    w1: 6.4,
     meander: 2.6,
     points: [
       [102.3, 2.9],
@@ -279,7 +279,7 @@ const RIVER_SPECS: RiverSpec[] = [
     key: "klang",
     note: "Sungai Klang — short, but it runs through the Klang Valley where most of the market is, and Kuala Lumpur is named for its confluence.",
     w0: 1,
-    w1: 4.4,
+    w1: 5,
     meander: 1.8,
     points: [
       [101.72, 3.17],
@@ -287,6 +287,47 @@ const RIVER_SPECS: RiverSpec[] = [
       [101.45, 3.05],
       [101.32, 3.0],
       [101.24, 3.0],
+    ],
+  },
+  {
+    key: "terengganu",
+    note: "Sungai Terengganu — out of the Kenyir highlands to the sea at Kuala Terengganu.",
+    w0: 1.2,
+    w1: 6,
+    meander: 2,
+    points: [
+      [102.68, 4.98],
+      [102.82, 5.08],
+      [102.96, 5.18],
+      [103.08, 5.26],
+      [103.13, 5.32],
+    ],
+  },
+  {
+    key: "johor",
+    note: "Sungai Johor — south off Gunung Belumut, out to the Johor Strait east of JB.",
+    w0: 1.2,
+    w1: 6.5,
+    meander: 2.4,
+    points: [
+      [103.45, 2.12],
+      [103.5, 1.92],
+      [103.55, 1.72],
+      [103.6, 1.55],
+      [103.63, 1.45],
+    ],
+  },
+  {
+    key: "selangor",
+    note: "Sungai Selangor — from the Kuala Kubu Bharu hills west to the sea at Kuala Selangor.",
+    w0: 1,
+    w1: 5,
+    meander: 2,
+    points: [
+      [101.66, 3.6],
+      [101.52, 3.5],
+      [101.38, 3.43],
+      [101.27, 3.36],
     ],
   },
   /* ── Tributaries. A trunk with no branches looks drawn. ─────────────────── */
@@ -327,6 +368,80 @@ const RIVER_SPECS: RiverSpec[] = [
       [101.08, 4.42],
       [101.02, 4.2],
       [100.99, 4.06],
+    ],
+  },
+  {
+    key: "galas",
+    note: "Sungai Galas — the western headwater, meeting the Lebir at Kuala Krai to form the Kelantan.",
+    w0: 0.7,
+    w1: 2.2,
+    meander: 1.8,
+    points: [
+      [101.82, 4.88],
+      [101.95, 5.1],
+      [102.06, 5.32],
+      [102.2, 5.53],
+    ],
+  },
+  {
+    key: "semantan",
+    note: "Sungai Semantan — from the west into the Pahang at Temerloh.",
+    w0: 0.7,
+    w1: 2.4,
+    meander: 1.8,
+    points: [
+      [101.96, 3.3],
+      [102.14, 3.37],
+      [102.28, 3.41],
+      [102.42, 3.45],
+    ],
+  },
+  {
+    key: "bera",
+    note: "Sungai Bera — draining the Tasik Bera wetland north into the Pahang. The lake the plate used to show as a dot, returned as its river.",
+    w0: 0.6,
+    w1: 1.8,
+    meander: 1.5,
+    points: [
+      [102.62, 3.02],
+      [102.58, 3.18],
+      [102.6, 3.34],
+    ],
+  },
+  {
+    key: "gombak",
+    note: "Sungai Gombak — meeting the Klang at the muddy confluence Kuala Lumpur is named for.",
+    w0: 0.5,
+    w1: 1.6,
+    meander: 1.2,
+    points: [
+      [101.78, 3.28],
+      [101.74, 3.21],
+      [101.71, 3.16],
+    ],
+  },
+  {
+    key: "segamat",
+    note: "Sungai Segamat — through Segamat town into the Muar.",
+    w0: 0.6,
+    w1: 1.8,
+    meander: 1.4,
+    points: [
+      [102.75, 2.6],
+      [102.63, 2.55],
+      [102.55, 2.5],
+    ],
+  },
+  {
+    key: "plus",
+    note: "Sungai Plus — out of the Titiwangsa into the upper Perak above Kuala Kangsar.",
+    w0: 0.6,
+    w1: 1.8,
+    meander: 1.4,
+    points: [
+      [101.32, 5.22],
+      [101.17, 5.18],
+      [101.05, 5.15],
     ],
   },
   {
@@ -388,50 +503,6 @@ export const RIVERS = RIVER_SPECS.map((spec, index) => ({
   flowDuration: +(9 + spec.w1 * 0.5).toFixed(1),
   flowDelay: +(index * -1.9).toFixed(1),
 }));
-
-/* ── LAKES — the peninsula's real standing water ──────────────────────────────
-   Three that exist and matter: Tasik Temenggor behind the dam in upper Perak,
-   Tasik Kenyir (the largest man-made lake in South-East Asia) in Terengganu,
-   and Tasik Bera, the Pahang wetland. Blue that HOLDS still, beside rivers
-   that move — the pairing is what makes the water system read as real. */
-export const LAKES: { key: string; note: string; d: string }[] = [
-  {
-    key: "temenggor",
-    note: "Tasik Temenggor, upper Perak — the reservoir behind the Temenggor dam, threaded around Banding island.",
-    d: smooth([
-      [101.28, 5.55],
-      [101.38, 5.52],
-      [101.44, 5.42],
-      [101.4, 5.32],
-      [101.32, 5.3],
-      [101.26, 5.4],
-    ]),
-  },
-  {
-    key: "kenyir",
-    note: "Tasik Kenyir, Terengganu — South-East Asia's largest man-made lake.",
-    d: smooth([
-      [102.62, 5.12],
-      [102.75, 5.1],
-      [102.82, 4.98],
-      [102.74, 4.88],
-      [102.62, 4.92],
-      [102.57, 5.02],
-    ]),
-  },
-  {
-    key: "bera",
-    note: "Tasik Bera, Pahang — the peninsula's largest natural lake system, a Ramsar wetland.",
-    d: smooth([
-      [102.55, 3.18],
-      [102.63, 3.15],
-      [102.66, 3.06],
-      [102.6, 3.0],
-      [102.53, 3.05],
-      [102.51, 3.12],
-    ]),
-  },
-];
 
 /* ── ESTUARIES — where the rivers actually end ────────────────────────────────
    Every river used to just STOP at the coast, which is the least alive moment
