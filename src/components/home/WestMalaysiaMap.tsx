@@ -922,7 +922,15 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 fully-drawn water. */}
             <g className="wm-river-flow">
               {RIVERS.map((river) => (
-                <path key={`fl-${river.key}`} d={river.flow} />
+                <path
+                  key={`fl-${river.key}`}
+                  d={river.flow}
+                  style={{
+                    strokeWidth: river.flowWidth,
+                    animationDuration: `${river.flowDuration}s`,
+                    animationDelay: `${river.flowDelay}s`,
+                  }}
+                />
               ))}
             </g>
           </g>

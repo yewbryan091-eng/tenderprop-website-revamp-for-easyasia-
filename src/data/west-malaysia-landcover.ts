@@ -49,35 +49,14 @@ export type LandcoverRegion = {
   note: string;
 };
 
+/* ⚠️ NO BLOB FORESTS. The two big forest polygons (Taman Negara interior,
+   Endau-Rompin) were removed by Bryan's call, 15 Aug: even feathered, a convex
+   traced blob reads as a giant green dot on the plate. The terrain finish's
+   own base ladder already carries the lowland green; if forest ever returns it
+   must FOLLOW THE RANGES (tint the TERRAIN_BANDS envelopes), because that is
+   where Malaysia's primary forest actually survives — elongated, irregular,
+   broken at the passes. Never reintroduce it as a freestanding blob. */
 export const LANDCOVER: LandcoverRegion[] = [
-  {
-    key: "forest-interior",
-    zone: "forest",
-    note: "Taman Negara and the Pahang–Kelantan–Terengganu interior: the peninsula's primary rainforest, and the darkest thing on it.",
-    d: smooth([
-      [101.9, 5.2],
-      [102.5, 5.32],
-      [103.0, 4.9],
-      [103.05, 4.3],
-      [102.8, 3.8],
-      [102.3, 3.58],
-      [101.9, 3.9],
-      [101.72, 4.5],
-    ]),
-  },
-  {
-    key: "forest-south",
-    zone: "forest",
-    note: "Endau-Rompin and the Johor–Pahang forest belt — the southern reserve, smaller and lower than the interior.",
-    d: smooth([
-      [102.9, 2.75],
-      [103.35, 2.6],
-      [103.4, 2.15],
-      [103.0, 1.95],
-      [102.6, 2.15],
-      [102.6, 2.55],
-    ]),
-  },
   {
     key: "paddy-kedah-perlis",
     zone: "paddy",
@@ -388,7 +367,7 @@ function centreline(spec: RiverSpec) {
   return `M${out.join(" L")}`;
 }
 
-export const RIVERS = RIVER_SPECS.map((spec) => ({
+export const RIVERS = RIVER_SPECS.map((spec, index) => ({
   key: spec.key,
   note: spec.note,
   d: ribbon(spec),
@@ -397,6 +376,17 @@ export const RIVERS = RIVER_SPECS.map((spec) => ({
      ribbon is just a coloured groove. */
   glint: ribbon(spec, 0.34),
   flow: centreline(spec),
+  /* ── PER-RIVER FLOW PHYSICS ────────────────────────────────────────────────
+     One uniform stroke on every river was the artificial tell: on a tributary
+     a 1.7-unit flow line was nearly as wide as the channel itself and the
+     light read as a blob crawling up a thread.
+     - width follows the mouth width, floored so trunks lead and feeders whisper
+     - big rivers run SLOWER (mass moves with majesty; threads hurry)
+     - a negative, index-staggered delay so no two rivers pulse in sync —
+       synchrony is the one thing real water never does. */
+  flowWidth: +Math.min(1.7, Math.max(0.8, spec.w1 * 0.19)).toFixed(2),
+  flowDuration: +(9 + spec.w1 * 0.5).toFixed(1),
+  flowDelay: +(index * -1.9).toFixed(1),
 }));
 
 /* ── LAKES — the peninsula's real standing water ──────────────────────────────
