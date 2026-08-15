@@ -946,15 +946,67 @@
    photograph, which also keeps the rivers as the plate's only motion. The
    wisp is bright and reasonably crisp (blur 7); its shadow is softer and
    displaced — the pairing is the realism, not the puff itself. */
-.wm-cloud-shadow ellipse {
-  fill: color-mix(in srgb, var(--wm-shadow) 92%, transparent);
-  opacity: 0.3;
-  filter: blur(10px);
+/* The shadow is the whole silhouette in one dark tone — ground doesn't know
+   about crowns. The wisp is two-tone: dim flat base, bright crown, tighter
+   blur on the crown so the domes keep their edges. */
+/* The shadow must PRINT or the altitude illusion dies — the var-mixed fill
+   was ~9% ink and invisible, so nothing bound the wisps to the ground and
+   they read as stickers. Solid warm dark, real opacity. */
+.wm-cloud-shadow .wm-puff-base *,
+.wm-cloud-shadow .wm-puff-crown * {
+  fill: #3a3222;
+  opacity: 0.4;
+  filter: blur(7px);
   mix-blend-mode: multiply;
 }
 
-.wm-cloud-wisp ellipse {
-  fill: #fffefa;
-  opacity: 0.75;
-  filter: blur(7px);
+/* Warmer, softer vapour — paper-white crowns read as icons. The crown keeps a
+   touch more edge than the base, but both stay soft; cloud edges are the one
+   place on this plate where crisp is wrong. */
+.wm-cloud-wisp .wm-puff-base * {
+  fill: #ece1cd;
+  opacity: 0.55;
+  filter: blur(8px);
+}
+
+.wm-cloud-wisp .wm-puff-crown * {
+  fill: #fdf9f0;
+  opacity: 0.78;
+  filter: blur(5px);
+}
+
+
+/* ── SURFACE POLISH ──────────────────────────────────────────────────────────
+   Beach: a pale rim stroked ON the coastline and clipped to land, so only the
+   inner half prints — 2.5 units of sand between the sea wall and the green.
+   Paddy: the stripes agriculture actually draws on the land, faint enough to
+   read as texture before pattern. Canopy: thresholded turbulence dots in a
+   deeper green, multiply, confined to the forested flanks — trees, honestly,
+   at map scale. Mist: barely-there pale pools in the valley floors; if it
+   ever reads as smoke, halve it again. */
+.wm-coast-sand {
+  fill: none;
+  stroke: #ecdcb2;
+  stroke-width: 5;
+  opacity: 0.5;
+}
+
+.wm-paddy-grain path {
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+}
+
+.wm-canopy path {
+  fill: #4e5e39;
+}
+
+.wm-canopy {
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+
+.wm-valley-mist ellipse {
+  fill: #f6eedd;
+  opacity: 0.17;
+  filter: blur(14px);
 }

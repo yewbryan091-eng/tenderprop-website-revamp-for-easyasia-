@@ -41,6 +41,14 @@ const STUDIES: {
 ];
 
 function Sandbox() {
+  /* `?finish=terrain` renders one study alone — the verification loop needs a
+     reliable, scroll-free screenshot of a single plate. Client-only read;
+     during SSR every study renders, which is also the correct fallback. */
+  const only =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("finish")
+      : null;
+  const studies = only ? STUDIES.filter((study) => study.finish === only) : STUDIES;
   return (
     <main className="sb-map-study">
       <header className="sb-map-head">
@@ -53,7 +61,7 @@ function Sandbox() {
       </header>
 
       <div className="sb-map-grid">
-        {STUDIES.map((study) => (
+        {studies.map((study) => (
           <section key={study.finish} className="sb-map-panel">
             <header>
               <h2>{study.title}</h2>

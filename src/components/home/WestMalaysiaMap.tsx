@@ -372,24 +372,37 @@ function projectedToPercent(x: number, y: number) {
    weather rather than a stamp. Positions sit on the peninsula's diagonal and
    keep clear of the three pegs and the Klang Valley bloom. */
 const CLOUDS = [
-  { key: "a", x: 250, y: 140, s: 0.85, flip: false, rot: 0 },
-  { key: "b", x: 520, y: 180, s: 0.7, flip: true, rot: 8 },
-  { key: "c", x: 330, y: 430, s: 1.15, flip: false, rot: -6 },
-  { key: "d", x: 640, y: 430, s: 0.75, flip: true, rot: 4 },
-  { key: "e", x: 560, y: 720, s: 1.0, flip: false, rot: 10 },
-  { key: "f", x: 780, y: 770, s: 0.8, flip: true, rot: -8 },
-  { key: "g", x: 480, y: 960, s: 1.0, flip: false, rot: 5 },
-  { key: "h", x: 800, y: 1060, s: 0.6, flip: true, rot: -4 },
+  { key: "a", x: 250, y: 150, s: 0.8, o: 0.95, flip: false, rot: 0 },
+  { key: "a2", x: 350, y: 205, s: 0.42, o: 0.7, flip: true, rot: 6 },
+  { key: "b", x: 540, y: 190, s: 0.62, o: 0.8, flip: true, rot: 8 },
+  { key: "c", x: 330, y: 440, s: 1.3, o: 1, flip: false, rot: -6 },
+  { key: "d", x: 645, y: 420, s: 0.68, o: 0.75, flip: true, rot: 4 },
+  { key: "e", x: 555, y: 730, s: 1.05, o: 0.95, flip: false, rot: 10 },
+  { key: "e2", x: 668, y: 795, s: 0.45, o: 0.65, flip: false, rot: -3 },
+  { key: "f", x: 790, y: 665, s: 0.72, o: 0.8, flip: true, rot: -8 },
+  { key: "g", x: 470, y: 965, s: 0.95, o: 0.9, flip: false, rot: 5 },
+  { key: "h", x: 795, y: 1055, s: 0.55, o: 0.7, flip: true, rot: -4 },
 ];
 
 function CloudPuff() {
-  /* Four overlapping ellipses — a cumulus blob the blur turns to vapour. */
+  /* Cumulus anatomy, not a smudge: a flat, dimmer BASE (clouds are shaded
+     underneath) with a bright cauliflower CROWN of unequal domes on top. The
+     unequal radii are what give the silhouette character; the two-tone
+     shading is what gives it volume. */
   return (
     <>
-      <ellipse cx="0" cy="0" rx="56" ry="20" />
-      <ellipse cx="-36" cy="8" rx="34" ry="14" />
-      <ellipse cx="38" cy="6" rx="40" ry="15" />
-      <ellipse cx="6" cy="-14" rx="36" ry="15" />
+      <g className="wm-puff-base">
+        <ellipse cx="-28" cy="8" rx="40" ry="13" />
+        <ellipse cx="24" cy="9" rx="44" ry="14" />
+        <ellipse cx="62" cy="4" rx="24" ry="10" />
+      </g>
+      <g className="wm-puff-crown">
+        <circle cx="-46" cy="0" r="15" />
+        <circle cx="-20" cy="-12" r="22" />
+        <circle cx="12" cy="-17" r="27" />
+        <circle cx="42" cy="-7" r="19" />
+        <circle cx="64" cy="0" r="11" />
+      </g>
     </>
   );
 }
@@ -406,6 +419,8 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
   const poolBlurId = `wm-pool-blur-${instance}`;
   const clipId = `wm-clip-${instance}`;
   const riverBlurId = `wm-river-blur-${instance}`;
+  const canopyId = `wm-canopy-${instance}`;
+  const paddyGrainId = `wm-paddy-grain-${instance}`;
   const crinkleId = `wm-crinkle-${instance}`;
   const sheetId = `wm-sheet-${instance}`;
   const etchId = `wm-etch-${instance}`;
@@ -435,6 +450,37 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             <filter id={riverBlurId} x="-30%" y="-30%" width="160%" height="160%">
               <feGaussianBlur stdDeviation="3.2" />
             </filter>
+            {/* Canopy dissolve: turbulence thresholded to sparse dots, then the
+                source (the forest bands, filled deep green) shows only through
+                those dots — treetops at map scale, the honest way. */}
+            <filter id={canopyId} x="-2%" y="-2%" width="104%" height="104%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.16"
+                numOctaves="2"
+                seed="13"
+                result="n"
+              />
+              <feColorMatrix
+                in="n"
+                type="matrix"
+                values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 14 -8.5"
+                result="dots"
+              />
+              <feComposite in="SourceGraphic" in2="dots" operator="in" />
+            </filter>
+            {/* Rice paddies are STRIPED from the air — the one land cover with
+                a man-made grain. Rotated so the fields follow the coastal
+                plain, not the viewport. */}
+            <pattern
+              id={paddyGrainId}
+              width="10"
+              height="10"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(24)"
+            >
+              <line x1="0" y1="0" x2="10" y2="0" stroke="#77804a" strokeWidth="1.1" />
+            </pattern>
 
             <linearGradient id={topId} x1="0" y1="0" x2="0.88" y2="1">
               <stop offset="0" stopColor="var(--wm-top-light)" />
@@ -908,6 +954,30 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             </g>
           </g>
 
+          {/* ── SURFACE POLISH — beach, paddy grain, canopy, valley mist ────
+              All value work over the finished colour, all clipped to the
+              coastline. Order matters: sand rim under everything (it is the
+              lowest ground), paddy stripes on their plains, canopy dots on the
+              forested flanks, mist in the valleys on top. */}
+          <g clipPath={`url(#${clipId})`}>
+            <use href={`#${shapeId}`} className="wm-coast-sand" />
+            <g className="wm-paddy-grain">
+              {LANDCOVER.filter((r) => r.zone === "paddy").map((r) => (
+                <path key={`pg-${r.key}`} d={r.d} fill={`url(#${paddyGrainId})`} />
+              ))}
+            </g>
+            <g className="wm-canopy" filter={`url(#${canopyId})`}>
+              {TERRAIN_BANDS.filter((band) => band.level < 2).map((band) => (
+                <path key={`cn-${band.key}`} d={band.d} />
+              ))}
+            </g>
+            <g className="wm-valley-mist">
+              <ellipse cx="286" cy="468" rx="17" ry="62" transform="rotate(14 286 468)" />
+              <ellipse cx="452" cy="560" rx="30" ry="74" transform="rotate(8 452 560)" />
+              <ellipse cx="392" cy="250" rx="20" ry="55" transform="rotate(18 392 250)" />
+            </g>
+          </g>
+
           {/* ── RIVERS ──────────────────────────────────────────────────────
               OUTSIDE the land-cover group on purpose: water belongs to every
               finish, not only the naturalistic one. Bryan chose the limestone
@@ -1047,7 +1117,8 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               <g
                 key={`cs-${cloud.key}`}
                 className="wm-cloud-shadow"
-                transform={`translate(${cloud.x + 24} ${cloud.y + 52}) rotate(${cloud.rot}) scale(${cloud.flip ? -cloud.s : cloud.s} ${cloud.s})`}
+                opacity={cloud.o}
+                transform={`translate(${cloud.x + 19} ${cloud.y + 42}) rotate(${cloud.rot}) scale(${cloud.flip ? -cloud.s : cloud.s} ${cloud.s})`}
               >
                 <CloudPuff />
               </g>
@@ -1072,12 +1143,20 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
 
           {/* The wisps themselves — over everything in the scene, still under
               the HTML stems and cards, which live outside this SVG. */}
-          <g className="wm-clouds" clipPath={`url(#${clipId})`}>
+          {/* UNCLIPPED, deliberately: hard-clipping a wisp at the coastline
+              paints it ONTO the land — the exact opposite of floating. The
+              fleet is parked inland instead, so the clouds stay within the map
+              without needing the knife. scale-Y carries a 1.7 counter to the
+              camera's foreshortening: everything in this SVG is squashed by
+              the 60-degree tilt, and a cloud flattened like the ground reads
+              as ground. Un-squashing it is what lifts it off the plate. */}
+          <g className="wm-clouds">
             {CLOUDS.map((cloud) => (
               <g
                 key={`cw-${cloud.key}`}
                 className="wm-cloud-wisp"
-                transform={`translate(${cloud.x} ${cloud.y}) rotate(${cloud.rot}) scale(${cloud.flip ? -cloud.s : cloud.s} ${cloud.s})`}
+                transform={`translate(${cloud.x} ${cloud.y}) rotate(${cloud.rot}) scale(${cloud.flip ? -cloud.s : cloud.s} ${cloud.s * 1.25})`}
+                opacity={cloud.o}
               >
                 <CloudPuff />
               </g>
