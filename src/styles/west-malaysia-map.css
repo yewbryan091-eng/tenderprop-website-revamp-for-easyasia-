@@ -1010,3 +1010,17 @@
   opacity: 0.17;
   filter: blur(14px);
 }
+
+
+/* ── BIRDS ───────────────────────────────────────────────────────────────────
+   Warm near-black, not #000 — pure black is the one tone this plate has
+   nowhere else and it would read as a hole. Round caps make the wingtips
+   read as feathers at speck size. Slightly translucent so the smallest ones
+   sit back in the haze. */
+.wm-bird path {
+  fill: none;
+  stroke: #2e2718;
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.85;
+}

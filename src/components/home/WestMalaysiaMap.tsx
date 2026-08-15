@@ -14,6 +14,10 @@ export type WestMalaysiaMapFinish = "limestone" | "porcelain" | "monument" | "te
 type WestMalaysiaMapProps = {
   className?: string;
   finish?: WestMalaysiaMapFinish;
+  /* Stems + flags/cards. OFF while the scenery is iterated bare (Bryan,
+     15 Aug); flip back with <WestMalaysiaMap markers /> — everything below
+     is gated, nothing was deleted. */
+  markers?: boolean;
 };
 
 /* Copies of the exact Natural Earth path, stamped down a diagonal, form one
@@ -384,6 +388,36 @@ const CLOUDS = [
   { key: "h", x: 795, y: 1055, s: 0.55, o: 0.7, flip: true, rot: -4 },
 ];
 
+/* ── BIRDS — two flocks and a straggler pair, in ink ─────────────────────────
+   The classic distant-gull mark: two shallow arcs, stroked. Tiny on purpose —
+   at this altitude a bird is a punctuation mark, not a drawing. Loose
+   scatter, varied size and heading per bird (a flock that shares a heading
+   reads as wallpaper). The render transform carries a 2x vertical counter on
+   top of a 1.5x size-up: the 60-degree camera squashed the first pass to
+   ~1px dashes lost in the terrain texture — a speck has to be UPRIGHT to
+   read as a wing. Stationary like the clouds, unclipped like the clouds:
+   birds fly over coastlines. Positioned in open sky between the cumulus. */
+const BIRDS = [
+  /* flock over the Perak–Kelantan gap */
+  { key: "b1", x: 468, y: 310, s: 1.0, rot: -8 },
+  { key: "b2", x: 492, y: 296, s: 0.8, rot: 4 },
+  { key: "b3", x: 512, y: 318, s: 0.9, rot: -2 },
+  { key: "b4", x: 484, y: 332, s: 0.65, rot: 10 },
+  /* flock off the Johor coast */
+  { key: "b5", x: 706, y: 878, s: 0.95, rot: 6 },
+  { key: "b6", x: 728, y: 894, s: 0.7, rot: -6 },
+  { key: "b7", x: 690, y: 898, s: 0.6, rot: 2 },
+  /* straggler pair over the Straits side */
+  { key: "b8", x: 236, y: 630, s: 0.85, rot: -4 },
+  { key: "b9", x: 258, y: 644, s: 0.6, rot: 8 },
+];
+
+function BirdGlyph() {
+  /* Two shallow arcs meeting at the body — the mark every eye already reads
+     as "distant bird". Wingtips lift slightly past the shoulders. */
+  return <path d="M-7 0 Q-3.4 -4.2 -0.2 -0.8 Q3.2 -4.4 7 -0.4" />;
+}
+
 function CloudPuff() {
   /* Cumulus anatomy, not a smudge: a flat, dimmer BASE (clouds are shaded
      underneath) with a bright cauliflower CROWN of unequal domes on top. The
@@ -407,7 +441,11 @@ function CloudPuff() {
   );
 }
 
-export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMalaysiaMapProps) {
+export function WestMalaysiaMap({
+  className = "",
+  finish = "limestone",
+  markers = false,
+}: WestMalaysiaMapProps) {
   const instance = useId().replaceAll(":", "");
   const shapeId = `wm-shape-${instance}`;
   const topId = `wm-top-${instance}`;
@@ -1162,6 +1200,19 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               </g>
             ))}
           </g>
+
+          {/* Birds above everything — the one mark allowed over the clouds. */}
+          <g className="wm-birds">
+            {BIRDS.map((bird) => (
+              <g
+                key={bird.key}
+                className="wm-bird"
+                transform={`translate(${bird.x} ${bird.y}) rotate(${bird.rot}) scale(${bird.s * 1.5} ${bird.s * 3})`}
+              >
+                <BirdGlyph />
+              </g>
+            ))}
+          </g>
         </svg>
 
         {/* Stems live outside the SVG, split into three nested layers: a
@@ -1170,30 +1221,32 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             tilt, and an inner line pinned to that upright wrapper's bottom
             edge — so it rises flush from the peg instead of lying across
             the tilted stone plane. */}
-        <div className="wm-stems">
-          {WEST_MALAYSIA_LOCATIONS.map((location, index) => {
-            const { left, top } = projectedToPercent(location.x, location.y);
-            return (
-              <span
-                key={location.key}
-                className="wm-stem-anchor"
-                style={{ left: `${left}%`, top: `${top}%` }}
-              >
+        {markers && (
+          <div className="wm-stems">
+            {WEST_MALAYSIA_LOCATIONS.map((location, index) => {
+              const { left, top } = projectedToPercent(location.x, location.y);
+              return (
                 <span
-                  className="wm-stem-upright"
-                  style={
-                    {
-                      "--wm-stem-h": `${location.stemHeight}px`,
-                      "--wm-stem-color": location.color,
-                    } as CSSProperties
-                  }
+                  key={location.key}
+                  className="wm-stem-anchor"
+                  style={{ left: `${left}%`, top: `${top}%` }}
                 >
-                  <span className="wm-stem-line" />
+                  <span
+                    className="wm-stem-upright"
+                    style={
+                      {
+                        "--wm-stem-h": `${location.stemHeight}px`,
+                        "--wm-stem-color": location.color,
+                      } as CSSProperties
+                    }
+                  >
+                    <span className="wm-stem-line" />
+                  </span>
                 </span>
-              </span>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* FLAT overlay, deliberately OUTSIDE `.wm-map-camera`. Inside it, the
@@ -1202,37 +1255,39 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
           1.3px width hides the residual perspective skew. Any real surface
           shows it immediately. Out here it simply faces the viewer, pinned to
           the stem's measured screen position. */}
-      <div className="wm-flags" ref={flagsRef}>
-        {WEST_MALAYSIA_LOCATIONS.map((location, index) => {
-          const flag = STEM_FLAGS[location.key];
-          if (!flag) return null;
-          const auction = flag.method === "Owner Auction";
-          return (
-            <span
-              key={location.key}
-              className="wm-flag-anchor"
-              style={
-                {
-                  zIndex: index + 1,
-                  "--wm-stem-h": `${location.stemHeight}px`,
-                  "--wm-flag-dx": `${flag.dx}px`,
-                  "--wm-stem-color": location.color,
-                } as CSSProperties
-              }
-            >
-              <span className="wm-flag-stem" />
-              <span className={`wm-flag${auction ? " wm-flag--auction" : ""}`}>
-                <span className="wm-flag-method">
-                  {auction ? <GavelGlyph /> : <MailGlyph />}
-                  {flag.method}
+      {markers && (
+        <div className="wm-flags" ref={flagsRef}>
+          {WEST_MALAYSIA_LOCATIONS.map((location, index) => {
+            const flag = STEM_FLAGS[location.key];
+            if (!flag) return null;
+            const auction = flag.method === "Owner Auction";
+            return (
+              <span
+                key={location.key}
+                className="wm-flag-anchor"
+                style={
+                  {
+                    zIndex: index + 1,
+                    "--wm-stem-h": `${location.stemHeight}px`,
+                    "--wm-flag-dx": `${flag.dx}px`,
+                    "--wm-stem-color": location.color,
+                  } as CSSProperties
+                }
+              >
+                <span className="wm-flag-stem" />
+                <span className={`wm-flag${auction ? " wm-flag--auction" : ""}`}>
+                  <span className="wm-flag-method">
+                    {auction ? <GavelGlyph /> : <MailGlyph />}
+                    {flag.method}
+                  </span>
+                  <span className="wm-flag-place">{flag.place}</span>
+                  <span className="wm-flag-price">{flag.price}</span>
                 </span>
-                <span className="wm-flag-place">{flag.place}</span>
-                <span className="wm-flag-price">{flag.price}</span>
               </span>
-            </span>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
