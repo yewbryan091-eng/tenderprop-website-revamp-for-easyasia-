@@ -849,11 +849,35 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
                 />
               ))}
             </g>
-            {/* Rivers last, over their own valleys, so the water reads as cut
-                INTO the land rather than lying on top of the tint. */}
-            <g className="wm-rivers">
+          </g>
+
+          {/* ── RIVERS ──────────────────────────────────────────────────────
+              OUTSIDE the land-cover group on purpose: water belongs to every
+              finish, not only the naturalistic one. Bryan chose the limestone
+              plate and asked for the rivers on it, so this group carries its
+              own clip and its own opacity rather than inheriting
+              `--wm-landcover`.
+
+              Cut, not drawn on. Three passes, the same engraving logic the
+              state borders use: a light stroke offset a hair DOWN-RIGHT reads
+              as the sunlit far bank, the dark stroke is the channel itself,
+              and a narrower core carries the water's own colour. Take the
+              light pass away and the rivers instantly look like pen lines
+              lying on the surface. */}
+          <g className="wm-rivers" clipPath={`url(#${clipId})`}>
+            <g className="wm-river-bank" transform="translate(1.1 1.4)">
               {RIVERS.map((river) => (
-                <path key={river.key} d={river.d} />
+                <path key={`bank-${river.key}`} d={river.d} />
+              ))}
+            </g>
+            <g className="wm-river-channel">
+              {RIVERS.map((river) => (
+                <path key={`ch-${river.key}`} d={river.d} />
+              ))}
+            </g>
+            <g className="wm-river-water">
+              {RIVERS.map((river) => (
+                <path key={`wa-${river.key}`} d={river.d} />
               ))}
             </g>
           </g>

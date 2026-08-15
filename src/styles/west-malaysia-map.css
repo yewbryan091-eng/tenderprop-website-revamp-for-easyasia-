@@ -670,13 +670,51 @@
    Engraved, not drawn on: a dark stroke with a light one offset a hair below
    it, the same two-pass trick the state borders use, so the water reads as cut
    into the surface. Four real rivers — Pahang, Perak, Kelantan, Muar. */
+/* ── RIVERS — engraved into the stone, on every finish ───────────────────────
+   Bryan chose the limestone plate (study A) and asked for water on it, so this
+   group is NOT gated behind `--wm-landcover`.
+
+   Three passes, and the order matters. The bank pass is offset 1.1/1.4 down and
+   right — the same direction the plate's own key light comes from — so it reads
+   as the lit far bank of a cut channel. Without it the rivers look like pen
+   lines drawn ON the surface instead of water running THROUGH it.
+
+   The water core is a desaturated slate-blue, not a map-blue: it has to be the
+   only cool note on a warm stone plate without becoming a highlighter. This is
+   the one place blue belongs — the sea stays paper, because the plate reads as
+   a solid object rather than an atlas page. */
 .wm-rivers path {
   fill: none;
-  stroke: #5d6647;
-  stroke-width: 2.1;
   stroke-linecap: round;
-  opacity: 0.5;
+  stroke-linejoin: round;
+}
+
+/* WIDTHS ARE SET BY THE RENDERED PIXEL, NOT BY THE VIEWBOX. The plate is a
+   1000-unit viewBox painted about 470px wide in the section, so the scale is
+   ~0.47: the first pass used a 1.5-unit water core, which rendered at 0.7px —
+   sub-pixel, and therefore grey. Anything meant to be SEEN as water needs
+   roughly 3px on screen, i.e. ~6 units. */
+.wm-river-bank path {
+  stroke: color-mix(in srgb, var(--wm-top-light) 78%, #ffffff);
+  stroke-width: 4.8;
+  opacity: 0.55;
+}
+
+.wm-river-channel path {
+  stroke: #4f4433;
+  stroke-width: 4.4;
+  opacity: 0.38;
   mix-blend-mode: multiply;
+}
+
+/* NOT multiply. Multiplying slate-blue into tan stone produces mud — which is
+   exactly what the first pass looked like, a crack rather than a river. Normal
+   blend at partial opacity keeps the hue and lets this stay the only cool note
+   on the plate. */
+.wm-river-water path {
+  stroke: #55707a;
+  stroke-width: 3;
+  opacity: 0.6;
 }
 
 /* ── The finish itself ───────────────────────────────────────────────────────
@@ -694,4 +732,46 @@
   --wm-side-bottom: #443c27;
   --wm-rim: #c99b55;
   --wm-shadow: rgba(46, 44, 24, 0.3);
+}
+
+
+/* ── SIDEWALL STRATA ─────────────────────────────────────────────────────────
+   The wall is 42 slices stepping evenly from side-top to side-bottom — which is
+   exactly why it read as a gradient rather than as rock. Real cut stone has
+   bedding planes. Every 7th slice takes a darker multiply, so the wall gains
+   six horizontal bands at irregular visual spacing (the perspective foreshortens
+   them unevenly, which is what stops it looking like a ruler).
+
+   Applied with `nth-child` rather than in the component's colour maths so the
+   banding can be tuned, or removed, without touching the depth geometry. */
+.wm-map-depth use:nth-child(7n + 3) {
+  filter: brightness(0.955);
+}
+
+.wm-map-depth use:nth-child(14n + 8) {
+  filter: brightness(0.925);
+}
+
+/* ── CONTACT SHADOW ──────────────────────────────────────────────────────────
+   `.wm-map-ground` is a wide, soft, 12px-blurred pool — an ambient shadow, and
+   on its own it lets the plate hover. A solid object also has a TIGHT dark line
+   where it actually meets the ground. This is that: much smaller, much darker,
+   barely blurred, and sat under the plate's lower edge. Cheapest 3D cue there
+   is, and the one the reference render has that this was missing. */
+.wm-map-ground::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  width: 74%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--wm-shadow) 100%, transparent) 0%,
+    color-mix(in srgb, var(--wm-shadow) 46%, transparent) 52%,
+    transparent 78%
+  );
+  filter: blur(4px);
+  transform: translate(-50%, -50%) rotate(-8deg);
 }
