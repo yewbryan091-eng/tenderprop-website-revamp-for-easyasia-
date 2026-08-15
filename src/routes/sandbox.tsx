@@ -67,7 +67,7 @@ function Sandbox() {
               <h2>{study.title}</h2>
               <p>{study.note}</p>
             </header>
-            <WestMalaysiaMap finish={study.finish} />
+            <WestMalaysiaMap finish={study.finish} markers />
           </section>
         ))}
       </div>

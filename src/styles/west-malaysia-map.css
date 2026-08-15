@@ -503,18 +503,49 @@
 
 /* The connector, drawn flat. Its foot is on the peg and its head is exactly
    where the flag's foot sits, so the two always meet. */
-.wm-flag-stem {
+/* ── LEADER ──────────────────────────────────────────────────────────────────
+   One zero-size SVG anchored on the geographic point, drawing OUTSIDE its own
+   box (`overflow: visible`) in units that equal px at scale 1. Everything the
+   connector needs — line, map terminal, placard anchor — lives in this one
+   element, so no part of an annotation can drift from another.
+
+   A hairline in the method's own colour, at low opacity. It reads as an
+   engraved leader on a plate rather than a pole holding a sign up. */
+.wm-flag-leader {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 1.5px;
-  /* STRAIGHT, always. It rises vertically from the exact geographic point to
-     the flag's lower edge. All final `dx` values are zero, so every line meets
-     the flag at its exact bottom centre. */
-  height: calc(var(--wm-stem-h, 100px) * var(--wm-stem-scale, 1));
-  margin-left: -0.75px;
-  background: var(--wm-stem-color, #8a7663);
-  opacity: 0.76;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  transform: scale(var(--wm-stem-scale, 1));
+  transform-origin: 0 100%;
+}
+
+.wm-leader-line {
+  fill: none;
+  stroke: var(--wm-annot-leader, #8a4054);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.6;
+}
+
+/* At the map end: precision. Small, solid, method ink. */
+.wm-leader-terminal {
+  fill: var(--wm-annot-terminal, #6d2739);
+  opacity: 0.9;
+}
+
+/* Under the placard: a ring, not a dot, so the two terminals are not twins —
+   the map end states a point, this one states an attachment. */
+.wm-leader-anchor {
+  fill: #fffcf8;
+  stroke: var(--wm-annot-terminal, #6d2739);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.85;
 }
 
 .wm-flag {

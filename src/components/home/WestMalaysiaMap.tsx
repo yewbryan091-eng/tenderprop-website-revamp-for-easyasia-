@@ -225,6 +225,12 @@ const POOL_TILTS = [
 function useStemTips(
   mapRef: React.RefObject<HTMLDivElement | null>,
   flagsRef: React.RefObject<HTMLDivElement | null>,
+  /* MUST be passed. The flags layer is conditionally rendered, so on the first
+     paint `flagsRef.current` is null and `sync` bails out. Without this in the
+     dependency list the effect never ran again and every anchor kept its
+     50%/50% fallback — all three placards stacked in the centre of the plate,
+     which is exactly the bug this argument exists to prevent. */
+  enabled: boolean,
 ) {
   const sync = useCallback(() => {
     const map = mapRef.current;
@@ -249,7 +255,13 @@ function useStemTips(
   }, [mapRef, flagsRef]);
 
   useEffect(() => {
+    if (!enabled) return;
     sync();
+    /* Fonts land after first paint and change the placard box, so re-measure
+       once they are ready as well as on resize. */
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      void document.fonts.ready.then(sync);
+    }
     const map = mapRef.current;
     if (!map || typeof ResizeObserver === "undefined") {
       window.addEventListener("resize", sync);
@@ -258,7 +270,7 @@ function useStemTips(
     const observer = new ResizeObserver(sync);
     observer.observe(map);
     return () => observer.disconnect();
-  }, [sync, mapRef]);
+  }, [sync, mapRef, enabled]);
 }
 
 /* Flag glyphs. The seal and gavel mirror the two the left column already uses,
@@ -315,6 +327,19 @@ function GavelGlyph() {
    `pointer-events: none`. Each flag's place matches the region its stem
    actually stands in, so the composition never claims a Selangor address over
    a Kedah anchor. */
+/* ── ANNOTATION INK — one table, keyed by METHOD ─────────────────────────────
+   Every coloured part of an annotation (bloom, terminal, leader, placard rule,
+   label, price) reads from HERE, so a method can never be burgundy in one
+   layer and olive in another. It was: the pegs and pools took a per-location
+   tone, which left Kluang — an E-Tender — blooming olive while Sungai Petani
+   bloomed rose. Geography does not pick these colours; the selling method
+   does. Derived from the fold's own burgundy/brass split, lightened for
+   pigment where the mark is a wash rather than a line. */
+const METHOD_INK = {
+  "E-Tender": { leader: "#8a4054", terminal: "#6d2739", bloom: "#b3808c" },
+  "Owner Auction": { leader: "#96773a", terminal: "#7d5a22", bloom: "#c2a267" },
+} as const;
+
 const STEM_FLAGS: Record<
   string,
   {
@@ -328,21 +353,28 @@ const STEM_FLAGS: Record<
   }
 > = {
   north: {
-    dx: 0,
+    /* Penang sits on its island off the west coast: the placard offsets
+       WEST into the Straits, where there is nothing to cover. */
+    dx: -34,
     method: "E-Tender",
-    place: "Sungai Petani, Kedah",
+    place: "George Town, Penang",
     price: "RM 385,000",
   },
   central: {
-    dx: 0,
+    /* Lowest of the three, shortest leader, and the one that takes the elbow —
+       a bend here is what stops the trio reading as three parallel sticks.
+       Offset east into the open interior, clear of the Klang Valley bloom. */
+    dx: 26,
     method: "Owner Auction",
-    place: "Kuala Lipis, Pahang",
+    place: "Kuala Lumpur",
     price: "RM 465,000",
   },
   south: {
-    dx: 0,
+    /* Johor Bahru is near the southern tip; the placard offsets OUTWARD
+       (east) so it clears the narrow landmass instead of standing on it. */
+    dx: 44,
     method: "E-Tender",
-    place: "Kluang, Johor",
+    place: "Johor Bahru, Johor",
     price: "RM 520,000",
   },
 };
@@ -449,7 +481,7 @@ export function WestMalaysiaMap({
   const mottleId = `wm-mottle-${instance}`;
   const mapRef = useRef<HTMLDivElement>(null);
   const flagsRef = useRef<HTMLDivElement>(null);
-  useStemTips(mapRef, flagsRef);
+  useStemTips(mapRef, flagsRef, markers);
 
   return (
     <div ref={mapRef} className={`wm-map wm-map--${finish} ${className}`.trim()} aria-hidden="true">
@@ -1093,6 +1125,7 @@ export function WestMalaysiaMap({
           <g className="wm-map-pools" clipPath={`url(#${clipId})`}>
             {WEST_MALAYSIA_LOCATIONS.map((location, index) => {
               const tilt = POOL_TILTS[index % POOL_TILTS.length];
+              const ink = METHOD_INK[STEM_FLAGS[location.key]?.method ?? "E-Tender"];
               return (
                 <g key={location.key} transform={`translate(${location.x} ${location.y})`}>
                   {POOL_LAYERS.map((layer) => {
@@ -1104,7 +1137,7 @@ export function WestMalaysiaMap({
                         className={layer.cls}
                         d={layer.path}
                         transform={`translate(${t.x} ${t.y}) rotate(${t.r}) scale(${layer.sx} ${layer.sy})`}
-                        fill={location.color}
+                        fill={ink.bloom}
                         filter={layer.blur ? `url(#${poolBlurId})` : undefined}
                       />
                     );
@@ -1161,7 +1194,11 @@ export function WestMalaysiaMap({
                 key={location.key}
                 transform={`translate(${location.x} ${location.y}) scale(1.35)`}
               >
-                <path className="wm-peg-base" d={PEG_HEX_PATH} fill={location.color} />
+                <path
+                  className="wm-peg-base"
+                  d={PEG_HEX_PATH}
+                  fill={METHOD_INK[STEM_FLAGS[location.key]?.method ?? "E-Tender"].terminal}
+                />
                 <path className="wm-peg-top" d={PEG_TOP_PATH} />
                 <path className="wm-peg-bottom" d={PEG_BOTTOM_PATH} />
               </g>
@@ -1212,12 +1249,7 @@ export function WestMalaysiaMap({
                 >
                   <span
                     className="wm-stem-upright"
-                    style={
-                      {
-                        "--wm-stem-h": `${location.stemHeight}px`,
-                        "--wm-stem-color": location.color,
-                      } as CSSProperties
-                    }
+                    style={{ "--wm-stem-h": `${location.stemHeight}px` } as CSSProperties}
                   >
                     <span className="wm-stem-line" />
                   </span>
@@ -1249,11 +1281,42 @@ export function WestMalaysiaMap({
                     zIndex: index + 1,
                     "--wm-stem-h": `${location.stemHeight}px`,
                     "--wm-flag-dx": `${flag.dx}px`,
-                    "--wm-stem-color": location.color,
+                    "--wm-annot-leader": METHOD_INK[flag.method].leader,
+                    "--wm-annot-terminal": METHOD_INK[flag.method].terminal,
                   } as CSSProperties
                 }
               >
-                <span className="wm-flag-stem" />
+                {/* ── LEADER ────────────────────────────────────────────
+                    A cartographic leader, not a pole: a vertical run from
+                    the exact geographic point, one rounded elbow near the
+                    top, then a short horizontal to the placard's foot. The
+                    elbow only appears when the placard is offset — at dx 0
+                    the path is a plain vertical, so the geometry never
+                    invents a bend it does not need.
+
+                    Drawn as ONE svg with `overflow: visible` anchored on the
+                    peg, so the line, the map terminal and the placard's
+                    anchor dot can never drift apart. */}
+                <svg className="wm-flag-leader" viewBox="0 0 1 1" aria-hidden="true">
+                  {(() => {
+                    const h = location.stemHeight;
+                    const d = flag.dx;
+                    const r = Math.min(9, Math.abs(d) * 0.55);
+                    const s = Math.sign(d);
+                    const path = d
+                      ? `M0 0 V${-(h - r)} Q0 ${-h} ${s * r} ${-h} H${d}`
+                      : `M0 0 V${-h}`;
+                    return (
+                      <>
+                        <path className="wm-leader-line" d={path} />
+                        {/* At the map: precision. */}
+                        <circle className="wm-leader-terminal" cx={0} cy={0} r={2.1} />
+                        {/* Under the placard: the annotation's own anchor. */}
+                        <circle className="wm-leader-anchor" cx={d} cy={-h} r={2.6} />
+                      </>
+                    );
+                  })()}
+                </svg>
                 <span className={`wm-flag${auction ? " wm-flag--auction" : ""}`}>
                   <span className="wm-flag-method">
                     {auction ? <GavelGlyph /> : <MailGlyph />}

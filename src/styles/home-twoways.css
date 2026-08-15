@@ -339,7 +339,12 @@
    ARMED, never reveal-by-default (ledger 13 Aug): every rule here is inert
    until TwoWays.tsx adds `.tw--armed` / `.tw--play`, so with no JS the section
    rests fully drawn. Reduced motion is double-gated — the JS refuses to arm and
-   this whole block sits behind the media query. */
+   this whole block sits behind the media query.
+
+   The sequence REPLAYS: the component re-arms once the section is fully off
+   screen, so scrolling back to it runs the whole thing again. Every animation
+   below therefore has to be restartable from its own `from` state — do not add
+   one that depends on a one-time starting condition. */
 @media (prefers-reduced-motion: no-preference) {
   .tw--armed :is(.tw-kicker, h2, .tw-deck, .tw-note, .tw-route) {
     opacity: 0;

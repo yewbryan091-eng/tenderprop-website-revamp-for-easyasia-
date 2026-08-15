@@ -92,42 +92,91 @@ function GavelArt() {
 export function TwoWays() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  /* ARM, NEVER REVEAL (ledger, 13 Aug). The markup rests fully drawn; this
-     effect only adds theatre when it is safe to. If JS never runs, the observer
-     never fires, or the user prefers reduced motion, the section is simply
-     already complete — it cannot ship blank. The 8s guard covers the starved-
-     scheduler case the ledger records: if we armed but the observer never
-     delivered, force the play rather than stay hidden. All through classList on
-     the DOM, never React state — EasyAsia lifts rendered HTML with no React
-     behind it. */
+  /* ARM, NEVER REVEAL — and RE-ARM, so the entrance replays every time the
+     section is scrolled back to (Bryan, 15 Aug), while a refresh or a deep
+     link that lands already inside it stays still.
+
+     Two observers, each with one job. The PLAY one is deliberately stricter
+     (bottom inset) so the sequence starts once the section is properly in
+     frame; the RESET one has no inset, so re-arming — which sets opacity 0 —
+     can only happen when the section is FULLY off screen. Sharing one observer
+     between both jobs would re-arm while a sliver was still visible and flash
+     the copy away mid-scroll.
+
+     The ledger's no-blank rule still holds: markup rests fully drawn, arming
+     happens only through classList (never React state — EasyAsia lifts
+     rendered HTML with no React behind it), and a guard forces the first play
+     if the observer starves. That guard is FIRST-PLAY ONLY: once the section
+     has animated once the observer is proven, and a repeating guard would
+     fire while the user is away and silently consume the next replay. */
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (typeof IntersectionObserver === "undefined") return;
-    /* Already on screen (reload mid-page): skip the theatre entirely. */
-    if (el.getBoundingClientRect().top < window.innerHeight * 0.85) return;
 
-    el.classList.add("tw--armed");
     let guard = 0;
+    let hasPlayed = false;
+
+    const arm = () => {
+      if (el.classList.contains("tw--armed")) return;
+      el.classList.remove("tw--play");
+      el.classList.add("tw--armed");
+    };
+
     const play = () => {
-      el.classList.add("tw--play");
+      /* Only ever plays FROM the armed state, which is what keeps a refresh
+         inside the section still: it was never armed, so this no-ops. */
+      if (!el.classList.contains("tw--armed")) return;
       el.classList.remove("tw--armed");
-      observer.disconnect();
+      /* Forces the style change to land before `tw--play` is added, so the
+         keyframes restart on every replay instead of being coalesced away. */
+      void el.offsetWidth;
+      el.classList.add("tw--play");
+      hasPlayed = true;
       window.clearTimeout(guard);
     };
-    const observer = new IntersectionObserver(
+
+    /* Below the fold at mount: arm it. Already on screen: leave it drawn.
+       Deferred two frames on purpose — a load straight into #how-it-works has
+       NOT applied its anchor scroll by the time effects run, so measuring here
+       reported the section as below the fold, armed it, and the observer then
+       animated it the instant the browser jumped. Measuring after layout has
+       settled reads its true position. */
+    let raf1 = 0;
+    let raf2 = 0;
+    raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => {
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.85) return;
+        arm();
+        guard = window.setTimeout(() => {
+          if (!hasPlayed) play();
+        }, 8000);
+      });
+    });
+
+    const playObserver = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) play();
       },
       { rootMargin: "0px 0px -14% 0px" },
     );
-    observer.observe(el);
-    guard = window.setTimeout(play, 8000);
+    const resetObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries.every((entry) => !entry.isIntersecting)) arm();
+      },
+      { rootMargin: "0px" },
+    );
+    playObserver.observe(el);
+    resetObserver.observe(el);
+
     return () => {
-      observer.disconnect();
+      playObserver.disconnect();
+      resetObserver.disconnect();
+      window.cancelAnimationFrame(raf1);
+      window.cancelAnimationFrame(raf2);
       window.clearTimeout(guard);
-      el.classList.remove("tw--armed");
+      el.classList.remove("tw--armed", "tw--play");
     };
   }, []);
 
@@ -199,7 +248,7 @@ export function TwoWays() {
         <div className="tw-scene" aria-hidden="true">
           {/* Study D, chosen by Bryan 15 Aug — the naturalistic country, not the
               stone plate. All iteration happens on THIS finish from here on. */}
-          <WestMalaysiaMap finish="terrain" />
+          <WestMalaysiaMap finish="terrain" markers />
         </div>
       </div>
     </section>
