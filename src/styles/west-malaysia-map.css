@@ -711,15 +711,66 @@
   opacity: 0.5;
 }
 
+/* BLUE, by the founder's call — and the right blue for this plate: a
+   desaturated river-blue, darker than the stone so it reads as depth, never
+   cobalt. NORMAL blend: multiplying blue into tan made mud, which is exactly
+   how the first blue attempt died. */
 .wm-river-water path {
-  fill: #6d6247;
-  opacity: 0.82;
-  mix-blend-mode: multiply;
+  fill: #4f7590;
+  opacity: 0.8;
 }
 
 .wm-river-glint path {
-  fill: #cfd8cf;
-  opacity: 0.42;
+  fill: #d8e9f0;
+  opacity: 0.5;
+}
+
+/* ── FLOW ─────────────────────────────────────────────────────────────────────
+   A pale dash sliding seaward along each centreline. The paths are AUTHORED
+   source→mouth, so a NEGATIVE dashoffset travel moves the light downstream on
+   every river at once. Slow on purpose: rivers drift, they do not race. The
+   only ambient loop on the plate besides the peg pulses. */
+.wm-river-flow path {
+  fill: none;
+  stroke: #e6f2f7;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  opacity: 0.55;
+  stroke-dasharray: 7 26;
+  animation: wm-flow 11s linear infinite;
+}
+
+@keyframes wm-flow {
+  to {
+    stroke-dashoffset: -99;
+  }
+}
+
+/* ── LAKES — still water beside the moving kind ──────────────────────────────
+   Slightly deeper than the rivers (standing water reads darker), with a lit
+   north-west rim from the same key light as everything else. */
+.wm-lakes path {
+  fill: #46708c;
+  opacity: 0.85;
+}
+
+.wm-lake-rims path {
+  fill: none;
+  stroke: #d8e9f0;
+  stroke-width: 1.1;
+  opacity: 0.45;
+}
+
+/* ── SHALLOW-WATER SHELF ─────────────────────────────────────────────────────
+   The sea remembering the coast: one wide, soft, cool ring at the foot of the
+   wall. The single trace of sea this section allows itself — the ground stays
+   paper so the plate keeps reading as an object, not an atlas page. */
+.wm-coast-shelf {
+  fill: none;
+  stroke: #9dbecb;
+  stroke-width: 10;
+  opacity: 0.14;
+  filter: blur(4px);
 }
 
 /* ── SIDEWALL STRATA ─────────────────────────────────────────────────────────
@@ -761,4 +812,68 @@
   );
   filter: blur(4px);
   transform: translate(-50%, -50%) rotate(-8deg);
+}
+
+
+/* ── GREENERY ON THE LIMESTONE — the chosen plate, brought to life ────────────
+   Bryan, 15 Aug: the map needs terrain, blue water and GREEN. Study D proved
+   the hue-only `color` blend keeps the value ladder and the pegs safe; the
+   limestone finish now runs the same land cover at conversational volume —
+   forest you notice second, not first. All regions are the real ones:
+   Taman Negara, Endau-Rompin, the rice bowls, the mangrove fringe. */
+.wm-map--limestone {
+  --wm-landcover: 1;
+}
+
+/* FEATHERED, not filled. A flat vector fill gave each forest a hard edge and
+   they read as green stickers on the stone — the exact opposite of vegetation,
+   which thins at its margins. The blur dissolves the traced edge into the
+   land; the ancestor group's coastline clip still cuts the composite, so
+   nothing bleeds into the sea. */
+.wm-map--limestone .wm-cover {
+  opacity: 0.62;
+  filter: blur(11px);
+}
+
+.wm-map--limestone .wm-cover--paddy {
+  opacity: 0.42;
+}
+
+.wm-map--limestone .wm-cover--mangrove {
+  opacity: 0.4;
+}
+
+/* The reference's colour lives at the PEGS via the blooms; grey city smudges
+   on top of that read as dirt marks, so they stay near-off here. */
+.wm-map--limestone .wm-cover--urban {
+  opacity: 0.16;
+}
+
+.wm-map--limestone .wm-shade--forest {
+  opacity: 0.24;
+  filter: blur(14px);
+}
+
+/* ── DIRT ON THE RANGES ──────────────────────────────────────────────────────
+   The terrain-band fills were a near-invisible ivory (0.055) — elevation as a
+   whisper. The reference colours its mountains: warm ochre deepening toward
+   the crests, the ground the forest thins out to. Multiply, so the crinkle
+   relief lights THROUGH the tint rather than being painted over. */
+.wm-map--limestone .wm-terrain-fill {
+  fill: #b98d58;
+  opacity: 0.14;
+  mix-blend-mode: multiply;
+}
+
+.wm-map--limestone .wm-terrain-contours path {
+  opacity: 0.1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wm-river-flow path {
+    animation: none;
+    /* At rest the flow pass still exists as faint standing light on the
+       water — the rivers stay fully drawn, nothing goes missing. */
+    opacity: 0.3;
+  }
 }

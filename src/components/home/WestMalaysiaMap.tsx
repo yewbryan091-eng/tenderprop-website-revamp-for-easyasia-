@@ -7,7 +7,7 @@ import {
   WEST_MALAYSIA_STATE_LINES,
 } from "@/data/west-malaysia-geometry";
 import "@/styles/west-malaysia-map.css";
-import { LANDCOVER, RIVERS, URBAN } from "@/data/west-malaysia-landcover";
+import { LAKES, LANDCOVER, RIVERS, URBAN } from "@/data/west-malaysia-landcover";
 
 export type WestMalaysiaMapFinish = "limestone" | "porcelain" | "monument" | "terrain";
 
@@ -734,6 +734,13 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               therefore barely changed at all across a 68-unit wall, which is
               why the sidewall read as one flat brown band. Interpolating BY
               SLICE puts the ramp where the depth actually is. */}
+          {/* Shallow-water shelf: the sea remembering the coast — one soft ring
+              at sea level, behind the wall and everything on the land. */}
+          <use
+            href={`#${shapeId}`}
+            className="wm-coast-shelf"
+            transform={`translate(${DEPTH_DROP.x} ${DEPTH_DROP.y})`}
+          />
           <g className="wm-map-depth">
             {DEPTH_LAYERS.map((layer) => {
               const t = layer / DEPTH_SLICES;
@@ -893,6 +900,29 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             <g className="wm-river-glint" transform="translate(-0.7 -0.9)">
               {RIVERS.map((river) => (
                 <path key={`gl-${river.key}`} d={river.glint} />
+              ))}
+            </g>
+            {/* ── LAKES — still water beside the moving kind ─────────────────
+                Temenggor, Kenyir, Bera: real, and each gets a lit north-west
+                rim from the same key light that lights everything else. */}
+            <g className="wm-lakes">
+              {LAKES.map((lake) => (
+                <path key={lake.key} d={lake.d} />
+              ))}
+            </g>
+            <g className="wm-lake-rims" transform="translate(-0.8 -1)">
+              {LAKES.map((lake) => (
+                <path key={`rim-${lake.key}`} d={lake.d} />
+              ))}
+            </g>
+            {/* ── FLOW — the water moving seaward ────────────────────────────
+                A dashed light stroke sliding along each centreline. The dash
+                travel is the ONLY ambient loop on the plate besides the peg
+                pulses; killed under reduced-motion, where the rivers rest as
+                fully-drawn water. */}
+            <g className="wm-river-flow">
+              {RIVERS.map((river) => (
+                <path key={`fl-${river.key}`} d={river.flow} />
               ))}
             </g>
           </g>

@@ -365,6 +365,29 @@ const RIVER_SPECS: RiverSpec[] = [
   },
 ];
 
+/* The centreline as an open path, WITH the same meander the ribbon carries, so
+   a stroke drawn along it stays inside the channel. This is what the flow
+   animation rides — a dashed light stroke sliding seaward along this path is
+   what makes the water MOVE instead of merely sitting in its bed. */
+function centreline(spec: RiverSpec) {
+  const pts = densify(spec.points);
+  const n = pts.length;
+  const out: string[] = [];
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1);
+    const a = pts[Math.max(0, i - 1)];
+    const b = pts[Math.min(n - 1, i + 1)];
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const wob = (spec.meander ?? 0) * Math.sin(t * 11) * (1 - Math.abs(0.5 - t));
+    out.push(
+      `${(pts[i].x + (-dy / len) * wob).toFixed(1)} ${(pts[i].y + (dx / len) * wob).toFixed(1)}`,
+    );
+  }
+  return `M${out.join(" L")}`;
+}
+
 export const RIVERS = RIVER_SPECS.map((spec) => ({
   key: spec.key,
   note: spec.note,
@@ -373,4 +396,49 @@ export const RIVERS = RIVER_SPECS.map((spec) => ({
      second river. This is the mark that reads as LIQUID; without it a filled
      ribbon is just a coloured groove. */
   glint: ribbon(spec, 0.34),
+  flow: centreline(spec),
 }));
+
+/* ── LAKES — the peninsula's real standing water ──────────────────────────────
+   Three that exist and matter: Tasik Temenggor behind the dam in upper Perak,
+   Tasik Kenyir (the largest man-made lake in South-East Asia) in Terengganu,
+   and Tasik Bera, the Pahang wetland. Blue that HOLDS still, beside rivers
+   that move — the pairing is what makes the water system read as real. */
+export const LAKES: { key: string; note: string; d: string }[] = [
+  {
+    key: "temenggor",
+    note: "Tasik Temenggor, upper Perak — the reservoir behind the Temenggor dam, threaded around Banding island.",
+    d: smooth([
+      [101.28, 5.55],
+      [101.38, 5.52],
+      [101.44, 5.42],
+      [101.4, 5.32],
+      [101.32, 5.3],
+      [101.26, 5.4],
+    ]),
+  },
+  {
+    key: "kenyir",
+    note: "Tasik Kenyir, Terengganu — South-East Asia's largest man-made lake.",
+    d: smooth([
+      [102.62, 5.12],
+      [102.75, 5.1],
+      [102.82, 4.98],
+      [102.74, 4.88],
+      [102.62, 4.92],
+      [102.57, 5.02],
+    ]),
+  },
+  {
+    key: "bera",
+    note: "Tasik Bera, Pahang — the peninsula's largest natural lake system, a Ramsar wetland.",
+    d: smooth([
+      [102.55, 3.18],
+      [102.63, 3.15],
+      [102.66, 3.06],
+      [102.6, 3.0],
+      [102.53, 3.05],
+      [102.51, 3.12],
+    ]),
+  },
+];
