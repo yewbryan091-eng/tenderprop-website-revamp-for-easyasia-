@@ -4,17 +4,52 @@
    separate lets the future Klang Valley layer sit above the unchanged plate.
    ──────────────────────────────────────────────────────────────────────────── */
 
+/* ── THE VALUE LADDER, AND WHY IT MOVED ───────────────────────────────────────
+   The terrain was never missing — Titiwangsa, the Kinta gap and Tahan were all
+   being rendered. They were invisible because the plate sat at the wrong END of
+   the value scale, and two measurements say so:
+
+   1. The surface mid-tone was #EFE2D3 (luminance .774) on a #F1E8DE ground
+      (.817) — a contrast of 1.05:1. This file's own §3 note records that below
+      ~1.1 the eye cannot resolve an edge at all, so the plate had no body: a
+      near-white object on near-white paper.
+
+   2. All terrain blends with `soft-light`, whose strength is proportional to
+      b x (1 - b) — a term that COLLAPSES TO ZERO as the base approaches white.
+      At the old mid-tone that factor was 0.101. Here it is 0.188.
+
+   So the same relief filter, with no change to its geometry, lighting or
+   turbulence, now renders 1.86x stronger. The ladder was re-valued, not
+   redesigned: the surface moves from the top of the scale into the MIDDLE,
+   where light has somewhere to go in both directions.
+
+   Measured against the section ground (#F1E8DE):
+     top-mid   1.05:1 -> 1.48:1   the plate now reads as an object
+     top-low   1.30:1 -> 2.10:1
+     side-mid  2.44:1 -> 4.71:1   the wall reads as stone, not as a fade
+   And what sits ON the plate gains, rather than loses, separation:
+     paper cards 1.18:1 -> 1.66:1, burgundy pegs still 7.26:1.
+
+   ⚠️ The brass peg drops to 2.98:1 (from 4.20:1). Fine for a 9px solid mark,
+   too low for brass TEXT — if a label ever goes brass on this surface, lift it
+   toward the rim tone rather than reusing the peg fill. */
 .wm-map {
-  --wm-top-light: #fffaf3;
-  --wm-top-mid: #efe2d3;
-  --wm-top-low: #ddcbb9;
-  --wm-side-top: #d2bea9;
-  --wm-side-mid: #ac917c;
-  --wm-side-bottom: #725647;
-  --wm-rim: #b48a50;
+  --wm-top-light: #ebd7b6;
+  --wm-top-mid: #d6be9b;
+  --wm-top-low: #bb9e78;
+  --wm-side-top: #a6855d;
+  --wm-side-mid: #7f613d;
+  --wm-side-bottom: #4c3726;
+  /* Lifted with the plate: the old rim was 2.59:1 on the ground but would have
+     sunk INTO a mid-toned surface. */
+  --wm-rim: #c99b55;
   --wm-burgundy-shade: #571c2e;
   --wm-shadow: rgba(56, 35, 28, 0.28);
-  --wm-relief-strength: 0.86;
+  /* Raised with the ladder. This was tuned against a near-white base where
+     soft-light could barely register; on the re-valued surface the same number
+     renders 1.86x stronger, so the tuning had to be re-taken from scratch
+     rather than inherited. */
+  --wm-relief-strength: 1.12;
   --wm-sheet-strength: 0.5;
   --wm-cluster-strength: 0.5;
   --wm-grain-strength: 0.48;
