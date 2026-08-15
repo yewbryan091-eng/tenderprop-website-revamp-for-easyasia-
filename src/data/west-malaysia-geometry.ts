@@ -111,6 +111,13 @@ export const WEST_MALAYSIA_STATE_LINES = [
    215.60 — and each was verified to fall inside the flattened coastline before
    being written here, so no terminal can land in the sea.
 
+   `stemHeight` is the whole vertical distance from the geographic point to the
+   label's foot, in screen px. Bryan, 16 Aug: keep it inside 70-140 and keep the
+   three differences SUBTLE — a long stem reads as a label floating in browser
+   space, and equal stems read as three parallel sticks. Shortened from 94/66/82
+   once the elbows went, because a vertical stem shows its full length whereas a
+   bent one spent part of its run sideways.
+
    `stemHeight` is composition, not geography: the placards must not sit at one
    height or the trio reads as a dashboard. Penang carries the longest leader
    (highest placard), Kuala Lumpur the shortest, Johor between them. Colour is
@@ -124,7 +131,7 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 100.3288,
     x: 147.02,
     y: 278.96,
-    stemHeight: 94,
+    stemHeight: 78,
   },
   {
     key: "central",
@@ -133,7 +140,7 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 101.6869,
     x: 439.12,
     y: 769.47,
-    stemHeight: 66,
+    stemHeight: 74,
   },
   {
     key: "south",
@@ -142,6 +149,6 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 103.7414,
     x: 880.99,
     y: 1124.42,
-    stemHeight: 82,
+    stemHeight: 84,
   },
 ] as const;

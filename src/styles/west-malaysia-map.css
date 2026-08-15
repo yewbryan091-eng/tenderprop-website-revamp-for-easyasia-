@@ -350,22 +350,41 @@
   pointer-events: none;
 }
 
-/* Three washes, largest and softest first. Opacities stay low so the state
-   engraving and the limestone grain still read THROUGH the stain — it should
-   register as "this area is softly highlighted", not as a marker. */
+/* MULTIPLY, not normal. A normal-blended wash paints ON the plate: the terrain
+   underneath is replaced in proportion to alpha, so the stain reads as a pink
+   sticker and the ochre one — being the same lightness as the tan interior it
+   covers — read as nothing at all. Multiplying makes the wash behave like
+   pigment soaking into a sheet, taking its value from the land beneath it, so
+   the land's grain, forest and relief all still show through the stain and the
+   ochre finally has somewhere to go (it darkens the tan instead of matching it).
+   The higher opacities below are calibrated for THIS blend; on normal they
+   would be far too heavy.
+
+   Three washes, largest and softest first — pigment soaked into the sheet, not
+   a marker printed on top. The ladder still climbs outward-in so the perimeter
+   stays feathered and the centre reads denser, and every value is low enough
+   that terrain, rivers and state engraving all survive underneath. Raised 16 Aug
+   from 0.085/0.105/0.11, which was invisible at viewing distance: the stain is
+   what ties the terminal dot to the land, so if it cannot be seen the stem
+   dangles. Do not push past ~0.35 on the core — beyond that the wash starts
+   hiding the land cover instead of tinting it. */
+.wm-map-pools {
+  mix-blend-mode: multiply;
+}
+
 .wm-pool-a {
   stroke: none;
-  opacity: 0.085;
+  opacity: 0.3;
 }
 
 .wm-pool-b {
   stroke: none;
-  opacity: 0.105;
+  opacity: 0.36;
 }
 
 .wm-pool-c {
   stroke: none;
-  opacity: 0.11;
+  opacity: 0.42;
 }
 
 /* Deliberately quiet. The eye should travel watercolour -> stem, not
@@ -441,13 +460,45 @@
 @media (max-width: 700px) {
   .wm-map {
     min-height: 350px;
+    /* On .wm-map, NOT on .wm-map-camera: the flags layer is the camera's
+       sibling, so anything declared on the camera never reaches it. */
+    --wm-stem-scale: 0.74;
+  }
+
+  /* The scale variable shortens the stem and the offsets, but a label's type and
+     padding are absolute — left alone they keep their desktop bulk on a map half
+     the width. These bring the label down with everything else; measured ~97px
+     wide against a 355px map, versus 133px before. */
+  .wm-flag {
+    padding: 6px 8px 6px;
+  }
+
+  .wm-flag::before {
+    height: 1.5px;
+  }
+
+  .wm-flag-method {
+    font-size: 7px;
+  }
+
+  .wm-flag-method svg {
+    width: 8.5px;
+    height: 8.5px;
+  }
+
+  .wm-flag-place {
+    margin-top: 4px;
+    font-size: 8.5px;
+  }
+
+  .wm-flag-price {
+    font-size: 11px;
   }
 
   .wm-map-camera {
     width: min(78%, 430px);
     transform: rotateX(58deg) rotateZ(-7deg) translate3d(2%, -1%, 0);
     filter: drop-shadow(8px 21px 14px var(--wm-shadow));
-    --wm-stem-scale: 0.74;
   }
 
   .wm-stem-upright {
@@ -538,16 +589,6 @@
   opacity: 0.9;
 }
 
-/* Under the placard: a ring, not a dot, so the two terminals are not twins —
-   the map end states a point, this one states an attachment. */
-.wm-leader-anchor {
-  fill: #fffcf8;
-  stroke: var(--wm-annot-terminal, #6d2739);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-  opacity: 0.85;
-}
-
 .wm-flag {
   position: absolute;
   left: 0;
@@ -556,18 +597,20 @@
      is a label, and a label that pads itself out to a column looks like a card
      again. `max-content` with nowrap keeps "Sungai Petani, Kedah" on one line. */
   width: max-content;
-  max-width: calc(210px * var(--wm-stem-scale, 1));
+  max-width: calc(172px * var(--wm-stem-scale, 1));
   transform: translateX(calc(-50% + var(--wm-flag-dx, 0px) * var(--wm-stem-scale, 1)));
   transform-origin: 50% 100%;
-  padding: 11px 15px 12px;
-  border-radius: 10px;
+  padding: 8px 11px 9px;
+  /* Almost square. A 10px radius on a label this small is a UI card's corner;
+     a placard's corner is barely eased. */
+  border-radius: 5px;
   background: #fffcf8;
-  /* A tight contact shadow so it reads as a solid object, plus a wide soft one
-     that lifts it off the plate without muddying the stone. Lighter than the
-     card's — there is far less object here to hold up. */
+  /* One narrow contact shadow and one shallow lift. The old 24px spread threw a
+     web-component drop shadow across the terrain — an object resting a few
+     millimetres above a physical model barely casts anything. */
   box-shadow:
-    0 1px 2px rgba(45, 32, 24, 0.08),
-    0 12px 24px -10px rgba(45, 32, 24, 0.24);
+    0 1px 1.5px rgba(45, 32, 24, 0.07),
+    0 7px 14px -8px rgba(45, 32, 24, 0.18);
   font-family: var(--sans);
   text-align: left;
   /* The route colour, inherited by the top rule and by both coloured lines.
@@ -594,8 +637,8 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 2.5px;
-  border-radius: 10px 10px 0 0;
+  height: 2px;
+  border-radius: 5px 5px 0 0;
   background: var(--wm-flag-ink);
 }
 
@@ -604,9 +647,9 @@
   align-items: center;
   gap: 5px;
   color: var(--wm-flag-ink-small);
-  font-size: 8.5px;
+  font-size: 8px;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   line-height: 1;
   white-space: nowrap;
@@ -619,8 +662,8 @@
 
 .wm-flag-place {
   display: block;
-  margin-top: 7px;
-  font-size: 11.5px;
+  margin-top: 5px;
+  font-size: 10.5px;
   font-weight: 500;
   color: #6b6055;
   line-height: 1.25;
@@ -629,8 +672,8 @@
 
 .wm-flag-price {
   display: block;
-  margin-top: 3px;
-  font-size: 16px;
+  margin-top: 2px;
+  font-size: 13.5px;
   font-weight: 800;
   letter-spacing: -0.015em;
   color: var(--wm-flag-ink);

@@ -92,89 +92,91 @@ function GavelArt() {
 export function TwoWays() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  /* ARM, NEVER REVEAL — and RE-ARM, so the entrance replays every time the
-     section is scrolled back to (Bryan, 15 Aug), while a refresh or a deep
-     link that lands already inside it stays still.
+  /* ARM, NEVER REVEAL — and replay on every return (Bryan, 15–16 Aug).
+     ONE observer, ONE boundary, watching the ROUTES block rather than the
+     section. Both choices are load-bearing:
 
-     Two observers, each with one job. The PLAY one is deliberately stricter
-     (bottom inset) so the sequence starts once the section is properly in
-     frame; the RESET one has no inset, so re-arming — which sets opacity 0 —
-     can only happen when the section is FULLY off screen. Sharing one observer
-     between both jobs would re-arm while a sliver was still visible and flash
-     the copy away mid-scroll.
+     · One boundary cannot oscillate. Two observers with different insets both
+       claim the band between them, so scrolling into it made them fight —
+       play, arm, play — on every frame.
+     · The routes block, not the section. `.tw` starts 802px down an 801px
+       viewport, so "the section has fully left the screen" was only true
+       within a pixel of the very top: scroll up to the hero and a sliver
+       stayed, so it never re-armed and never replayed. The illustrations sit
+       ~400px lower, so they clear the viewport on any normal scroll back up.
 
-     The ledger's no-blank rule still holds: markup rests fully drawn, arming
-     happens only through classList (never React state — EasyAsia lifts
-     rendered HTML with no React behind it), and a guard forces the first play
-     if the observer starves. That guard is FIRST-PLAY ONLY: once the section
-     has animated once the observer is proven, and a repeating guard would
-     fire while the user is away and silently consume the next replay. */
+     Resetting is SILENT: the resting state IS the finished state, so dropping
+     `tw--play` mid-scroll changes nothing on screen. Only the very first play
+     needs `tw--armed` to hide the content beforehand, and that only ever
+     happens while the section is off screen.
+
+     No rAF and no manual measurement anywhere. rAF does not fire in a
+     backgrounded tab — the exact starvation the 13 Aug ledger entry records —
+     and a one-shot measurement at mount cannot see an anchor jump or a browser
+     scroll restoration. If the observer never delivers at all, nothing arms
+     and the section simply rests fully drawn. */
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (typeof IntersectionObserver === "undefined") return;
+    const routes = el.querySelector(".tw-routes");
+    if (!routes) return;
 
     let guard = 0;
     let hasPlayed = false;
+    let first = true;
 
     const arm = () => {
-      if (el.classList.contains("tw--armed")) return;
       el.classList.remove("tw--play");
       el.classList.add("tw--armed");
+      if (guard) return;
+      guard = window.setTimeout(() => {
+        if (!hasPlayed) play();
+      }, 8000);
     };
 
     const play = () => {
-      /* Only ever plays FROM the armed state, which is what keeps a refresh
-         inside the section still: it was never armed, so this no-ops. */
-      if (!el.classList.contains("tw--armed")) return;
+      if (el.classList.contains("tw--play")) return;
       el.classList.remove("tw--armed");
-      /* Forces the style change to land before `tw--play` is added, so the
-         keyframes restart on every replay instead of being coalesced away. */
+      /* Flush the class removal so the keyframes restart on a replay instead
+         of the two mutations being coalesced into no change at all. */
       void el.offsetWidth;
       el.classList.add("tw--play");
       hasPlayed = true;
       window.clearTimeout(guard);
+      guard = 0;
     };
 
-    /* Below the fold at mount: arm it. Already on screen: leave it drawn.
-       Deferred two frames on purpose — a load straight into #how-it-works has
-       NOT applied its anchor scroll by the time effects run, so measuring here
-       reported the section as below the fold, armed it, and the observer then
-       animated it the instant the browser jumped. Measuring after layout has
-       settled reads its true position. */
-    let raf1 = 0;
-    let raf2 = 0;
-    raf1 = window.requestAnimationFrame(() => {
-      raf2 = window.requestAnimationFrame(() => {
-        if (el.getBoundingClientRect().top < window.innerHeight * 0.85) return;
-        arm();
-        guard = window.setTimeout(() => {
-          if (!hasPlayed) play();
-        }, 8000);
-      });
-    });
-
-    const playObserver = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) play();
+        const visible = entries[entries.length - 1].isIntersecting;
+        if (first) {
+          first = false;
+          /* Already on screen at mount — a refresh or a deep link. Leave it
+             drawn and count it as played, so scrolling away and back still
+             replays from then on. */
+          if (visible) {
+            hasPlayed = true;
+            return;
+          }
+          arm();
+          return;
+        }
+        if (visible) play();
+        else if (hasPlayed) el.classList.remove("tw--play");
       },
-      { rootMargin: "0px 0px -14% 0px" },
+      /* -8%, and the number is measured, not chosen. The routes block sits
+         ~380px down the section, so a -20% inset put the trigger line ABOVE
+         where the illustrations reach on a normal scroll-in — measured 578 vs
+         a 571 boundary, missing by 7px, and the only thing that ever fired was
+         the 8s no-blank guard. At -8% the same scroll clears it by ~79px. */
+      { rootMargin: "0px 0px -8% 0px" },
     );
-    const resetObserver = new IntersectionObserver(
-      (entries) => {
-        if (entries.every((entry) => !entry.isIntersecting)) arm();
-      },
-      { rootMargin: "0px" },
-    );
-    playObserver.observe(el);
-    resetObserver.observe(el);
+    observer.observe(routes);
 
     return () => {
-      playObserver.disconnect();
-      resetObserver.disconnect();
-      window.cancelAnimationFrame(raf1);
-      window.cancelAnimationFrame(raf2);
+      observer.disconnect();
       window.clearTimeout(guard);
       el.classList.remove("tw--armed", "tw--play");
     };

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useRef } from "react";
+import { useCallback, useEffect, useId, useLayoutEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 
 import {
@@ -194,9 +194,9 @@ const POOL_WASH_C =
    look this is meant to avoid. Each layer also gets its own rotation and a small
    offset per location, so no two stains repeat and none is radially symmetric. */
 const POOL_LAYERS = [
-  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 1.45, sy: 1.2 },
-  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 1.38, sy: 1.42 },
-  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 1.34, sy: 1.18 },
+  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 1.04, sy: 0.86 },
+  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 0.99, sy: 1.02 },
+  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 0.96, sy: 0.85 },
 ] as const;
 
 /* Offsets are LARGE relative to each shape — around a third of the wash's own
@@ -222,6 +222,8 @@ const POOL_TILTS = [
    percentages ARE stable for a given layout — but they shift the moment the
    map gains padding or the breakpoint changes the stem scale, and a stale
    number would silently detach every card from its stem. */
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
 function useStemTips(
   mapRef: React.RefObject<HTMLDivElement | null>,
   flagsRef: React.RefObject<HTMLDivElement | null>,
@@ -254,7 +256,7 @@ function useStemTips(
     });
   }, [mapRef, flagsRef]);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!enabled) return;
     sync();
     /* Fonts land after first paint and change the placard box, so re-measure
@@ -336,9 +338,26 @@ function GavelGlyph() {
    does. Derived from the fold's own burgundy/brass split, lightened for
    pigment where the mark is a wash rather than a line. */
 const METHOD_INK = {
-  "E-Tender": { leader: "#8a4054", terminal: "#6d2739", bloom: "#b3808c" },
-  "Owner Auction": { leader: "#96773a", terminal: "#7d5a22", bloom: "#c2a267" },
+  "E-Tender": { leader: "#8a4054", terminal: "#6d2739", bloom: "#a06579" },
+  "Owner Auction": { leader: "#96773a", terminal: "#7d5a22", bloom: "#b0812f" },
 } as const;
+
+/* WHERE EACH PLACARD SITS WITHOUT JAVASCRIPT.
+   `useStemTips` measures the pegs through the 3D camera and overwrites these
+   at runtime, so they are only ever a starting pose — but they matter twice.
+   EasyAsia lifts our rendered HTML with no React behind it, and React paints
+   the markup once before the effect runs; in both cases the CSS fallback is
+   `left:50%; top:50%`, which stacks all three placards in a heap at the centre
+   of the plate. These are the measured screen positions of the three pegs at
+   the desktop breakpoint (map-box percentages, 1280px and 1440px agreeing to
+   within a percentage point), so the un-measured pose is already right to a few
+   pixels instead of catastrophically wrong. Re-measure if the camera angle or
+   the coastline projection ever changes. */
+const FALLBACK_PEG: Record<string, { x: number; y: number }> = {
+  north: { x: 23.9, y: 45.2 },
+  central: { x: 47.9, y: 59.6 },
+  south: { x: 84.9, y: 70.3 },
+};
 
 const STEM_FLAGS: Record<
   string,
@@ -346,25 +365,21 @@ const STEM_FLAGS: Record<
     method: "E-Tender" | "Owner Auction";
     place: string;
     price: string;
-    /* Controlled horizontal offset, px. Every final value is zero so each
-       straight stem meets its flag at bottom centre; the hook stays available
-       for a future small editorial nudge without moving the geographic peg. */
+    /* Horizontal offset, px. HELD AT ZERO — a beacon's stem is vertical and
+       meets its label at bottom centre. The field survives only as a hook for a
+       future one-off nudge; any non-zero value reintroduces the elbow that was
+       removed on 16 Aug for detaching the labels from the land. */
     dx: number;
   }
 > = {
   north: {
-    /* Penang sits on its island off the west coast: the placard offsets
-       WEST into the Straits, where there is nothing to cover. */
-    dx: -34,
+    dx: 0,
     method: "E-Tender",
     place: "George Town, Penang",
     price: "RM 385,000",
   },
   central: {
-    /* Lowest of the three, shortest leader, and the one that takes the elbow —
-       a bend here is what stops the trio reading as three parallel sticks.
-       Offset east into the open interior, clear of the Klang Valley bloom. */
-    dx: 26,
+    dx: 0,
     method: "Owner Auction",
     place: "Kuala Lumpur",
     price: "RM 465,000",
@@ -372,7 +387,7 @@ const STEM_FLAGS: Record<
   south: {
     /* Johor Bahru is near the southern tip; the placard offsets OUTWARD
        (east) so it clears the narrow landmass instead of standing on it. */
-    dx: 44,
+    dx: 0,
     method: "E-Tender",
     place: "Johor Bahru, Johor",
     price: "RM 520,000",
@@ -1279,6 +1294,8 @@ export function WestMalaysiaMap({
                 style={
                   {
                     zIndex: index + 1,
+                    "--wm-peg-x": `${FALLBACK_PEG[location.key]?.x ?? 50}%`,
+                    "--wm-peg-y": `${FALLBACK_PEG[location.key]?.y ?? 50}%`,
                     "--wm-stem-h": `${location.stemHeight}px`,
                     "--wm-flag-dx": `${flag.dx}px`,
                     "--wm-annot-leader": METHOD_INK[flag.method].leader,
@@ -1298,24 +1315,8 @@ export function WestMalaysiaMap({
                     peg, so the line, the map terminal and the placard's
                     anchor dot can never drift apart. */}
                 <svg className="wm-flag-leader" viewBox="0 0 1 1" aria-hidden="true">
-                  {(() => {
-                    const h = location.stemHeight;
-                    const d = flag.dx;
-                    const r = Math.min(9, Math.abs(d) * 0.55);
-                    const s = Math.sign(d);
-                    const path = d
-                      ? `M0 0 V${-(h - r)} Q0 ${-h} ${s * r} ${-h} H${d}`
-                      : `M0 0 V${-h}`;
-                    return (
-                      <>
-                        <path className="wm-leader-line" d={path} />
-                        {/* At the map: precision. */}
-                        <circle className="wm-leader-terminal" cx={0} cy={0} r={2.1} />
-                        {/* Under the placard: the annotation's own anchor. */}
-                        <circle className="wm-leader-anchor" cx={d} cy={-h} r={2.6} />
-                      </>
-                    );
-                  })()}
+                  <path className="wm-leader-line" d={`M0 0 V${-location.stemHeight}`} />
+                  <circle className="wm-leader-terminal" cx={0} cy={0} r={2.2} />
                 </svg>
                 <span className={`wm-flag${auction ? " wm-flag--auction" : ""}`}>
                   <span className="wm-flag-method">
