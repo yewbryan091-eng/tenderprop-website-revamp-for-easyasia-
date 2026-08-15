@@ -376,47 +376,14 @@ function projectedToPercent(x: number, y: number) {
    weather rather than a stamp. Positions sit on the peninsula's diagonal and
    keep clear of the three pegs and the Klang Valley bloom. */
 const CLOUDS = [
-  { key: "a", x: 250, y: 150, s: 0.8, o: 0.95, flip: false, rot: 0 },
-  { key: "a2", x: 350, y: 205, s: 0.42, o: 0.7, flip: true, rot: 6 },
-  { key: "b", x: 540, y: 190, s: 0.62, o: 0.8, flip: true, rot: 8 },
-  { key: "c", x: 330, y: 440, s: 1.3, o: 1, flip: false, rot: -6 },
-  { key: "d", x: 645, y: 420, s: 0.68, o: 0.75, flip: true, rot: 4 },
-  { key: "e", x: 555, y: 730, s: 1.05, o: 0.95, flip: false, rot: 10 },
-  { key: "e2", x: 668, y: 795, s: 0.45, o: 0.65, flip: false, rot: -3 },
-  { key: "f", x: 790, y: 665, s: 0.72, o: 0.8, flip: true, rot: -8 },
-  { key: "g", x: 470, y: 965, s: 0.95, o: 0.9, flip: false, rot: 5 },
-  { key: "h", x: 795, y: 1055, s: 0.55, o: 0.7, flip: true, rot: -4 },
+  /* Four, by Bryan's call — one per region so the weather reads as national,
+     none over a peg site or the Klang Valley: Kedah, the central range (the
+     largest, where clouds actually gather), the eastern lowland, Johor. */
+  { key: "a", x: 250, y: 150, s: 0.85, o: 0.95, flip: false, rot: 0 },
+  { key: "c", x: 330, y: 440, s: 1.15, o: 1, flip: false, rot: -6 },
+  { key: "e", x: 560, y: 730, s: 0.95, o: 0.9, flip: true, rot: 8 },
+  { key: "g", x: 470, y: 970, s: 0.9, o: 0.9, flip: false, rot: 5 },
 ];
-
-/* ── BIRDS — two flocks and a straggler pair, in ink ─────────────────────────
-   The classic distant-gull mark: two shallow arcs, stroked. Tiny on purpose —
-   at this altitude a bird is a punctuation mark, not a drawing. Loose
-   scatter, varied size and heading per bird (a flock that shares a heading
-   reads as wallpaper). The render transform carries a 2x vertical counter on
-   top of a 1.5x size-up: the 60-degree camera squashed the first pass to
-   ~1px dashes lost in the terrain texture — a speck has to be UPRIGHT to
-   read as a wing. Stationary like the clouds, unclipped like the clouds:
-   birds fly over coastlines. Positioned in open sky between the cumulus. */
-const BIRDS = [
-  /* flock over the Perak–Kelantan gap */
-  { key: "b1", x: 468, y: 310, s: 1.0, rot: -8 },
-  { key: "b2", x: 492, y: 296, s: 0.8, rot: 4 },
-  { key: "b3", x: 512, y: 318, s: 0.9, rot: -2 },
-  { key: "b4", x: 484, y: 332, s: 0.65, rot: 10 },
-  /* flock off the Johor coast */
-  { key: "b5", x: 706, y: 878, s: 0.95, rot: 6 },
-  { key: "b6", x: 728, y: 894, s: 0.7, rot: -6 },
-  { key: "b7", x: 690, y: 898, s: 0.6, rot: 2 },
-  /* straggler pair over the Straits side */
-  { key: "b8", x: 236, y: 630, s: 0.85, rot: -4 },
-  { key: "b9", x: 258, y: 644, s: 0.6, rot: 8 },
-];
-
-function BirdGlyph() {
-  /* Two shallow arcs meeting at the body — the mark every eye already reads
-     as "distant bird". Wingtips lift slightly past the shoulders. */
-  return <path d="M-7 0 Q-3.4 -4.2 -0.2 -0.8 Q3.2 -4.4 7 -0.4" />;
-}
 
 function CloudPuff() {
   /* Cumulus anatomy, not a smudge: a flat, dimmer BASE (clouds are shaded
@@ -1197,19 +1164,6 @@ export function WestMalaysiaMap({
                 opacity={cloud.o}
               >
                 <CloudPuff />
-              </g>
-            ))}
-          </g>
-
-          {/* Birds above everything — the one mark allowed over the clouds. */}
-          <g className="wm-birds">
-            {BIRDS.map((bird) => (
-              <g
-                key={bird.key}
-                className="wm-bird"
-                transform={`translate(${bird.x} ${bird.y}) rotate(${bird.rot}) scale(${bird.s * 1.5} ${bird.s * 3})`}
-              >
-                <BirdGlyph />
               </g>
             ))}
           </g>
