@@ -134,26 +134,107 @@ export const URBAN: { key: string; cx: number; cy: number; r: number }[] = [
   { key: "johor-bahru", ...project([103.72, 1.52]), r: 18 },
 ].map((u) => ({ key: u.key, cx: u.x, cy: u.y, r: u.r }));
 
-/* ── RIVERS ───────────────────────────────────────────────────────────────────
-   Open paths, stroked not filled. Rivers are what stop the lowlands reading as
-   one flat field of green, and they are the cheapest mark that makes a landform
-   look inhabited rather than drawn. Four real ones, sources to mouths. */
-function line(points: readonly LngLat[]) {
+/* ── RIVERS — TAPERED RIBBONS, NOT STROKES ───────────────────────────────────
+   A stroke has ONE width for its whole length, which is the single thing that
+   made the first attempt read as a drawn line rather than water: real rivers
+   start as a thread at the watershed and open to an estuary at the sea. So each
+   river is built as a POLYGON — the centreline offset left and right by a
+   half-width that grows downstream — and filled, not stroked.
+
+   Three further things separate water from a groove:
+   · MEANDER. The traced course is smooth; real channels wander. A small
+     perpendicular sine is added along the run, at an amplitude well under the
+     accuracy of the trace, so the course still passes through the same towns.
+   · TAPER CURVE. Width grows as t^0.65, not linearly — rivers gain most of
+     their width in the lower third, where the tributaries have joined.
+   · TRIBUTARIES. A trunk with no branches looks drawn. The real feeders are
+     here: Tembeling and Jelai into the Pahang, Kinta into the Perak, Galas and
+     Lebir into the Kelantan.
+
+   Colour is handled in CSS, but the intent belongs here: these rivers are
+   SILTY, not blue. The Klang, the Pahang and the Perak all run brown — a
+   cobalt river on a Malaysian map is the unrealistic choice. What makes them
+   read as liquid is the specular glint, not the hue. */
+
+type RiverSpec = {
+  key: string;
+  note: string;
+  points: readonly LngLat[];
+  /* Half-width at source and at mouth, in projected units. */
+  w0: number;
+  w1: number;
+  meander?: number;
+};
+
+/* Sample a quadratic-smoothed polyline into evenly-spaced points, so the
+   offsets below get clean normals instead of corners. */
+function densify(points: readonly LngLat[], per = 14) {
   const p = points.map(project);
-  let d = `M${p[0].x.toFixed(1)} ${p[0].y.toFixed(1)}`;
-  for (let i = 1; i < p.length - 1; i++) {
-    const m = { x: (p[i].x + p[i + 1].x) / 2, y: (p[i].y + p[i + 1].y) / 2 };
-    d += ` Q${p[i].x.toFixed(1)} ${p[i].y.toFixed(1)} ${m.x.toFixed(1)} ${m.y.toFixed(1)}`;
+  const out: { x: number; y: number }[] = [];
+  for (let i = 0; i < p.length - 1; i++) {
+    const a = p[i];
+    const b = p[i + 1];
+    const prev = p[i - 1] ?? a;
+    const next = p[i + 2] ?? b;
+    for (let s = 0; s < per; s++) {
+      const u = s / per;
+      /* Catmull-Rom through the traced points — passes THROUGH each waypoint,
+         so the towns the course is traced by are not smoothed away. */
+      const u2 = u * u;
+      const u3 = u2 * u;
+      out.push({
+        x:
+          0.5 *
+          (2 * a.x +
+            (-prev.x + b.x) * u +
+            (2 * prev.x - 5 * a.x + 4 * b.x - next.x) * u2 +
+            (-prev.x + 3 * a.x - 3 * b.x + next.x) * u3),
+        y:
+          0.5 *
+          (2 * a.y +
+            (-prev.y + b.y) * u +
+            (2 * prev.y - 5 * a.y + 4 * b.y - next.y) * u2 +
+            (-prev.y + 3 * a.y - 3 * b.y + next.y) * u3),
+      });
+    }
   }
-  const last = p[p.length - 1];
-  return `${d} L${last.x.toFixed(1)} ${last.y.toFixed(1)}`;
+  out.push(p[p.length - 1]);
+  return out;
 }
 
-export const RIVERS: { key: string; d: string; note: string }[] = [
+/* Build the filled ribbon: walk the left bank downstream, the right bank back. */
+function ribbon(spec: RiverSpec, widthScale = 1) {
+  const pts = densify(spec.points);
+  const n = pts.length;
+  const left: string[] = [];
+  const right: string[] = [];
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1);
+    const a = pts[Math.max(0, i - 1)];
+    const b = pts[Math.min(n - 1, i + 1)];
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+    const half = (spec.w0 + (spec.w1 - spec.w0) * Math.pow(t, 0.65)) * widthScale;
+    const wob = (spec.meander ?? 0) * Math.sin(t * 11) * (1 - Math.abs(0.5 - t));
+    const cx = pts[i].x + nx * wob;
+    const cy = pts[i].y + ny * wob;
+    left.push(`${(cx + nx * half).toFixed(1)} ${(cy + ny * half).toFixed(1)}`);
+    right.push(`${(cx - nx * half).toFixed(1)} ${(cy - ny * half).toFixed(1)}`);
+  }
+  return `M${left.join(" L")} L${right.reverse().join(" L")} Z`;
+}
+
+const RIVER_SPECS: RiverSpec[] = [
   {
     key: "pahang",
-    note: "Sungai Pahang, 459km — the peninsula's longest. Traced through the places it actually passes: Kuala Tembeling, Jerantut, Temerloh, Chenor, Lubuk Paku, out at Pekan.",
-    d: line([
+    note: "Sungai Pahang, 459km — Kuala Tembeling, Jerantut, Temerloh, Chenor, out at Pekan. The widest mouth on the peninsula.",
+    w0: 1.4,
+    w1: 9.5,
+    meander: 3.2,
+    points: [
       [102.4, 4.05],
       [102.36, 3.86],
       [102.4, 3.66],
@@ -162,12 +243,15 @@ export const RIVERS: { key: string; d: string; note: string }[] = [
       [102.85, 3.38],
       [103.1, 3.44],
       [103.39, 3.49],
-    ]),
+    ],
   },
   {
     key: "perak",
-    note: "Sungai Perak, 400km — Thai border to the Straits: Grik, Kuala Kangsar, Teluk Intan, out at Bagan Datoh. The south-then-west dogleg is real, not a smoothing artefact.",
-    d: line([
+    note: "Sungai Perak, 400km — Grik, Kuala Kangsar, Teluk Intan, out at Bagan Datoh, including its real south-then-west dogleg.",
+    w0: 1.3,
+    w1: 8.2,
+    meander: 3,
+    points: [
       [101.4, 5.75],
       [101.28, 5.56],
       [101.13, 5.43],
@@ -179,24 +263,30 @@ export const RIVERS: { key: string; d: string; note: string }[] = [
       [101.02, 4.02],
       [100.89, 3.96],
       [100.78, 3.99],
-    ]),
+    ],
   },
   {
     key: "kelantan",
-    note: "Sungai Kelantan — from Kuala Krai where the Galas and Lebir meet, north through Pasir Mas and Kota Bharu to the South China Sea.",
-    d: line([
+    note: "Sungai Kelantan — Kuala Krai, where the Galas and Lebir meet, north through Pasir Mas to the Kota Bharu delta.",
+    w0: 1.6,
+    w1: 7,
+    meander: 2.4,
+    points: [
       [102.2, 5.53],
       [102.18, 5.75],
       [102.14, 5.95],
       [102.14, 6.05],
       [102.2, 6.13],
       [102.28, 6.22],
-    ]),
+    ],
   },
   {
     key: "muar",
-    note: "Sungai Muar — Negeri Sembilan highlands south-west through Segamat district to Muar town on the Straits.",
-    d: line([
+    note: "Sungai Muar — Negeri Sembilan highlands, south-west through Segamat district to Muar on the Straits.",
+    w0: 1.1,
+    w1: 5.6,
+    meander: 2.6,
+    points: [
       [102.3, 2.9],
       [102.45, 2.7],
       [102.55, 2.5],
@@ -204,17 +294,83 @@ export const RIVERS: { key: string; d: string; note: string }[] = [
       [102.58, 2.15],
       [102.55, 2.04],
       [102.47, 2.02],
-    ]),
+    ],
   },
   {
     key: "klang",
-    note: "Sungai Klang — short, but it runs through the Klang Valley, which is where most of the market is. Kuala Lumpur means the muddy confluence, and this is one of the two rivers in it.",
-    d: line([
+    note: "Sungai Klang — short, but it runs through the Klang Valley where most of the market is, and Kuala Lumpur is named for its confluence.",
+    w0: 1,
+    w1: 4.4,
+    meander: 1.8,
+    points: [
       [101.72, 3.17],
       [101.6, 3.11],
       [101.45, 3.05],
       [101.32, 3.0],
       [101.24, 3.0],
-    ]),
+    ],
+  },
+  /* ── Tributaries. A trunk with no branches looks drawn. ─────────────────── */
+  {
+    key: "tembeling",
+    note: "Sungai Tembeling — down from Taman Negara to meet the Jelai at Kuala Tembeling, where the Pahang begins.",
+    w0: 0.8,
+    w1: 2.4,
+    meander: 2,
+    points: [
+      [102.62, 4.55],
+      [102.55, 4.35],
+      [102.47, 4.18],
+      [102.4, 4.05],
+    ],
+  },
+  {
+    key: "jelai",
+    note: "Sungai Jelai — the western headwater of the Pahang, out of the Titiwangsa foothills.",
+    w0: 0.8,
+    w1: 2.3,
+    meander: 2,
+    points: [
+      [101.95, 4.35],
+      [102.1, 4.24],
+      [102.26, 4.12],
+      [102.4, 4.05],
+    ],
+  },
+  {
+    key: "kinta",
+    note: "Sungai Kinta — through Ipoh and the tin valley, into the Perak near Teluk Intan.",
+    w0: 0.7,
+    w1: 2.2,
+    meander: 1.6,
+    points: [
+      [101.15, 4.62],
+      [101.08, 4.42],
+      [101.02, 4.2],
+      [100.99, 4.06],
+    ],
+  },
+  {
+    key: "lebir",
+    note: "Sungai Lebir — the eastern headwater joining the Galas at Kuala Krai to form the Kelantan.",
+    w0: 0.7,
+    w1: 2,
+    meander: 1.6,
+    points: [
+      [102.42, 5.05],
+      [102.34, 5.24],
+      [102.26, 5.4],
+      [102.2, 5.53],
+    ],
   },
 ];
+
+export const RIVERS = RIVER_SPECS.map((spec) => ({
+  key: spec.key,
+  note: spec.note,
+  d: ribbon(spec),
+  /* The glint runs at a third of the channel's width — a specular sliver, not a
+     second river. This is the mark that reads as LIQUID; without it a filled
+     ribbon is just a coloured groove. */
+  glint: ribbon(spec, 0.34),
+}));

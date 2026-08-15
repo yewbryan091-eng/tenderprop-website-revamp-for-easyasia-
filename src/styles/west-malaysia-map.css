@@ -689,51 +689,38 @@
   stroke-linejoin: round;
 }
 
-/* WIDTHS ARE SET BY THE RENDERED PIXEL, NOT BY THE VIEWBOX. The plate is a
-   1000-unit viewBox painted about 470px wide in the section, so the scale is
-   ~0.47: the first pass used a 1.5-unit water core, which rendered at 0.7px —
-   sub-pixel, and therefore grey. Anything meant to be SEEN as water needs
-   roughly 3px on screen, i.e. ~6 units. */
-.wm-river-bank path {
-  stroke: color-mix(in srgb, var(--wm-top-light) 78%, #ffffff);
-  stroke-width: 4.8;
-  opacity: 0.55;
+/* FILLED RIBBONS, NOT STROKES. A stroke carries one width for its whole run —
+   the single thing that made these read as drawn lines. These are polygons that
+   open from a thread at the watershed to an estuary at the sea.
+
+   And they are SILTY, not blue. The Klang, the Pahang and the Perak all run
+   brown; a cobalt river on a Malaysian map is the unrealistic choice. What
+   makes water read as water is the specular glint, not the hue. */
+.wm-rivers path {
+  stroke: none;
 }
 
-.wm-river-channel path {
-  stroke: #4f4433;
-  stroke-width: 4.4;
-  opacity: 0.38;
+.wm-river-margin path {
+  fill: #6b5a44;
+  opacity: 0.3;
   mix-blend-mode: multiply;
 }
 
-/* NOT multiply. Multiplying slate-blue into tan stone produces mud — which is
-   exactly what the first pass looked like, a crack rather than a river. Normal
-   blend at partial opacity keeps the hue and lets this stay the only cool note
-   on the plate. */
+.wm-river-bank path {
+  fill: color-mix(in srgb, var(--wm-top-light) 72%, #ffffff);
+  opacity: 0.5;
+}
+
 .wm-river-water path {
-  stroke: #55707a;
-  stroke-width: 3;
-  opacity: 0.6;
+  fill: #6d6247;
+  opacity: 0.82;
+  mix-blend-mode: multiply;
 }
 
-/* ── The finish itself ───────────────────────────────────────────────────────
-   The base ladder shifts from limestone to a lowland plantation green, and the
-   SUMMITS keep the stone: geologically right, since Malaysia's peaks are
-   exposed rock, and it means the limestone already built is not discarded —
-   it is promoted to where it belongs. */
-.wm-map--terrain {
-  --wm-landcover: 1;
-  --wm-top-light: #d9d2a4;
-  --wm-top-mid: #b3b585;
-  --wm-top-low: #94996a;
-  --wm-side-top: #8f8358;
-  --wm-side-mid: #6d6440;
-  --wm-side-bottom: #443c27;
-  --wm-rim: #c99b55;
-  --wm-shadow: rgba(46, 44, 24, 0.3);
+.wm-river-glint path {
+  fill: #cfd8cf;
+  opacity: 0.42;
 }
-
 
 /* ── SIDEWALL STRATA ─────────────────────────────────────────────────────────
    The wall is 42 slices stepping evenly from side-top to side-bottom — which is

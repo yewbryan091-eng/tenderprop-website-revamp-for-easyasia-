@@ -373,6 +373,7 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
   const blurId = `wm-blur-${instance}`;
   const poolBlurId = `wm-pool-blur-${instance}`;
   const clipId = `wm-clip-${instance}`;
+  const riverBlurId = `wm-river-blur-${instance}`;
   const crinkleId = `wm-crinkle-${instance}`;
   const sheetId = `wm-sheet-${instance}`;
   const etchId = `wm-etch-${instance}`;
@@ -399,6 +400,9 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
             <clipPath id={clipId}>
               <use href={`#${shapeId}`} />
             </clipPath>
+            <filter id={riverBlurId} x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="3.2" />
+            </filter>
 
             <linearGradient id={topId} x1="0" y1="0" x2="0.88" y2="1">
               <stop offset="0" stopColor="var(--wm-top-light)" />
@@ -865,19 +869,30 @@ export function WestMalaysiaMap({ className = "", finish = "limestone" }: WestMa
               light pass away and the rivers instantly look like pen lines
               lying on the surface. */}
           <g className="wm-rivers" clipPath={`url(#${clipId})`}>
-            <g className="wm-river-bank" transform="translate(1.1 1.4)">
+            {/* Wet margin — the damp, darker ground a river leaves either side
+                of itself. Same ribbon, blurred, so it has no edge of its own. */}
+            <g className="wm-river-margin" filter={`url(#${riverBlurId})`}>
               {RIVERS.map((river) => (
-                <path key={`bank-${river.key}`} d={river.d} />
+                <path key={`mg-${river.key}`} d={river.d} />
               ))}
             </g>
-            <g className="wm-river-channel">
+            {/* Lit far bank, offset along the plate's own key-light direction. */}
+            <g className="wm-river-bank" transform="translate(1.2 1.5)">
               {RIVERS.map((river) => (
-                <path key={`ch-${river.key}`} d={river.d} />
+                <path key={`bank-${river.key}`} d={river.d} />
               ))}
             </g>
             <g className="wm-river-water">
               {RIVERS.map((river) => (
                 <path key={`wa-${river.key}`} d={river.d} />
+              ))}
+            </g>
+            {/* THE GLINT — a specular sliver up-left of centre, where the key
+                light strikes moving water. This is the mark that reads as
+                LIQUID; without it a filled ribbon is a coloured groove. */}
+            <g className="wm-river-glint" transform="translate(-0.7 -0.9)">
+              {RIVERS.map((river) => (
+                <path key={`gl-${river.key}`} d={river.glint} />
               ))}
             </g>
           </g>
