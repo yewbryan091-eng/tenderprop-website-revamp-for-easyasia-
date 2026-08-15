@@ -286,6 +286,8 @@
 }
 
 .tw-strikes {
+  transform-box: view-box;
+  transform-origin: 122px 94px;
   fill: none;
   stroke: #b58f3e;
   stroke-width: 1.8;
@@ -343,7 +345,7 @@
   }
 
   .tw--play .tw-note {
-    animation-delay: 1050ms;
+    animation-delay: 1500ms;
   }
 
   .tw--play .tw-route--tender {
@@ -351,27 +353,27 @@
   }
 
   .tw--play .tw-route--auction {
-    animation: tw-rise 560ms cubic-bezier(0.22, 0.61, 0.21, 1) 460ms both;
+    animation: tw-rise 560ms cubic-bezier(0.22, 0.61, 0.21, 1) 620ms both;
   }
 
   .tw--play .tw-env-flap {
-    animation: tw-flap 300ms ease-out 380ms both;
+    animation: tw-flap 460ms cubic-bezier(0.3, 0.72, 0.28, 1) 330ms both;
   }
 
   .tw--play .tw-env-lock {
-    animation: tw-seal 430ms cubic-bezier(0.34, 1.35, 0.5, 1) 360ms both;
+    animation: tw-seal 420ms cubic-bezier(0.34, 1.4, 0.5, 1) 720ms both;
   }
 
   .tw--play .tw-gavel {
-    animation: tw-strike 280ms cubic-bezier(0.6, 0, 0.85, 0.35) 700ms both;
+    animation: tw-strike 340ms cubic-bezier(0.55, 0, 0.9, 0.3) 1000ms both;
   }
 
   .tw--play .tw-strikes {
-    animation: tw-pop 150ms ease-out 980ms both;
+    animation: tw-pop 620ms ease-out 1300ms both;
   }
 
   .tw--play .tw-live-dot {
-    animation: tw-pulse 1.6s ease-in-out 1300ms infinite;
+    animation: tw-pulse 1.6s ease-in-out 1900ms infinite;
   }
 
   @keyframes tw-rise {
@@ -386,13 +388,17 @@
     }
   }
 
+  /* A REAL FOLD. This was scaleY(0.88 -> 1) — a 12% squash nobody could see.
+     The flap now starts flipped UP about its hinge (open envelope), passes
+     through zero height and lands closed, which is the actual gesture: the
+     envelope seals itself. */
   @keyframes tw-flap {
     from {
-      transform: scaleY(0.88);
+      transform: scaleY(-0.92);
     }
 
     to {
-      transform: none;
+      transform: scaleY(1);
     }
   }
 
@@ -410,9 +416,11 @@
     }
   }
 
+  /* Raised further and accelerating into the block, so the landing reads as an
+     impact rather than a drift. It stops dead — no bounce, no second tap. */
   @keyframes tw-strike {
     from {
-      transform: rotate(-18deg);
+      transform: rotate(-30deg);
     }
 
     to {
@@ -420,13 +428,22 @@
     }
   }
 
+  /* Flashes on contact and settles back — impact lines that stayed at full
+     strength forever read as permanent decoration rather than a strike. */
   @keyframes tw-pop {
-    from {
+    0% {
       opacity: 0;
+      transform: scale(0.7);
     }
 
-    to {
+    30% {
       opacity: 1;
+      transform: scale(1.06);
+    }
+
+    100% {
+      opacity: 0.55;
+      transform: scale(1);
     }
   }
 
