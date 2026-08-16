@@ -350,37 +350,6 @@
   pointer-events: none;
 }
 
-/* MULTIPLY, not normal. A normal-blended wash paints ON the plate: the terrain
-   underneath is replaced in proportion to alpha, so the stain reads as a pink
-   sticker and the ochre one — being the same lightness as the tan interior it
-   covers — read as nothing at all. Multiplying makes the wash behave like
-   pigment soaking into a sheet, taking its value from the land beneath it, so
-   the land's grain, forest and relief all still show through the stain and the
-   ochre finally has somewhere to go (it darkens the tan instead of matching it).
-   The higher opacities below are calibrated for THIS blend; on normal they
-   would be far too heavy. They were raised again once the stains were cut to
-   the briefed 80-120px: a smaller stain has less area to state itself with, and
-   the brief wants the stain SMALL and CLEARLY VISIBLE at once, so the strength
-   has to come from pigment rather than from spreading over more of the state.
-
-   Three washes, largest and softest first — pigment soaked into the sheet, not
-   a marker printed on top. The ladder still climbs outward-in so the perimeter
-   stays feathered and the centre reads denser, and every value is low enough
-   that terrain, rivers and state engraving all survive underneath. Raised 16 Aug
-   from 0.085/0.105/0.11, which was invisible at viewing distance: the stain is
-   what ties the terminal dot to the land, so if it cannot be seen the stem
-   dangles. Do not push past ~0.35 on the core — beyond that the wash starts
-   hiding the land cover instead of tinting it. */
-.wm-map-pools {
-  mix-blend-mode: multiply;
-}
-
-.wm-pool-a,
-.wm-pool-b,
-.wm-pool-c {
-  stroke: none;
-}
-
 /* Deliberately quiet. The eye should travel watercolour -> stem, not
    "map marker -> stem", so the peg is barely more than a tonal dot. */
 .wm-peg-base {
@@ -508,6 +477,35 @@
    the space above it grows. */
 .wm-map {
   padding-top: clamp(20px, 2.4vw, 36px);
+}
+
+.wm-flag-blot {
+  position: absolute;
+  left: 0;
+  bottom: -21px;
+  width: 158px;
+  height: 58px;
+  overflow: visible;
+  transform: translateX(
+      calc(-50% + var(--wm-flag-dx, 0px) * var(--wm-stem-scale, 1) * var(--wm-dx-scale, 1))
+    )
+    scale(var(--wm-stem-scale, 1));
+  transform-origin: 50% 100%;
+  mix-blend-mode: multiply;
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.wm-blot {
+  fill: var(--wm-blot-ink, #a97883);
+}
+
+.wm-blot--wide {
+  opacity: 0.4;
+}
+
+.wm-blot--core {
+  opacity: 0.55;
 }
 
 /* Zero-size point sitting on the peg. `--wm-peg-*` are written by useStemTips()
@@ -1135,15 +1133,6 @@
     font-size: 7px;
   }
 
-  /* The price label made every card a row taller, and on this 355px plate that
-     row was exactly the clearance between Penang's card and Kuala Lumpur's —
-     they overlapped by 7px. Penang (the first anchor) gets a longer stem HERE,
-     as a var override rather than a bottom hack, because the stem scale feeds
-     the card offset AND the leader geometry together — bump only the card and
-     the line stops 9px short of its foot. Measured: 4px clear. */
-  .wm-flags .wm-flag-anchor:nth-child(1) {
-    --wm-stem-scale: 1.06;
-  }
 
   .wm-flag-price {
     margin-top: 1px;

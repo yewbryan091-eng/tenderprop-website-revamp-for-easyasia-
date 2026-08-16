@@ -184,38 +184,11 @@ const TERRAIN_VALLEY_TIPS = [
    pigment rather than resolving into three tidy ellipses. */
 const POOL_WASH_A =
   "M8 -72 C28 -68 40 -55 55 -42 C74 -36 79 -12 69 5 C77 23 61 46 42 49 C27 68 -3 73 -24 59 C-45 64 -70 43 -66 22 C-81 6 -68 -23 -52 -34 C-50 -55 -25 -71 -7 -65 C-1 -70 2 -72 8 -72 Z M-95 31 C-87 22 -72 24 -69 34 C-68 44 -82 50 -92 43 C-100 40 -101 35 -95 31 Z M70 -49 C78 -55 89 -51 91 -43 C92 -36 83 -30 75 -34 C68 -37 66 -44 70 -49 Z";
+/* POOL_WASH_B retired with the in-map pools; A and C live on in the blots. */
 const POOL_WASH_B =
   "M-5 -50 C14 -55 30 -42 35 -29 C53 -29 61 -7 51 7 C59 25 34 43 17 39 C3 55 -23 50 -30 35 C-49 34 -59 11 -48 -5 C-55 -25 -32 -45 -17 -40 C-14 -46 -10 -49 -5 -50 Z M-61 -34 C-54 -43 -40 -41 -37 -32 C-35 -24 -47 -18 -56 -22 C-64 -24 -66 -29 -61 -34 Z M48 31 C55 25 66 28 68 36 C69 43 60 48 53 45 C47 43 44 36 48 31 Z";
 const POOL_WASH_C =
   "M3 -29 C14 -27 20 -18 18 -10 C31 -4 29 11 19 16 C15 28 -1 31 -10 22 C-23 25 -31 12 -24 2 C-31 -10 -17 -23 -8 -20 C-5 -26 -1 -29 3 -29 Z";
-
-/* THREE related-but-different outlines, never one shape rescaled — a shape
-   scaled three times reads as a concentric ring, which is exactly the radar-dot
-   look this is meant to avoid. Each layer also gets its own rotation and a small
-   offset per location, so no two stains repeat and none is radially symmetric.
-
-   MEASURE THESE AT >1000px VIEWPORT. The camera is capped at 748px wide there
-   but only 620px below the 1000px breakpoint, so a stain photographed on a
-   narrow window comes out about a fifth small and the scales get set too large
-   to compensate — which is how they first landed at 145-195px against a brief
-   asking for 80-120. At the shipping width these render 90-121px across, and
-   roughly half that tall because the 60deg camera is looking along the ground
-   plane the stain is painted on. */
-const POOL_LAYERS = [
-  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 0.93, sy: 0.77, opacity: 0.3 },
-  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 0.9, sy: 0.91, opacity: 0.36 },
-  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 0.86, sy: 0.77, opacity: 0.38 },
-] as const;
-
-/* Offsets are LARGE relative to each shape — around a third of the wash's own
-   radius. Small offsets leave the three outlines sharing a centre, which is
-   exactly what the eye reads as concentric rings. Pushed this far apart, and
-   with the blur raised, they dissolve into one lopsided stain instead. */
-const POOL_TILTS = [
-  { a: { r: -12, x: -25, y: 16 }, b: { r: 58, x: 24, y: -22 }, c: { r: 24, x: -15, y: 14 } },
-  { a: { r: 34, x: 26, y: -16 }, b: { r: -21, x: -24, y: 23 }, c: { r: 70, x: 15, y: 17 } },
-  { a: { r: 96, x: -23, y: -23 }, b: { r: 12, x: 25, y: 21 }, c: { r: -15, x: -15, y: -16 } },
-];
 
 /* The flags live in a FLAT layer, so nothing in CSS knows where a peg ended up
    once the camera's rotateX/rotateZ has had its way. This measures each peg's
@@ -393,9 +366,6 @@ const STEM_FLAGS: Record<
        straight run to the dot, and past that it reads as a wire rather than a
        tether. */
     dx: number;
-    washColor?: string;
-    washScale: number;
-    washStrength: number;
   }
 > = {
   north: {
@@ -403,16 +373,12 @@ const STEM_FLAGS: Record<
     method: "E-Tender",
     place: "George Town, Penang",
     price: "RM\u00a0385,000",
-    washScale: 1,
-    washStrength: 0.84,
   },
   central: {
     dx: -6,
     method: "Owner Auction",
     place: "Kuala Lumpur",
     price: "RM\u00a0465,000",
-    washScale: 0.9,
-    washStrength: 0.88,
   },
   south: {
     /* Inboard, but only as far as the leader can follow. dx dominates the
@@ -425,9 +391,6 @@ const STEM_FLAGS: Record<
     method: "E-Tender",
     place: "Johor Bahru, Johor",
     price: "RM\u00a0520,000",
-    washColor: "#b18a91",
-    washScale: 0.81,
-    washStrength: 0.78,
   },
 };
 
@@ -521,7 +484,6 @@ export function WestMalaysiaMap({
   const grainId = `wm-grain-${instance}`;
   const speckleId = `wm-speckle-${instance}`;
   const blurId = `wm-blur-${instance}`;
-  const poolBlurId = `wm-pool-blur-${instance}`;
   const clipId = `wm-clip-${instance}`;
   const riverBlurId = `wm-river-blur-${instance}`;
   const canopyId = `wm-canopy-${instance}`;
@@ -879,25 +841,6 @@ export function WestMalaysiaMap({
               />
               <feComposite in="tonedMottle" in2="SourceAlpha" operator="in" />
             </filter>
-
-            <filter id={poolBlurId} x="-50%" y="-50%" width="200%" height="200%">
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency="0.025 0.036"
-                numOctaves="2"
-                seed="19"
-                result="poolNoise"
-              />
-              <feDisplacementMap
-                in="SourceGraphic"
-                in2="poolNoise"
-                scale="19"
-                xChannelSelector="R"
-                yChannelSelector="G"
-                result="poolRagged"
-              />
-              <feGaussianBlur in="poolRagged" stdDeviation="7.2" />
-            </filter>
           </defs>
 
           {/* A second silhouette close to the object makes the shadow follow
@@ -1174,38 +1117,6 @@ export function WestMalaysiaMap({
             </g>
           </g>
 
-          {/* Surface washes are clipped to the published coastline so no
-              tint can ever bleed past it, and sit below the Admin 1
-              engravings and stone grain so both stay legible through them. */}
-          <g className="wm-map-pools" clipPath={`url(#${clipId})`}>
-            {WEST_MALAYSIA_LOCATIONS.map((location, index) => {
-              const tilt = POOL_TILTS[index % POOL_TILTS.length];
-              const ink = METHOD_INK[STEM_FLAGS[location.key]?.method ?? "E-Tender"];
-              return (
-                <g
-                  key={location.key}
-                  transform={`translate(${location.x} ${location.y}) scale(${STEM_FLAGS[location.key]?.washScale ?? 1})`}
-                >
-                  {POOL_LAYERS.map((layer) => {
-                    const t =
-                      tilt[layer.cls.endsWith("a") ? "a" : layer.cls.endsWith("b") ? "b" : "c"];
-                    return (
-                      <path
-                        key={layer.cls}
-                        className={layer.cls}
-                        d={layer.path}
-                        transform={`translate(${t.x} ${t.y}) rotate(${t.r}) scale(${layer.sx} ${layer.sy})`}
-                        fill={STEM_FLAGS[location.key]?.washColor ?? ink.bloom}
-                        opacity={layer.opacity * (STEM_FLAGS[location.key]?.washStrength ?? 1)}
-                        filter={layer.blur ? `url(#${poolBlurId})` : undefined}
-                      />
-                    );
-                  })}
-                </g>
-              );
-            })}
-          </g>
-
           {/* Whole-face material remains below the administrative engraving so
               even the stronger highland treatment cannot sand away a state
               boundary. Every use still carries the exact coastline shape. */}
@@ -1342,9 +1253,22 @@ export function WestMalaysiaMap({
                     "--wm-peg-y": `${FALLBACK_PEG[location.key]?.y ?? 50}%`,
                     "--wm-stem-h": `${location.stemHeight}px`,
                     "--wm-flag-dx": `${flag.dx}px`,
+                    "--wm-blot-ink": METHOD_INK[flag.method].bloom,
                   } as CSSProperties
                 }
               >
+                <svg className="wm-flag-blot" viewBox="-65 -24 130 48" aria-hidden="true">
+                  <path
+                    className="wm-blot wm-blot--wide"
+                    d={POOL_WASH_A}
+                    transform="scale(0.65 0.27)"
+                  />
+                  <path
+                    className="wm-blot wm-blot--core"
+                    d={POOL_WASH_C}
+                    transform="translate(8 -3) scale(1 0.43)"
+                  />
+                </svg>
                 <span className={`wm-flag${auction ? " wm-flag--auction" : ""}`}>
                   <span className="wm-flag-method">
                     {auction ? <GavelGlyph /> : <MailGlyph />}
