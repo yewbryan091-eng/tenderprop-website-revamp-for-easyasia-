@@ -303,13 +303,15 @@ function MailGlyph() {
 }
 
 function GavelGlyph() {
+  /* SOLID silhouette, not line work. At the 10px this renders, 2.2px strokes
+     crossing at 45deg mush into a scribble — a filled mallet with its handle
+     bar underneath (the classic auction mark) survives the shrink. Bryan,
+     16 Aug: "a proper one". */
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" width="11" height="11">
       <path
-        d="m14 13-7.5 7.5a2.12 2.12 0 0 1-3-3L11 10M16 16l6-6M8 8l6-6M9 7l8 8M21 11l-8-8"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.2"
+        d="M1 21h12v2H1zM5.24 8.07l2.83-2.83 14.14 14.14-2.83 2.83zM12.32 1l5.66 5.66-2.83 2.83L9.5 3.83zM3.83 9.48l5.66 5.66-2.83 2.83L1 12.31z"
+        fill="currentColor"
       />
     </svg>
   );
