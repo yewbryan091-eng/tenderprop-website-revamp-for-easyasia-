@@ -179,12 +179,14 @@ including today, and the final day reads "1 day left" rather than "0".
   top, shallow layered extrusion, restrained brass rim, engraved state lines and one connected soft
   shadow, viewed at roughly 30° elevation. It is SVG/CSS only — no raster render, WebGL or map embed
   — and remains crisp across desktop sizes. Its final desktop camera width is `min(101%, 760px)`.
-  Three coordinate-projected staged properties sit above accurate Kedah / Pahang / Johor anchors.
-  Their cards are uniformly scaled to 92%, centred over straight `1.5px` stems at `82 / 68 / 55px`
-  with `0.76` opacity. Each anchor carries three displaced, off-centre lobed washes at low
-  `0.085 / 0.105 / 0.11` opacity; the broadest layer is 1.45× its former contour before the plate's
-  5.2% desktop increase. Dusty rose, muted terracotta and soft olive-taupe connect each property to
-  its place only; they never encode selling method or categorise geography.
+  Three coordinate-projected staged properties sit at the real George Town / Kuala Lumpur / Johor
+  Bahru city points. Geography owns the pigment and 4.4px terminal; composition owns the placard.
+  Placards paint at roughly 88% of the rejected UI-box baseline and use desktop offsets
+  `+48 / -6 / -112px` with lifts `32 / 46 / 44px`, tracing the peninsula instead of standing in a
+  row. Their leaders are only `32 / 30 / 34px`: one fading hairline from the placard toward the
+  wash, deliberately stopping before it. Three displaced organic layers render at measured
+  1440px footprints `106 / 119 / 120px`; dusty rose / muted ochre carry effective outer-to-inner
+  opacities `.252–.319 / .264–.334 / .234–.296`, with Johor's rose separately desaturated.
   **Hard rules, founder-set:** West Malaysia only; no East Malaysia; no live listing data, state or
   Klang Valley category fill, map labels, clicks or interaction; the map stays `aria-hidden`. The
   staged cards and E-Tender / Owner Auction badges are a flat, non-interactive overlay and must not

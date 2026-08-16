@@ -202,9 +202,9 @@ const POOL_WASH_C =
    roughly half that tall because the 60deg camera is looking along the ground
    plane the stain is painted on. */
 const POOL_LAYERS = [
-  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 0.64, sy: 0.53 },
-  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 0.61, sy: 0.63 },
-  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 0.6, sy: 0.53 },
+  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 0.7, sy: 0.58, opacity: 0.3 },
+  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 0.68, sy: 0.69, opacity: 0.36 },
+  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 0.65, sy: 0.58, opacity: 0.38 },
 ] as const;
 
 /* Offsets are LARGE relative to each shape — around a third of the wash's own
@@ -346,8 +346,8 @@ function GavelGlyph() {
    does. Derived from the fold's own burgundy/brass split, lightened for
    pigment where the mark is a wash rather than a line. */
 const METHOD_INK = {
-  "E-Tender": { leader: "#8a4054", terminal: "#6d2739", bloom: "#a06579" },
-  "Owner Auction": { leader: "#96773a", terminal: "#7d5a22", bloom: "#b0812f" },
+  "E-Tender": { leader: "#8a4054", terminal: "#6d2739", bloom: "#a97883" },
+  "Owner Auction": { leader: "#96773a", terminal: "#7d5a22", bloom: "#aa8a55" },
 } as const;
 
 /* WHERE EACH PLACARD SITS WITHOUT JAVASCRIPT.
@@ -373,34 +373,74 @@ const STEM_FLAGS: Record<
     method: "E-Tender" | "Owner Auction";
     place: string;
     price: string;
-    /* Horizontal offset, px. HELD AT ZERO — a beacon's stem is vertical and
-       meets its label at bottom centre. The field survives only as a hook for a
-       future one-off nudge; any non-zero value reintroduces the elbow that was
-       removed on 16 Aug for detaching the labels from the land. */
+    /* The card is composition; the dot is geography. Keeping these separate
+       lets the placard trace the peninsula without moving its real location. */
+    /* Horizontal offset of the LABEL from its hotspot, px. Bryan, 16 Aug:
+       "why is it at the edge of the map, make it onto the middle of the map".
+
+       Measured cause: the camera's rotateX(60deg) rotateZ(-7deg) lays the
+       peninsula out almost lengthwise, so the three cities span the plate end
+       to end. At Penang's column the land is a 30-41% sliver and at Johor's a
+       69-84% one, so a label sitting straight above either dot clears the coast
+       and floats on bare background — only Kuala Lumpur, in the fat middle of
+       the country, had land under it. Offsetting the label inboard is what puts
+       all three over the map's body.
+
+       Signs point INWARD: +ve moves the northern label east, -ve moves the
+       southern label west. Keep them under ~100px — the leader is drawn as one
+       straight run to the dot, and past that it reads as a wire rather than a
+       tether. */
     dx: number;
+    /* Visible leader length from the placard toward the wash. It deliberately
+       stops before the pigment instead of becoming a full-length pole. */
+    leaderLength: number;
+    washColor?: string;
+    washScale: number;
+    washStrength: number;
   }
 > = {
   north: {
-    dx: 0,
+    dx: 48,
+    leaderLength: 32,
     method: "E-Tender",
     place: "George Town, Penang",
-    price: "RM 385,000",
+    price: "RM385,000",
+    washScale: 1,
+    washStrength: 0.84,
   },
   central: {
-    dx: 0,
+    dx: -6,
+    leaderLength: 30,
     method: "Owner Auction",
     place: "Kuala Lumpur",
-    price: "RM 465,000",
+    price: "RM465,000",
+    washScale: 0.9,
+    washStrength: 0.88,
   },
   south: {
-    /* Johor Bahru is near the southern tip; the placard offsets OUTWARD
-       (east) so it clears the narrow landmass instead of standing on it. */
-    dx: 0,
+    /* WEST, not east. Offsetting outward pushed this label past the plate
+       entirely — it was the one hanging 38px beyond the map box. Inboard puts
+       it over the southern landmass. */
+    dx: -112,
+    leaderLength: 34,
     method: "E-Tender",
     place: "Johor Bahru, Johor",
-    price: "RM 520,000",
+    price: "RM520,000",
+    washColor: "#b18a91",
+    washScale: 0.81,
+    washStrength: 0.78,
   },
 };
+
+function leaderSegment(dx: number, lift: number, length: number) {
+  const distance = Math.hypot(dx, lift) || 1;
+  return {
+    startX: dx,
+    startY: -lift,
+    endX: dx - (dx / distance) * length,
+    endY: -lift + (lift / distance) * length,
+  };
+}
 
 /* Low-profile six-sided peg plate, shared silhouette for every location.
    Top/bottom overlay panels add a subtle light-over-dark bevel in the
@@ -859,12 +899,12 @@ export function WestMalaysiaMap({
               <feDisplacementMap
                 in="SourceGraphic"
                 in2="poolNoise"
-                scale="16"
+                scale="19"
                 xChannelSelector="R"
                 yChannelSelector="G"
                 result="poolRagged"
               />
-              <feGaussianBlur in="poolRagged" stdDeviation="5.2" />
+              <feGaussianBlur in="poolRagged" stdDeviation="7.2" />
             </filter>
           </defs>
 
@@ -1150,7 +1190,10 @@ export function WestMalaysiaMap({
               const tilt = POOL_TILTS[index % POOL_TILTS.length];
               const ink = METHOD_INK[STEM_FLAGS[location.key]?.method ?? "E-Tender"];
               return (
-                <g key={location.key} transform={`translate(${location.x} ${location.y})`}>
+                <g
+                  key={location.key}
+                  transform={`translate(${location.x} ${location.y}) scale(${STEM_FLAGS[location.key]?.washScale ?? 1})`}
+                >
                   {POOL_LAYERS.map((layer) => {
                     const t =
                       tilt[layer.cls.endsWith("a") ? "a" : layer.cls.endsWith("b") ? "b" : "c"];
@@ -1160,7 +1203,8 @@ export function WestMalaysiaMap({
                         className={layer.cls}
                         d={layer.path}
                         transform={`translate(${t.x} ${t.y}) rotate(${t.r}) scale(${layer.sx} ${layer.sy})`}
-                        fill={ink.bloom}
+                        fill={STEM_FLAGS[location.key]?.washColor ?? ink.bloom}
+                        opacity={layer.opacity * (STEM_FLAGS[location.key]?.washStrength ?? 1)}
                         filter={layer.blur ? `url(#${poolBlurId})` : undefined}
                       />
                     );
@@ -1215,7 +1259,7 @@ export function WestMalaysiaMap({
             {WEST_MALAYSIA_LOCATIONS.map((location) => (
               <g
                 key={location.key}
-                transform={`translate(${location.x} ${location.y}) scale(1.35)`}
+                transform={`translate(${location.x} ${location.y}) scale(0.72)`}
               >
                 <path
                   className="wm-peg-base"
@@ -1295,6 +1339,8 @@ export function WestMalaysiaMap({
             const flag = STEM_FLAGS[location.key];
             if (!flag) return null;
             const auction = flag.method === "Owner Auction";
+            const leader = leaderSegment(flag.dx, location.stemHeight, flag.leaderLength);
+            const leaderId = `wm-leader-${instance}-${location.key}`;
             return (
               <span
                 key={location.key}
@@ -1306,24 +1352,45 @@ export function WestMalaysiaMap({
                     "--wm-peg-y": `${FALLBACK_PEG[location.key]?.y ?? 50}%`,
                     "--wm-stem-h": `${location.stemHeight}px`,
                     "--wm-flag-dx": `${flag.dx}px`,
-                    "--wm-annot-leader": METHOD_INK[flag.method].leader,
                     "--wm-annot-terminal": METHOD_INK[flag.method].terminal,
                   } as CSSProperties
                 }
               >
-                {/* ── LEADER ────────────────────────────────────────────
-                    A cartographic leader, not a pole: a vertical run from
-                    the exact geographic point, one rounded elbow near the
-                    top, then a short horizontal to the placard's foot. The
-                    elbow only appears when the placard is offset — at dx 0
-                    the path is a plain vertical, so the geometry never
-                    invents a bend it does not need.
-
-                    Drawn as ONE svg with `overflow: visible` anchored on the
-                    peg, so the line, the map terminal and the placard's
-                    anchor dot can never drift apart. */}
+                {/* The dot stays at the projected point. The short leader starts
+                    at the placard, fades toward the wash, and intentionally
+                    stops before it — proximity carries the remaining link. */}
                 <svg className="wm-flag-leader" viewBox="0 0 1 1" aria-hidden="true">
-                  <path className="wm-leader-line" d={`M0 0 V${-location.stemHeight}`} />
+                  <defs>
+                    <linearGradient
+                      id={leaderId}
+                      gradientUnits="userSpaceOnUse"
+                      x1={leader.startX}
+                      y1={leader.startY}
+                      x2={leader.endX}
+                      y2={leader.endY}
+                    >
+                      <stop
+                        offset="0"
+                        stopColor={METHOD_INK[flag.method].leader}
+                        stopOpacity="0.76"
+                      />
+                      <stop
+                        offset="0.78"
+                        stopColor={METHOD_INK[flag.method].leader}
+                        stopOpacity="0.44"
+                      />
+                      <stop
+                        offset="1"
+                        stopColor={METHOD_INK[flag.method].leader}
+                        stopOpacity="0.12"
+                      />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    className="wm-leader-line"
+                    d={`M${leader.startX} ${leader.startY} L${leader.endX} ${leader.endY}`}
+                    stroke={`url(#${leaderId})`}
+                  />
                   <circle className="wm-leader-terminal" cx={0} cy={0} r={2.2} />
                 </svg>
                 <span className={`wm-flag${auction ? " wm-flag--auction" : ""}`}>

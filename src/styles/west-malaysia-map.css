@@ -375,19 +375,10 @@
   mix-blend-mode: multiply;
 }
 
-.wm-pool-a {
-  stroke: none;
-  opacity: 0.38;
-}
-
-.wm-pool-b {
-  stroke: none;
-  opacity: 0.46;
-}
-
+.wm-pool-a,
+.wm-pool-b,
 .wm-pool-c {
   stroke: none;
-  opacity: 0.54;
 }
 
 /* Deliberately quiet. The eye should travel watercolour -> stem, not
@@ -466,6 +457,11 @@
     /* On .wm-map, NOT on .wm-map-camera: the flags layer is the camera's
        sibling, so anything declared on the camera never reaches it. */
     --wm-stem-scale: 0.74;
+    /* Keeps the inward pull the same SHARE of the plate it is on desktop, and
+       then some: on a 355px map the labels are proportionally far wider, so
+       pulling them toward the centre is what makes them collide. 0.3 is the
+       measured value at which the southern pair separates horizontally. */
+    --wm-dx-scale: 0.3;
   }
 
   .wm-map-camera {
@@ -542,18 +538,17 @@
   width: 1px;
   height: 1px;
   overflow: visible;
-  transform: scale(var(--wm-stem-scale, 1));
+  transform: scaleX(calc(var(--wm-stem-scale, 1) * var(--wm-dx-scale, 1)))
+    scaleY(var(--wm-stem-scale, 1));
   transform-origin: 0 100%;
 }
 
 .wm-leader-line {
   fill: none;
-  stroke: var(--wm-annot-leader, #8a4054);
-  stroke-width: 1;
+  stroke-width: 1.1;
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
-  opacity: 0.6;
 }
 
 /* At the map end: precision. Small, solid, method ink. */
@@ -571,19 +566,21 @@
      again. `max-content` with nowrap keeps "Sungai Petani, Kedah" on one line. */
   width: max-content;
   max-width: calc(172px * var(--wm-stem-scale, 1));
-  transform: translateX(calc(-50% + var(--wm-flag-dx, 0px) * var(--wm-stem-scale, 1)));
+  transform: translateX(
+    calc(-50% + var(--wm-flag-dx, 0px) * var(--wm-stem-scale, 1) * var(--wm-dx-scale, 1))
+  );
   transform-origin: 50% 100%;
-  padding: 8px 11px 9px;
+  padding: 6.5px 8.5px 7.5px;
   /* Almost square. A 10px radius on a label this small is a UI card's corner;
      a placard's corner is barely eased. */
   border-radius: 5px;
-  background: #fffcf8;
+  background: #f8efe5;
   /* One narrow contact shadow and one shallow lift. The old 24px spread threw a
      web-component drop shadow across the terrain — an object resting a few
      millimetres above a physical model barely casts anything. */
   box-shadow:
-    0 1px 1.5px rgba(45, 32, 24, 0.07),
-    0 7px 14px -8px rgba(45, 32, 24, 0.18);
+    0 1px 1px rgba(45, 32, 24, 0.045),
+    0 5px 10px -8px rgba(45, 32, 24, 0.12);
   font-family: var(--sans);
   text-align: left;
   /* The route colour, inherited by the top rule and by both coloured lines.
@@ -620,7 +617,7 @@
   align-items: center;
   gap: 5px;
   color: var(--wm-flag-ink-small);
-  font-size: 8px;
+  font-size: 7.3px;
   font-weight: 800;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -629,14 +626,14 @@
 }
 
 .wm-flag-method svg {
-  width: 10px;
-  height: 10px;
+  width: 8.8px;
+  height: 8.8px;
 }
 
 .wm-flag-place {
   display: block;
-  margin-top: 5px;
-  font-size: 10.5px;
+  margin-top: 4.5px;
+  font-size: 9.5px;
   font-weight: 500;
   color: #6b6055;
   line-height: 1.25;
@@ -645,8 +642,8 @@
 
 .wm-flag-price {
   display: block;
-  margin-top: 2px;
-  font-size: 13.5px;
+  margin-top: 1.5px;
+  font-size: 12.2px;
   font-weight: 800;
   letter-spacing: -0.015em;
   color: var(--wm-flag-ink);
@@ -823,7 +820,6 @@
   }
 }
 
-
 /* ── SHALLOW-WATER SHELF ─────────────────────────────────────────────────────
    The sea remembering the coast: one wide, soft, cool ring at the foot of the
    wall. The single trace of sea this section allows itself — the ground stays
@@ -876,7 +872,6 @@
   filter: blur(4px);
   transform: translate(-50%, -50%) rotate(-8deg);
 }
-
 
 /* ── GREENERY ON THE LIMESTONE — the chosen plate, brought to life ────────────
    Bryan, 15 Aug: the map needs terrain, blue water and GREEN. Study D proved
@@ -941,14 +936,12 @@
   }
 }
 
-
 /* On the green country the settlement smudges at 0.72 read as stains; the peg
    blooms already carry the colour story at the cities. Same restraint as the
    limestone treatment. */
 .wm-map--terrain .wm-cover--urban {
   opacity: 0.2;
 }
-
 
 /* ── FOREST ON THE RANGES ────────────────────────────────────────────────────
    Inside the hue-only group, so the relief's own light survives — these paint
@@ -987,7 +980,6 @@
   filter: blur(5px);
 }
 
-
 /* ── CLOUDS — still weather ──────────────────────────────────────────────────
    No animation by Bryan's call: a stationary fleet, composed like an aerial
    photograph, which also keeps the rivers as the plate's only motion. The
@@ -1021,7 +1013,6 @@
   opacity: 0.66;
   filter: blur(6px);
 }
-
 
 /* ── SURFACE POLISH ──────────────────────────────────────────────────────────
    Beach: a pale rim stroked ON the coastline and clipped to land, so only the
@@ -1057,9 +1048,6 @@
   opacity: 0.17;
   filter: blur(14px);
 }
-
-
-
 
 /* ── RIVER HIERARCHY ─────────────────────────────────────────────────────────
    Rank drives opacity, not just width (Bryan, 15 Aug: several waterways
@@ -1123,8 +1111,15 @@
    absolute lengths and have to come down on their own. Measured after: labels
    ~97px against a 355px map (27% of its width, from 36%), no overlaps. */
 @media (max-width: 700px) {
+  /* Sized by the STACK, not by taste. The mobile plate is 355x350, and the
+     three pegs span only ~99px of it vertically while the southern label has
+     the longest stem — which lifts it INTO the other two. At 49px tall the
+     labels overlapped in pairs; at ~40px they clear, measured. They also drop
+     from 30% to ~22% of the map's width, which is where a label this size
+     should sit anyway. */
   .wm-flag {
-    padding: 6px 8px 6px;
+    padding: 3px 7px 4px;
+    max-width: calc(150px * var(--wm-stem-scale, 1));
   }
 
   .wm-flag::before {
@@ -1132,20 +1127,22 @@
   }
 
   .wm-flag-method {
-    font-size: 7px;
+    font-size: 6.5px;
+    gap: 4px;
   }
 
   .wm-flag-method svg {
-    width: 8.5px;
-    height: 8.5px;
+    width: 7.5px;
+    height: 7.5px;
   }
 
   .wm-flag-place {
-    margin-top: 4px;
-    font-size: 8.5px;
+    margin-top: 3px;
+    font-size: 8px;
   }
 
   .wm-flag-price {
-    font-size: 11px;
+    margin-top: 1px;
+    font-size: 10px;
   }
 }
