@@ -476,3 +476,14 @@
     }
   }
 }
+
+/* Hover replay is driven by the Web Animations API in TwoWays.tsx, not by a
+   class here. Two CSS attempts failed in ways worth recording:
+   · Reusing `tw-flap` et al. did nothing — an element already carrying an
+     animation of that name keeps the existing (finished) one and merely takes
+     the new timing, so the hover re-applied a finished animation.
+   · Distinct `-h` keyframes ran correctly, but REMOVING the class handed the
+     element back to the `.tw--play` rule as a fresh animation, so every hover
+     fired a stray second gesture ~1s later.
+   A WAAPI animation is independent of both, always restarts, and on finishing
+   returns the element to whatever CSS says — which is the resting pose. */

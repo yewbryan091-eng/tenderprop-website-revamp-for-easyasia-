@@ -175,9 +175,79 @@ export function TwoWays() {
     );
     observer.observe(routes);
 
+    /* HOVER REPLAY, driven by the Web Animations API rather than a CSS class.
+       See the note in home-twoways.css: a class could not restart these
+       reliably without also firing a stray second gesture when it came off.
+       A WAAPI animation is independent of the CSS one, restarts every time,
+       and on finishing hands the element back to its resting pose.
+
+       Bound to the artwork only, so pointing at the copy while reading does
+       not set the drawings off, and skipped while one is already mid-replay so
+       a jittery pointer cannot stutter the gesture. */
+    const EASE_OUT = "cubic-bezier(0.3, 0.72, 0.28, 1)";
+    const EASE_IN = "cubic-bezier(0.55, 0, 0.9, 0.3)";
+    const EASE_PRESS = "cubic-bezier(0.34, 1.4, 0.5, 1)";
+    const running = new Set<HTMLElement>();
+
+    const gesture = (
+      root: HTMLElement,
+      selector: string,
+      frames: Keyframe[],
+      options: KeyframeAnimationOptions,
+    ) => {
+      const node = root.querySelector(selector);
+      if (node) node.animate(frames, options);
+    };
+
+    const replay = (event: Event) => {
+      const art = event.currentTarget as HTMLElement;
+      if (running.has(art)) return;
+      running.add(art);
+      window.setTimeout(() => running.delete(art), 950);
+
+      /* Envelope: the flap folds shut, then the padlock presses. */
+      gesture(art, ".tw-env-flap", [{ transform: "scaleY(-0.92)" }, { transform: "scaleY(1)" }], {
+        duration: 460,
+        easing: EASE_OUT,
+      });
+      gesture(
+        art,
+        ".tw-env-lock",
+        [
+          { transform: "scale(0.86)", offset: 0 },
+          { transform: "scale(1.05)", offset: 0.55 },
+          { transform: "scale(1)", offset: 1 },
+        ],
+        { duration: 420, delay: 300, easing: EASE_PRESS },
+      );
+
+      /* Gavel: one strike, then the impact ticks flash and settle. */
+      gesture(art, ".tw-gavel", [{ transform: "rotate(-30deg)" }, { transform: "rotate(0deg)" }], {
+        duration: 340,
+        easing: EASE_IN,
+      });
+      gesture(
+        art,
+        ".tw-strikes",
+        [
+          { opacity: 0, transform: "scale(0.7)", offset: 0 },
+          { opacity: 1, transform: "scale(1.06)", offset: 0.3 },
+          { opacity: 0.55, transform: "scale(1)", offset: 1 },
+        ],
+        { duration: 620, delay: 280, easing: "ease-out" },
+      );
+    };
+    const artBlocks = Array.from(el.querySelectorAll<HTMLElement>(".tw-route-art"));
+    /* Real pointers only. `pointerenter` fires on tap, which would make the
+       drawings feel like buttons on a phone. */
+    if (window.matchMedia("(hover: hover)").matches) {
+      artBlocks.forEach((art) => art.addEventListener("pointerenter", replay));
+    }
+
     return () => {
       observer.disconnect();
       window.clearTimeout(guard);
+      artBlocks.forEach((art) => art.removeEventListener("pointerenter", replay));
       el.classList.remove("tw--armed", "tw--play");
     };
   }, []);

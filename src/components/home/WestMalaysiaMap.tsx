@@ -192,11 +192,19 @@ const POOL_WASH_C =
 /* THREE related-but-different outlines, never one shape rescaled — a shape
    scaled three times reads as a concentric ring, which is exactly the radar-dot
    look this is meant to avoid. Each layer also gets its own rotation and a small
-   offset per location, so no two stains repeat and none is radially symmetric. */
+   offset per location, so no two stains repeat and none is radially symmetric.
+
+   MEASURE THESE AT >1000px VIEWPORT. The camera is capped at 748px wide there
+   but only 620px below the 1000px breakpoint, so a stain photographed on a
+   narrow window comes out about a fifth small and the scales get set too large
+   to compensate — which is how they first landed at 145-195px against a brief
+   asking for 80-120. At the shipping width these render 90-121px across, and
+   roughly half that tall because the 60deg camera is looking along the ground
+   plane the stain is painted on. */
 const POOL_LAYERS = [
-  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 1.04, sy: 0.86 },
-  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 0.99, sy: 1.02 },
-  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 0.96, sy: 0.85 },
+  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 0.64, sy: 0.53 },
+  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 0.61, sy: 0.63 },
+  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 0.6, sy: 0.53 },
 ] as const;
 
 /* Offsets are LARGE relative to each shape — around a third of the wash's own

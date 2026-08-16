@@ -358,7 +358,10 @@
    the land's grain, forest and relief all still show through the stain and the
    ochre finally has somewhere to go (it darkens the tan instead of matching it).
    The higher opacities below are calibrated for THIS blend; on normal they
-   would be far too heavy.
+   would be far too heavy. They were raised again once the stains were cut to
+   the briefed 80-120px: a smaller stain has less area to state itself with, and
+   the brief wants the stain SMALL and CLEARLY VISIBLE at once, so the strength
+   has to come from pigment rather than from spreading over more of the state.
 
    Three washes, largest and softest first — pigment soaked into the sheet, not
    a marker printed on top. The ladder still climbs outward-in so the perimeter
@@ -374,17 +377,17 @@
 
 .wm-pool-a {
   stroke: none;
-  opacity: 0.3;
+  opacity: 0.38;
 }
 
 .wm-pool-b {
   stroke: none;
-  opacity: 0.36;
+  opacity: 0.46;
 }
 
 .wm-pool-c {
   stroke: none;
-  opacity: 0.42;
+  opacity: 0.54;
 }
 
 /* Deliberately quiet. The eye should travel watercolour -> stem, not
@@ -463,36 +466,6 @@
     /* On .wm-map, NOT on .wm-map-camera: the flags layer is the camera's
        sibling, so anything declared on the camera never reaches it. */
     --wm-stem-scale: 0.74;
-  }
-
-  /* The scale variable shortens the stem and the offsets, but a label's type and
-     padding are absolute — left alone they keep their desktop bulk on a map half
-     the width. These bring the label down with everything else; measured ~97px
-     wide against a 355px map, versus 133px before. */
-  .wm-flag {
-    padding: 6px 8px 6px;
-  }
-
-  .wm-flag::before {
-    height: 1.5px;
-  }
-
-  .wm-flag-method {
-    font-size: 7px;
-  }
-
-  .wm-flag-method svg {
-    width: 8.5px;
-    height: 8.5px;
-  }
-
-  .wm-flag-place {
-    margin-top: 4px;
-    font-size: 8.5px;
-  }
-
-  .wm-flag-price {
-    font-size: 11px;
   }
 
   .wm-map-camera {
@@ -1136,4 +1109,43 @@
   stroke: #6b5c3c;
   stroke-width: 1.6;
   opacity: 0.22;
+}
+
+/* ── ANNOTATIONS ON SMALL SCREENS ─────────────────────────────────────────────
+   LAST IN THE FILE ON PURPOSE. These selectors are identical in specificity to
+   the base `.wm-flag*` rules above, so a media block placed earlier in the
+   stylesheet loses to them and silently does nothing — which is exactly what
+   happened when this lived up beside the other max-width:700px rules: the stems
+   shortened, the labels did not, and the three of them overlapped across a
+   355px-wide map. Keep any new label override down here.
+
+   `--wm-stem-scale` handles the stem and the offsets; type and padding are
+   absolute lengths and have to come down on their own. Measured after: labels
+   ~97px against a 355px map (27% of its width, from 36%), no overlaps. */
+@media (max-width: 700px) {
+  .wm-flag {
+    padding: 6px 8px 6px;
+  }
+
+  .wm-flag::before {
+    height: 1.5px;
+  }
+
+  .wm-flag-method {
+    font-size: 7px;
+  }
+
+  .wm-flag-method svg {
+    width: 8.5px;
+    height: 8.5px;
+  }
+
+  .wm-flag-place {
+    margin-top: 4px;
+    font-size: 8.5px;
+  }
+
+  .wm-flag-price {
+    font-size: 11px;
+  }
 }
