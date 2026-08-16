@@ -113,7 +113,7 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 100.3288,
     x: 147.02,
     y: 278.96,
-    stemHeight: 32,
+    stemHeight: 17,
   },
   {
     key: "central",
@@ -122,7 +122,7 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 101.6869,
     x: 439.12,
     y: 769.47,
-    stemHeight: 46,
+    stemHeight: 26,
   },
   {
     key: "south",
@@ -131,6 +131,6 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 103.7414,
     x: 881,
     y: 1124.42,
-    stemHeight: 44,
+    stemHeight: 22,
   },
 ] as const;

@@ -202,9 +202,9 @@ const POOL_WASH_C =
    roughly half that tall because the 60deg camera is looking along the ground
    plane the stain is painted on. */
 const POOL_LAYERS = [
-  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 0.7, sy: 0.58, opacity: 0.3 },
-  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 0.68, sy: 0.69, opacity: 0.36 },
-  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 0.65, sy: 0.58, opacity: 0.38 },
+  { cls: "wm-pool-a", path: POOL_WASH_A, blur: true, sx: 0.93, sy: 0.77, opacity: 0.3 },
+  { cls: "wm-pool-b", path: POOL_WASH_B, blur: true, sx: 0.9, sy: 0.91, opacity: 0.36 },
+  { cls: "wm-pool-c", path: POOL_WASH_C, blur: false, sx: 0.86, sy: 0.77, opacity: 0.38 },
 ] as const;
 
 /* Offsets are LARGE relative to each shape — around a third of the wash's own
@@ -391,56 +391,43 @@ const STEM_FLAGS: Record<
        straight run to the dot, and past that it reads as a wire rather than a
        tether. */
     dx: number;
-    /* Visible leader length from the placard toward the wash. It deliberately
-       stops before the pigment instead of becoming a full-length pole. */
-    leaderLength: number;
     washColor?: string;
     washScale: number;
     washStrength: number;
   }
 > = {
   north: {
-    dx: 48,
-    leaderLength: 32,
+    dx: 34,
     method: "E-Tender",
     place: "George Town, Penang",
-    price: "RM385,000",
+    price: "RM\u00a0385,000",
     washScale: 1,
     washStrength: 0.84,
   },
   central: {
     dx: -6,
-    leaderLength: 30,
     method: "Owner Auction",
     place: "Kuala Lumpur",
-    price: "RM465,000",
+    price: "RM\u00a0465,000",
     washScale: 0.9,
     washStrength: 0.88,
   },
   south: {
-    /* WEST, not east. Offsetting outward pushed this label past the plate
-       entirely — it was the one hanging 38px beyond the map box. Inboard puts
-       it over the southern landmass. */
-    dx: -112,
-    leaderLength: 34,
+    /* Inboard, but only as far as the leader can follow. dx dominates the
+       card-to-dot distance here (the dot is at 97% of the plate), so this is
+       the one offset that cannot simply grow: at -112 the card sat 120px from
+       its own hotspot with a 34px stub, leaving 86px of bare terrain between
+       label and pigment. -72 brings the span to 78px — 35% shorter — and puts
+       the card body on the southern landmass instead of on the coast. */
+    dx: -56,
     method: "E-Tender",
     place: "Johor Bahru, Johor",
-    price: "RM520,000",
+    price: "RM\u00a0520,000",
     washColor: "#b18a91",
     washScale: 0.81,
     washStrength: 0.78,
   },
 };
-
-function leaderSegment(dx: number, lift: number, length: number) {
-  const distance = Math.hypot(dx, lift) || 1;
-  return {
-    startX: dx,
-    startY: -lift,
-    endX: dx - (dx / distance) * length,
-    endY: -lift + (lift / distance) * length,
-  };
-}
 
 /* Low-profile six-sided peg plate, shared silhouette for every location.
    Top/bottom overlay panels add a subtle light-over-dark bevel in the
@@ -1342,8 +1329,6 @@ export function WestMalaysiaMap({
             const flag = STEM_FLAGS[location.key];
             if (!flag) return null;
             const auction = flag.method === "Owner Auction";
-            const leader = leaderSegment(flag.dx, location.stemHeight, flag.leaderLength);
-            const leaderId = `wm-leader-${instance}-${location.key}`;
             return (
               <span
                 key={location.key}
@@ -1359,42 +1344,8 @@ export function WestMalaysiaMap({
                   } as CSSProperties
                 }
               >
-                {/* The dot stays at the projected point. The short leader starts
-                    at the placard, fades toward the wash, and intentionally
-                    stops before it — proximity carries the remaining link. */}
-                <svg className="wm-flag-leader" viewBox="0 0 1 1" aria-hidden="true">
-                  <defs>
-                    <linearGradient
-                      id={leaderId}
-                      gradientUnits="userSpaceOnUse"
-                      x1={leader.startX}
-                      y1={leader.startY}
-                      x2={leader.endX}
-                      y2={leader.endY}
-                    >
-                      <stop
-                        offset="0"
-                        stopColor={METHOD_INK[flag.method].leader}
-                        stopOpacity="0.76"
-                      />
-                      <stop
-                        offset="0.78"
-                        stopColor={METHOD_INK[flag.method].leader}
-                        stopOpacity="0.44"
-                      />
-                      <stop
-                        offset="1"
-                        stopColor={METHOD_INK[flag.method].leader}
-                        stopOpacity="0.12"
-                      />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    className="wm-leader-line"
-                    d={`M${leader.startX} ${leader.startY} L${leader.endX} ${leader.endY}`}
-                    stroke={`url(#${leaderId})`}
-                  />
-                  <circle className="wm-leader-terminal" cx={0} cy={0} r={2.2} />
+                <svg className="wm-flag-dot" viewBox="0 0 1 1" aria-hidden="true">
+                  <circle className="wm-dot-mark" cx={0} cy={0} r={2.4} />
                 </svg>
                 <span className={`wm-flag${auction ? " wm-flag--auction" : ""}`}>
                   <span className="wm-flag-method">
@@ -1402,6 +1353,9 @@ export function WestMalaysiaMap({
                     {flag.method}
                   </span>
                   <span className="wm-flag-place">{flag.place}</span>
+                  <span className="wm-flag-pricelabel">
+                    {auction ? "Starting Bid" : "Reserve Price"}
+                  </span>
                   <span className="wm-flag-price">{flag.price}</span>
                 </span>
               </span>
