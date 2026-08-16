@@ -350,23 +350,14 @@
   pointer-events: none;
 }
 
-/* Deliberately quiet. The eye should travel watercolour -> stem, not
-   "map marker -> stem", so the peg is barely more than a tonal dot. */
-.wm-peg-base {
-  stroke: rgba(35, 22, 18, 0.16);
-  stroke-width: 0.4;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-}
-
-.wm-peg-top {
-  fill: rgba(255, 253, 248, 0.2);
-  pointer-events: none;
-}
-
-.wm-peg-bottom {
-  fill: rgba(32, 20, 16, 0.14);
-  pointer-events: none;
+/* INVISIBLE, NOT DELETED. The pegs are the measurement anchors useStemTips
+   reads to place every card — but as painted marks they died on 16 Aug: over
+   the blot's rose pigment the ink hexes popped as "weird dots" (Bryan) instead
+   of hiding as texture. visibility:hidden keeps their geometry measurable
+   while removing every trace of them from the render. Do not display:none
+   them — that collapses getBoundingClientRect and stacks all three cards. */
+.wm-map-pegs {
+  visibility: hidden;
 }
 
 .wm-stems {
@@ -506,6 +497,90 @@
 
 .wm-blot--core {
   opacity: 0.55;
+}
+
+/* ── ATLAS FURNITURE ─────────────────────────────────────────────────────────
+   Compass upper-right, unlabelled survey rule lower-right — both in the
+   plate's negative space, both on the map's -7deg grid, both quieter than
+   every property card. If either is the first thing the eye lands on, it is
+   too strong: drop opacity before size. Hidden below 700px — decoration never
+   outranks composition on a phone. */
+.wm-compass {
+  position: absolute;
+  top: 6%;
+  right: 3%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transform: rotate(-7deg);
+  opacity: 0.52;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.wm-compass-n {
+  font-family: var(--sans);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  fill: #571c2e;
+}
+
+.wm-compass-line {
+  fill: none;
+  stroke: #571c2e;
+  stroke-width: 0.9;
+  stroke-linecap: round;
+}
+
+.wm-compass-diamond {
+  fill: none;
+  stroke: #571c2e;
+  stroke-width: 0.9;
+  stroke-linejoin: round;
+}
+
+.wm-compass-tip {
+  fill: #571c2e;
+}
+
+.wm-compass-caption {
+  font-family: var(--sans);
+  font-size: 6.5px;
+  font-weight: 600;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: #8a7d6e;
+  white-space: nowrap;
+}
+
+.wm-scalebar {
+  position: absolute;
+  right: 4%;
+  bottom: 7%;
+  transform: rotate(-7deg);
+  opacity: 0.48;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.wm-scalebar-line {
+  fill: none;
+  stroke: #6f6252;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+
+.wm-scalebar-fill {
+  fill: #6f6252;
+}
+
+@media (max-width: 700px) {
+  .wm-compass,
+  .wm-scalebar {
+    display: none;
+  }
 }
 
 /* Zero-size point sitting on the peg. `--wm-peg-*` are written by useStemTips()
