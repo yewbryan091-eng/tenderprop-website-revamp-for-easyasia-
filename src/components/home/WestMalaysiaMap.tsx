@@ -486,6 +486,9 @@ const CLOUDS = [
   /* Northern: dimmed to 0.72 — at 0.95 it hid too much Kedah terrain. */
   { key: "a", x: 228, y: 164, s: 0.85, o: 0.72, flip: false, rot: 0 },
   { key: "c", x: 330, y: 440, s: 1.15, o: 1, flip: false, rot: -6 },
+  /* Eastern lowland: intentionally smaller and quieter than the central-range
+     cloud so the open Pahang terrain still reads beneath it. */
+  { key: "e", x: 695, y: 435, s: 0.78, o: 0.82, flip: true, rot: -3 },
   /* Johor sits EAST — at this latitude the land only begins around x=614,
      so the old x=470 hung the wisp off the coast like fog on the wall. At
      (700, 1000) the puff's full extent (±63 units at this scale) stays on
