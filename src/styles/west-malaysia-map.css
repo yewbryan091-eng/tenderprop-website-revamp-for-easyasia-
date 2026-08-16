@@ -473,7 +473,7 @@
 .wm-flag-blot {
   position: absolute;
   left: 0;
-  bottom: -21px;
+  bottom: calc(var(--wm-stem-h, 0px) * var(--wm-stem-scale, 1) - 34px);
   width: 158px;
   height: 58px;
   overflow: visible;
@@ -507,14 +507,14 @@
    outranks composition on a phone. */
 .wm-compass {
   position: absolute;
-  top: 6%;
-  right: 3%;
+  top: 12%;
+  right: 7%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   transform: rotate(-7deg);
-  opacity: 0.52;
+  opacity: 0.58;
   pointer-events: none;
   z-index: 2;
 }
@@ -545,9 +545,14 @@
   fill: #571c2e;
 }
 
+.wm-compass svg {
+  width: 82px;
+  height: auto;
+}
+
 .wm-compass-caption {
   font-family: var(--sans);
-  font-size: 6.5px;
+  font-size: 7.5px;
   font-weight: 600;
   letter-spacing: 0.17em;
   text-transform: uppercase;
@@ -555,30 +560,8 @@
   white-space: nowrap;
 }
 
-.wm-scalebar {
-  position: absolute;
-  right: 4%;
-  bottom: 7%;
-  transform: rotate(-7deg);
-  opacity: 0.48;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.wm-scalebar-line {
-  fill: none;
-  stroke: #6f6252;
-  stroke-width: 0.8;
-  stroke-linecap: round;
-}
-
-.wm-scalebar-fill {
-  fill: #6f6252;
-}
-
 @media (max-width: 700px) {
-  .wm-compass,
-  .wm-scalebar {
+  .wm-compass {
     display: none;
   }
 }

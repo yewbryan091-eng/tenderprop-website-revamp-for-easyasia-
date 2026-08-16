@@ -1236,19 +1236,15 @@ export function WestMalaysiaMap({
           1.3px width hides the residual perspective skew. Any real surface
           shows it immediately. Out here it simply faces the viewer, pinned to
           the stem's measured screen position. */}
-      {/* ── ATLAS FURNITURE — compass and scale, print not UI ─────────────
-          Two cartographic details in the plate's negative space, meant to be
+      {/* ── ATLAS FURNITURE — a survey compass, print not UI ───────────────
+          One cartographic detail in the plate's negative space, meant to be
           NOTICED SECOND: first the country and its properties, then "oh, this
-          is drawn like a little property atlas". Both are rotated -7deg to sit
-          on the map's own grid (the camera carries rotateZ(-7deg)), which is
-          what makes them read as printed onto the sheet rather than pinned
-          over it.
-
-          The scale bar is DELIBERATELY UNLABELLED. The 60deg camera makes
-          on-screen distance direction-dependent — Penang->JB measures ~0.92
-          km/px along its diagonal against ~0.79 horizontally — so any single
-          number would be false in most directions. A ticked survey rule keeps
-          the cartographic voice without asserting fake geodesy. */}
+          is drawn like a little property atlas". Rotated -7deg to sit on the
+          map's own grid (the camera carries rotateZ(-7deg)), which is what
+          makes it read as printed onto the sheet rather than pinned over it.
+          A scale bar was tried and removed (Bryan, 16 Aug) — and the 60deg
+          camera makes distance direction-dependent anyway, so any labelled
+          scale would be false geodesy. */}
       <div className="wm-compass" aria-hidden="true">
         <svg viewBox="0 0 56 64" width="56" height="64">
           <text className="wm-compass-n" x="28" y="10" textAnchor="middle">
@@ -1261,15 +1257,6 @@ export function WestMalaysiaMap({
           <path className="wm-compass-tip" d="M28 15 L30.4 20.6 L28 19.4 L25.6 20.6 Z" />
         </svg>
         <span className="wm-compass-caption">Peninsular Malaysia</span>
-      </div>
-      <div className="wm-scalebar" aria-hidden="true">
-        <svg viewBox="0 0 104 10" width="104" height="10">
-          <path
-            className="wm-scalebar-line"
-            d="M2 5 H102 M2 1.8 V8.2 M35.3 2.8 V7.2 M68.7 2.8 V7.2 M102 1.8 V8.2"
-          />
-          <rect className="wm-scalebar-fill" x="35.3" y="4" width="33.4" height="1" />
-        </svg>
       </div>
       {markers && (
         <div className="wm-flags" ref={flagsRef}>
