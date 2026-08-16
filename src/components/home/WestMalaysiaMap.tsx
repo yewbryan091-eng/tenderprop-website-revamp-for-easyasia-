@@ -387,7 +387,7 @@ const STEM_FLAGS: Record<
        its own hotspot with a 34px stub, leaving 86px of bare terrain between
        label and pigment. -72 brings the span to 78px — 35% shorter — and puts
        the card body on the southern landmass instead of on the coast. */
-    dx: -56,
+    dx: -92,
     method: "E-Tender",
     place: "Johor Bahru, Johor",
     price: "RM\u00a0520,000",
@@ -1279,6 +1279,21 @@ export function WestMalaysiaMap({
                   } as CSSProperties
                 }
               >
+                {(() => {
+                  const hyp = Math.hypot(flag.dx, location.stemHeight) || 1;
+                  const len = Math.min(44, Math.max(22, hyp * 0.55));
+                  const ex = flag.dx - (flag.dx / hyp) * len;
+                  const ey = -location.stemHeight + (location.stemHeight / hyp) * len;
+                  return (
+                    <svg className="wm-flag-tether" viewBox="0 0 1 1" aria-hidden="true">
+                      <path
+                        className="wm-tether-line"
+                        d={`M${flag.dx} ${-location.stemHeight} L${ex.toFixed(1)} ${ey.toFixed(1)}`}
+                        stroke={METHOD_INK[flag.method].leader}
+                      />
+                    </svg>
+                  );
+                })()}
                 <svg className="wm-flag-blot" viewBox="-65 -24 130 48" aria-hidden="true">
                   <path
                     className="wm-blot wm-blot--wide"

@@ -131,6 +131,6 @@ export const WEST_MALAYSIA_LOCATIONS = [
     lon: 103.7414,
     x: 881,
     y: 1124.42,
-    stemHeight: 22,
+    stemHeight: 40,
   },
 ] as const;

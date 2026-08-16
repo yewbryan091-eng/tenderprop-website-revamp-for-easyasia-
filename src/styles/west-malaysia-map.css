@@ -470,6 +470,27 @@
   padding-top: clamp(20px, 2.4vw, 36px);
 }
 
+.wm-flag-tether {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  transform: scaleX(calc(var(--wm-stem-scale, 1) * var(--wm-dx-scale, 1)))
+    scaleY(var(--wm-stem-scale, 1));
+  transform-origin: 0 100%;
+  pointer-events: none;
+}
+
+.wm-tether-line {
+  fill: none;
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+
 .wm-flag-blot {
   position: absolute;
   left: 0;
@@ -492,11 +513,11 @@
 }
 
 .wm-blot--wide {
-  opacity: 0.4;
+  opacity: 0.33;
 }
 
 .wm-blot--core {
-  opacity: 0.55;
+  opacity: 0.45;
 }
 
 /* ── ATLAS FURNITURE ─────────────────────────────────────────────────────────
@@ -594,8 +615,8 @@
   /* Sized by its own longest line rather than by a fixed card width — a flag
      is a label, and a label that pads itself out to a column looks like a card
      again. `max-content` with nowrap keeps "Sungai Petani, Kedah" on one line. */
-  width: max-content;
-  max-width: calc(172px * var(--wm-stem-scale, 1));
+  width: calc(126px * var(--wm-stem-scale, 1));
+  box-sizing: border-box;
   transform: translateX(
     calc(-50% + var(--wm-flag-dx, 0px) * var(--wm-stem-scale, 1) * var(--wm-dx-scale, 1))
   );
@@ -664,7 +685,7 @@
 .wm-flag-place {
   display: block;
   margin-top: 5px;
-  font-size: 10.6px;
+  font-size: 10px;
   font-weight: 500;
   color: #6b6055;
   line-height: 1.25;
@@ -1164,7 +1185,9 @@
      should sit anyway. */
   .wm-flag {
     padding: 3px 7px 4px;
-    max-width: calc(150px * var(--wm-stem-scale, 1));
+    /* The uniform desktop width scales to 93px here, which clips the longest
+       place name at its 8px mobile size; 140 scales to ~104px and fits it. */
+    width: calc(140px * var(--wm-stem-scale, 1));
   }
 
   .wm-flag::before {
