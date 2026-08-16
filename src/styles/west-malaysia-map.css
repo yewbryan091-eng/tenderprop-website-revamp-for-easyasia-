@@ -531,22 +531,6 @@
 
    A hairline in the method's own colour, at low opacity. It reads as an
    engraved leader on a plate rather than a pole holding a sign up. */
-.wm-flag-dot {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 1px;
-  height: 1px;
-  overflow: visible;
-}
-
-/* The exact geographic point — with the stems gone, the one precision mark
-   the annotation still owns. Solid method ink. */
-.wm-dot-mark {
-  fill: var(--wm-annot-terminal, #6d2739);
-  opacity: 0.95;
-}
-
 .wm-flag {
   position: absolute;
   left: 0;

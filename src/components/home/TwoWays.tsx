@@ -267,9 +267,13 @@ export function TwoWays() {
               Sarawak. The illustration showing the peninsula is a drawing
               decision, not the limit of the offer. */}
           <h2 id="tw-title">Across Malaysia, two ways to buy.</h2>
+          {/* "reserve price OR starting bid", not "and": a property runs ONE
+              route, so it has a reserve price (E-Tender) or a starting bid
+              (Owner Auction), never both. The pair also maps exactly onto the
+              two labels the map's cards print. */}
           <p className="tw-deck">
             Discover Malaysian subsale properties offered through private E-Tender or live Owner
-            Auction &mdash; each with its own price, place and closing date.
+            Auction &mdash; each with its own reserve price or starting bid, place and closing date.
           </p>
 
           {/* A REMINDER, not an explainer. Section 1 already taught both routes

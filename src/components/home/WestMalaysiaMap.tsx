@@ -1340,13 +1340,9 @@ export function WestMalaysiaMap({
                     "--wm-peg-y": `${FALLBACK_PEG[location.key]?.y ?? 50}%`,
                     "--wm-stem-h": `${location.stemHeight}px`,
                     "--wm-flag-dx": `${flag.dx}px`,
-                    "--wm-annot-terminal": METHOD_INK[flag.method].terminal,
                   } as CSSProperties
                 }
               >
-                <svg className="wm-flag-dot" viewBox="0 0 1 1" aria-hidden="true">
-                  <circle className="wm-dot-mark" cx={0} cy={0} r={2.4} />
-                </svg>
                 <span className={`wm-flag${auction ? " wm-flag--auction" : ""}`}>
                   <span className="wm-flag-method">
                     {auction ? <GavelGlyph /> : <MailGlyph />}
