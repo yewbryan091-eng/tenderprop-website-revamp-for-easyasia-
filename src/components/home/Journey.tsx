@@ -66,7 +66,11 @@ const OFFERS: Offer[] = [
     description:
       "Sell with professional marketing, valuation guidance and a selling method suited to your property.",
     highlight: "Fully subsidised valuation report",
-    includes: ["Professional marketing & valuation guidance"],
+    includes: [
+      "Professional marketing & valuation guidance",
+      "Free market price check & property inspection",
+      "Sell within a stipulated timeline",
+    ],
     actions: [{ label: "Check Your Property Value Online", to: "/sell", tone: "red" }],
     imageBase: "/assets/layout/home-offer-sell",
     imageAlt: "Modern Malaysian bungalow lit at dusk",
