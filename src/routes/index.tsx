@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
+import { Journey } from "@/components/home/Journey";
 import { ScrollCue } from "@/components/home/ScrollCue";
 import { TwoWays } from "@/components/home/TwoWays";
 import { SiteFooter } from "@/components/tender/SiteFooter";
@@ -19,6 +20,7 @@ import "@/styles/tender-listings.css";
 import "@/styles/home.css";
 import "@/styles/home-scrollcue.css";
 import "@/styles/home-twoways.css";
+import "@/styles/home-journey.css";
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
@@ -230,6 +232,7 @@ function HomePage() {
         </section>
 
         <TwoWays />
+        <Journey />
       </main>
       <SiteFooter />
     </div>

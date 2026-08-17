@@ -205,6 +205,46 @@ including today, and the final day reads "1 day left" rather than "0".
   southern plains stay calmer but still tactile. Final CSS strengths are relief `0.86`, sheet
   `0.50`, cluster `0.50`, grain `0.48`, speckle `0.34`, mottle `0.82`. The authored zones are
   geographically grounded illustration, not claimed elevation precision.
+- **Homepage section 3 — WHAT WE OFFER, approved equal-card reference** (17 Aug, final composition,
+  superseding the asymmetric 01/02 tiles + burgundy 03 band): the diagonal architectural image and
+  its single intro remain the section signature, but the business offer underneath is deliberately
+  explicit — **three equal cards in one desktop row**, because Buying, Selling and the One-Stop
+  Property Solution carry equal business weight.
+  Every card uses one fixed reading architecture: **number → category → Newsreader promise → plain
+  description → benefit/tags → flexible space → edge-to-edge photograph → dedicated CTA footer**.
+  The grid stretches all three cards to the same total height; their 222px images and 66px footer
+  strips therefore share exact top and bottom baselines regardless of copy length. Cards are warm
+  white on `--paper`, held by one `--line` hairline and 12px corners with only the system's nearly
+  invisible `0 1px 2px` shadow. Buying and Services use burgundy; Selling alone uses the
+  header-vetted `#836A33` brass.
+  Tags are small editorial records, not buttons: faint paper tint, thin outline, 7px corners and a
+  quiet dot. Selling's FULLY SUBSIDISED VALUATION REPORT is a separate compact badge above its two
+  method tags. The five Services tags are a two-column grid so the content cannot become one long
+  row. Card photography is intentional: urban/property landscape → landed home → interior and
+  renovation; no image receives internal padding.
+  **Responsive**: 1280+ remains three equal cards; 620–979 renders two equal-width cards with the
+  third centred at that same measure; below 620 all three stack naturally. The mobile cards may
+  take content-driven heights, but the image and footer layers remain identical and the page must
+  retain zero horizontal overflow at 375px.
+- **Photographs ship as AVIF + WebP + a JPEG fallback, across four widths** (16 Aug): a 3200px
+  AVIF of the section-3 interior is 201KB — smaller than the 1599px JPEG it replaced, at twice the
+  resolution. Format buys more sharpness per byte than any upscaler. ⚠️ **When a photograph is
+  scaled by CSS (a crop zoom, a parallax, a hover push-in), the `sizes` attribute must carry that
+  factor** — it describes how many pixels are NEEDED, not how wide the box is. Section 3's image is
+  laid out at ~52vw but scaled 1.66x, so its hint is 87vw. Omit the factor and every device fetches
+  one step too small and the image goes soft for reasons nobody can find in the CSS.
+- **Normalised-stage geometry — the pattern that stops drawings drifting** (16 Aug, generalised
+  from sections 2 and 3): when a drawing and HTML have to stay registered to each other, give the
+  container ONE normalised coordinate space, lock it with `aspect-ratio`, and place everything as a
+  percentage of it. The SVG stretches with the box (`preserveAspectRatio="none"`) so it is in the
+  same space, and `vector-effect: non-scaling-stroke` keeps hairlines true under the uneven scale.
+  ⛔ **Dots and other round marks must be HTML, not `<circle>`** — a non-uniformly stretched circle
+  is an ellipse. Generate curves from their anchors (Catmull-Rom → cubic Bézier) rather than
+  hand-tuning control points, so the line provably passes through every mark. **Measure nothing at
+  runtime.** Where one element genuinely cannot live in the space (section 3's photograph bleeds to
+  the viewport edge by a distance no percentage can express), do not compute the join — hide it:
+  start the line under the opaque element and let the element mask it, so it emerges from the edge
+  exactly, at every width, precisely because nothing measured the edge.
 - **Entrance animations ARM, they do not reveal** (13 Aug, load-bearing): CSS rests in the finished
   visible state; JS adds `.is-armed` to hide it and removes it on approach, toggled through
   `classList` rather than React state. Hide-by-default ships blank sections whenever the reveal

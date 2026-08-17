@@ -20,7 +20,7 @@ the area you were asked to work on, tell Bryan instead of editing anyway.
 | 14 Aug | **The three Section 2 anchors are COMPOSITION-LED, accurate regional points rather than city centres.** The current projected coordinates are SVG `237.61,184.98` · `512.91,522.8` · `764.3,965.99`: the northern point moved off Kedah's western boundary into the state interior, the central point moved east into Pahang to clear the centred cards, and the southern Kluang-area point is unchanged. **This supersedes the George Town / Kuala Lumpur / Johor Bahru set committed earlier the same day** (`6557f8e`). Cards name Sungai Petani, Kuala Lipis and Kluang consistently with those regional anchors, and the section remains explicitly "Illustration only" | Bryan marked the composition, then approved moving pins to keep straight centred stems | Bryan |
 | 13 Aug | **Panel countdown: eyebrow / day numeral / DAYS LEFT on the centre column, with `: 03h : 23m : 33s` hanging off the numeral's BASELINE to its right.** ⚠️ **THE TICK'S WIDTH IS LOad-BEARING.** The numeral drifts off the half's centre by exactly `col3 − (contentWidth − numeralWidth) / 2`. At 26px the tick measured 250px against 442px of content: column one collapsed to zero and the numeral was pinned to the LEFT EDGE while the rule, date and CTA under it stayed centred — Bryan caught it on sight. At 15px the tick is 119px and the numeral measures **dead centre, offset 0, on both halves**; mobile uses 13px (103px) for an offset of ~4–12px. **If you resize the tick, re-measure the offset.** Also: `.hp-product-event` needs `align-self: stretch` or the rule's % width resolves against the shrink-wrapped block (rendered 25% instead of 52%). Product labels are Newsreader italic 600 matching `.hl` on /tender — cream for E-Tender, brass for Owner Auction, accent strokes kept | Bryan's countdown-parity spec, then two rounds of his correction | Bryan |
 | ~~13 Aug~~ | ~~Panel countdown is a CENTRED STACK~~ — superseded by the row above the same day. ⚠️ It was briefly built with the Residensi Sinaran deadline panel's `1fr auto 1fr` grid, tick hanging off the numeral's baseline in a third column. **That does not transplant.** That panel is full-bleed; a homepage half is ~442px and numeral + tick measure ~484px, so the third column consumed the row, the first collapsed to 0 and the numeral was pinned to the LEFT EDGE while the rule, date and CTA under it stayed centred. Bryan caught it on sight. Do not reintroduce the horizontal tick here without checking it against the half's real width. Also: the leading `::before` colon belongs to the hanging layout only, and `.hp-product-event` needs `align-self: stretch` or the rule's % width resolves against the shrink-wrapped block (rendered 25% instead of 52%). Product labels are Newsreader italic 600 matching `.hl` on /tender — cream for E-Tender, brass for Owner Auction, accent strokes kept | Bryan's countdown-parity spec, then his correction | Bryan |
-| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | *(free)* | — | Combined E-Tender / Owner Auction event instrument completed and verified 13 Aug; source pages, navigation and lower-page content unchanged. |
+| Homepage `/` | `src/routes/index.tsx`, `src/styles/home.css`, `public/assets/layout/home-*` | *(free)* | — | 17 Aug: Section 3 rebuilt from Bryan's approved three-equal-card reference and verified at 1440 / 1280 / 768 / 375; Sections 1–2 unchanged by this pass. |
 | Homepage `/` — **fold / section 1** | `src/routes/index.tsx` (hero block), `src/styles/home.css` | *(free)* | — | 13 Aug: Codex's headline + diagonal product panel, then reworked by Claude on Bryan's direction — panel images removed (see ledger), panel shrunk, days-only countdown, route-naming CTAs. Headline scaled down 104/67px → 80/52px on Bryan's call (see ledger). Panel restyled 13 Aug from Bryan's written critique — 0.74 washes, clipped seam, accent strokes, one-line countdown, coloured CTAs (see ledger). Then compressed 13 Aug: hero shortened so the search card lands inside the first viewport, both fold CTAs and the scroll cue removed, panel down to 196px, seam changed from brass to paper (see ledger). ~~OPEN BUG: `.hp-cue` overlaps the stacked panel on mobile~~ — **fixed properly**: the cue was briefly removed, then restored on Bryan's request as an IN-FLOW child of `.hp-hero-inner` above the search card, with the hero reserving `--hs-overlap` of bottom padding. The bug was pre-existing (measured 95px both before and after the panel restyle) and its cause was the cue's absolute positioning against a content-sized hero — that is now gone, so the class of bug cannot recur. Bryan continues in CLI from here. |
 | Homepage `/` — **section 2 right-side map only** | `src/components/home/WestMalaysiaMap.tsx`, `src/styles/west-malaysia-map.css`, `src/styles/home-twoways.css` (`.tw-inner` / `.tw-scene` only), `scripts/generate-west-malaysia-geometry.mjs`, `src/data/west-malaysia-geometry.ts`, `design/west-malaysia-*` | *(free)* | — | 16 Aug (Codex): city-coupled watercolor annotations finalized — ~88% placards, independent placement, 30–34px fading leaders, 106–120px organic washes, softer Johor rose. Later the same day, added the missing fourth regional cloud over the eastern lowland at `(695, 435)`, scale `.78`, opacity `.82`; every other map and annotation layer stayed unchanged. Verified 1440×900, 1728×1050, 390×844. |
 | Owner Auction `/owner-auction` | `src/routes/owner-auction/index.tsx`, `.oa-page` rules at the foot of `tender-listings.css` | *(free)* | — | Homepage `q` search handoff completed 12 Aug. Existing Owner Auction page architecture/data unchanged. |
@@ -41,6 +41,23 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 
 | Date | Decision | Why | Decided by |
 |---|---|---|---|
+| 17 Aug | **Section 3 now follows the approved generated reference: THREE EQUAL, TEXT-FIRST CARDS. This supersedes the unequal 01/02 tiles + burgundy 03 band below.** Desktop order is Buying / Selling / One-Stop Property Solution at identical width and total height; every card is content → edge-to-edge 222px image → 66px text-link footer, so image and CTA baselines are exact. Buying and Services use burgundy, Selling uses brass; the valuation report is its own compact badge, and Services uses a two-column five-tag grid. Routes are `/tender`, `/sell`, `/services`. The diagonal intro remains but its wash is flat and quieter. Tablet keeps equal card widths (2 + centred 1); mobile stacks with zero 375px overflow | Bryan approved the generated visual and explicitly locked its structure for a close HTML/CSS reconstruction; it replaces the later reinterpretation rather than layering another patch onto it | Bryan directing, Codex building |
+| 17 Aug | **The tiles carry ACTION BUTTONS, so they are no longer whole-tile links** | Bryan: buying needs the E-Tender and Owner Auction buttons — "meaning go to that listing page button". A link cannot nest in a link, so each tile is an `<article>` and the buttons are its only links: buying → `/tender` + `/owner-auction` (the platform has two listing pages), selling → `/sell`. Outlined in the tile's own accent, never filled — a filled pair here would out-shout the burgundy band that is the section's payoff. ⚠️ They are NOT pinned to the tiles' feet with `margin-top: auto`: that aligned the two rows but left an ~80px hole under buying's title, because selling's valuation stamp fills that space and buying has nothing. The photographs already give the row its baseline | Bryan |
+| 17 Aug | **The header-to-tiles gap closed from 165px to ~110px WITHOUT resizing the photograph** — and the tip clearance is the constraint that caps it | The stage is the photograph's box, so a short header always leaves a void beneath it. Three levers, none touching the rendered image: the stage ends earlier and the image overflows it (`aspect-ratio` and the visual's `height` multiply out to the same 755x470 box — change one, recompute the other), the header sits lower in what remains (23%), and the tiles' own margin shrank. ⚠️ Overshooting this is a REAL defect, not a taste call: at `1200/408` the photograph's tip crossed into the content column at 1024–1280 and painted over the sell tile's image. The narrow-visual breakpoint also moved 1240 → 1320, because the tightest clearance is just ABOVE the old breakpoint where the image is still 53% but the page gutter has already collapsed. Verified 13–321px of clearance across 1024–1920 | Bryan (gap), Claude Code (constraint) |
+| 17 Aug | **WHAT WE OFFER recomposed the same day: the three equal cards are DEAD; the section is now 01/02 asymmetric tiles + the 03 burgundy payoff band** | Bryan on v1: *"no moment... three equal cards communicate 'we have three categories', but that's not the TenderProp story."* Now: buying leads (1.42fr, aerial), selling beside it (1fr, hero house, valuation stamp), and One-Stop arrives as a full-width SOLID BURGUNDY statement band — `Everything around your property, handled in one place.` over the five categories — the only solid burgundy block on the homepage. Headline is his premium option: `One place for whatever comes next.` Whole tiles/band are the links (→ /tender, /sell, /services); CTAs-as-buttons are gone. **Method lines are gone from the tiles per his sketch — which also takes the unconfirmed "Private Offer" third method back OFF the homepage** (the 🚩 flag below now has nothing rendered against it; the question still needs settling before the method is ever surfaced). `kl-skyline` card assets deleted as unused; regenerate via the PIL pipeline in the 17 Aug note if the band ever switches to its image-overlay variant | Bryan |
+| 17 Aug | **Section 3's journey area is REBUILT as "WHAT WE OFFER" — three offer cards, no timelines. This supersedes the 16 Aug two-lane / closing-rail / red-CTA decisions in one stroke** | Bryan's spec: the homepage section must explain the BUSINESS, not the process — "a homepage visitor should not have to read a long process diagram to understand TenderProp." Removed: both 01–04 timelines, their rails/nodes/icons, the MORE THAN THE TRANSACTION rail, and the filled red "Sell your property" button. Added: `WHAT WE OFFER · Property, from start to finish.` in the diagonal's wedge (now the section's ONLY header — the previous `Buying or selling, TenderProp helps with what comes next.` headline is retired with it), then three cards: Buying (`Find your next property.` → /tender), Selling (`Bring your property to market.` + FULLY SUBSIDISED VALUATION REPORT stamp → /sell), One Stop Property Solution (`More than the transaction.` + the five service categories → /services). CTAs are uniform text+arrow — the spec reserves solid red for primary actions elsewhere. The 01–04 step content survives in git history (16 Aug commits of Journey.tsx) for the product pages | Bryan |
+| 17 Aug | **🚩 "Private Offer" now appears buyer-facing as a THIRD method — `E-Tender · Owner Auction · Private Offer` on both the Buying and Selling cards** | Bryan's spec states it twice, and the agent model has always carried a private-sale route (see the founder-strategy note). But the 30 Jul founder decision was "TWO PRODUCTS ONLY", every other page teaches exactly two methods, and no `/private-offer` product page exists. **Needs Bryan's father's confirmation before go-live** — if it stays, the rest of the site has to acknowledge the third route; if not, delete two array entries in `Journey.tsx` | Bryan (flagged by Claude Code) |
+| 17 Aug | **Section 3's card photography is deliberate reuse of vetted assets, one dusk-toned set** | buy = `home-residential-dusk` (aerial neighbourhood = discovery), sell = `owner-auction-hero` (hero house = brought to market; also the /owner-auction hero), solution = `kl-skyline` (the city; also the /tender hero background). Chosen over the B&W KL shot (tonal outlier) and the keys-over-model-house stock (the exact "cheesy stock" the spec bans). Emitted at 480/760/1140 AVIF+WebP + 760 JPEG fallback, same pipeline as the diagonal's set | Bryan's spec, choices by Claude Code |
+| 16 Aug | **Section 3's journey is TWO NAMED LANES on a shared 4-column grid — the curved-line version is dead** | Bryan: the curves "looked elegant" but a first-time visitor had to work out the reading order, whose line was whose, and which marks were steps rather than services. Now: `BUYING A PROPERTY` / `SELLING A PROPERTY`, four numbered steps each, both on the same `repeat(4, minmax(0,1fr))` so buying 02 sits above selling 02 — the alignment IS the "two sides, one platform" argument. The lane title stands in step 01's number slot; the rail runs past node 04 to the margin; icons take the lane's accent; E-Tender / Owner Auction are filled badges. Do not turn these back into free-floating annotations, cards, or six-step lists | Bryan (two reference crops) |
+| 16 Aug | **⚠️ THE PHOTOGRAPH'S CROP IS TIED TO ITS BOX ASPECT — re-derive `--jn-img-zoom` whenever the stage's aspect-ratio changes** | Compressing the stage from 1200/478 to 1200/325 silently re-framed the photograph and Bryan caught it: `object-fit: cover` crops on whichever axis OVERFLOWS, so reshaping the box from 1.61 to 2.36 flipped the cropped axis from sides to top/bottom, and the same 1.66 zoom pulled back to a thin letterboxed band of the whole room. **The stage is 1200/478 (755 x 470 at 1440) and the crop is 1.66 / 100% / 72%.** Those two facts move together — changing the stage's height without re-deriving the zoom is a silent regression, not a spacing tweak | Bryan |
+| 16 Aug | **The closing rail names TenderProp's REAL service categories: Investment · Interior Design & Renovation · Loan Matters · Legal Matters · Agent Services** | The earlier "Valuation · Financing · Legal · Professional support" paraphrased the journey above it rather than naming the business. The rail is ONE row — proposition left, categories centre, both CTAs right — at ~62px, and it must stay a rail rather than becoming a fourth block | Bryan |
+| 16 Aug | **⚠️ SECTION 3 IS ~962px AGAINST SECTION 2's 788px, AND THE PHOTOGRAPH IS THE REASON** | Measured breakdown at 1440: stage 470 + buying 174 + selling 174 + rail 62 + gaps 52 + tail 29. The journey and the rail are AT THEIR FLOOR — 174px per lane carries a number, rail, node, icon, serif title, description and two badges. The photograph alone is **49% of the section**. Matching 788px means taking ~174px out of the only block left, i.e. shrinking the photograph, which Bryan has explicitly rejected twice. Do not "fix" this by squeezing the lanes further; the next move is a founder decision about the photograph | Bryan / Claude Code |
+| 16 Aug | **Section 3's heading block is FIVE levels, and the property-types line is not decoration** | Bryan's final copy: eyebrow `BEYOND THE PROPERTY · ONE-STOP SOLUTION`, headline `Buying or selling, TenderProp helps with what comes next.`, then `Residential · Commercial · Industrial · Land` in italic serif, its gloss `Whatever the property, there's a place for it on TenderProp.`, then the services description. **The types line exists because the photograph is a RESIDENTIAL interior** and on its own it quietly says "homes platform" — so the correction has to be READ, which is why it gets its own italic-serif treatment instead of being folded into the description where it would vanish. Spacing is TWO groups, not five equal steps: types + gloss sit 5px apart, the real air (21 / 17px) goes between groups. `TenderProp` in the headline is burgundy, never bold | Bryan |
+| 16 Aug | **The headline's second line stays on ONE line, and that is what sets its size** | Bryan: *"TenderProp helps with what comes next. in one line."* It is 38 characters, so the type can only be as large as the column is wide divided by that — hence the column widened 52%→48% left (as far into the wedge as the cut allows at the narrow end) and the headline capped at 33px rather than 43px. **Do not re-break it over two lines to make it bigger.** The block is squeezed between the cut above and the buying labels ~15px below: check BOTH when touching `.jn-head`'s `top`, and note tablet gets its own 7% because the photograph is smaller there | Bryan |
+| 16 Aug | **Section 3 is ONE SCENE — the whole composition reads inside a single 1440x900 viewport (848px), and each path carries exactly THREE milestones** | Bryan, after the first build shipped at 1108px: *"it makes Section 3 feel like a long infographic instead of one premium homepage composition."* The height came out of WASTED space, not scale — the typography, the photograph and the whitespace are all unchanged or larger. What changed: the selling line stopped plunging (it now diverges gently, and its label offset dropped 8.2% -> 5.4%, which alone was ~60px of dead air per stop); buyer legal + completion merged into one stop; labels widened 13% -> 16% so copy sets in one or two lines instead of three; the stage dropped 980 -> 735 units. **Do not add a fourth milestone to either path** — three is the story, four is a process manual | Bryan |
+| 16 Aug | **Homepage section 3 runs TWO journeys off one property, and VALUATION IS SELLER-SIDE ONLY** | The first build ran one line — valuation → buy → financing → legal → keys — which told a buyer who had already found a property to go and value it. Valuation is the SELLER proposition (the fully subsidised report the top nav already advertises as "Valuation Report Included"). The section now forks: a BUYING path (make your move → financing → legal & completion) above, a SELLING path (valuation → choose how to sell → sale support) below — THREE stops each. The headline carries it: `Buying or selling, TenderProp helps with what comes next.` | Bryan |
+| 16 Aug | **Section 3's property visual is a TRIANGLE in the section's own corner — right angle on the section's top-left, one leg down the VIEWPORT's left edge** — and the section therefore has NO top padding | Bryan, with a diagonal drawn straight across a screenshot: *"the shape of the image is triangle, not trapezium"* and *"place the image at the corner of section 3, literally"*. Two earlier attempts are dead: a small bordered "The property you found" card under a centred heading, and a trapezoid inset on the content grid. The heading sits in the space the cut opens on the RIGHT — never above the image | Bryan |
+| 16 Aug | **The journey line starts ~300 units OFF the left of the stage, under the photograph, and is never asked where the diagonal is** | The triangle bleeds out of the content grid by `(100vw − stage)/2`, which changes with every viewport and cannot be written as a percentage of the stage — so a line drawn to MEET the cut would drift, which is the section-2 stem bug again. Instead the opaque triangle masks the line's start, so it emerges from the cut exactly, at every width, precisely because nothing measures the cut. Same trick as the `.jn-visual-edge` SVG, which draws the edge inside the triangle's OWN box | Claude Code |
 | 15 Aug | **Section 2's map ships the `terrain` finish (study D) — the naturalistic country. All map iteration happens on this finish from now on** | Bryan compared the /sandbox studies and chose D over the limestone plate. D = green base ladder, real land cover (Taman Negara, Endau-Rompin, rice bowls, mangrove) through the hue-only `color` blend, feathered margins, blue flowing rivers + 3 real lakes, ochre dirt ranges. ⚠️ The `.wm-map--terrain` token block was silently LOST once in a material-file rewrite, leaving D rendering as limestone with the gate shut — if a finish ever looks identical to limestone, check that block exists first | Bryan |
 | 15 Aug | **Section 2 terrain is one broad, valley-cut heightfield — never drawn ridge lines.** The paired warm-recess / ivory-catchlight crest strokes and 14 open erosion cuts are removed. Five authored masks now describe three broken, overlapping Titiwangsa sections and quieter Bintang/Kledang plus Timur/Tahan zones. Thirteen varied-width branching channels with tapered ends are removed from those masks before one upper-left matte diffuse-light pass (`azimuth 235°`, no specular), so the negative space becomes valleys and saddles inside the volume. A bounded two-scale field adds shoulders and micro-erosion beneath the authored direction. Whole-face mottle, mineral grain and isotropic tooth stay independent of elevation; state engravings remain above all material at `0.78`. Final strengths: relief `0.86`, sheet `0.50`, cluster `0.50`, grain `0.48`, speckle `0.34`, mottle `0.82`. | Bryan asked for a 50–70% stronger real highland presence without a vein, crease, grey mountain or random-noise look. Three rendered treatments plus two independent screenshot critiques showed that connected mass and carved negative space, not brighter strokes, were the correct axis. | Bryan directing, Codex building |
 | 14 Aug (night) | **The plate's surface is a lit material system — terrain done RIGHT this time.** Four layers, all `soft-light`, all below the washes/states/grain: (1) a whole-plate handmade-paper undulation (low-freq fractalNoise → feDiffuseLighting); (2) the range relief — a `type="turbulence"` heightfield lit by feDiffuseLighting from the plate's upper-left key (azimuth 235°), masked through blurred geography envelopes so it fades into the plain, on a rect rotated 14° so the creases run with the range axis; (3) faint ivory elevation fills + engraved contour hairlines (dark 11% over lit lip 28%, roughened by displacement, never blur); (4) aged-paper mottling + the speckle retuned 3× finer into paper tooth. Both lighting outputs pass a warming matrix (R×1.04 G×.96 B×.86) — neutral relief under soft-light DESATURATES warm cream and reads cool/dirty; warm sepia is what carved reads as. Envelope geometry is real: Titiwangsa (Korbu, Cameron, Fraser's, Genting, pinched at the Kinta gap), Banjaran Timur/Tahan, Bintang/Kledang, summit pockets broken apart like real contours; regenerate via scratchpad `terrain_gen.py`. **Verified at 1:1 native crops at 1728/1440/1280 — the standard the smudge failure set** | Bryan's structured brief (14 Aug night) + his carved-paper reference image: premium carved limestone, terrain second read, no new colours, hierarchy coastline>states>terrain>grain | Bryan directing, Claude building |
@@ -156,6 +173,162 @@ bug or a mistake, it probably isn't — **ask Bryan before changing it.**
 ## 4. WORKING NOTES — newest first
 
 Short entries. What you did, anything the other agent needs to know.
+
+### 17 Aug 2026 — Codex · Section 3 matched to the approved three-card reference
+
+Rendered the inherited section at 1440 before editing and saved the before-state under
+`work/section3-qa/`. It was the superseded asymmetric composition: two image-first tiles at
+1.42fr / 1fr followed by a full-width burgundy services band. Those tile/band elements and all
+their obsolete `.jn-tile*` / `.jn-band*` CSS are now removed rather than overridden.
+
+`Journey.tsx` now drives three equal cards from one `OFFERS` array. Every card is text-first:
+number, category, Newsreader headline, approved description, compact metadata, flexible space,
+edge-to-edge image, then a separate CTA footer. Buying and Services use burgundy; Selling uses
+brass and carries the standalone FULLY SUBSIDISED VALUATION REPORT badge. Services renders the
+five approved tags in a two-column grid. Routes are `/tender`, `/sell`, `/services`.
+
+The diagonal intro remains the section signature, but its image wash is now one flat 7% burgundy
+exposure rather than a competing gradient. At 1440 the three cards are exactly `374.66 × 678.93px`;
+their content boxes, 222px images and 66px CTA strips share identical baselines. At 1280 they remain
+one equal row; at 768 they are two equal-width cards plus a centred third at the same width; below
+620 they stack. Browser QA reports zero horizontal overflow and fully loaded responsive AVIFs at
+1440 / 1280 / 768 / 375. Fresh-tab console: zero warnings/errors. All four routes return 200.
+
+Production build passes. Scoped ESLint and Prettier pass for `Journey.tsx`, `index.tsx` and
+`home-journey.css`. The repository-wide lint remains red on 436 existing formatting/type-policy
+issues in unrelated files; this pass did not touch or auto-format those files. The exact generated
+PNG filename from the handoff was not present in `/mnt/data` or the workspace, so visual matching
+used Bryan's locked content/architecture brief plus the retained approved diagonal and local image
+set.
+
+### 17 Aug 2026 — Claude Code · Section 3 journey area rebuilt as the WHAT WE OFFER cards
+
+`Journey.tsx` and `home-journey.css` rewritten. The diagonal composition is UNTOUCHED in geometry
+— same stage arithmetic, same crop, same edge lines — only the wedge's copy changed (see ledger).
+Everything below it is new: a 3-card grid driven by one `OFFERS` array.
+
+**Bugs worth remembering from this pass:**
+1. JSX `map()` renders `<li>` elements with NO text node between them. Inline `white-space: nowrap`
+   items therefore fuse into ONE unbreakable chain — card 3's five services ran straight through
+   the card edge. The lists are `display: flex; flex-wrap: wrap` because flex items wrap between
+   themselves regardless of whitespace. Do not "simplify" them back to inline.
+2. `loading="lazy"` images legitimately report `naturalWidth 0` in any headless check that never
+   scrolls — scroll the section into view before asserting images loaded, or the QA cries wolf.
+
+**Verified**: 12-width sweep (1920→360): zero overflow, zero text collisions, zero card spill,
+one CTA baseline per row, right AVIF variant picked per width. Routes /tender /sell /services all
+200. Build, ESLint, Prettier clean. Tablet (700–1023) runs 2-up with the solution card full-width
+horizontal; phones stack. Section: 1096px at 1440 — taller than the compressed journey by design;
+the spec asked for a generous feature section and the cards carry real imagery.
+
+### 16 Aug 2026 — Claude Code · Homepage SECTION 3 built: "Beyond the property"
+
+New section, new files: `src/components/home/Journey.tsx`, `src/styles/home-journey.css`, wired into
+`src/routes/index.tsx` after `<TwoWays />`. Sections 1 and 2, the nav and the footer are untouched.
+
+**What it argues.** TenderProp is more than a listing/auction site — it carries the transaction on
+both sides. One photograph is the origin; one line runs out from under it and forks into a BUYING
+path (Make your move · Financing · Legal & completion) and a SELLING path (Valuation · Choose how
+to sell · Sale support) — three stops each. One CTA at the end, to `/services`. Nothing is claimed that
+`/services` does not already name — no insurance, no renovation, no moving.
+
+**The composition.** Property photograph as a triangle in the section's corner (see the ledger);
+heading in the wedge the cut opens on the right; buying labels ABOVE their line and selling labels
+BELOW theirs, so the corridor between the two lines stays empty — that gap is the only reason two
+paths read as two paths at a glance. **Do not alternate labels into it.** Colour is deliberately
+faint: burgundy for buying, the header-vetted `#836A33` brass for selling, carried by the lines,
+the dots and the two small branch labels only. Every node title stays ink except the one
+transaction node per path.
+
+**The coordinate system, and please keep it.** One normalised `1200 × 735` stage locked by
+`aspect-ratio`; every position is a percentage of it, converted once by `pct()`. The SVG stretches
+with the box (`preserveAspectRatio="none"` + `vector-effect: non-scaling-stroke`), so the drawn
+lines and the HTML labels are in the same space. Dots are HTML, not `<circle>` — a non-uniformly
+stretched circle is an ellipse. Curves are generated from their anchors (Catmull-Rom → cubic
+Bézier), so each provably passes through every dot. **Nothing is measured at runtime**, which is
+the whole point: measured over CDP, every dot sits within **0.18px** of its own line at 1920 /
+1440 / 1280 / 1240 / 1100 / 1024.
+
+**Height is a design constraint here, not a by-product.** The section is **848px at 1440**, so the
+whole composition — photograph, statement, both journeys, action — lands inside one 900px viewport.
+The first build was 1108px and Bryan rejected it as "a long infographic". See the ledger for what
+was cut; the short version is that nothing was shrunk, the dead air between selling stops was
+removed. If a future edit pushes this back over ~900px, it has broken the thing the section is
+for.
+
+**Three bugs found only by rendering, all worth knowing:**
+1. `tender-listings.css:30` styles the BARE `header` ELEMENT globally — sticky, paper ground,
+   hairline bottom border. A semantic `<header>` for the section's heading silently inherited a
+   rule under the deck *and stuck to the top of the window on scroll*. Use a `<div>`.
+2. The offset edge line was written outside its box with `overflow: visible` and painted a stray
+   hairline clean across the whole section: the box is stretched non-uniformly, so "58 units
+   outside it" is a long way outside it. Both edge lines now stay inside the box (x + y = 1030).
+3. A `<br>` hidden at ≤560px rendered `One property.Two sides of the journey.` — JSX strips the
+   newline around the tag, and Prettier then insists on deleting the `{" "}` that fixes it. Two
+   spans that swap `block` for `inline` cannot lose the space.
+
+**Animation: none, deliberately.** Section 2 owns the page's one entrance and a second sequence
+directly under it would compete with it; the IntersectionObserver hazards in this log are not
+worth re-entering for a section whose job is to feel still. The only motion is a hover scale on a
+node's dot, behind `@media (hover: hover)` and disabled under `prefers-reduced-motion`.
+
+**Responsive.** Diagonal above 1023px (the stage grows taller below 1240px rather than the type
+growing smaller, so labels keep their vertical room and the dots stay on the lines). At ≤1023px
+the split is abandoned, not shrunk: photograph full-bleed with a shallow cut across its foot, then
+the heading, then the two journeys as vertical rails under BUYING / SELLING running heads, then
+the CTA. Verified 1920 / 1440 / 1280 / 1240 / 1100 / 1024 / 1000 / 768 / 390: zero horizontal
+overflow, zero text overlaps, no line crossing any text box, nothing outside the stage. Lint, Prettier and
+the production build pass.
+
+**Placeholder, and it matters:** `/assets/layout/home-journey-interior-*.{avif,webp,jpg}` is
+Bryan's supplied interior. It is a stand-in and deliberately NOT one of the listings —
+section 2's rule that the homepage must never read as live inventory applies here too. Swapping it
+means replacing the `<picture>` alone; the box, the clip, the edge lines and every position hold.
+
+**"Make it 4K" — what actually made it sharp** (16 Aug). Higgsfield's AI upscaler was the obvious
+route and is NOT available: the account reads 0 credits on the free plan, and no credits were
+bought. The source is 1599x1066 and there is no higher-resolution original, so no true 8K detail
+exists to recover. Three real wins were taken instead:
+1. **Re-mastered from the pristine file.** The repo copy had been through `sips q72` AND a PIL q88
+   re-encode, and every variant would have inherited that loss. The retouch was re-applied to
+   `~/Downloads/section 3 image.jpeg` and everything is generated from that master once.
+2. **AVIF, and this is where the sharpness came from, not the upscale.** The 3200px AVIF is
+   **201KB — SMALLER than the 1599px JPEG it replaces**, at twice the resolution. Four widths
+   (1200/1800/2400/3200) in AVIF and WebP, plus one 1800px JPEG fallback.
+3. **Lanczos 2x with a gentle unsharp** (radius 1.6, 55%, threshold 3) so the browser stops doing
+   the upscaling in the compositor. It invents no detail; it reads crisper on a retina desktop.
+
+⚠️ **The `sizes` attribute carries the CROP ZOOM and that is not a typo.** The photograph is laid
+out at ~52vw desktop / 100vw stacked, but it is also scaled 1.66x / 1.22x by the crop, so the
+browser needs that much more pixel data than the layout box implies — hence
+`(max-width: 1023px) 122vw, 87vw`. Verified: at 1920 the image needs 1652 CSS px and the hint says
+1670, and Chrome picks the right variant at every width. Drop the zoom out of these numbers and
+every device quietly fetches one step too small and the wedge goes soft again.
+
+**The crop needs a ZOOM, not just `object-position`** (16 Aug, Bryan: *"it currently doesn't show
+anything, it needs to show the full interior"*). The wedge keeps only the UPPER-LEFT triangle and
+the room in this photograph is on its RIGHT, so panning could never fix it: the box is only
+slightly taller in proportion than the photo, `cover` already shows ~87% of its width, and the
+living space stayed in the half the clip throws away — all the wedge ever showed was plaster wall.
+The image is therefore scaled and anchored: `--jn-img-zoom` (how much room) with
+`--jn-img-origin-*` (which part), anchored to the RIGHT edge so the room is pulled leftward into
+the wedge, and to 72% vertically so the furniture band sits above the floor. Desktop 1.66 /
+100% / 72%, stacked 1.22 / 82% / 54% — the stacked box is close to the photo's own 3:2 and barely
+clips, so it needs far less. **Keep the zoom at or below ~1.7**: the source is 1599px wide and past
+that the crop upscales on a 1920px screen. The wash over it was cut roughly in half at the same
+time (0.20/0.12/0.14 → 0.12/0.06/0.10) — it was tuned when the wedge held a flat wall and it was
+flattening a room.
+
+⚠️ **THE ASSET IS RETOUCHED.** Bryan asked for the seated figure to be removed. She sat at
+source `x 1047–1118, y 522–608`, against a vertical window frame on the left and sheer curtain on
+the right with the bench line crossing below — cropping her out would have meant losing the door
+frame and the dining setting, i.e. the composition. She was painted out instead, in two
+reconstructions blended across the bench line at y≈576: the upper half clones straight DOWN
+(the frame, the slatted blind and the curtain are vertical structures, so a vertical clone stays
+registered), the lower half clones sideways from the same bench band 74px to the left. Feathered
+8px. Verified at 6x — the frame, blind, curtain and bench all continue correctly and there is no
+seam at rendered scale. **Bryan's unedited original is `~/Downloads/section 3 image.jpeg`** — if
+this asset is ever replaced, the retouch is not in the repo's history to recover.
 
 ### 16 Aug 2026 — Codex · Eastern-lowland cloud restored
 
