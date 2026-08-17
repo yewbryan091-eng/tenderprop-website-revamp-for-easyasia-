@@ -241,19 +241,33 @@
 /* THE giveaway — Bryan, 17 Aug: "golden, big, a box, neon". A gold plate with
    a soft outer glow. The glow is the "neon": bounded, warm, and the only
    luminous thing on the page, which is exactly why it reads. */
+/* Italic Newsreader — the same voice as the nav's "Valuation Report
+   Included", so the promise reads identically wherever it appears. The
+   texture is two layers: a fine SVG grain multiplied into the gold plate
+   (paper, not plastic) and a light letterpress catch under the type so the
+   words sit pressed INTO the plate rather than printed on it. */
 .jn-card-highlight {
   margin: 0 0 11px;
-  padding: 9px 13px;
+  padding: 9px 14px 10px;
   border: 1px solid #c19a4b;
   border-radius: 8px;
   color: #6d4f16;
-  background: linear-gradient(180deg, #faf0d3, #f3e2b6);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, #faf0d3, #f2e0b0);
   box-shadow:
     0 0 0 1px rgba(212, 164, 74, 0.25),
-    0 0 18px rgba(212, 164, 74, 0.4);
-  font: 800 13px/1.35 var(--sans);
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
+    0 0 18px rgba(212, 164, 74, 0.4),
+    inset 0 1px 0 rgba(255, 252, 240, 0.75);
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  font-weight: 600;
+  font-optical-sizing: auto;
+  line-height: 1.3;
+  letter-spacing: 0.015em;
+  text-transform: capitalize;
+  text-shadow: 0 1px 0 rgba(255, 250, 232, 0.65);
 }
 
 .jn-card-includes {
