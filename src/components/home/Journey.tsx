@@ -1,8 +1,6 @@
-import { Link } from "@tanstack/react-router";
-
 /* Section 3 is intentionally a compact business overview, not another process
    explainer. The approved order inside every card is fixed:
-   information -> image -> action. */
+   information -> full-width image. */
 
 const INTRO_IMAGE_WIDTHS = [1200, 1800, 2400, 3200] as const;
 const CARD_IMAGE_WIDTHS = [480, 760, 1140] as const;
@@ -18,8 +16,6 @@ type Offer = {
   description: string;
   badge?: string;
   chips: string[];
-  cta: string;
-  to: "/tender" | "/sell" | "/services";
   imageBase: string;
   imageWidths: readonly number[];
   imageFallback: string;
@@ -34,8 +30,6 @@ const OFFERS: Offer[] = [
     description:
       "Discover properties and choose how you want to make your offer through TenderProp.",
     chips: ["E-Tender", "Owner Auction"],
-    cta: "Explore properties",
-    to: "/tender",
     imageBase: "/assets/layout/home-offer-buy",
     imageWidths: CARD_IMAGE_WIDTHS,
     imageFallback: "/assets/layout/home-offer-buy-760.jpg",
@@ -49,8 +43,6 @@ const OFFERS: Offer[] = [
       "Sell with professional marketing, valuation guidance and a selling method suited to your property.",
     badge: "Fully subsidised valuation report",
     chips: ["E-Tender", "Owner Auction"],
-    cta: "Sell your property",
-    to: "/sell",
     imageBase: "/assets/layout/home-offer-sell",
     imageWidths: CARD_IMAGE_WIDTHS,
     imageFallback: "/assets/layout/home-offer-sell-760.jpg",
@@ -63,21 +55,11 @@ const OFFERS: Offer[] = [
     description:
       "Investment, legal, loan, renovation and agent services — all connected through TenderProp.",
     chips: ["Investment", "Legal Matters", "Loan Matters", "Renovation", "Agent Services"],
-    cta: "Explore our services",
-    to: "/services",
     imageBase: "/assets/layout/home-journey-interior",
     imageWidths: INTRO_IMAGE_WIDTHS,
     imageFallback: "/assets/layout/home-journey-interior-1800.jpg",
   },
 ];
-
-function Arrow() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M4 12h15M13 6l6 6-6 6" />
-    </svg>
-  );
-}
 
 function OfferCard({ offer }: { offer: Offer }) {
   return (
@@ -123,11 +105,6 @@ function OfferCard({ offer }: { offer: Offer }) {
           />
         </picture>
       </figure>
-
-      <Link className="jn-card-cta" to={offer.to}>
-        <span>{offer.cta}</span>
-        <Arrow />
-      </Link>
     </article>
   );
 }

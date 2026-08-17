@@ -1,7 +1,7 @@
 /* ── HOMEPAGE SECTION 3 — WHAT WE OFFER ─────────────────────────────────────
    The approved composition has one restrained diagonal introduction followed
    by three equal editorial cards. Every card is the same architecture:
-   information -> full-width image -> dedicated CTA strip. */
+   information -> full-width image. */
 
 .jn {
   --jn-buy: var(--burgundy);
@@ -16,7 +16,7 @@
 }
 
 .jn-inner {
-  width: min(1180px, calc(100% - clamp(28px, 7vw, 104px)));
+  width: min(1280px, calc(100% - clamp(28px, 7vw, 104px)));
   margin: 0 auto;
 }
 
@@ -93,9 +93,9 @@
 .jn-kicker {
   margin: 0 0 clamp(12px, 1.3vw, 18px);
   color: var(--burgundy);
-  font-size: 12.5px;
+  font-size: clamp(14px, 1.05vw, 15px);
   font-weight: 800;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.145em;
   text-transform: uppercase;
 }
 
@@ -123,12 +123,14 @@
 
 /* ── Three equal cards ───────────────────────────────────────────────────── */
 .jn-cards {
-  --jn-card-gap: clamp(18px, 2vw, 28px);
+  --jn-card-gap: clamp(20px, 2vw, 30px);
+  position: relative;
+  z-index: 4;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: 1fr;
   gap: var(--jn-card-gap);
-  margin-top: clamp(28px, 3.2vw, 44px);
+  margin-top: clamp(-72px, -4.5vw, -56px);
 }
 
 .jn-card {
@@ -148,7 +150,7 @@
 }
 
 .jn-card-content {
-  min-height: 382px;
+  min-height: 400px;
   padding: clamp(25px, 2.25vw, 32px) clamp(23px, 2.15vw, 30px) 26px;
   display: flex;
   flex: 1 1 auto;
@@ -159,9 +161,9 @@
   display: block;
   margin: 0 0 10px;
   color: var(--jn-card-accent);
-  font: 750 12.5px/1 var(--sans);
+  font: 800 clamp(15px, 1.15vw, 16px) / 1 var(--sans);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.09em;
 }
 
 .jn-card-label {
@@ -253,7 +255,7 @@
 
 /* The image is a structural layer, not a padded card thumbnail. */
 .jn-card-media {
-  height: 222px;
+  height: 242px;
   margin: 0;
   flex: none;
   overflow: hidden;
@@ -286,64 +288,18 @@
   object-position: 67% 55%;
 }
 
-/* A dedicated footer strip keeps every action on the same baseline. */
-.jn-card-cta {
-  min-height: 66px;
-  padding: 0 clamp(23px, 2.15vw, 30px);
-  border-top: 1px solid color-mix(in srgb, var(--line) 74%, transparent);
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  color: var(--jn-card-accent);
-  background: var(--jn-card-surface);
-  font: 750 13.5px/1.2 var(--sans);
-  letter-spacing: 0.005em;
-  text-decoration: none;
-  transition: background-color 160ms ease;
-}
-
-.jn-card-cta svg {
-  width: 18px;
-  height: 18px;
-  flex: none;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 160ms ease;
-}
-
-.jn-card-cta:focus-visible {
-  outline: 2px solid var(--jn-card-accent);
-  outline-offset: -4px;
-}
-
 @media (hover: hover) {
   .jn-card:hover .jn-card-media img {
     transform: scale(1.025);
   }
-
-  .jn-card-cta:hover {
-    background: color-mix(in srgb, var(--paper-deep) 38%, var(--jn-card-surface));
-  }
-
-  .jn-card-cta:hover svg {
-    transform: translateX(3px);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .jn-card-media img,
-  .jn-card-cta,
-  .jn-card-cta svg {
+  .jn-card-media img {
     transition: none;
   }
 
-  .jn-card:hover .jn-card-media img,
-  .jn-card-cta:hover svg {
+  .jn-card:hover .jn-card-media img {
     transform: none;
   }
 }
@@ -457,11 +413,6 @@
 
   .jn-card-media {
     height: clamp(184px, 54vw, 218px);
-  }
-
-  .jn-card-cta {
-    min-height: 62px;
-    padding: 0 24px;
   }
 }
 
