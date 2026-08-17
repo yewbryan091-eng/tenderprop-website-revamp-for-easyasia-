@@ -42,7 +42,7 @@ const OFFERS: Offer[] = [
     key: "buy",
     number: "01",
     label: "Buying a Property",
-    title: "Find your next property.",
+    title: "Find your next property online.",
     description:
       "Discover subsale properties across Malaysia and choose how you want to make your offer.",
     support: "Sealed offers or live bidding \u2014 the choice is yours.",
