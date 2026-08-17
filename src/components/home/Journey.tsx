@@ -57,7 +57,7 @@ const OFFERS: Offer[] = [
       { label: "View Owner Auction", to: "/owner-auction", tone: "gold" },
     ],
     imageBase: "/assets/layout/home-offer-buy",
-    imageAlt: "Rows of terrace homes in a Malaysian neighbourhood",
+    imageAlt: "Kuala Lumpur homes and apartments in golden evening light",
   },
   {
     key: "sell",
