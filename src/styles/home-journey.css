@@ -150,25 +150,43 @@
 }
 
 .jn-card-content {
-  min-height: 400px;
+  flex: 0 0 auto;
   padding: clamp(25px, 2.25vw, 32px) clamp(23px, 2.15vw, 30px) 26px;
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
 }
 
+/* One marker line: numeral, rule, label. The numeral keeps the accent and
+   sits a step larger than the label so the 01/02/03 sequence is legible at a
+   glance without becoming a display element in its own right. */
+.jn-card-eyebrow {
+  margin: 0 0 13px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--jn-card-accent) 20%, var(--line));
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
 .jn-card-number {
-  display: block;
-  margin: 0 0 10px;
   color: var(--jn-card-accent);
-  font: 800 clamp(15px, 1.15vw, 16px) / 1 var(--sans);
+  font: 800 17px/1 var(--sans);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.02em;
+}
+
+.jn-card-dash {
+  flex: none;
+  align-self: center;
+  width: 13px;
+  height: 1px;
+  background: color-mix(in srgb, var(--jn-card-accent) 48%, var(--line));
 }
 
 .jn-card-label {
   display: block;
-  margin: 0 0 18px;
+  margin: 0;
   color: color-mix(in srgb, var(--jn-card-accent) 82%, var(--ink));
   font: 800 11.25px/1.25 var(--sans);
   letter-spacing: 0.145em;
@@ -186,76 +204,114 @@
   text-wrap: balance;
 }
 
+.jn-card h3 {
+  min-height: calc(2 * 1.1em);
+}
+
 .jn-card-description {
-  margin: 15px 0 0;
+  margin: 14px 0 0;
   color: var(--muted);
   font-size: 14.25px;
   line-height: 1.55;
+  min-height: calc(3 * 1.55em);
 }
 
-.jn-card-meta {
+/* The card's one differentiated fact. The sell card's earns the gold — the
+   subsidised valuation report is the row's only giveaway — the other two stay
+   in the neutral ink so the row keeps one voice. */
+.jn-card-support {
+  margin: 13px 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: #6f6252;
+  font: 600 12.5px/1.5 var(--sans);
+  min-height: calc(2 * 1.5em);
+}
+
+.jn-support-mark {
+  flex: none;
+  align-self: center;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: color-mix(in srgb, var(--jn-card-accent) 72%, var(--line));
+}
+
+.jn-card-support--gold {
+  color: #7d5a22;
+}
+
+/* ── CTA — the row's ONE action colour. Filled burgundy on every card, sized
+   to be pressed, pinned to a shared baseline by the content flex. Equal fills
+   on the buy card's pair is deliberate: the platform's doctrine is that the
+   BUYER chooses the method, so neither route may look like the default. */
+.jn-card-actions {
   margin-top: auto;
-  padding-top: 24px;
-}
-
-.jn-card-badge {
-  display: inline-flex;
-  max-width: 100%;
-  margin: 0 0 10px;
-  padding: 5px 8px 4px;
-  border: 1px solid color-mix(in srgb, var(--jn-card-accent) 42%, var(--line));
-  border-radius: 6px;
-  color: var(--jn-card-accent);
-  background: color-mix(in srgb, var(--paper-deep) 35%, var(--jn-card-surface));
-  font: 800 9.25px/1.3 var(--sans);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.jn-card-chips {
-  margin: 0;
-  padding: 0;
+  padding-top: 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  list-style: none;
+  gap: 9px;
 }
 
-.jn-card-chips li {
-  min-height: 29px;
-  padding: 5px 9px 5px 8px;
-  border: 1px solid color-mix(in srgb, var(--jn-card-accent) 19%, var(--line));
-  border-radius: 7px;
+.jn-cta {
+  min-height: 40px;
+  padding: 10px 15px;
+  border-radius: 9px;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  color: color-mix(in srgb, var(--jn-card-accent) 58%, var(--muted));
-  background: color-mix(in srgb, var(--paper-deep) 26%, var(--jn-card-surface));
-  font: 650 11.25px/1.2 var(--sans);
+  gap: 8px;
+  color: #f7ecdf;
+  background: var(--burgundy, #571c2e);
+  border: 1px solid var(--burgundy, #571c2e);
+  font: 700 12.5px/1.2 var(--sans);
+  letter-spacing: 0.015em;
+  text-decoration: none;
   white-space: nowrap;
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease;
 }
 
-.jn-chip-mark {
-  width: 4px;
-  height: 4px;
+.jn-cta svg {
   flex: none;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.72;
+  opacity: 0.85;
+  transition: transform 0.18s ease;
 }
 
-.jn-card--services .jn-card-chips {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.jn-cta:hover {
+  background: #431423;
 }
 
-.jn-card--services .jn-card-chips li {
-  min-width: 0;
+.jn-cta:hover svg {
+  transform: translateX(2px);
+}
+
+.jn-cta:focus-visible {
+  outline: 2px solid var(--burgundy, #571c2e);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jn-cta,
+  .jn-cta svg {
+    transition: none;
+  }
+
+  .jn-cta:hover svg {
+    transform: none;
+  }
+}
+
+.jn-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
 }
 
 /* The image is a structural layer, not a padded card thumbnail. */
 .jn-card-media {
-  height: 242px;
+  height: 248px;
   margin: 0;
   flex: none;
   overflow: hidden;
@@ -277,7 +333,7 @@
 }
 
 .jn-card--buy .jn-card-media img {
-  object-position: 50% 61%;
+  object-position: 50% 42%;
 }
 
 .jn-card--sell .jn-card-media img {
@@ -285,7 +341,7 @@
 }
 
 .jn-card--services .jn-card-media img {
-  object-position: 67% 55%;
+  object-position: 50% 45%;
 }
 
 @media (hover: hover) {
@@ -416,8 +472,12 @@
   }
 }
 
-@media (max-width: 380px) {
-  .jn-card--services .jn-card-chips {
-    grid-template-columns: minmax(0, 1fr);
+/* Single column: the alignment locks exist to synchronise three cards side by
+   side; stacked, they just manufacture empty space. */
+@media (max-width: 979px) {
+  .jn-card h3,
+  .jn-card-description,
+  .jn-card-support {
+    min-height: 0;
   }
 }

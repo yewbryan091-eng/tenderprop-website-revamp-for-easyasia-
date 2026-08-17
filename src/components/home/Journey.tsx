@@ -1,6 +1,19 @@
 /* Section 3 is intentionally a compact business overview, not another process
    explainer. The approved order inside every card is fixed:
-   information -> full-width image. */
+   number -> label -> heading -> description -> actions -> full-width image.
+
+   The NUMBER leads, on the label's own line: "01 — Buying a Property"
+   (Bryan, 16 Aug). It was 16px sans stacked above the label at the same
+   weight, so the three cards had no visible ordering at all; as one marker
+   line the sequence reads instantly and costs a row of height.
+
+   Card 01 is the first to get actions. The section used to be a dead end:
+   three descriptions of what TenderProp offers and no way to reach any of it.
+   Its two method chips became those actions, which also clears a collision —
+   chips meant METHODS on cards 01/02 but SERVICES on card 03, one shape doing
+   two jobs across a single row. Cards 02 and 03 follow in their own pass. */
+
+import { Link } from "@tanstack/react-router";
 
 const INTRO_IMAGE_WIDTHS = [1200, 1800, 2400, 3200] as const;
 const CARD_IMAGE_WIDTHS = [480, 760, 1140] as const;
@@ -14,11 +27,14 @@ type Offer = {
   label: string;
   title: string;
   description: string;
-  badge?: string;
-  chips: string[];
+  /* The ONE differentiated fact this card is allowed. Everything else the
+     three cards share, which is what makes the row read as one offer in
+     three parts instead of three competing designs. */
+  support: string;
+  supportTone?: "gold";
+  actions: { label: string; to: string }[];
   imageBase: string;
-  imageWidths: readonly number[];
-  imageFallback: string;
+  imageAlt: string;
 };
 
 const OFFERS: Offer[] = [
@@ -28,11 +44,14 @@ const OFFERS: Offer[] = [
     label: "Buying a Property",
     title: "Find your next property.",
     description:
-      "Discover properties and choose how you want to make your offer through TenderProp.",
-    chips: ["E-Tender", "Owner Auction"],
+      "Discover subsale properties across Malaysia and choose how you want to make your offer.",
+    support: "Sealed offers or live bidding \u2014 the choice is yours.",
+    actions: [
+      { label: "View E-Tender", to: "/tender" },
+      { label: "View Owner Auction", to: "/owner-auction" },
+    ],
     imageBase: "/assets/layout/home-offer-buy",
-    imageWidths: CARD_IMAGE_WIDTHS,
-    imageFallback: "/assets/layout/home-offer-buy-760.jpg",
+    imageAlt: "Rows of terrace homes in a Malaysian neighbourhood",
   },
   {
     key: "sell",
@@ -41,11 +60,11 @@ const OFFERS: Offer[] = [
     title: "Bring your property to market.",
     description:
       "Sell with professional marketing, valuation guidance and a selling method suited to your property.",
-    badge: "Fully subsidised valuation report",
-    chips: ["E-Tender", "Owner Auction"],
+    support: "Fully subsidised valuation report included.",
+    supportTone: "gold",
+    actions: [{ label: "Check Your Property Value", to: "/sell" }],
     imageBase: "/assets/layout/home-offer-sell",
-    imageWidths: CARD_IMAGE_WIDTHS,
-    imageFallback: "/assets/layout/home-offer-sell-760.jpg",
+    imageAlt: "Modern Malaysian bungalow lit at dusk",
   },
   {
     key: "services",
@@ -53,11 +72,11 @@ const OFFERS: Offer[] = [
     label: "One-Stop Property Solution",
     title: "Everything around your property, in one place.",
     description:
-      "Investment, legal, loan, renovation and agent services — all connected through TenderProp.",
-    chips: ["Investment", "Legal Matters", "Loan Matters", "Renovation", "Agent Services"],
-    imageBase: "/assets/layout/home-journey-interior",
-    imageWidths: INTRO_IMAGE_WIDTHS,
-    imageFallback: "/assets/layout/home-journey-interior-1800.jpg",
+      "From financing to renovation, TenderProp connects every service your property needs.",
+    support: "Investment \u00b7 Legal \u00b7 Loan \u00b7 Renovation \u00b7 Agent Services",
+    actions: [{ label: "Check Our Services", to: "/services" }],
+    imageBase: "/assets/layout/home-offer-services",
+    imageAlt: "House keys handed over inside a new home",
   },
 ];
 
@@ -65,21 +84,36 @@ function OfferCard({ offer }: { offer: Offer }) {
   return (
     <article className={`jn-card jn-card--${offer.key}`}>
       <div className="jn-card-content">
-        <span className="jn-card-number">{offer.number}</span>
-        <span className="jn-card-label">{offer.label}</span>
+        <p className="jn-card-eyebrow">
+          <span className="jn-card-number">{offer.number}</span>
+          <span className="jn-card-dash" aria-hidden="true" />
+          <span className="jn-card-label">{offer.label}</span>
+        </p>
         <h3>{offer.title}</h3>
         <p className="jn-card-description">{offer.description}</p>
+        <p
+          className={`jn-card-support${offer.supportTone === "gold" ? " jn-card-support--gold" : ""}`}
+        >
+          <span className="jn-support-mark" aria-hidden="true" />
+          {offer.support}
+        </p>
 
-        <div className="jn-card-meta">
-          {offer.badge ? <span className="jn-card-badge">{offer.badge}</span> : null}
-          <ul className="jn-card-chips" aria-label={`${offer.label} options`}>
-            {offer.chips.map((chip) => (
-              <li key={chip}>
-                <span className="jn-chip-mark" aria-hidden="true" />
-                {chip}
-              </li>
-            ))}
-          </ul>
+        <div className="jn-card-actions">
+          {offer.actions.map((action) => (
+            <Link key={action.to} className="jn-cta" to={action.to}>
+              <span>{action.label}</span>
+              <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+                <path
+                  d="M2.5 8h10M9 4.5 12.5 8 9 11.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          ))}
         </div>
       </div>
 
@@ -88,18 +122,18 @@ function OfferCard({ offer }: { offer: Offer }) {
           <source
             type="image/avif"
             sizes="(max-width: 619px) calc(100vw - 56px), (max-width: 979px) 44vw, 28vw"
-            srcSet={imageSrcSet(offer.imageBase, offer.imageWidths, "avif")}
+            srcSet={imageSrcSet(offer.imageBase, CARD_IMAGE_WIDTHS, "avif")}
           />
           <source
             type="image/webp"
             sizes="(max-width: 619px) calc(100vw - 56px), (max-width: 979px) 44vw, 28vw"
-            srcSet={imageSrcSet(offer.imageBase, offer.imageWidths, "webp")}
+            srcSet={imageSrcSet(offer.imageBase, CARD_IMAGE_WIDTHS, "webp")}
           />
           <img
-            src={offer.imageFallback}
-            width={offer.key === "services" ? 1800 : 760}
-            height={offer.key === "services" ? 1200 : 475}
-            alt=""
+            src={`${offer.imageBase}-760.jpg`}
+            width={760}
+            height={475}
+            alt={offer.imageAlt}
             loading="lazy"
             decoding="async"
           />
