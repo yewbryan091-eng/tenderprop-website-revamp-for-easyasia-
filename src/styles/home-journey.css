@@ -161,25 +161,29 @@
    sits a step larger than the label so the 01/02/03 sequence is legible at a
    glance without becoming a display element in its own right. */
 .jn-card-eyebrow {
-  margin: 0 0 13px;
-  padding-bottom: 12px;
+  margin: 0 0 14px;
+  padding-bottom: 13px;
   border-bottom: 1px solid color-mix(in srgb, var(--jn-card-accent) 20%, var(--line));
   display: flex;
   align-items: baseline;
-  gap: 9px;
+  gap: 11px;
 }
 
 .jn-card-number {
   color: var(--jn-card-accent);
-  font: 800 17px/1 var(--sans);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: clamp(32px, 2.6vw, 38px);
+  font-weight: 600;
+  font-optical-sizing: auto;
+  line-height: 0.9;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
 }
 
 .jn-card-dash {
   flex: none;
   align-self: center;
-  width: 13px;
+  width: 16px;
   height: 1px;
   background: color-mix(in srgb, var(--jn-card-accent) 48%, var(--line));
 }
@@ -188,7 +192,7 @@
   display: block;
   margin: 0;
   color: color-mix(in srgb, var(--jn-card-accent) 82%, var(--ink));
-  font: 800 11.25px/1.25 var(--sans);
+  font: 800 12.5px/1.25 var(--sans);
   letter-spacing: 0.145em;
   text-transform: uppercase;
 }
@@ -226,22 +230,47 @@
    sized to them so every card's CTA and photograph stay on shared baselines.
    Ticks take each card's accent; text stays neutral so the row keeps one
    voice. */
+.jn-card-zone {
+  margin: 15px 0 0;
+  min-height: 89px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* THE giveaway — Bryan, 17 Aug: "golden, big, a box, neon". A gold plate with
+   a soft outer glow. The glow is the "neon": bounded, warm, and the only
+   luminous thing on the page, which is exactly why it reads. */
+.jn-card-highlight {
+  margin: 0 0 11px;
+  padding: 9px 13px;
+  border: 1px solid #c19a4b;
+  border-radius: 8px;
+  color: #6d4f16;
+  background: linear-gradient(180deg, #faf0d3, #f3e2b6);
+  box-shadow:
+    0 0 0 1px rgba(212, 164, 74, 0.25),
+    0 0 18px rgba(212, 164, 74, 0.4);
+  font: 800 13px/1.35 var(--sans);
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
 .jn-card-includes {
-  margin: 14px 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  min-height: 75px;
+  gap: 9px;
 }
 
 .jn-card-includes li {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #5f5347;
-  font: 600 12.75px/1.35 var(--sans);
+  gap: 9px;
+  color: #57493c;
+  font: 600 14px/1.35 var(--sans);
 }
 
 .jn-card-includes svg {
@@ -253,8 +282,9 @@
 .jn-card--services .jn-card-includes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 7px 12px;
+  gap: 9px 14px;
   align-content: start;
+  align-self: stretch;
 }
 
 /* ── CTA — the row's ONE action colour. Filled burgundy on every card, sized
@@ -263,23 +293,25 @@
    BUYER chooses the method, so neither route may look like the default. */
 .jn-card-actions {
   margin-top: auto;
-  padding-top: 20px;
+  padding-top: 22px;
   display: flex;
   flex-wrap: wrap;
   gap: 9px;
 }
 
 .jn-cta {
-  min-height: 40px;
-  padding: 10px 15px;
-  border-radius: 9px;
+  flex: 1 1 auto;
+  min-height: 46px;
+  padding: 12px 15px;
+  border-radius: 10px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 9px;
   color: #f7ecdf;
   background: var(--burgundy, #571c2e);
   border: 1px solid var(--burgundy, #571c2e);
-  font: 700 12.5px/1.2 var(--sans);
+  font: 700 14px/1.2 var(--sans);
   letter-spacing: 0.015em;
   text-decoration: none;
   white-space: nowrap;
@@ -305,6 +337,33 @@
 .jn-cta:focus-visible {
   outline: 2px solid var(--burgundy, #571c2e);
   outline-offset: 2px;
+}
+
+.jn-cta--gold {
+  background: #7d5a22;
+  border-color: #7d5a22;
+}
+
+.jn-cta--gold:hover {
+  background: #63461a;
+}
+
+.jn-cta--red {
+  background: #c8281c;
+  border-color: #c8281c;
+}
+
+.jn-cta--red:hover {
+  background: #a51f14;
+}
+
+.jn-cta--blue {
+  background: #33506b;
+  border-color: #33506b;
+}
+
+.jn-cta--blue:hover {
+  background: #263e54;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -492,7 +551,17 @@
 @media (max-width: 979px) {
   .jn-card h3,
   .jn-card-description,
-  .jn-card-includes {
+  .jn-card-zone {
     min-height: 0;
+  }
+
+  /* "ONE-STOP PROPERTY SOLUTION" beside a display numeral wraps at phone
+     width; both step down together so every eyebrow holds one line. */
+  .jn-card-number {
+    font-size: 28px;
+  }
+
+  .jn-card-label {
+    font-size: 11px;
   }
 }

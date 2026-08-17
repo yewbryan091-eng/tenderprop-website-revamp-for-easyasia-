@@ -31,7 +31,9 @@ type Offer = {
      every card, sized by the services card's five-item catalogue, so the
      row's CTAs and photos stay on shared baselines. */
   includes: string[];
-  actions: { label: string; to: string }[];
+  /* The sell card's headline giveaway, rendered as the gold highlight box. */
+  highlight?: string;
+  actions: { label: string; to: string; tone?: "gold" | "red" | "blue" }[];
   imageBase: string;
   imageAlt: string;
 };
@@ -44,10 +46,14 @@ const OFFERS: Offer[] = [
     title: "Find your next property online.",
     description:
       "Discover subsale properties across Malaysia and choose how you want to make your offer.",
-    includes: ["Private sealed offers", "Live open bidding"],
+    includes: [
+      "Private sealed offers",
+      "Live open bidding",
+      "See how E-Tender & Owner Auction work",
+    ],
     actions: [
       { label: "View E-Tender", to: "/tender" },
-      { label: "View Owner Auction", to: "/owner-auction" },
+      { label: "View Owner Auction", to: "/owner-auction", tone: "gold" },
     ],
     imageBase: "/assets/layout/home-offer-buy",
     imageAlt: "Rows of terrace homes in a Malaysian neighbourhood",
@@ -59,8 +65,9 @@ const OFFERS: Offer[] = [
     title: "Bring your property to market.",
     description:
       "Sell with professional marketing, valuation guidance and a selling method suited to your property.",
-    includes: ["Fully subsidised valuation report", "Professional marketing & valuation guidance"],
-    actions: [{ label: "Check Your Property Value", to: "/sell" }],
+    highlight: "Fully subsidised valuation report",
+    includes: ["Professional marketing & valuation guidance"],
+    actions: [{ label: "Check Your Property Value Online", to: "/sell", tone: "red" }],
     imageBase: "/assets/layout/home-offer-sell",
     imageAlt: "Modern Malaysian bungalow lit at dusk",
   },
@@ -72,7 +79,7 @@ const OFFERS: Offer[] = [
     description:
       "From financing to renovation, TenderProp connects every service your property needs.",
     includes: ["Investment", "Legal Matters", "Loan Matters", "Renovation", "Agent Services"],
-    actions: [{ label: "Check Our Services", to: "/services" }],
+    actions: [{ label: "Check Our Services", to: "/services", tone: "blue" }],
     imageBase: "/assets/layout/home-offer-services",
     imageAlt: "House keys handed over inside a new home",
   },
@@ -89,27 +96,34 @@ function OfferCard({ offer }: { offer: Offer }) {
         </p>
         <h3>{offer.title}</h3>
         <p className="jn-card-description">{offer.description}</p>
-        <ul className="jn-card-includes" aria-label={`${offer.label} — included`}>
-          {offer.includes.map((item) => (
-            <li key={item}>
-              <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true">
-                <path
-                  d="M2.2 6.4 4.9 9 9.8 3.2"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              {item}
-            </li>
-          ))}
-        </ul>
+        <div className="jn-card-zone">
+          {offer.highlight ? <p className="jn-card-highlight">{offer.highlight}</p> : null}
+          <ul className="jn-card-includes" aria-label={`${offer.label} — included`}>
+            {offer.includes.map((item) => (
+              <li key={item}>
+                <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+                  <path
+                    d="M2.2 6.4 4.9 9 9.8 3.2"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className="jn-card-actions">
           {offer.actions.map((action) => (
-            <Link key={action.to} className="jn-cta" to={action.to}>
+            <Link
+              key={action.to}
+              className={`jn-cta${action.tone ? ` jn-cta--${action.tone}` : ""}`}
+              to={action.to}
+            >
               <span>{action.label}</span>
               <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
                 <path
