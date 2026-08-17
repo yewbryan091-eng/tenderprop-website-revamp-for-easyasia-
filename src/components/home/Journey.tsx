@@ -49,7 +49,8 @@ const OFFERS: Offer[] = [
     includes: [
       "Private sealed offers",
       "Live open bidding",
-      "See how E-Tender & Owner Auction work",
+      "Low 3% deposit \u2014 refundable if unsuccessful",
+      "Step-by-step guides for both methods",
     ],
     actions: [
       { label: "View E-Tender", to: "/tender" },
@@ -82,8 +83,14 @@ const OFFERS: Offer[] = [
     title: "Everything around your property, in one place.",
     description:
       "From financing to renovation, TenderProp connects every service your property needs.",
-    includes: ["Investment", "Legal Matters", "Loan Matters", "Renovation", "Agent Services"],
-    actions: [{ label: "Check Our Services", to: "/services", tone: "blue" }],
+    includes: [
+      "Investment",
+      "Interior Design & Renovation",
+      "Loan Center",
+      "Legal Matter",
+      "Agent",
+    ],
+    actions: [{ label: "Explore Our Services", to: "/services", tone: "blue" }],
     imageBase: "/assets/layout/home-offer-services",
     imageAlt: "House keys handed over inside a new home",
   },
