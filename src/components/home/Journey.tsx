@@ -27,11 +27,10 @@ type Offer = {
   label: string;
   title: string;
   description: string;
-  /* The ONE differentiated fact this card is allowed. Everything else the
-     three cards share, which is what makes the row read as one offer in
-     three parts instead of three competing designs. */
-  support: string;
-  supportTone?: "gold";
+  /* What this offer INCLUDES — rendered as a ticked checklist. Same zone on
+     every card, sized by the services card's five-item catalogue, so the
+     row's CTAs and photos stay on shared baselines. */
+  includes: string[];
   actions: { label: string; to: string }[];
   imageBase: string;
   imageAlt: string;
@@ -45,7 +44,7 @@ const OFFERS: Offer[] = [
     title: "Find your next property online.",
     description:
       "Discover subsale properties across Malaysia and choose how you want to make your offer.",
-    support: "Sealed offers or live bidding \u2014 the choice is yours.",
+    includes: ["Private sealed offers", "Live open bidding"],
     actions: [
       { label: "View E-Tender", to: "/tender" },
       { label: "View Owner Auction", to: "/owner-auction" },
@@ -60,8 +59,7 @@ const OFFERS: Offer[] = [
     title: "Bring your property to market.",
     description:
       "Sell with professional marketing, valuation guidance and a selling method suited to your property.",
-    support: "Fully subsidised valuation report included.",
-    supportTone: "gold",
+    includes: ["Fully subsidised valuation report", "Professional marketing & valuation guidance"],
     actions: [{ label: "Check Your Property Value", to: "/sell" }],
     imageBase: "/assets/layout/home-offer-sell",
     imageAlt: "Modern Malaysian bungalow lit at dusk",
@@ -73,7 +71,7 @@ const OFFERS: Offer[] = [
     title: "Everything around your property, in one place.",
     description:
       "From financing to renovation, TenderProp connects every service your property needs.",
-    support: "Investment \u00b7 Legal \u00b7 Loan \u00b7 Renovation \u00b7 Agent Services",
+    includes: ["Investment", "Legal Matters", "Loan Matters", "Renovation", "Agent Services"],
     actions: [{ label: "Check Our Services", to: "/services" }],
     imageBase: "/assets/layout/home-offer-services",
     imageAlt: "House keys handed over inside a new home",
@@ -91,12 +89,23 @@ function OfferCard({ offer }: { offer: Offer }) {
         </p>
         <h3>{offer.title}</h3>
         <p className="jn-card-description">{offer.description}</p>
-        <p
-          className={`jn-card-support${offer.supportTone === "gold" ? " jn-card-support--gold" : ""}`}
-        >
-          <span className="jn-support-mark" aria-hidden="true" />
-          {offer.support}
-        </p>
+        <ul className="jn-card-includes" aria-label={`${offer.label} — included`}>
+          {offer.includes.map((item) => (
+            <li key={item}>
+              <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true">
+                <path
+                  d="M2.2 6.4 4.9 9 9.8 3.2"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {item}
+            </li>
+          ))}
+        </ul>
 
         <div className="jn-card-actions">
           {offer.actions.map((action) => (

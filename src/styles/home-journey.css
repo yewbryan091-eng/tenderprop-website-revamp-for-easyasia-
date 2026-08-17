@@ -216,30 +216,45 @@
   min-height: calc(3 * 1.55em);
 }
 
-/* The card's one differentiated fact. The sell card's earns the gold — the
-   subsidised valuation report is the row's only giveaway — the other two stay
-   in the neutral ink so the row keeps one voice. */
-.jn-card-support {
-  margin: 13px 0 0;
+/* WHAT'S INCLUDED — a ticked checklist, the same zone on every card. This
+   replaced two failed abstractions in a row (bold caption with a floating
+   square, then an italic serif whisper): Bryan's verdict was that neither
+   convinced, and he was right — these are deliverables, and deliverables are
+   scanned as a list, not read as prose. The services card is the reason this
+   zone exists at all ("services we have a lot"): its five offerings set in
+   two columns are the row's height reference, and the zone's min-height is
+   sized to them so every card's CTA and photograph stay on shared baselines.
+   Ticks take each card's accent; text stays neutral so the row keeps one
+   voice. */
+.jn-card-includes {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  gap: 7px;
+  min-height: 75px;
+}
+
+.jn-card-includes li {
+  display: flex;
+  align-items: center;
   gap: 8px;
-  color: #6f6252;
-  font: 600 12.5px/1.5 var(--sans);
-  min-height: calc(2 * 1.5em);
+  color: #5f5347;
+  font: 600 12.75px/1.35 var(--sans);
 }
 
-.jn-support-mark {
+.jn-card-includes svg {
   flex: none;
-  align-self: center;
-  width: 5px;
-  height: 5px;
-  border-radius: 1px;
-  background: color-mix(in srgb, var(--jn-card-accent) 72%, var(--line));
+  color: var(--jn-card-accent);
 }
 
-.jn-card-support--gold {
-  color: #7d5a22;
+/* Five services, two columns: a catalogue, displayed as one. */
+.jn-card--services .jn-card-includes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 12px;
+  align-content: start;
 }
 
 /* ── CTA — the row's ONE action colour. Filled burgundy on every card, sized
@@ -477,7 +492,7 @@
 @media (max-width: 979px) {
   .jn-card h3,
   .jn-card-description,
-  .jn-card-support {
+  .jn-card-includes {
     min-height: 0;
   }
 }
